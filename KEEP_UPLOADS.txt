@@ -1,0 +1,6 @@
+QUAN TRỌNG:
+Bản ZIP này KHÔNG chứa thư mục uploads để tránh làm file quá lớn.
+Khi cập nhật bản ZIP vào project cũ, hãy GIỮ NGUYÊN:
+  uploads/
+  uploads/manifest.json
+Đây là nơi chứa các ảnh phòng bạn đã upload từ trang Admin.

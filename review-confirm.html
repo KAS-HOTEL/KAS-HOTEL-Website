@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review &amp; Confirm — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div class="container"><nav class="crumb" id="crumb"></nav></div>
+<div id="steps"></div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <div class="split__main">
+        <h1 style="font-size:clamp(1.9rem,3vw,2.5rem)">Review &amp; Confirm</h1>
+        <p class="muted" style="margin:.4rem 0 1.8rem;font-size:.93rem">Please review your booking details before confirming.</p>
+        <div class="stack" style="gap:18px" id="cards"></div>
+
+        <div class="between" style="margin-top:26px;flex-wrap:wrap;gap:14px">
+          <a class="btn btn--ghost" id="backEdit"></a>
+          <div style="text-align:right">
+            <button class="btn btn--gold btn--lg" id="confirmBtn"></button>
+            <p class="tiny muted" style="margin:8px 0 0">You won't be charged — this is a demo.</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="split__side">
+        <div class="sticky stack" style="gap:16px">
+          <div class="panel">
+            <div class="panel__hd panel__hd--gold"><h4>Booking summary</h4></div>
+            <div class="panel__b" id="sumTop"></div>
+            <div id="stayPanel"></div>
+          </div>
+          <div class="panel">
+            <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
+              <h4 style="color:var(--tx)">Price breakdown</h4></div>
+            <div class="panel__b" id="sidePrice"></div>
+          </div>
+          <div class="panel"><div class="panel__b" id="trustBadges"></div></div>
+          <div class="panel" id="assist"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking;
+  App.boot({ active: 'my kas' });
+
+  var c = B.requireGuest();
+  if (!c) return;
+  c = B.reprice();
+  var hotel = D.getHotel(c.hotelId), room = D.getRoom(c.hotelId, c.roomId), g = c.guest;
+
+  App.renderSteps(U.$('#steps'), 3, [
+    U.fmtDate(c.checkIn) + ' – ' + U.fmtDate(c.checkOut), room.name,
+    B.guestLabel(c)
+  ]);
+  U.$('#crumb').innerHTML =
+    '<a href="index.html">Home</a><span class="sep">›</span>' +
+    '<a href="hotel-detail.html?hotel=' + hotel.id + '">' + U.esc(hotel.name) + '</a><span class="sep">›</span>' +
+    '<a href="room-detail.html?hotel=' + hotel.id + '&room=' + room.id + '">' + U.esc(room.name) + '</a><span class="sep">›</span>' +
+    '<a href="guest-details.html">Your booking</a><span class="sep">›</span><span class="cur">Review &amp; confirm</span>';
+
+  var be = U.$('#backEdit');
+  be.innerHTML = U.icon('arrL', 13) + ' Back to edit';
+  be.href = 'guest-details.html';
+  U.$('#confirmBtn').innerHTML = U.icon('lock', 14) + ' Confirm booking';
+
+  var PAY_LABEL = { 'pay-later': 'Pay later — at the hotel', card: 'Credit / debit card',
+                    zalopay: 'ZaloPay', bank: 'Bank transfer' };
+
+  function card(icon, title, editHref, bodyHTML) {
+    return '<div class="card"><div class="card__hd">' + U.icon(icon, 18) + '<h4>' + title + '</h4>' +
+      (editHref ? '<a class="btn btn--link edit" href="' + editHref + '">' + U.icon('edit', 13) + ' Edit</a>' : '') +
+      '</div>' + bodyHTML + '</div>';
+  }
+  function dl(rows, cols) {
+    return '<div class="dl' + (cols === 2 ? ' dl--2' : '') + '">' + rows.map(function (r) {
+      return '<div><div class="dt">' + r[0] + '</div><div class="dd">' + U.esc(r[1] || '—') +
+        (r[2] ? '<small>' + U.esc(r[2]) + '</small>' : '') + '</div></div>';
+    }).join('') + '</div>';
+  }
+
+  var guestName = g.checkInGuest === 'different'
+    ? g.guestFirstName + ' ' + g.guestLastName
+    : 'Same as contact information';
+
+  U.$('#cards').innerHTML =
+    card('user', 'Contact information', 'guest-details.html',
+      dl([['Name', g.title + ' ' + g.firstName + ' ' + g.lastName],
+          ['Email', g.email], ['Phone', g.phoneFull]])) +
+
+    card('users', 'Guest information', 'guest-details.html',
+      dl([['Check-in guest', guestName],
+          ['Nationality', g.nationality],
+          ['Date of birth', g.dob ? U.fmtDate(g.dob) : 'Not provided']])) +
+
+    card('cal', 'Your stay', 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id,
+      dl([['Hotel', hotel.name, hotel.address],
+          ['Room type', room.name],
+          ['Guests & rooms', B.guestLabel(c)],
+          ['Check-in', U.fmtDateFull(c.checkIn), 'From ' + hotel.checkIn],
+          ['Check-out', U.fmtDateFull(c.checkOut), 'Until ' + hotel.checkOut],
+          ['Duration', c.nights + ' Night' + (c.nights === 1 ? '' : 's')]])) +
+
+    card('bed', 'Room &amp; rate details', 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id,
+      '<div style="display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap">' +
+        '<div style="width:180px;aspect-ratio:4/3;border-radius:var(--r-sm);overflow:hidden;background:var(--beige);flex-shrink:0">' +
+          U.img(room.images[0], room.name) + '</div>' +
+        '<div style="flex:1;min-width:230px">' +
+          '<h4 style="font-family:var(--serif);font-size:1.3rem;margin-bottom:10px">' + U.esc(room.name) + '</h4>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;margin-bottom:14px">' +
+            sp('size', room.size || 'Size not published') + sp('bed', room.bedType) +
+            sp('view', room.view || 'View not published') + sp('users', 'Max ' + room.maxGuests + ' guests') +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:6px">' +
+            pk(room.breakfast ? 'Breakfast for ' + Math.min(2, room.maxGuests) + ' guests' : 'Breakfast not included', room.breakfast) +
+            pk('Free Wi-Fi', true) +
+            pk('Free cancellation until ' + U.cancelBy(c.checkIn), true) +
+          '</div></div></div>') +
+
+    card('chat', 'Special requests', 'guest-details.html',
+      '<p style="font-size:.9rem;color:var(--tx-2);margin:0">' +
+        (g.specialRequests ? U.esc(g.specialRequests) : '<span class="muted">No special requests added.</span>') + '</p>' +
+      '<div class="divider" style="margin-block:16px"></div>' +
+      dl([['Estimated arrival', g.arrivalTime], ['Purpose of trip', g.purpose], ['Heard about us', g.heardFrom]])) +
+
+    card('card', 'Payment method', 'guest-details.html',
+      '<div style="display:flex;align-items:center;gap:11px">' + U.icon('wallet', 20) +
+        '<div><b style="font-size:.92rem;display:block">' + U.esc(PAY_LABEL[g.paymentMethod] || g.paymentMethod) + '</b>' +
+        '<span class="tiny muted">No payment is processed in this demo.</span></div></div>') +
+
+    card('shield', 'Cancellation policy', null,
+      '<div class="alert alert--ok">' + U.icon('checkC', 18) +
+        '<div><b>Free cancellation</b>Cancel for free until ' + U.cancelBy(c.checkIn) +
+        ' (local time). After that, 1 night is charged.</div></div>') +
+
+    card('info', 'Important information', null,
+      '<ul style="margin:0;padding-left:20px;font-size:.86rem;color:var(--tx-2);line-height:1.9">' +
+        ['Check-in from ' + hotel.checkIn + ', check-out until ' + hotel.checkOut + '.',
+         'A valid ID or passport is required at check-in.',
+         'Special requests are subject to availability and cannot be guaranteed.',
+         'Taxes and fees are included in the total price shown.',
+         'This is a demonstration booking. No payment is taken and no real reservation is created.'
+        ].map(function (t) { return '<li>' + U.esc(t) + '</li>'; }).join('') + '</ul>');
+
+  function sp(ic, t) { return '<span class="spec">' + U.icon(ic, 14) + U.esc(t) + '</span>'; }
+  function pk(t, ok) {
+    return '<span class="perk' + (ok ? '' : ' perk--gold') + '">' + U.icon(ok ? 'check' : 'x', 13) + U.esc(t) + '</span>';
+  }
+
+  /* ---- sidebar ---- */
+  U.$('#sumTop').innerHTML =
+    '<div style="display:flex;gap:13px;align-items:flex-start">' +
+      '<div style="width:78px;height:64px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;background:var(--beige)">' +
+        U.img(room.images[0], room.name, '', true, false) + '</div>' +
+      '<div style="min-width:0"><b style="font-size:.95rem;display:block;line-height:1.3">' + U.esc(hotel.name) + '</b>' +
+      '<span class="tiny" style="color:var(--gold-dk);font-weight:600;display:block">' + U.esc(room.name) + '</span>' +
+      '<span style="color:var(--gold);display:block;margin-top:3px">' + U.stars(hotel.rating / 2, 11) + '</span></div></div>';
+  U.$('#stayPanel').innerHTML = B.stayPanelHTML(Object.assign({}, c, {
+    checkInTime: hotel.checkIn, checkOutTime: hotel.checkOut
+  }), { header: false });
+  var _q = window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id)
+    ? window.KAS_RATES.quote(room.id, c.checkIn, c.checkOut) : null;
+  U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(c.price, {
+    nights: _q ? _q.nights : null, rateSource: room.rateSource });
+  U.$('#assist').innerHTML = B.assistHTML();
+  U.$('#trustBadges').innerHTML = B.trustBadgesHTML();
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* ---- confirm ---- */
+  var btn = U.$('#confirmBtn');
+  btn.addEventListener('click', function () {
+    btn.disabled = true;
+    btn.innerHTML = U.icon('rot', 14) + ' Confirming…';
+    setTimeout(function () {
+      var res = B.confirmBooking();
+      if (!res.ok) {
+        btn.disabled = false;
+        btn.innerHTML = U.icon('lock', 14) + ' Confirm booking';
+        var msgs = Object.keys(res.errors).map(function (k) { return res.errors[k]; });
+        App.modal({
+          icon: 'alert', tone: 'err', title: 'We couldn\'t confirm this booking',
+          body: '<ul style="margin:8px 0 0;padding-left:18px;text-align:left">' +
+                msgs.map(function (m) { return '<li>' + U.esc(m) + '</li>'; }).join('') + '</ul>',
+          ok: 'Fix details', cancel: 'Close',
+          onOk: function () { location.href = 'guest-details.html'; }
+        });
+        return;
+      }
+      location.href = 'booking-confirmed.html?ref=' + encodeURIComponent(res.booking.bookingNumber);
+    }, 700);
+  });
+})();
+</script>
+</body>
+</html>

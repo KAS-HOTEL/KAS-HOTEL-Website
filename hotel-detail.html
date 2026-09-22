@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotel — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div id="steps"></div>
+
+<section class="hero hero--sm" style="min-height:300px">
+  <div class="hero__bg" id="heroBg"></div>
+  <div class="container hero__in">
+    <div class="hero__ct">
+      <a href="hotels.html" class="tiny" style="color:var(--tx-inv-2);display:inline-flex;align-items:center;gap:6px;margin-bottom:12px" id="backLink"></a>
+      <h1 id="hName"></h1>
+      <p style="margin-top:.7rem" id="hTag"></p>
+    </div>
+    <div id="sumBar" style="margin-top:1.8rem"></div>
+  </div>
+</section>
+
+<div id="editSearch" style="background:var(--surface);border-bottom:1px solid var(--line);display:none">
+  <div class="container" style="padding-block:22px"><div id="searchWrap"></div></div>
+</div>
+
+<!-- ============ PROPERTY BAR ============ -->
+<section style="background:var(--black);color:var(--tx-inv);padding-block:26px">
+  <div class="container" id="propBar"></div>
+</section>
+
+<!-- ============ GALLERY + ABOUT ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:start" id="aboutGrid">
+      <div id="gal" class="gal"></div>
+      <div>
+        <span class="eyebrow">About the property</span>
+        <h2 style="font-size:1.7rem;margin:.7rem 0 1rem" id="aboutH"></h2>
+        <p style="font-size:.93rem;color:var(--tx-2)" id="aboutP"></p>
+        <div class="divider"></div>
+        <div class="dl dl--2" id="aboutFacts"></div>
+        <div class="divider"></div>
+        <h5 style="font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">Hotel facilities</h5>
+        <div class="amgrid" id="aboutAm" style="grid-template-columns:repeat(2,1fr)"></div>
+        <p class="srcnote" style="margin-top:16px" id="aboutSrc"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ROOMS ============ -->
+<section class="section section--tight section--alt" id="rooms">
+  <div class="container">
+    <div class="between" style="margin-bottom:22px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:1.6rem" id="roomCount"></h2>
+        <p class="tiny muted" style="margin:3px 0 0" id="roomSub"></p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tiny muted nowrap">Sort by</span>
+        <select class="select" id="sortBy" aria-label="Sort by" style="width:auto;min-width:180px">
+          <option value="recommended">Recommended</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="size">Room size</option>
+        </select>
+      </div>
+    </div>
+    <div class="split split--filters">
+      <aside class="split__side">
+        <div class="filters sticky">
+          <div class="between" style="margin-bottom:6px">
+            <h4 style="font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase">Filter rooms</h4>
+            <button class="btn btn--link" id="clearF" type="button">Clear all</button>
+          </div>
+          <div class="fgrp">
+            <h5>Price per night (VND)</h5>
+            <div class="range"><input type="range" id="fPrice" aria-label="Maximum price per night (VND)" min="600000" max="2800000" step="50000" value="2800000"></div>
+            <div class="range__v"><span>600,000</span><span id="fPriceV">2,800,000+</span></div>
+          </div>
+          <div class="fgrp"><h5>Room type</h5><div id="fType"></div></div>
+          <div class="fgrp"><h5>Bed type</h5><div id="fBed"></div></div>
+          <div class="fgrp"><h5>View</h5><div id="fView"></div></div>
+          <div class="fgrp"><h5>Amenities</h5><div id="fAmen"></div></div>
+          <button class="btn btn--ghost btn--block" id="applyF" type="button" style="margin-top:16px">Apply filters</button>
+        </div>
+      </aside>
+      <div class="split__main"><div id="roomList" class="stack" style="gap:18px"></div></div>
+    </div>
+
+    <div class="card" style="margin-top:26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between">
+      <div style="display:flex;gap:14px;align-items:center">
+        <span style="color:var(--gold-dk)" id="helpIcon"></span>
+        <div><b style="font-size:.92rem;display:block">Not sure which room is right for you?</b>
+          <span class="tiny muted">Our KAS team is here to help you find the perfect stay.</span></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn--ghost btn--sm" id="btnCall" type="button">Call us</button>
+        <button class="btn btn--dark btn--sm" id="btnChat" type="button">Chat on Zalo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="section section--tight" id="reviewsSec">
+  <div class="container"><div id="reviews"></div></div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script src="js/live.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App,
+      B = window.Booking, H = window.HotelUI, R = window.RoomUI;
+
+  App.boot({ active: 'hotels' });
+
+  var search = B.readSearch();
+  var hotel = D.getHotel(search.hotelId || U.qs().hotel || 'hotel-04');
+  if (!hotel) { location.replace('hotels.html'); return; }
+  var liveReady = window.KAS_LIVE.load().then(function(catalog){ window.KAS_LIVE.applyToHotel(hotel, catalog); paintPropertyMedia(); if (hotel.hasCustomPropertyGallery) { var src = hotel.imageSource || ''; U.$('#aboutSrc').innerHTML = 'Photos: ' + U.esc(src) + ' · Data: ' + U.esc(hotel.source); } return catalog; }).catch(function(){ return null; });
+  search.hotelId = hotel.id;
+  B.saveSearch(search);
+
+  document.title = hotel.name + ' — KAS Hotel Collection';
+  App.renderSteps(U.$('#steps'), 1, [U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut)]);
+
+  U.$('#backLink').innerHTML = U.icon('arrL', 13) + ' All properties';
+  U.$('#heroBg').innerHTML = U.img(hotel.images[0], hotel.name, '', false, false);
+  U.$('#hName').textContent = hotel.name;
+  U.$('#hTag').textContent = hotel.tagline;
+  U.$('#helpIcon').innerHTML = U.icon('bell', 24);
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* ---- search summary ---- */
+  function paintSummary() {
+    window.Search.summaryBar(U.$('#sumBar'), search, function () {
+      var box = U.$('#editSearch');
+      var open = box.style.display !== 'none';
+      box.style.display = open ? 'none' : 'block';
+      if (!open) window.Search.render(U.$('#searchWrap'), {
+        solid: true, cta: 'Search', values: search,
+        onSearch: function (s) {
+          if (s.hotelId && s.hotelId !== hotel.id) {
+            location.href = 'hotel-detail.html?' + U.buildQS({
+              hotel: s.hotelId, checkIn: s.checkIn, checkOut: s.checkOut,
+              adults: s.adults, children: s.children, rooms: s.rooms });
+            return;
+          }
+          search = s; search.hotelId = hotel.id; B.saveSearch(search);
+          box.style.display = 'none'; paintSummary(); liveReady.then(function(){ paintRooms(); });
+          App.renderSteps(U.$('#steps'), 1, [U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut)]);
+          U.toast('Availability updated.');
+        }
+      });
+    });
+  }
+  paintSummary();
+  if (window.KAS_I18N) window.KAS_I18N.apply();
+
+  /* ---- property bar ---- */
+  U.$('#propBar').innerHTML =
+    '<div style="display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:space-between">' +
+      '<div style="display:flex;gap:18px;align-items:center;min-width:0;flex:1">' +
+        '<div style="width:88px;height:88px;border-radius:var(--r-sm);overflow:hidden;flex-shrink:0;background:var(--char)">' +
+          U.img(hotel.images[1] || hotel.images[0], hotel.name, '', true, false) + '</div>' +
+        '<div style="min-width:0">' +
+          '<div style="display:flex;align-items:center;gap:11px;flex-wrap:wrap">' +
+            '<h3 style="color:var(--ivory);font-size:1.5rem">' + U.esc(hotel.name) + '</h3>' +
+            (hotel.starRating >= 4 ? '<span class="badge badge--gold badge--sig">Signature Property</span>' : '') +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:6px;color:var(--tx-inv-2);font-size:.83rem;margin-top:5px">' +
+            U.icon('pin', 13) + U.esc(hotel.address) + '</div>' +
+          '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:11px">' +
+            hotel.amenities.slice(0, 5).map(function (a) {
+              return '<span class="chip" style="background:rgba(255,255,255,.06);border-color:rgba(194,162,92,.28);color:var(--tx-inv-2)">' +
+                U.icon(App.amenityIcon(a), 12) + U.esc(a) + '</span>';
+            }).join('') + '</div>' +
+        '</div></div>' +
+      '<div style="text-align:right;flex-shrink:0">' +
+        '<div style="display:flex;align-items:center;gap:10px;justify-content:flex-end">' +
+          '<span style="font-family:var(--serif);font-size:1.9rem;color:var(--ivory);line-height:1">' + hotel.rating.toFixed(1) +
+          '<span style="font-size:.9rem;color:var(--tx-inv-2)">/10</span></span>' +
+          '<span style="color:var(--gold)">' + U.stars(hotel.rating / 2, 15) + '</span></div>' +
+        '<div class="tiny" style="color:var(--tx-inv-2);margin-top:4px">' + hotel.reviews + ' reviews · ' + U.esc(hotel.ratingSource) + '</div>' +
+          (hotel.tripUrl ? '<a class="tiny" href="' + hotel.tripUrl + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:6px;color:var(--gold)">Property reference ↗</a>' : '') +
+        '<button class="btn btn--ghost-lt btn--sm" id="saveHotel" type="button" style="margin-top:12px">' +
+          U.icon('heart', 13) + ' Save hotel</button>' +
+      '</div></div>';
+  U.$('#saveHotel').addEventListener('click', function () { U.toast(hotel.name + ' saved to your list.'); });
+
+  function paintPropertyMedia(){
+    var imgs = hotel.images && hotel.images.length ? hotel.images : [];
+    if (!imgs.length) return;
+    U.$('#heroBg').innerHTML = U.img(imgs[0], hotel.name, '', false, false);
+    App.gallery(U.$('#gal'), imgs, hotel.name);
+    var mini = imgs[1] || imgs[0];
+    var miniHost = document.querySelector('#propBar > div > div > div');
+    if (miniHost) miniHost.innerHTML = U.img(mini, hotel.name, '', true, false);
+  }
+
+  /* ---- gallery ---- */
+  paintPropertyMedia();
+
+  /* ---- about ---- */
+  U.$('#aboutH').textContent = hotel.tagline;
+  U.$('#aboutP').textContent = hotel.description;
+  var facts = [
+    ['Check-in', hotel.checkIn], ['Check-out', hotel.checkOut],
+    ['Property rating', hotel.starRating + '-star'],
+    ['Guest rating', hotel.rating + '/10 (' + hotel.reviews + ' reviews)'],
+    ['Rooms in property', hotel.totalRooms ? hotel.totalRooms + ' rooms' : 'Not published by source'],
+    ['Room types', hotel.roomCount + ' types'],
+    ['Neighbourhood', hotel.area + ', ' + hotel.district],
+    ['Published rate range', hotel.priceRangeUSD + ' (' + hotel.priceRangeSource + ')']
+  ];
+  U.$('#aboutFacts').innerHTML = facts.map(function (f) {
+    return '<div><div class="dt">' + f[0] + '</div><div class="dd">' + U.esc(f[1]) + '</div></div>';
+  }).join('');
+  U.$('#aboutAm').innerHTML = hotel.amenities.map(function (a) {
+    return '<span class="am">' + U.icon(App.amenityIcon(a), 15) + U.esc(a) + '</span>';
+  }).join('');
+  U.$('#aboutSrc').innerHTML = 'Also listed as “' + U.esc(hotel.legacyName) + '” · Photos: ' +
+    U.esc(hotel.imageSource) + ' · Data: ' + U.esc(hotel.source);
+
+  /* ---- filters ---- */
+  var TYPES = [['standard','Standard'],['superior','Superior'],['deluxe','Deluxe'],
+               ['premium|premier','Premium'],['suite|studio','Suite & Studio'],['family','Family']];
+  var BEDS  = [['king','King bed'],['queen','Queen bed'],['twin','Twin / single'],['double','Double bed']];
+  var VIEWS = [['city','City view'],['street','Street view'],['window','Has window'],['balcony','Balcony']];
+  var AMEN  = [['breakfast','Breakfast included'],['balcony','Private balcony'],['bathtub','Bathtub']];
+  function chk(host, list, name) {
+    U.$(host).innerHTML = list.map(function (x) {
+      return '<label class="opt"><input type="checkbox" value="' + x[0] + '" data-f="' + name + '"><span>' + x[1] + '</span></label>';
+    }).join('');
+  }
+  chk('#fType', TYPES, 'type'); chk('#fBed', BEDS, 'bed');
+  chk('#fView', VIEWS, 'view'); chk('#fAmen', AMEN, 'amen');
+
+  var priceEl = U.$('#fPrice'), priceV = U.$('#fPriceV');
+  priceEl.addEventListener('input', function () {
+    var v = +priceEl.value;
+    priceV.textContent = v >= 2800000 ? '2,800,000+' : U.vnd(v);
+    paintRooms();
+  });
+  document.addEventListener('change', function (e) { if (e.target.dataset && e.target.dataset.f) paintRooms(); });
+  U.$('#applyF').addEventListener('click', function () { paintRooms(); U.toast('Filters applied.'); });
+  U.$('#clearF').addEventListener('click', function () {
+    U.$$('[data-f]').forEach(function (i) { i.checked = false; });
+    priceEl.value = 2800000; priceV.textContent = '2,800,000+';
+    paintRooms(); U.toast('Filters cleared.');
+  });
+  U.$('#sortBy').addEventListener('change', paintRooms);
+
+  function readFilters() {
+    function vals(n) { return U.$$('[data-f="' + n + '"]:checked').map(function (i) { return i.value; }); }
+    var amen = vals('amen');
+    return {
+      priceMax: +priceEl.value >= 2800000 ? null : +priceEl.value,
+      types: vals('type'), beds: vals('bed'), views: vals('view'),
+      breakfast: amen.indexOf('breakfast') > -1,
+      balcony: amen.indexOf('balcony') > -1,
+      bathtub: amen.indexOf('bathtub') > -1
+    };
+  }
+
+  var BADGES = { 0: 'Most popular', 1: 'Great for couples' };
+  function paintRooms() {
+    /* The selected check-in date is the source of truth for the nightly rate. */
+    hotel.rooms.forEach(function(r){
+      r.currentRate = (window.KAS_RATES && window.KAS_RATES.rateForDate(r.id, search.checkIn));
+    });
+    var f = readFilters();
+    var list = hotel.rooms.filter(function (r) { return H.roomMatches(r, f); });
+    list = H.sortRooms(list, U.$('#sortBy').value);
+
+    var n = U.nights(search.checkIn, search.checkOut);
+    U.$('#roomCount').textContent = list.length + ' room type' + (list.length === 1 ? '' : 's') + ' available';
+    U.$('#roomSub').textContent = U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut) +
+      '  ·  ' + n + ' night' + (n === 1 ? '' : 's') + '  ·  ' + window.Search.guestText(search);
+
+    var host = U.$('#roomList');
+    if (!list.length) {
+      host.innerHTML = '<div class="empty">' + U.icon('bed', 44) +
+        '<h3 style="margin-bottom:8px">No rooms match these filters</h3>' +
+        '<p class="muted" style="font-size:.9rem">Try widening your price range or clearing a filter.</p>' +
+        '<button class="btn btn--ghost" style="margin-top:18px" onclick="document.getElementById(\'clearF\').click()">Clear all filters</button></div>';
+      return;
+    }
+    host.innerHTML = list.map(function (r, i) {
+      var big = r.maxGuests >= 4 ? 'Best for families' : null;
+      return H.roomCard(hotel, r, search, big || BADGES[i] || null);
+    }).join('');
+    U.$$('.rcard__media').forEach(App.miniCarousel);
+    App.reveal();
+    if (window.KAS_I18N) window.KAS_I18N.apply();
+  }
+  /* Uploaded room photos are authoritative when available. Wait for the
+     server catalog before drawing room cards so the cards show the same photos
+     the admin uploaded, not the old static gallery. */
+  liveReady.then(function(){ paintRooms(); });
+
+  /* ---- reviews ---- */
+  U.$('#reviews').innerHTML = R.reviewsHTML(hotel);
+  if (window.KAS_I18N) window.KAS_I18N.apply();
+
+  U.$('#btnCall').addEventListener('click', function () { U.toast('Call us on ' + D.config.phone); });
+  U.$('#btnChat').addEventListener('click', function () { U.toast('Our team replies on Zalo · ' + D.config.phone); });
+
+  function collapse() {
+    var g = U.$('#aboutGrid');
+    if (g) g.style.gridTemplateColumns = window.innerWidth < 980 ? '1fr' : '1.25fr 1fr';
+    var am = U.$('#aboutAm');
+    if (am) am.style.gridTemplateColumns = window.innerWidth < 520 ? '1fr' : 'repeat(2,1fr)';
+  }
+  collapse(); window.addEventListener('resize', U.debounce(collapse, 120));
+})();
+</script>
+</body>
+</html>

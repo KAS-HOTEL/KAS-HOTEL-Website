@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Stay — KAS Hotel Collection</title>
+<meta name="description" content="Discover rooms and rates across the KAS hotels in Ho Chi Minh City.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+
+<section class="hero hero--sm">
+  <div class="hero__bg" id="heroBg"></div>
+  <div class="container hero__in">
+    <div class="hero__ct">
+      <a href="index.html" class="tiny" style="color:var(--tx-inv-2);display:inline-flex;align-items:center;gap:6px;margin-bottom:14px" id="backHome"></a>
+      <h1>Find Your Stay</h1>
+      <p style="margin-top:.9rem">Signature hotels in the heart of Ho Chi Minh City.</p>
+    </div>
+    <div id="sumBar" style="margin-top:2rem"></div>
+  </div>
+</section>
+
+<div id="editSearch" style="background:var(--surface);border-bottom:1px solid var(--line);display:none">
+  <div class="container" style="padding-block:22px"><div id="searchWrap"></div></div>
+</div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split split--filters">
+
+      <!-- ============ FILTERS ============ -->
+      <aside class="split__side">
+        <div class="filters sticky">
+          <div class="between" style="margin-bottom:6px">
+            <h4 style="font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase">Filter your stay</h4>
+            <button class="btn btn--link" id="clearF" type="button">Clear all</button>
+          </div>
+
+          <div class="fgrp">
+            <h5>Price per night (VND)</h5>
+            <div class="range"><input type="range" id="fPrice" aria-label="Maximum price per night (VND)" min="600000" max="2800000" step="50000" value="2800000"></div>
+            <div class="range__v"><span>600,000</span><span id="fPriceV">2,800,000+</span></div>
+          </div>
+
+          <div class="fgrp"><h5>Room type</h5><div id="fType"></div></div>
+          <div class="fgrp"><h5>Bed type</h5><div id="fBed"></div></div>
+          <div class="fgrp"><h5>View</h5><div id="fView"></div></div>
+          <div class="fgrp"><h5>Amenities</h5><div id="fAmen"></div></div>
+          <div class="fgrp"><h5>Property</h5><div id="fStar"></div></div>
+
+          <button class="btn btn--ghost btn--block" id="applyF" type="button" style="margin-top:16px">Apply filters</button>
+        </div>
+      </aside>
+
+      <!-- ============ RESULTS ============ -->
+      <div class="split__main">
+        <div class="between" style="margin-bottom:22px;flex-wrap:wrap">
+          <div>
+            <h2 style="font-size:1.5rem" id="resCount"></h2>
+            <p class="tiny muted" style="margin:3px 0 0" id="resSub"></p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="tiny muted nowrap">Sort by</span>
+            <select class="select" id="sortBy" aria-label="Sort by" style="width:auto;min-width:190px">
+              <option value="recommended">Recommended</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="rating">Guest rating</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="results" class="stack" style="gap:20px"></div>
+
+        <div class="alert alert--info" style="margin-top:26px" id="srcNote"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/live.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App,
+      B = window.Booking, H = window.HotelUI;
+
+  App.boot({ active: 'hotels' });
+  U.$('#backHome').innerHTML = U.icon('arrL', 13) + ' Back to home';
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* Live property gallery: use the exact photos uploaded for each hotel
+     on the outer hotel listing too. Static images remain the fallback. */
+  var liveReady = window.KAS_LIVE.load().then(function(catalog) {
+    D.hotels.forEach(function(h) { window.KAS_LIVE.applyToHotel(h, catalog); });
+    /* Explicitly repaint the card media from the admin property gallery.
+       This is intentionally separate from the dataset mutation above so the
+       Hotels listing can never fall back to the old static photo set when the
+       server catalog has uploaded gallery images. */
+    function syncPropertyGalleries() {
+      U.$$('.hcard[data-hotel-id]').forEach(function(card) {
+        var h = D.getHotel(card.getAttribute('data-hotel-id'));
+        if (!h || !h.propertyGalleryImages || !h.propertyGalleryImages.length) return;
+        var media = U.$('.hcard__media', card);
+        if (!media) return;
+        var badge = h.starRating >= 4 ? '<span class="badge badge--gold">Signature Property</span>' : '';
+        media.innerHTML = badge + App.miniHTML(h.propertyGalleryImages, h.name);
+        var mini = U.$('.mini', media);
+        if (mini) App.miniCarousel(mini);
+      });
+    }
+    window.__KAS_SYNC_PROPERTY_GALLERIES__ = syncPropertyGalleries;
+    var heroHotel = D.getHotel('hotel-02');
+    if (heroHotel && heroHotel.images && heroHotel.images.length) {
+      U.$('#heroBg').innerHTML = U.img(heroHotel.images[0], heroHotel.name, '', false, false);
+    }
+    return catalog;
+  }).catch(function() {
+    var fallbackHero = D.getHotel('hotel-02');
+    if (fallbackHero && fallbackHero.images && fallbackHero.images.length) {
+      U.$('#heroBg').innerHTML = U.img(fallbackHero.images[0], fallbackHero.name, '', false, false);
+    }
+    return null;
+  });
+
+  /* Static dataset is rendered immediately; once the live catalog arrives,
+     repaint so hotel cards use the same uploaded property gallery as the
+     hotel-detail page. */
+  var search = B.readSearch();
+  /* This page always lists the whole collection, so a hotel remembered from a
+     hotel-detail visit must not appear in the "Where" summary. */
+  search.hotelId = '';
+
+  /* ---- search summary + modify ---- */
+  function paintSummary() {
+    window.Search.summaryBar(U.$('#sumBar'), search, function () {
+      var box = U.$('#editSearch');
+      var open = box.style.display !== 'none';
+      box.style.display = open ? 'none' : 'block';
+      if (!open) window.Search.render(U.$('#searchWrap'), {
+        solid: true, cta: 'Search', values: search,
+        onSearch: function (s) {
+          B.saveSearch(s);
+          if (s.hotelId) {
+            location.href = 'hotel-detail.html?' + U.buildQS({
+              hotel: s.hotelId, checkIn: s.checkIn, checkOut: s.checkOut,
+              adults: s.adults, children: s.children, rooms: s.rooms });
+            return;
+          }
+          search = s;
+          box.style.display = 'none';
+          paintSummary(); paint();
+          U.toast('Search updated.');
+        }
+      });
+    });
+  }
+  paintSummary();
+
+  /* ---- filter definitions ---- */
+  var TYPES = [['standard','Standard'],['superior','Superior'],['deluxe','Deluxe'],
+               ['premium|premier','Premium'],['suite|studio','Suite & Studio'],['family','Family']];
+  var BEDS  = [['king','King bed'],['queen','Queen bed'],['twin','Twin / single'],['double','Double bed']];
+  var VIEWS = [['city','City view'],['street','Street view'],['window','Has window'],['balcony','Balcony']];
+  var AMEN  = [['breakfast','Breakfast included'],['balcony','Private balcony'],['bathtub','Bathtub']];
+  var STARS = [['4','4-star property'],['3','3-star property']];
+
+  function chk(host, list, name) {
+    U.$(host).innerHTML = list.map(function (x) {
+      return '<label class="opt"><input type="checkbox" value="' + x[0] + '" data-f="' + name + '"><span>' + x[1] + '</span></label>';
+    }).join('');
+  }
+  chk('#fType', TYPES, 'type'); chk('#fBed', BEDS, 'bed');
+  chk('#fView', VIEWS, 'view'); chk('#fAmen', AMEN, 'amen'); chk('#fStar', STARS, 'star');
+
+  var priceEl = U.$('#fPrice'), priceV = U.$('#fPriceV');
+  priceEl.addEventListener('input', function () {
+    var v = +priceEl.value;
+    priceV.textContent = v >= 2800000 ? '2,800,000+' : U.vnd(v);
+    paint();
+  });
+
+  function readFilters() {
+    function vals(n) {
+      return U.$$('[data-f="' + n + '"]:checked').map(function (i) { return i.value; });
+    }
+    var amen = vals('amen');
+    return {
+      priceMax: +priceEl.value >= 2800000 ? null : +priceEl.value,
+      types: vals('type'), beds: vals('bed'), views: vals('view'),
+      breakfast: amen.indexOf('breakfast') > -1,
+      balcony:   amen.indexOf('balcony') > -1,
+      bathtub:   amen.indexOf('bathtub') > -1,
+      stars: vals('star').map(Number),
+      guests: Math.ceil((+search.adults + +search.children) / (+search.rooms || 1))
+    };
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.dataset && e.target.dataset.f) paint();
+  });
+  U.$('#applyF').addEventListener('click', function () { paint(); U.toast('Filters applied.'); });
+  U.$('#clearF').addEventListener('click', function () {
+    U.$$('[data-f]').forEach(function (i) { i.checked = false; });
+    priceEl.value = 2800000; priceV.textContent = '2,800,000+';
+    paint(); U.toast('Filters cleared.');
+  });
+  U.$('#sortBy').addEventListener('change', paint);
+
+  /* ---- paint ---- */
+  function paint() {
+    var f = readFilters();
+    var list = D.hotels.filter(function (h) {
+      // NOTE: a hotelId carried over from a previous search must NOT filter
+      // this page — "Find Your Stay" always presents the full collection.
+      // Choosing a specific hotel in the search box navigates to its own page.
+      if (f.stars.length && f.stars.indexOf(h.starRating) < 0) return false;
+      var ok = h.rooms.filter(function (r) { return H.roomMatches(r, f); });
+      h._matching = ok;
+      h._from = ok.length ? Math.min.apply(null, ok.map(function (r) { return r.pricePerNight; })) : h.startingPrice;
+      return ok.length > 0;
+    });
+
+    list = H.sortHotels(list, U.$('#sortBy').value, search);
+
+    var n = U.nights(search.checkIn, search.checkOut);
+    U.$('#resCount').textContent = list.length + (list.length === 1 ? ' property available' : ' properties available');
+    U.$('#resSub').textContent = U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut) +
+      '  ·  ' + n + ' night' + (n === 1 ? '' : 's') + '  ·  ' + window.Search.guestText(search);
+
+    var host = U.$('#results');
+    if (!list.length) {
+      host.innerHTML = '<div class="empty">' + U.icon('door', 46) +
+        '<h3 style="margin-bottom:8px">No rooms match these filters</h3>' +
+        '<p class="muted" style="font-size:.9rem">Try widening your price range or clearing a filter.</p>' +
+        '<button class="btn btn--ghost" style="margin-top:18px" onclick="document.getElementById(\'clearF\').click()">Clear all filters</button></div>';
+      return;
+    }
+    host.innerHTML = list.map(function (h) {
+      var card = H.hotelCard(h, search);
+      // reflect the filtered "from" price
+      return card.replace(/(<span class="price__lb">From<\/span>)[\s\S]*?(<div class="price__u">)/,
+        '$1' + U.priceHTML(h._from) + '$2');
+    }).join('');
+    U.$$('.hcard__media').forEach(App.miniCarousel);
+    App.reveal();
+  }
+  paint();
+  liveReady.then(function() {
+    paint();
+    if (window.__KAS_SYNC_PROPERTY_GALLERIES__) window.__KAS_SYNC_PROPERTY_GALLERIES__();
+  });
+
+  U.$('#srcNote').innerHTML = U.icon('info', 17) +
+    '<span><b>About this data</b>Property names, addresses, room inventory and reference rates are maintained from the KAS dataset and current property references. Guest scores shown in the interface use a clearly labelled 10-point source score (Google or Trip.com, depending on the property). KAS reference rates are not live OTA prices.</span>';
+})();
+</script>
+</body>
+</html>

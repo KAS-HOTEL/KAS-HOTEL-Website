@@ -1,0 +1,1039 @@
+/* ==========================================================================
+   KAS — COMPONENTS
+   ========================================================================== */
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:640px;display:flex;align-items:flex-end;background:var(--black)}
+/* NOTE: no overflow:hidden here — the search bar overhangs the hero by design.
+   Clipping is done on .hero__bg instead, which is what actually needs it. */
+.hero--sm{min-height:340px;align-items:center}
+.hero__bg{position:absolute;inset:0;overflow:hidden;z-index:0}
+.hero__bg img{width:100%;height:100%;object-fit:cover;opacity:.62;animation:slowZoom 22s var(--ease) forwards}
+@keyframes slowZoom{from{transform:scale(1.07)}to{transform:scale(1)}}
+.hero__bg::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(100deg,rgba(14,13,11,.94) 0%,rgba(14,13,11,.72) 38%,rgba(14,13,11,.34) 70%,rgba(14,13,11,.55) 100%);
+}
+.hero__in{position:relative;z-index:2;width:100%;padding-block:clamp(5rem,11vw,7rem) 0}
+.hero--sm .hero__in .searchbar,.hero .searchbar{z-index:3}
+.hero__ct{max-width:640px;color:var(--tx-inv)}
+.hero__ct h1{color:var(--ivory);margin:.9rem 0 0}
+.hero__ct p{color:var(--tx-inv-2);font-size:1rem;max-width:460px;margin-top:1.5rem}
+.hero--sm .hero__in{padding-block:0 10px}
+.hero--sm .hero__ct h1{font-size:clamp(2.1rem,4vw,3.2rem)}
+/* V19: keep the edit-search control compact and inside the hero, 10px above its bottom edge. */
+.hero--sm .searchbar--sum{margin-bottom:0}
+.hero--sm .searchbar--sum > .btn{width:212px;min-width:212px;padding-inline:12px;white-space:nowrap}
+
+
+/* ---------- search bar ---------- */
+.searchbar{
+  display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr auto;
+  background:rgba(14,13,11,.82);backdrop-filter:blur(14px);
+  border:1px solid rgba(194,162,92,.28);border-radius:var(--r);
+  margin-top:2.6rem;transform:translateY(38px);box-shadow:var(--sh-4);
+}
+.searchbar--solid{
+  background:var(--surface);border-color:var(--line);
+  transform:none;margin-top:2rem;box-shadow:var(--sh-3);
+}
+.sf{padding:15px 20px;border-right:1px solid rgba(194,162,92,.2);min-width:0;position:relative}
+.searchbar--solid .sf{border-right-color:var(--line)}
+.sf:last-of-type{border-right:none}
+.sf__lb{
+  display:block;font-size:.58rem;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold-lt);margin-bottom:5px;
+}
+.searchbar--solid .sf__lb{color:var(--tx-3)}
+.sf__ctl{display:flex;align-items:center;gap:9px}
+.sf__ctl svg{color:var(--gold);flex-shrink:0}
+.searchbar--solid .sf__ctl svg{color:var(--gold-dk)}
+.sf input,.sf select{
+  width:100%;background:transparent;border:none;padding:0;color:var(--ivory);
+  font-size:.92rem;font-weight:500;cursor:pointer;min-width:0;
+}
+.searchbar--solid .sf input,.searchbar--solid .sf select{color:var(--tx)}
+.sf input:focus,.sf select:focus{outline:none}
+.sf select option{background:var(--black);color:var(--ivory)}
+.searchbar--solid .sf select option{background:#fff;color:var(--tx)}
+.sf input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.72) sepia(.5) saturate(3) hue-rotate(2deg);cursor:pointer}
+.searchbar--solid input[type=date]::-webkit-calendar-picker-indicator{filter:none;opacity:.5}
+.searchbar .btn{border-radius:0;height:100%;padding-inline:34px}
+.searchbar--solid .btn{border-radius:0 var(--r) var(--r) 0}
+
+/* guests popover */
+.gpop{
+  position:absolute;top:calc(100% + 10px);right:0;z-index:60;width:280px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  box-shadow:var(--sh-4);padding:16px;display:none;
+}
+.gpop.open{display:block;animation:popIn .2s var(--ease)}
+@keyframes popIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.gpop__row{display:flex;align-items:center;justify-content:space-between;padding:9px 0}
+.gpop__row+.gpop__row{border-top:1px solid var(--line)}
+.gpop__row b{display:block;font-size:.87rem;font-weight:600;color:var(--tx)}
+.gpop__row span{font-size:.73rem;color:var(--tx-3)}
+
+.stepper{display:flex;align-items:center;gap:12px}
+.stepper button{
+  width:29px;height:29px;border-radius:50%;border:1px solid var(--line-2);
+  display:grid;place-items:center;color:var(--tx-2);transition:all var(--t);flex-shrink:0;
+}
+.stepper button:hover:not(:disabled){border-color:var(--gold);color:var(--gold-dk);background:rgba(194,162,92,.07)}
+.stepper button:disabled{opacity:.32;cursor:not-allowed}
+.stepper output{min-width:20px;text-align:center;font-weight:600;font-size:.92rem}
+
+/* ---------- trust strip ---------- */
+.trust{background:var(--surface);border-bottom:1px solid var(--line)}
+.trust__in{display:flex;justify-content:space-between;gap:18px;padding-block:1.15rem;flex-wrap:wrap}
+.trust__i{display:flex;align-items:center;gap:9px;font-size:.79rem;color:var(--tx-2);font-weight:500}
+.trust__i svg{color:var(--gold-dk);flex-shrink:0}
+.trust--pad{padding-block:2.6rem;border-top:1px solid var(--line);border-bottom:none;background:var(--surface-2)}
+.trust--pad .trust__in{padding:0;align-items:flex-start}
+.trust--pad .trust__i{flex-direction:row;align-items:flex-start;gap:12px;flex:1;min-width:190px}
+.trust--pad .trust__i b{display:block;font-size:.8rem;color:var(--tx);font-weight:600;margin-bottom:2px}
+.trust--pad .trust__i span{font-size:.76rem;color:var(--tx-3);font-weight:400;line-height:1.5}
+
+/* ---------- property rail (home) ---------- */
+.rail{display:grid;grid-template-columns:repeat(8,1fr);gap:14px}
+.pcard{
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  overflow:hidden;transition:all var(--t);cursor:pointer;display:flex;flex-direction:column;
+}
+.pcard:hover{transform:translateY(-5px);box-shadow:var(--sh-3);border-color:var(--sand)}
+.pcard__img{aspect-ratio:3/4;overflow:hidden;background:var(--beige);position:relative;contain:paint}
+.pcard__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.pcard:hover .pcard__img img{transform:scale(1.07)}
+.pcard__b{padding:13px 10px 15px;text-align:center;display:flex;flex-direction:column;min-width:0}
+.pcard__b h4{font-size:.93rem;line-height:1.25;margin-bottom:5px;overflow-wrap:anywhere}
+.pcard__b .area{font-size:.68rem;color:var(--tx-3);letter-spacing:.02em;line-height:1.4}
+.pcard__address{display:block;min-height:2.8em}
+.pcard__rate{font-size:.7rem;color:var(--gold-dk);font-weight:600;margin-top:6px}
+
+/* ---------- hotel card (listing) ---------- */
+.hcard{
+  display:grid;grid-template-columns:330px 1fr;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  transition:all var(--t);
+}
+.hcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
+.hcard__media{position:relative;background:var(--beige);min-height:250px;overflow:hidden;contain:paint}
+.hcard__media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .7s var(--ease)}
+.hcard:hover .hcard__media img{transform:scale(1.05)}
+.hcard__b{padding:24px 26px;display:flex;flex-direction:column;gap:12px}
+.hcard__hd{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
+.hcard__hd h3{margin-bottom:5px}
+.hcard__loc{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--tx-2)}
+.hcard__loc svg{color:var(--gold-dk);flex-shrink:0}
+.hcard__desc{font-size:.87rem;color:var(--tx-2);line-height:1.62}
+.hcard__am{display:flex;flex-wrap:wrap;gap:7px}
+.hcard__ft{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
+  margin-top:auto;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap;
+}
+.legacy{font-size:.7rem;color:var(--tx-3);font-style:italic;margin-top:4px}
+
+/* rating block */
+.rate{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.rate__n{
+  background:var(--black);color:var(--gold-lt);font-weight:600;
+  padding:7px 11px;border-radius:var(--r-sm);font-size:.95rem;line-height:1;
+  font-family:var(--serif);
+}
+.rate__m small{display:block;font-size:.68rem;color:var(--tx-3);line-height:1.4}
+.rate__m b{font-size:.76rem;font-weight:600;color:var(--tx)}
+.stars{display:flex;gap:1.5px;color:var(--gold)}
+.stars svg{width:12px;height:12px}
+
+/* price block */
+.price{text-align:right}
+.price__lb{font-size:.66rem;color:var(--tx-3);letter-spacing:.1em;text-transform:uppercase}
+.price__v{font-family:var(--serif);font-size:1.75rem;color:var(--tx);line-height:1.05;font-weight:500}
+.price__v sup{font-size:.58rem;font-family:var(--sans);letter-spacing:.08em;color:var(--tx-2);margin-left:3px;vertical-align:super;font-weight:600}
+.price__u{font-size:.72rem;color:var(--tx-3)}
+
+/* ---------- chips / tags ---------- */
+.chip{
+  display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:100px;
+  font-size:.71rem;color:var(--tx-2);white-space:nowrap;
+}
+.chip svg{color:var(--gold-dk);flex-shrink:0}
+.chip--gold{background:rgba(194,162,92,.1);border-color:rgba(194,162,92,.32);color:var(--brown)}
+.chip--ok{background:var(--ok-bg);border-color:#CFE0D0;color:var(--ok)}
+.badge{
+  position:absolute;top:14px;left:14px;z-index:3;padding:5px 12px;
+  background:rgba(14,13,11,.86);backdrop-filter:blur(6px);color:var(--gold-lt);
+  font-size:.6rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  border-radius:var(--r-sm);
+}
+.badge--gold{background:linear-gradient(160deg,var(--gold-lt),var(--gold));color:var(--black)}
+.badge--sig{position:static;display:inline-block}
+
+/* ---------- room card ---------- */
+.rcard{
+  display:grid;grid-template-columns:300px 1fr 226px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all var(--t);
+}
+.rcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
+.rcard__media{position:relative;background:var(--beige);min-height:224px;overflow:hidden;contain:paint}
+.rcard__b{padding:22px 24px;display:flex;flex-direction:column;gap:11px;min-width:0}
+.rcard__b h3{font-size:1.32rem}
+.rcard__specs{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px}
+.spec{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--tx-2)}
+.spec svg{color:var(--gold-dk);flex-shrink:0}
+.rcard__desc{font-size:.84rem;color:var(--tx-2);line-height:1.6}
+.rcard__side{
+  padding:22px 22px;background:var(--surface-2);border-left:1px solid var(--line);
+  display:flex;flex-direction:column;gap:10px;
+}
+.rcard__perks{display:flex;flex-direction:column;gap:6px;margin-top:2px}
+.perk{display:flex;align-items:center;gap:7px;font-size:.75rem;color:var(--tx-2)}
+.perk svg{color:var(--ok);flex-shrink:0}
+.perk--gold svg{color:var(--gold-dk)}
+
+/* ---------- gallery ---------- */
+.gal{display:flex;flex-direction:column;gap:11px}
+.gal__main{
+  position:relative;aspect-ratio:16/10;background:transparent;
+  border-radius:var(--r);overflow:hidden;cursor:zoom-in;
+}
+.gal__main img{display:block;width:100%;height:100%;object-fit:cover}
+.gal__nav{
+  position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;
+  border-radius:50%;background:rgba(251,249,245,.92);backdrop-filter:blur(6px);
+  display:grid;place-items:center;color:var(--tx);transition:all var(--t);
+  z-index:3;box-shadow:var(--sh-2);
+}
+.gal__nav:hover{background:var(--ivory);transform:translateY(-50%) scale(1.07)}
+.gal__nav--prev{left:14px}
+.gal__nav--next{right:14px}
+.gal__count{
+  position:absolute;right:14px;bottom:14px;z-index:3;padding:5px 11px;
+  background:rgba(14,13,11,.74);color:var(--ivory);border-radius:100px;
+  font-size:.71rem;letter-spacing:.05em;backdrop-filter:blur(6px);
+}
+.gal__thumbs{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}
+.gal__t{
+  aspect-ratio:4/3;border-radius:var(--r-sm);overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:all var(--t);background:var(--beige);position:relative;
+}
+.gal__t img{width:100%;height:100%;object-fit:cover;transition:opacity var(--t)}
+.gal__t:hover img{opacity:.82}
+.gal__t.is-active{border-color:var(--gold)}
+.gal__more{
+  position:absolute;inset:0;background:rgba(14,13,11,.68);color:var(--ivory);
+  display:grid;place-items:center;font-size:.76rem;text-align:center;line-height:1.3;
+}
+
+/* mini carousel inside cards */
+.mini{position:absolute;inset:0}
+.mini img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .45s var(--ease)}
+.mini img.is-on{opacity:1}
+.mini__nav{
+  position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;
+  border-radius:50%;background:rgba(251,249,245,.9);display:grid;place-items:center;
+  color:var(--tx);opacity:0;transition:all var(--t);z-index:3;
+}
+.rcard:hover .mini__nav,.hcard:hover .mini__nav{opacity:1}
+.mini__nav--prev{left:10px}
+.mini__nav--next{right:10px}
+.mini__dots{position:absolute;bottom:11px;left:50%;transform:translateX(-50%);display:flex;gap:5px;z-index:3}
+.mini__dots i{width:5px;height:5px;border-radius:50%;background:rgba(251,249,245,.5);transition:all var(--t)}
+.mini__dots i.is-on{background:var(--ivory);width:14px;border-radius:3px}
+
+/* lightbox */
+.lb{
+  position:fixed;inset:0;z-index:1200;background:rgba(10,9,8,.95);
+  display:none;place-items:center;padding:36px;
+}
+.lb.open{display:grid;animation:fade .25s var(--ease)}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.lb img{max-width:100%;max-height:84vh;object-fit:contain;border-radius:var(--r)}
+.lb__x{position:absolute;top:22px;right:26px;color:var(--ivory);padding:10px;z-index:5}
+.lb__nav{position:absolute;top:50%;transform:translateY(-50%);color:var(--ivory);padding:16px;transition:opacity var(--t)}
+.lb__nav:hover{opacity:.65}
+.lb__nav--prev{left:18px}
+.lb__nav--next{right:18px}
+.lb__cap{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:var(--tx-inv-2);font-size:.8rem}
+
+/* ---------- stepper / progress ---------- */
+.steps{background:var(--surface);border-bottom:1px solid var(--line)}
+.steps__in{display:flex;align-items:center;padding-block:20px;gap:0}
+.step{display:flex;align-items:center;gap:11px;flex-shrink:1;min-width:0}
+/* long step captions (e.g. a room name) truncate instead of pushing the row off-screen */
+.step__t{min-width:0}
+.step__t b,.step__t span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.step__n{
+  width:29px;height:29px;border-radius:50%;display:grid;place-items:center;
+  font-size:.76rem;font-weight:600;flex-shrink:0;
+  background:var(--surface-2);color:var(--tx-3);border:1px solid var(--line-2);
+  transition:all var(--t);
+}
+.step__t b{display:block;font-size:.79rem;font-weight:600;color:var(--tx-3);line-height:1.3}
+.step__t span{font-size:.69rem;color:var(--tx-3)}
+.step.is-done .step__n{background:var(--gold);border-color:var(--gold);color:var(--black)}
+.step.is-done .step__t b{color:var(--tx-2)}
+.step.is-on .step__n{background:var(--black);border-color:var(--black);color:var(--gold-lt)}
+.step.is-on .step__t b{color:var(--tx)}
+.step.is-on .step__t span{color:var(--gold-dk)}
+.step__line{flex:1;height:1px;background:var(--line);margin-inline:16px;min-width:20px}
+.step__line.is-done{background:var(--gold)}
+
+/* breadcrumb */
+.crumb{display:flex;align-items:center;gap:8px;font-size:.77rem;color:var(--tx-3);padding-block:16px;flex-wrap:wrap}
+.crumb a{transition:color var(--t)}
+.crumb a:hover{color:var(--gold-dk)}
+.crumb .sep{opacity:.5}
+.crumb .cur{color:var(--gold-dk);font-weight:500}
+
+/* ---------- layout: content + sidebar ---------- */
+.split{display:grid;grid-template-columns:1fr 360px;gap:30px;align-items:start}
+/* Grid items default to min-width:auto (= min-content), so an intrinsically
+   wide child — the price range slider — can force a column wider than the
+   viewport. Allowing the tracks to shrink is the fix; clipping the page is not. */
+.split > *{min-width:0}
+.split--filters{grid-template-columns:262px 1fr}
+.sticky{position:sticky;top:calc(var(--nav-h) + 20px)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel__hd{
+  padding:14px 20px;background:var(--black);color:var(--ivory);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.panel__hd h4{
+  color:var(--ivory);font-family:var(--sans);font-size:.72rem;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;
+}
+.panel__hd--gold{background:linear-gradient(160deg,var(--gold-lt),var(--gold))}
+.panel__hd--gold h4{color:var(--black)}
+.panel__b{padding:20px}
+.panel__b+.panel__b{border-top:1px solid var(--line)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px 26px}
+.card__hd{display:flex;align-items:center;gap:11px;margin-bottom:18px}
+.card__hd svg{color:var(--gold-dk);flex-shrink:0}
+.card__hd h4{
+  font-family:var(--sans);font-size:.74rem;font-weight:600;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--tx);
+}
+.card__hd .edit{margin-left:auto}
+
+/* definition rows */
+.dl{display:grid;grid-template-columns:repeat(3,1fr);gap:18px 24px}
+.dl--2{grid-template-columns:repeat(2,1fr)}
+.dt{font-size:.7rem;color:var(--tx-3);letter-spacing:.08em;margin-bottom:3px}
+.dd{font-size:.9rem;color:var(--tx);font-weight:500}
+.dd small{display:block;font-size:.74rem;color:var(--tx-3);font-weight:400;margin-top:2px}
+
+/* price summary rows */
+.prow{display:flex;justify-content:space-between;gap:14px;font-size:.85rem;padding:7px 0;align-items:baseline}
+.prow span:first-child{color:var(--tx-2)}
+.prow span:last-child{font-weight:500;white-space:nowrap}
+.prow small{display:block;font-size:.72rem;color:var(--tx-3)}
+.prow--total{
+  border-top:1px solid var(--line);margin-top:10px;padding-top:14px;align-items:baseline;
+}
+.prow--total span:first-child{font-family:var(--serif);font-size:1.22rem;color:var(--tx)}
+.prow--total span:last-child{font-family:var(--serif);font-size:1.52rem;color:var(--tx);font-weight:500}
+.prow--total sup{font-size:.56rem;font-family:var(--sans);letter-spacing:.08em;margin-left:3px;vertical-align:super;font-weight:600;color:var(--tx-2)}
+
+/* ---------- filters ---------- */
+.filters{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:22px;min-width:0}
+.range__v{min-width:0;gap:8px}
+.range__v span{white-space:nowrap}
+.fgrp{padding-block:16px;border-top:1px solid var(--line)}
+.fgrp:first-of-type{border-top:none;padding-top:6px}
+.fgrp h5{
+  font-family:var(--sans);font-size:.63rem;font-weight:600;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--tx);margin-bottom:11px;
+}
+.fgrp .opt{padding:5px 0;font-size:.83rem}
+.range{display:flex;align-items:center;gap:10px;margin-bottom:8px;min-width:0}
+.range input{flex:1;min-width:0;width:100%;accent-color:var(--gold);cursor:pointer}
+.range__v{display:flex;justify-content:space-between;font-size:.74rem;color:var(--tx-2)}
+
+/* ---------- payment method cards ---------- */
+.pays{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.pay{
+  border:1px solid var(--line);border-radius:var(--r);padding:15px 17px;
+  cursor:pointer;transition:all var(--t);background:var(--surface);
+}
+.pay:hover{border-color:var(--line-2);background:var(--surface-2)}
+.pay.is-on{border-color:var(--gold);background:rgba(194,162,92,.055);box-shadow:0 0 0 1px var(--gold)}
+.pay__hd{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.pay__hd b{font-size:.87rem;font-weight:600}
+.pay__hd .cards{margin-left:auto;display:flex;gap:4px;align-items:center}
+.pay p{font-size:.75rem;color:var(--tx-3);margin:0;padding-left:26px;line-height:1.5}
+
+/* ---------- alerts ---------- */
+.alert{display:flex;gap:12px;padding:15px 18px;border-radius:var(--r);font-size:.85rem;line-height:1.6}
+.alert svg{flex-shrink:0;margin-top:1px}
+.alert--ok{background:var(--ok-bg);border:1px solid #CFE0D0;color:#2F5636}
+.alert--ok svg{color:var(--ok)}
+.alert--info{background:var(--surface-2);border:1px solid var(--line)}
+.alert--info svg{color:var(--gold-dk)}
+.alert--err{background:var(--err-bg);border:1px solid #EFCEC6;color:#7E3323}
+.alert--err svg{color:var(--err)}
+.alert b{display:block;margin-bottom:3px}
+.alert--demo{background:rgba(194,162,92,.08);border:1px solid rgba(194,162,92,.3);font-size:.78rem;color:var(--brown)}
+
+/* ---------- toast ---------- */
+.toasts{position:fixed;bottom:26px;left:26px;z-index:1400;display:flex;flex-direction:column;gap:10px}
+.toast{
+  display:flex;align-items:center;gap:11px;padding:14px 20px;background:var(--black);
+  color:var(--ivory);border-radius:var(--r);box-shadow:var(--sh-4);font-size:.85rem;
+  border-left:3px solid var(--gold);animation:slideIn .34s var(--ease);max-width:370px;
+}
+.toast svg{color:var(--gold-lt);flex-shrink:0}
+.toast.out{animation:slideOut .3s var(--ease) forwards}
+@keyframes slideIn{from{opacity:0;transform:translateX(-26px)}to{opacity:1;transform:none}}
+@keyframes slideOut{to{opacity:0;transform:translateX(-26px)}}
+
+/* ---------- modal ---------- */
+.modal{position:fixed;inset:0;z-index:1300;display:none;place-items:center;padding:24px;background:rgba(14,13,11,.62);backdrop-filter:blur(3px)}
+.modal.open{display:grid;animation:fade .22s var(--ease)}
+.modal__box{
+  background:var(--surface);border-radius:var(--r-lg);max-width:470px;width:100%;
+  box-shadow:var(--sh-4);animation:zoomIn .28s var(--ease);overflow:hidden;
+}
+@keyframes zoomIn{from{opacity:0;transform:scale(.95) translateY(10px)}to{opacity:1;transform:none}}
+.modal__b{padding:30px}
+.modal__b h3{margin-bottom:10px}
+.modal__ft{display:flex;gap:11px;padding:0 30px 30px}
+.modal__ft .btn{flex:1}
+
+/* ---------- chat bubble ---------- */
+.chat{
+  position:fixed;right:22px;bottom:22px;z-index:800;display:flex;align-items:center;gap:9px;
+  padding:12px 21px;background:var(--black);color:var(--ivory);border-radius:100px;
+  box-shadow:var(--sh-4);font-size:.8rem;font-weight:500;transition:all var(--t);
+  border:1px solid rgba(194,162,92,.3);
+}
+.chat:hover{transform:translateY(-2px);background:var(--char);border-color:var(--gold)}
+.chat svg{color:var(--gold-lt)}
+
+/* back to top */
+.totop{
+  position:fixed;right:22px;bottom:82px;z-index:790;width:40px;height:40px;border-radius:50%;
+  background:var(--surface);border:1px solid var(--line-2);color:var(--tx-2);
+  display:grid;place-items:center;box-shadow:var(--sh-2);opacity:0;visibility:hidden;
+  transition:all var(--t);
+}
+.totop.show{opacity:1;visibility:visible}
+.totop:hover{background:var(--gold);border-color:var(--gold);color:var(--black)}
+
+/* ---------- misc ---------- */
+.fade-up{opacity:0;transform:translateY(22px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
+.fade-up.in{opacity:1;transform:none}
+
+.skel{background:linear-gradient(90deg,var(--beige) 25%,var(--ivory-2) 50%,var(--beige) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+
+/* Branded placeholder — shown only when every candidate URL fails.
+   Designed to read as intentional art direction, not a broken image. */
+.imgfall{
+  position:absolute;inset:0;width:100%;height:100%;
+  display:grid;place-items:center;text-align:center;padding:18px;
+  background:
+    radial-gradient(120% 90% at 50% 0%,rgba(194,162,92,.14),transparent 62%),
+    linear-gradient(155deg,#14120F 0%,#1F1B16 48%,#2A2621 100%);
+  color:var(--gold-lt);overflow:hidden;
+}
+.imgfall::before{
+  content:'';position:absolute;inset:0;opacity:.16;
+  background-image:
+    repeating-linear-gradient(45deg,transparent 0 13px,rgba(194,162,92,.5) 13px 14px),
+    repeating-linear-gradient(-45deg,transparent 0 13px,rgba(194,162,92,.28) 13px 14px);
+}
+.imgfall > div{position:relative;z-index:1;max-width:220px}
+.imgfall span{
+  font-size:.63rem;letter-spacing:.15em;text-transform:uppercase;
+  opacity:.82;display:block;margin-top:9px;line-height:1.55;
+}
+/* ensure image containers can host the absolute placeholder.
+   NOTE: .mini is intentionally EXCLUDED — it is position:absolute;inset:0
+   and must stay that way, or it collapses to zero height. */
+.pcard__img,.hcard__media,.rcard__media,.gal__main,.gal__t{position:relative}
+
+.divider{height:1px;background:var(--line);margin-block:22px}
+.srcnote{font-size:.7rem;color:var(--tx-3);font-style:italic}
+.amgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px 18px}
+.am{display:flex;align-items:center;gap:9px;font-size:.83rem;color:var(--tx-2)}
+.am svg{color:var(--gold-dk);flex-shrink:0}
+
+.revbar{display:grid;grid-template-columns:58px 1fr 40px;gap:10px;align-items:center;font-size:.76rem;color:var(--tx-2)}
+.revbar__t{height:5px;background:var(--beige);border-radius:3px;overflow:hidden}
+.revbar__f{height:100%;background:var(--gold);border-radius:3px}
+.revcard{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;background:var(--surface-2)}
+.revcard__hd{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+.avatar{
+  width:33px;height:33px;border-radius:50%;background:var(--black);color:var(--gold-lt);
+  display:grid;place-items:center;font-size:.75rem;font-weight:600;flex-shrink:0;
+}
+.empty{text-align:center;padding:64px 24px;color:var(--tx-2)}
+.empty svg{color:var(--sand);margin-bottom:18px}
+.mobile-cta{display:none}
+
+/* V12.1: featured gallery must be seamless — no dark slivers between image tiles. */
+.featured-gallery{gap:0!important;line-height:0}
+.featured-gallery>div{margin:0!important;padding:0!important;line-height:0;background:transparent!important}
+.featured-gallery>div img{display:block;width:100%;height:100%;margin:0!important;vertical-align:top}
+
+/* room-detail + reviews responsive helpers */
+@media (max-width:1100px){ .specstrip{grid-template-columns:repeat(3,1fr)!important} }
+@media (max-width:980px){ .revgrid{grid-template-columns:1fr!important} }
+@media (max-width:720px){ .revlist{grid-template-columns:1fr!important} }
+@media (max-width:560px){ .specstrip{grid-template-columns:repeat(2,1fr)!important} }
+
+/* summary bar variant — grid lives in CSS (not inline) so the
+   responsive media queries in responsive.css can override it. */
+.searchbar--sum{margin:0;grid-template-columns:1.5fr 1fr 1fr 1.2fr 212px}
+.searchbar--sum .sf__ctl > div{min-width:0}
+
+/* guests trigger must inherit the same light treatment as the other fields
+   on the dark hero variant (it is a <button>, not an <input>) */
+.searchbar #sbGuests{color:var(--ivory)}
+.searchbar--solid #sbGuests{color:var(--tx)}
+
+/* "+N / View all" overlay must sit above a placeholder if one rendered */
+.gal__more{z-index:2;background:rgba(14,13,11,.74);backdrop-filter:blur(2px);font-weight:500}
+
+/* ==========================================================================
+   CONTACT  (single source: KAS_DATA.config.contact via js/contact.js)
+   ========================================================================== */
+.ct-link{display:flex;align-items:center;gap:13px;font-size:.83rem;color:var(--tx-2);
+  padding:7px 0;transition:color var(--t);line-height:1.35;min-height:32px}
+.ct-link svg{color:var(--gold-dk);flex-shrink:0}
+.ct-link:hover{color:var(--gold-dk)}
+.ct-link--inv{color:var(--tx-inv-2)}
+.ct-link--inv svg{color:var(--gold)}
+.ct-link--inv:hover{color:var(--ivory)}
+.ct-stack{display:flex;flex-direction:column;gap:5px}.ct-stack--footer{margin-top:8px}
+.ct-btn{text-transform:none;letter-spacing:.01em;font-size:.76rem}
+
+/* header phone */
+.hdr__tel{display:inline-flex;align-items:center;gap:7px;color:var(--tx-inv-2);
+  font-size:.8rem;font-weight:600;letter-spacing:.02em;padding:7px 11px;
+  border:1px solid rgba(194,162,92,.3);border-radius:var(--r-sm);transition:all var(--t);white-space:nowrap}
+.hdr__tel svg{color:var(--gold)}
+.hdr__tel:hover{color:var(--ivory);border-color:var(--gold);background:rgba(194,162,92,.12)}
+
+/* support block */
+.ct-support{border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;background:var(--surface-2)}
+.ct-support--inv{background:rgba(255,255,255,.04);border-color:rgba(194,162,92,.24)}
+.ct-support__hd{display:flex;gap:11px;align-items:flex-start;margin-bottom:14px}
+.ct-support__hd svg{color:var(--gold-dk);flex-shrink:0;margin-top:1px}
+.ct-support__hd b{display:block;font-size:.88rem;line-height:1.35}
+.ct-support__hd span{font-size:.76rem;color:var(--tx-3)}
+.ct-support--inv .ct-support__hd svg{color:var(--gold)}
+.ct-support--inv .ct-support__hd b{color:var(--ivory)}
+.ct-support--inv .ct-support__hd span{color:var(--tx-inv-2)}
+.ct-channels{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.ct-ch{display:flex;align-items:center;gap:9px;padding:11px 12px;border:1px solid var(--line);
+  border-radius:var(--r-sm);background:var(--surface);transition:all var(--t);min-width:0}
+.ct-ch svg{color:var(--gold-dk);flex-shrink:0}
+.ct-ch b{display:block;font-size:.79rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ct-ch small{display:block;font-size:.68rem;color:var(--tx-3)}
+.ct-ch:hover{border-color:var(--gold);background:rgba(194,162,92,.06);transform:translateY(-1px)}
+.ct-ch--zalo:hover{border-color:#0068FF}
+.ct-ch--zalo:hover svg{color:#0068FF}
+.ct-ch--wa:hover{border-color:#25D366}
+.ct-ch--wa:hover svg{color:#1EA952}
+.ct-support--inv .ct-ch{background:rgba(255,255,255,.05);border-color:rgba(194,162,92,.2)}
+.ct-support--inv .ct-ch b{color:var(--ivory)}
+.ct-support--inv .ct-ch small{color:var(--tx-inv-2)}
+.ct-support--inv .ct-ch svg{color:var(--gold)}
+
+/* floating contact widget (replaces the old single chat bubble) */
+.ct-fab{position:fixed;right:22px;bottom:22px;z-index:800;display:flex;flex-direction:column;
+  align-items:flex-end;gap:10px}
+.ct-fab__btn{display:flex;align-items:center;gap:9px;padding:12px 21px;background:var(--black);
+  color:var(--ivory);border-radius:100px;box-shadow:var(--sh-4);font-size:.8rem;font-weight:500;
+  border:1px solid rgba(194,162,92,.3);transition:all var(--t)}
+.ct-fab__btn svg{color:var(--gold-lt)}
+.ct-fab__btn:hover{background:var(--char);border-color:var(--gold);transform:translateY(-2px)}
+.ct-fab.is-open .ct-fab__btn{background:var(--char);border-color:var(--gold)}
+.ct-fab__menu{display:flex;flex-direction:column;gap:7px;background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh-4);padding:8px;
+  min-width:216px;animation:popIn .2s var(--ease)}
+.ct-fab__item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);
+  transition:background var(--t)}
+.ct-fab__item svg{color:var(--gold-dk);flex-shrink:0}
+.ct-fab__item b{display:block;font-size:.83rem;font-weight:600}
+.ct-fab__item small{display:block;font-size:.7rem;color:var(--tx-3)}
+.ct-fab__item:hover{background:var(--surface-2)}
+
+/* two-tier gallery: the room's own photos vs other rooms at the property */
+.gal__tier{position:absolute;left:14px;bottom:14px;z-index:3;padding:5px 11px;
+  background:rgba(194,162,92,.92);color:var(--black);border-radius:100px;
+  font-size:.65rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  backdrop-filter:blur(6px)}
+.gal__tier--sib{background:rgba(14,13,11,.78);color:var(--champagne)}
+.gal__t--sib{opacity:.82}
+.gal__t--sib::after{content:'';position:absolute;inset:0;border:1px dashed rgba(194,162,92,.45);
+  border-radius:var(--r-sm);pointer-events:none}
+.gal__t--sib.is-active{opacity:1}
+
+/* ---- room / hotel card refinements (STEP 6) ----
+   Same design language; better ratio, cropping and hover. */
+.rcard__media{aspect-ratio:4/3;min-height:0}
+.hcard__media{aspect-ratio:4/3;min-height:0}
+.mini img{object-position:center 55%}          /* rooms read better slightly low */
+.rcard{transition:box-shadow var(--t),border-color var(--t),transform var(--t)}
+.rcard:hover{transform:translateY(-2px)}
+.hcard:hover{transform:translateY(-2px)}
+.rcard__b h3{letter-spacing:-.012em;margin-bottom:2px}
+.rcard__b > .rcard__specs{margin-top:2px}
+.spec{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rcard__media .mini img,.hcard__media .mini img{transition:transform .8s var(--ease)}
+.rcard:hover .mini img.is-on,.hcard:hover .mini img.is-on{transform:scale(1.045)}
+/* photo-provenance chip on room cards */
+.photochip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;
+  font-size:.64rem;letter-spacing:.06em;background:rgba(194,162,92,.12);
+  border:1px solid rgba(194,162,92,.32);color:var(--brown)}
+.photochip--warn{background:rgba(168,118,44,.1);border-color:rgba(168,118,44,.35);color:var(--warn)}
+.photochip svg{flex-shrink:0}
+
+
+/* V11.1 footer contact/travel-trade spacing */
+.ftr__contact .ct-link,
+.ftr__trade > a{display:flex;align-items:center;gap:13px;padding:7px 0;line-height:1.35;min-height:32px}
+.ftr__contact .ct-link svg,
+.ftr__trade > a svg{width:17px;height:17px;flex:0 0 17px}
+.ftr__contact .ct-stack--footer{gap:5px;margin-top:8px}
+.ftr__contact .tiny{line-height:1.65}
+.ftr__trade-intro{font-size:.76rem;color:var(--tx-3);line-height:1.55;margin:0 0 8px;max-width:190px}
+.ftr__trade > a{font-size:.82rem;color:var(--tx-2)}
+.ftr__trade > a:hover{color:var(--gold-dk)}
+
+/* ---------- KAS member sign-in ---------- */
+.kas-auth{position:fixed;inset:0;z-index:1000;background:rgba(10,9,7,.72);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+.kas-auth.is-open{opacity:1;visibility:visible}
+.kas-auth__box{width:min(440px,100%);max-height:min(720px,calc(100vh - 36px));overflow:auto;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-4);border-radius:10px;padding:34px 34px 28px;position:relative}
+.kas-auth__close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:var(--ivory);color:var(--tx);cursor:pointer;font-size:20px;line-height:1}
+.kas-auth__brand{display:flex;justify-content:center;margin:3px 0 19px}
+.kas-auth__brand img{width:150px;height:auto}
+.kas-auth__eyebrow{text-align:center;color:var(--gold-dk);font-size:.62rem;font-weight:700;letter-spacing:.22em;text-transform:uppercase}
+.kas-auth h2{text-align:center;font-family:var(--serif);font-weight:400;font-size:2rem;margin:9px 0 6px}
+.kas-auth__sub{text-align:center;color:var(--tx-2);font-size:.78rem;line-height:1.55;margin:0 0 24px}
+.kas-auth__field{margin-bottom:14px}.kas-auth__field label{display:block;font-size:.7rem;font-weight:600;margin-bottom:6px;color:var(--tx)}
+.kas-auth__field input{width:100%;height:46px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:0 13px;font:inherit;font-size:.82rem;outline:0}
+.kas-auth__field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,162,92,.12)}
+.kas-auth__submit{width:100%;height:46px;border:0;border-radius:6px;background:var(--gold);color:#17130d;font-weight:700;letter-spacing:.06em;cursor:pointer;margin-top:5px}
+.kas-auth__switch{text-align:center;color:var(--tx-2);font-size:.74rem;margin:18px 0 0}.kas-auth__switch button{border:0;background:none;color:var(--gold-dk);font-weight:700;cursor:pointer;font:inherit}
+.kas-auth__message{min-height:18px;text-align:center;font-size:.72rem;margin:9px 0 0;color:var(--gold-dk)}
+.kas-auth__remember{display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--tx-2);margin:8px 0 14px}.kas-auth__remember input{accent-color:var(--gold)}
+.dest-d3-cta{text-align:right;margin-top:18px}
+.dest-experiences--three{margin-top:0}
+@media(max-width:560px){.kas-auth__box{padding:30px 22px 24px}.dest-d3-cta{text-align:left}}
+
+/* Homepage — horizontal KAS discovery rail */
+.kas-discover{padding-top:clamp(4rem,6vw,5.5rem);padding-bottom:clamp(3.2rem,5vw,4.8rem);overflow:hidden}
+.kas-discover__head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:1.8rem}
+.kas-discover__head .section-title{text-align:left;margin-top:.45rem}
+.kas-discover__intro{max-width:340px;color:var(--tx-2);font-size:.82rem;line-height:1.65;margin:0 0 .35rem}
+.kas-rail-wrap{width:100%;overflow:hidden}
+.kas-rail{
+  display:flex;gap:12px;
+  overflow-x:auto;overflow-y:hidden;
+  padding:0 max(22px,calc((100vw - var(--container))/2)) 18px;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:thin;
+  scrollbar-color:var(--gold) transparent;
+  -webkit-overflow-scrolling:touch;
+}
+.kas-rail::-webkit-scrollbar{height:6px}
+.kas-rail::-webkit-scrollbar-track{background:transparent}
+.kas-rail::-webkit-scrollbar-thumb{background:rgba(151,117,48,.45);border-radius:99px}
+.kas-rail .pcard{
+  flex:0 0 clamp(190px,18vw,245px);
+  scroll-snap-align:start;
+  border-radius:0;
+}
+.kas-rail .pcard__img{aspect-ratio:4/4.8}
+.kas-rail .pcard__b{text-align:left;padding:15px 14px 17px}
+.kas-rail .pcard__b h4{font-family:var(--serif);font-size:1.05rem;font-weight:400}
+.kas-discover__actions{text-align:right;margin-top:1rem}
+.kas-discover__actions .btn{margin-left:8px}
+
+/* More cinematic homepage hero, with the booking search floating over the image. */
+.hero{min-height:min(760px,78vh)}
+.hero__in{padding-block:clamp(6rem,12vw,8rem) 0}
+.hero__ct{max-width:600px;padding-bottom:2.8rem}
+.hero__ct h1{font-size:clamp(3.2rem,6vw,5.5rem);line-height:.93;letter-spacing:-.025em}
+.hero__ct p{font-size:.95rem;line-height:1.75}
+.hero .searchbar{margin-top:0;transform:translateY(42px)}
+
+/* Homepage hero fills the full viewport on first load, matching the full-screen Vietnamese homepage treatment. */
+.hero{min-height:100svh}
+
+/* Homepage KAS Collection — clean editorial carousel */
+.kas-carousel{
+  position:relative;
+  margin-inline:-2px;
+}
+.kas-carousel__viewport{
+  overflow-x:auto;
+  overflow-y:hidden;
+  scroll-behavior:smooth;
+  scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+  padding:2px 2px 12px;
+}
+.kas-carousel__viewport::-webkit-scrollbar{display:none}
+.kas-carousel .kas-rail{
+  width:max-content;
+  display:flex;
+  gap:16px;
+  overflow:visible;
+  padding:0;
+}
+.kas-carousel .kas-rail .pcard{
+  flex:0 0 calc((100vw - 80px)/4);
+  width:calc((100vw - 80px)/4);
+  max-width:290px;
+  scroll-snap-align:start;
+}
+.kas-carousel__arrow{
+  position:absolute;
+  z-index:4;
+  top:50%;
+  transform:translateY(-50%);
+  width:42px;height:42px;
+  border:1px solid var(--line);
+  border-radius:50%;
+  background:rgba(255,255,255,.96);
+  color:var(--tx);
+  box-shadow:0 5px 20px rgba(0,0,0,.10);
+  display:grid;
+  place-items:center;
+  font-family:var(--serif);
+  font-size:1.8rem;
+  line-height:1;
+  cursor:pointer;
+  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+.kas-carousel__arrow:hover{
+  transform:translateY(-50%) scale(1.05);
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+  background:#fff;
+}
+.kas-carousel__arrow--prev{left:-21px}
+.kas-carousel__arrow--next{right:-21px}
+.kas-discover__actions{
+  text-align:center;
+  margin-top:1.25rem;
+}
+.kas-discover__actions .btn{margin:0 4px}
+
+/* ---------- Homepage hero: fixed Vietnamese reference frame ---------- */
+.hero{
+  min-height:100svh;
+  height:100svh;
+  align-items:stretch;
+}
+.hero__in{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  align-items:flex-start;
+  padding-top:clamp(8rem,13.2vh,9.2rem);
+  padding-bottom:0;
+}
+.hero__ct{
+  width:100%;
+  max-width:600px;
+  min-height:390px;
+  padding-bottom:0;
+}
+.hero__ct h1{max-width:600px}
+.hero__ct p{max-width:460px}
+.hero #heroSearch{width:100%;margin-top:0}
+.hero .searchbar{margin-top:0;transform:translateY(0)}
+
+/* Desktop reference frame: EN and VI share exactly the same hero geometry.
+   The language only changes text, never the vertical position of the search bar. */
+@media (min-width:901px){
+  .hero__in{position:relative;padding-top:0}
+  .hero__ct{position:absolute;left:0;top:clamp(8rem,13.2vh,9.2rem);min-height:0;padding:0}
+  .hero #heroSearch{position:absolute;left:0;right:0;bottom:48px;width:100%}
+}
+
+/* HOTELS PAGE V19 — compact Find Your Stay frame.
+   Keep the search summary in normal document flow so EN/VI naturally
+   place the bar according to the amount of hero copy, matching the
+   approved reference frames instead of pinning it to the same bottom edge. */
+.hero.hero--sm{min-height:340px;height:340px;align-items:stretch;overflow:hidden}
+.hero.hero--sm .hero__in{height:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding-top:0;padding-bottom:0}
+.hero.hero--sm .hero__ct{position:static;width:100%;max-width:640px;min-height:0;padding:0;color:var(--tx-inv);margin-top:clamp(3rem,5vw,4rem);order:1}
+.hero.hero--sm .hero__ct h1{font-size:clamp(2.5rem,4vw,3.2rem);line-height:1;margin:.9rem 0 0}
+.hero.hero--sm .hero__ct p{font-size:1rem;line-height:1.5;margin-top:.9rem}
+.hero.hero--sm #sumBar{position:static;left:auto;right:auto;bottom:auto;width:auto;margin:2rem 0 0!important;order:2}
+.hero.hero--sm .searchbar--sum{transform:none;margin:0}
+
+/* Footer alignment — match the approved compact editorial reference. */
+.ftr--dark .ftr__main{grid-template-columns:1.45fr 1.1fr 1.1fr 1.1fr 1.25fr;grid-template-rows:auto auto;gap:24px 38px;padding-bottom:2.4rem}
+.ftr--dark .ftr__brand{grid-column:1;grid-row:1}
+.ftr--dark .ftr__main>.ftr__col:nth-child(2){grid-column:2;grid-row:1}
+.ftr--dark .ftr__main>.ftr__col:nth-child(3){grid-column:3;grid-row:1}
+.ftr--dark .ftr__main>.ftr__col:nth-child(4){grid-column:4;grid-row:1}
+.ftr--dark .ftr__main>.ftr__col:nth-child(5){grid-column:5;grid-row:1}
+.ftr--dark .ftr__contact{grid-column:1 / span 2;grid-row:2}
+.ftr--dark .ftr__news{grid-column:4 / span 2;grid-row:2}
+@media(max-width:1100px){.ftr--dark .ftr__main{grid-template-columns:1.35fr repeat(4,1fr);gap:22px 24px}.ftr--dark .ftr__contact{grid-column:1 / span 2}.ftr--dark .ftr__news{grid-column:4 / span 2}}
+@media(max-width:760px){.ftr--dark .ftr__main{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}.ftr--dark .ftr__brand{grid-column:1/-1;grid-row:auto}.ftr--dark .ftr__main>.ftr__col:nth-child(2),.ftr--dark .ftr__main>.ftr__col:nth-child(3),.ftr--dark .ftr__main>.ftr__col:nth-child(4),.ftr--dark .ftr__main>.ftr__col:nth-child(5){grid-column:auto;grid-row:auto}.ftr--dark .ftr__contact,.ftr--dark .ftr__news{grid-column:1/-1;grid-row:auto}}
+
+/* ================= HOME REDESIGN — V19 editorial reference ================= */
+.home-redesign #hdr{position:fixed;left:0;right:0;top:0;z-index:900;background:transparent;border-bottom-color:rgba(194,162,92,.12);backdrop-filter:none;-webkit-backdrop-filter:none;transition:background-color .4s ease,backdrop-filter .4s ease,box-shadow .4s ease,border-color .4s ease}.home-redesign #hdr.header--transparent{background:transparent;border-bottom-color:rgba(194,162,92,.12);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}.home-redesign #hdr.header--scrolled{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);box-shadow:0 2px 24px rgba(0,0,0,.32);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
+.home-redesign #hdr .nav a,.home-redesign #hdr .hdr__tel,.home-redesign #hdr .lang-button{color:#f5efe3}
+.home-hero{position:relative;width:100%;min-height:100vh;height:100vh;background:#0e0d0b;overflow:visible;display:flex;align-items:stretch}
+.home-hero__bg{position:absolute;inset:0}.home-hero__bg img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.86);transform:scale(1.01)}
+.home-hero__bg:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,9,7,.82) 0%,rgba(10,9,7,.58) 34%,rgba(10,9,7,.16) 72%,rgba(10,9,7,.34) 100%),linear-gradient(0deg,rgba(10,9,7,.46),rgba(10,9,7,.06) 58%,rgba(10,9,7,.22) 100%)}
+.home-hero__inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(9rem,17vh,11rem);padding-bottom:0;height:100%}
+.home-hero__copy{max-width:500px;color:var(--ivory)}.home-redesign .home-hero__copy h1{color:var(--ivory);text-shadow:0 2px 18px rgba(0,0,0,.58);font-size:clamp(3rem,5vw,4.8rem);line-height:.9;letter-spacing:-.035em;margin:.9rem 0 1.6rem}.home-hero__copy p{max-width:380px;color:#f1eadf;font-size:.9rem;line-height:1.65;text-shadow:0 1px 10px rgba(0,0,0,.35)}.home-hero__actions{display:flex;gap:9px;margin-top:1.6rem}.home-hero__actions .btn{min-width:145px}.home-hero #homeHeroSearch{position:absolute;left:50%;right:auto;bottom:-38px;width:min(92%,1264px);transform:translateX(-50%);margin:0;z-index:10}.home-hero #homeHeroSearch .searchbar{margin:0;transform:none;border-radius:2px;background:linear-gradient(180deg,#1d1c1a,#292825);border:1px solid rgba(196,160,78,.42);box-shadow:0 16px 34px rgba(0,0,0,.24);overflow:hidden;grid-template-columns:1.5fr 1fr 1fr 1.08fr 184px}.home-hero #homeHeroSearch .sf{padding:12px 20px;border-right:1px solid rgba(196,160,78,.28)}.home-hero #homeHeroSearch .sf__lb{color:#d0b46e;letter-spacing:.16em}.home-hero #homeHeroSearch .sf__ctl{color:#f5f0e6}.home-hero #homeHeroSearch .sf__ctl svg{color:#c8a85f}.home-hero #homeHeroSearch .sf select,.home-hero #homeHeroSearch .sf input,.home-hero #homeHeroSearch #sbGuests{color:#f5f0e6!important;background:transparent}.home-hero #homeHeroSearch .sf select option{background:#25231f;color:#f5f0e6}.home-hero #homeHeroSearch .btn{height:100%;min-width:0;border:0;border-radius:0;margin:0;background:#c9aa63;color:#171511;padding-inline:22px;letter-spacing:.14em}.home-hero #homeHeroSearch .btn:hover{background:#d7ba73}
+
+/* V20 — homepage booking search bar: directly below the hero */
+.home-booking-search{
+  position:relative;
+  z-index:20;
+  background:var(--ivory);
+  min-height:0;
+}
+.home-booking-search__in{
+  position:relative;
+}
+.home-booking-search #homeHeroSearch{
+  width:min(92%,1264px);
+  margin:-48px auto 0;
+  position:relative;
+  left:auto;
+  right:auto;
+  bottom:auto;
+  transform:none;
+  z-index:20;
+}
+.home-booking-search #homeHeroSearch .searchbar{
+  margin:0;
+  transform:none;
+}
+@media(max-width:900px){
+  .home-booking-search #homeHeroSearch{
+    width:calc(100% - 36px);
+    margin:-36px auto 0;
+  }
+}
+@media(max-width:560px){
+  .home-booking-search #homeHeroSearch{
+    width:calc(100% - 24px);
+    margin:-24px auto 0;
+  }
+}
+.home-usp{background:var(--ivory);border-bottom:1px solid var(--line);padding-top:48px}.home-usp__in{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;padding:18px 0}.home-usp__in>div{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--tx-2);font-size:.72rem}.home-usp__in svg{color:var(--gold-dk)}
+.home-stay{background:#fff;padding-block:clamp(5rem,9vw,8rem)}.home-stay__grid{display:grid;grid-template-columns:1fr 1fr;min-height:590px}.home-stay__copy{padding:2rem clamp(1rem,4vw,5rem) 2rem 0;display:flex;flex-direction:column;justify-content:center}.home-stay__copy h2,.home-city h2,.home-experience h2,.home-rooms h2,.home-cta h2{font-family:var(--serif);font-weight:400;letter-spacing:-.025em}.home-stay__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.92;margin:.8rem 0 1.3rem}.home-stay__copy .rule{margin:0 0 1.4rem}.home-stay__copy p{max-width:520px;color:var(--tx-2);line-height:1.8;font-size:.92rem;margin-bottom:1.9rem}.home-stay__visual{position:relative;min-height:590px}.home-stay__image{height:100%;overflow:hidden}.home-stay__image img{width:100%;height:100%;object-fit:cover}.home-stay__caption{position:absolute;right:0;bottom:0;background:rgba(255,255,255,.96);padding:22px 28px;min-width:58%;font-family:var(--serif);font-size:1rem;color:#6b553a}
+.home-collection{background:var(--ivory);padding-block:clamp(5rem,8vw,7rem);overflow:hidden}.home-section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:2.2rem}.home-section-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.7rem,4vw,4rem);margin-top:.55rem}.home-section-head p{max-width:310px;color:var(--tx-2);line-height:1.6}.home-cards-wrap{position:relative}.home-cards{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:2px 1px 12px;scroll-snap-type:x mandatory}.home-cards::-webkit-scrollbar{display:none}.home-card{flex:0 0 calc((100% - 42px)/4);min-width:250px;background:#fff;border:1px solid var(--line);scroll-snap-align:start;color:inherit}.home-card__img{aspect-ratio:1.08/1;overflow:hidden}.home-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.home-card:hover .home-card__img img{transform:scale(1.04)}.home-card__body{padding:15px 16px 18px}.home-card__body h3{font-family:var(--serif);font-size:1.2rem;font-weight:400;margin-bottom:5px}.home-card__body p{font-size:.68rem;color:var(--tx-3);min-height:2.8em;line-height:1.45}.home-card__body strong{display:block;color:var(--gold-dk);font-size:.7rem;margin-top:10px}.home-cards__arrow{position:absolute;top:45%;transform:translateY(-50%);z-index:3;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1.7rem}.home-cards__arrow--prev{left:-20px}.home-cards__arrow--next{right:-20px}.home-collection__actions{text-align:center;margin-top:1.6rem}.home-collection__actions .btn{margin:0 4px}
+.home-city{display:grid;grid-template-columns:1fr 1fr;min-height:590px}.home-city__copy{background:var(--black);color:var(--ivory);display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,7vw,6rem)}.home-city__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-city__copy p{max-width:520px;color:#d2c9bb;line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}.home-city__image{min-height:590px}.home-city__image img{width:100%;height:100%;object-fit:cover}
+.home-experience{background:#f5f0e7;padding-block:clamp(5rem,8vw,7rem)}.home-experience h2{font-size:clamp(3rem,4.8vw,4.4rem);margin:.8rem 0 3.3rem}.home-feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}.home-feature-grid article{border-top:1px solid #cdbf9f;padding-top:10px}.home-feature-grid article>span{font-size:.66rem;color:var(--gold-dk)}.home-feature-grid h3{font-family:var(--serif);font-weight:400;font-size:1.05rem;margin:1.1rem 0 .45rem}.home-feature-grid p{font-size:.74rem;color:var(--tx-2);line-height:1.55}
+.home-rooms{background:#fff;padding-block:clamp(5rem,9vw,8rem)}.home-rooms__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(3rem,7vw,6rem);align-items:center}.home-rooms__image{aspect-ratio:1.15/1;overflow:hidden}.home-rooms__image img{width:100%;height:100%;object-fit:cover}.home-rooms__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-rooms__copy p{max-width:430px;color:var(--tx-2);line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}
+.home-cta{background:var(--black);color:var(--ivory);padding:clamp(6rem,10vw,9rem) 0;text-align:center}.home-cta__in{display:flex;align-items:center;flex-direction:column}.home-cta h2{font-size:clamp(3rem,5.5vw,5rem);line-height:.9;margin:1rem 0 1rem}.home-cta p{color:#cfc5b7;margin-bottom:1.8rem}.eyebrow--gold{color:var(--gold-lt)}
+@media(max-width:900px){.home-hero__inner{padding-top:8rem}.home-hero #homeHeroSearch{left:18px;right:18px;bottom:18px}.home-hero__copy h1{font-size:clamp(3rem,11vw,5rem)}.home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr 1fr;border-radius:18px}.home-hero #homeHeroSearch .sf:nth-child(3){display:none}.home-hero #homeHeroSearch .btn{grid-column:1/-1;border-radius:0;margin:0;height:52px}.home-usp__in{grid-template-columns:repeat(2,1fr)}.home-stay__grid,.home-city,.home-rooms__grid{grid-template-columns:1fr}.home-stay__copy{padding-right:0;padding-bottom:3rem}.home-stay__visual,.home-city__image{min-height:480px}.home-feature-grid{grid-template-columns:repeat(2,1fr)}.home-card{flex-basis:calc((100% - 14px)/2)}.home-section-head{align-items:start;flex-direction:column}.home-cards__arrow--prev{left:5px}.home-cards__arrow--next{right:5px}}
+@media(max-width:560px){.home-hero{min-height:900px;height:auto}.home-hero__inner{height:auto;min-height:900px;padding-top:7.5rem;padding-bottom:230px}.home-hero #homeHeroSearch{position:absolute;left:18px;right:18px;bottom:18px}.home-hero__copy h1{font-size:3.25rem}.home-hero__actions{flex-wrap:wrap}.home-hero #homeHeroSearch{padding-bottom:16px}.home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr;border-radius:14px}.home-hero #homeHeroSearch .sf{border-right:0;border-bottom:1px solid var(--line)}.home-hero #homeHeroSearch .sf:nth-child(3){display:block}.home-usp__in{grid-template-columns:1fr;padding-inline:18px}.home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}.home-stay__grid{min-height:0}.home-stay__visual,.home-city__image{min-height:360px}.home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3rem}.home-card{flex-basis:86vw}.home-feature-grid{grid-template-columns:1fr}.home-city__copy{padding:4rem 24px}.home-cards__arrow{display:none}.home-collection__actions .btn{display:block;margin:8px 0}.home-cta h2{font-size:3rem}}
+
+/* V20.1 — homepage hero is full-screen; booking search is intentionally removed. */
+.home-hero #homeHeroSearch{display:none!important}
+.home-booking-search{display:none!important}
+
+/* V20.2 — strengthen headings on dark homepage sections */
+.home-city__copy h2,
+.home-cta h2{
+  color:#fff !important;
+  font-weight:600 !important;
+  text-shadow:0 2px 14px rgba(0,0,0,.35);
+}
+
+/* V20.5 — zoom/viewport stability: homepage uses fixed desktop scales, not vw/vh sizing. */
+.home-hero__inner{padding-top:9rem;padding-bottom:0}
+.home-redesign .home-hero__copy h1{font-size:4.5rem}
+.home-hero__copy p{font-size:.95rem}
+.home-stay,.home-collection,.home-experience,.home-rooms{padding-block:6rem}
+.home-stay__copy{padding:2rem 4rem 2rem 0}
+.home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:4.25rem}
+.home-city__copy{padding:5rem 5rem}
+.home-experience h2{font-size:4rem}
+.home-rooms__grid{gap:5rem}
+.home-cta{padding:8rem 0}
+.home-cta h2{font-size:4.6rem}
+.home-section-head h2{font-size:3.6rem}
+
+/* Keep desktop composition intact through ordinary browser zoom; reflow only at real layout widths. */
+@media (max-width:1100px){
+  .home-hero__inner{padding-top:8.5rem}
+  .home-redesign .home-hero__copy h1{font-size:4rem}
+  .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3.75rem}
+  .home-city__copy{padding:4rem}
+  .home-rooms__grid{gap:3.5rem}
+  .home-cta h2{font-size:4.1rem}
+}
+@media (max-width:900px){
+  .home-redesign .home-hero__copy h1{font-size:3.4rem}
+  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4.5rem}
+  .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3.25rem}
+  .home-experience h2{font-size:3.2rem}
+  .home-cta{padding:6rem 0}
+  .home-cta h2{font-size:3.5rem}
+}
+@media (max-width:560px){
+  .home-redesign .home-hero__copy h1{font-size:3.25rem}
+  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}
+  .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3rem}
+  .home-experience h2{font-size:2.8rem}
+  .home-cta h2{font-size:3rem}
+}
+
+/* V20.6 — zoom compensation without transform/zoom.
+   Browser zoom changes the CSS viewport width. Keep the editorial layout
+   desktop-sized until the genuine tablet breakpoint, then widen the canvas
+   on very large CSS viewports so 50–80% zoom does not make the page tiny. */
+.home-redesign .container{max-width:min(2400px,calc(100vw - 56px));}
+
+@media (min-width:901px){
+  .home-redesign .home-hero__inner{padding-top:9rem;}
+  .home-redesign .home-hero__copy{max-width:700px;}
+  .home-redesign .home-redesign .home-hero__copy h1,
+  .home-redesign .home-hero__copy h1{font-size:4.75rem;}
+  .home-redesign .home-stay__copy h2,
+  .home-redesign .home-city__copy h2,
+  .home-redesign .home-rooms__copy h2{font-size:4.35rem;}
+  .home-redesign .home-section-head h2{font-size:3.55rem;}
+  .home-redesign .home-experience h2{font-size:4rem;}
+  .home-redesign .home-cta h2{font-size:4.65rem;}
+  .home-redesign .home-stay__copy{padding-right:4rem;}
+  .home-redesign .home-city__copy{padding:5rem;}
+  .home-redesign .home-rooms__grid{gap:4.5rem;}
+}
+
+/* At high browser zoom-out the CSS viewport becomes very wide. Increase the
+   usable canvas and a few UI dimensions instead of scaling the whole page. */
+@media (min-width:1800px){
+  .home-redesign .container{max-width:2400px;}
+  .home-redesign #hdr .hdr__in{max-width:2400px;}
+  .home-redesign #hdr .nav{gap:30px;}
+  .home-redesign #hdr .nav a{font-size:.82rem;}
+  .home-redesign #hdr .hdr__tel{font-size:.84rem;}
+  .home-redesign #hdr .lang-button{font-size:.82rem;}
+  .home-redesign #hdr .hdr__join{font-size:.78rem;}
+  .home-redesign .home-hero__copy{max-width:760px;}
+  .home-redesign .home-hero__copy h1{font-size:5rem;}
+  .home-redesign .home-hero__copy p{max-width:560px;font-size:1rem;}
+  .home-redesign .home-stay__copy p,
+  .home-redesign .home-city__copy p{max-width:700px;}
+  .home-redesign .home-section-head p{max-width:430px;}
+  .home-redesign .home-card{min-width:280px;}
+}
+
+@media (min-width:2300px){
+  .home-redesign .home-hero__copy h1{font-size:5.25rem;}
+  .home-redesign .home-stay__copy h2,
+  .home-redesign .home-city__copy h2,
+  .home-redesign .home-rooms__copy h2{font-size:4.75rem;}
+  .home-redesign .home-section-head h2{font-size:3.9rem;}
+  .home-redesign .home-experience h2{font-size:4.3rem;}
+  .home-redesign .home-cta h2{font-size:5rem;}
+}
+
+/* V20.7 — grid-based homepage layout for stable resizing/zoom.
+   The page is organized as full-width grid rows; internal content uses
+   explicit minmax() tracks instead of viewport-sized scaling. */
+.home-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  width:100%;
+  min-width:0;
+}
+.home-grid > section{min-width:0;}
+.home-grid .container{
+  width:100%;
+  max-width:none;
+  margin-inline:auto;
+  padding-inline:clamp(24px,4vw,64px);
+}
+.home-grid__hero{grid-row:auto;}
+.home-grid__usp{grid-row:auto;}
+.home-grid__section{grid-row:auto;}
+.home-grid__split{grid-row:auto;}
+
+/* 12-column editorial grid for the main content blocks. */
+.home-stay__grid,
+.home-rooms__grid{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:clamp(28px,3vw,56px);
+  align-items:center;
+}
+.home-stay__copy{grid-column:1 / span 5;min-width:0;}
+.home-stay__visual{grid-column:7 / -1;min-width:0;}
+.home-rooms__image{grid-column:1 / span 7;min-width:0;}
+.home-rooms__copy{grid-column:9 / -1;min-width:0;}
+
+.home-section-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(240px,360px);
+  gap:40px;
+  align-items:end;
+}
+.home-section-head > *{min-width:0;}
+.home-feature-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:clamp(18px,2.5vw,40px);
+}
+.home-city{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  min-height:0;
+}
+.home-city__copy,.home-city__image{min-width:0;min-height:clamp(520px,55vw,760px);}
+.home-city__copy{padding:clamp(48px,5vw,88px);}
+.home-city__copy h2,
+.home-stay__copy h2,
+.home-rooms__copy h2,
+.home-experience h2,
+.home-cta h2,
+.home-section-head h2{
+  font-size:clamp(3rem,4rem,5rem);
+}
+.home-redesign .home-hero__inner{
+  width:100%;
+  max-width:none;
+  padding-inline:clamp(24px,4vw,64px);
+}
+.home-redesign .home-hero__copy{
+  width:min(620px,100%);
+}
+.home-redesign .home-hero__copy h1{font-size:clamp(3.5rem,4.25rem,5rem);}
+
+@media (max-width:1100px){
+  .home-stay__copy{grid-column:1 / span 6;}
+  .home-stay__visual{grid-column:7 / -1;}
+  .home-rooms__image{grid-column:1 / span 6;}
+  .home-rooms__copy{grid-column:7 / -1;}
+}
+@media (max-width:900px){
+  .home-stay__grid,.home-rooms__grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .home-stay__copy,.home-stay__visual,.home-rooms__image,.home-rooms__copy{grid-column:1 / -1;}
+  .home-section-head{grid-template-columns:1fr;}
+  .home-city{grid-template-columns:1fr;}
+  .home-city__copy,.home-city__image{min-height:460px;}
+  .home-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .home-redesign .home-hero__copy h1{font-size:clamp(3rem,3.5rem,4rem);}
+}
+@media (max-width:560px){
+  .home-grid .container{padding-inline:20px;}
+  .home-feature-grid{grid-template-columns:1fr;}
+  .home-stay__grid,.home-rooms__grid{grid-template-columns:1fr;}
+  .home-city__copy{padding:48px 24px;}
+  .home-city__copy,.home-city__image{min-height:360px;}
+  .home-redesign .home-hero__copy h1{font-size:3.25rem;}
+}

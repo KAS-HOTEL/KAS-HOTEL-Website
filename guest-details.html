@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest Details — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div class="container"><nav class="crumb" id="crumb"></nav></div>
+<div id="steps"></div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <!-- ============ FORM ============ -->
+      <div class="split__main">
+        <h1 style="font-size:clamp(1.9rem,3vw,2.5rem)">Guest Details</h1>
+        <p class="muted" style="margin:.4rem 0 1.8rem;font-size:.93rem">Please enter your details to continue. We'll send your confirmation here.</p>
+
+        <form id="gForm" novalidate class="stack" style="gap:18px">
+
+          <!-- contact -->
+          <div class="card">
+            <div class="card__hd">${ICON_USER}<h4>Contact information</h4>
+              <span class="tiny muted" style="margin-left:auto"><span class="req" style="color:var(--err)">*</span> Required fields</span></div>
+            <div class="grid" style="grid-template-columns:170px 1fr 1fr" id="nameRow">
+              <div class="field"><label class="label" for="title">Title</label>
+                <select class="select" id="title" name="title">
+                  <option>Mr</option><option>Ms</option><option>Mrs</option><option>Dr</option>
+                </select></div>
+              <div class="field"><label class="label" for="firstName">First name <span class="req">*</span></label>
+                <input class="input" id="firstName" name="firstName" autocomplete="given-name" required>
+                <span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="lastName">Last name <span class="req">*</span></label>
+                <input class="input" id="lastName" name="lastName" autocomplete="family-name" required>
+                <span class="err-msg"></span></div>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:16px" id="contactRow">
+              <div class="field"><label class="label" for="email">Email address <span class="req">*</span></label>
+                <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                <span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="phone">Phone number <span class="req">*</span></label>
+                <div style="display:flex;gap:8px">
+                  <select class="select" id="dial" aria-label="Country calling code" style="width:110px">
+                    <option value="+84">+84</option><option value="+1">+1</option><option value="+44">+44</option>
+                    <option value="+65">+65</option><option value="+61">+61</option><option value="+82">+82</option>
+                    <option value="+81">+81</option><option value="+86">+86</option>
+                  </select>
+                  <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="912 345 678" required>
+                </div><span class="err-msg"></span></div>
+            </div>
+            <label class="opt" style="margin-top:16px">
+              <input type="checkbox" id="createAcct"><span>Create a KAS account for faster booking next time</span></label>
+          </div>
+
+          <!-- guest -->
+          <div class="card">
+            <div class="card__hd">${ICON_USERS}<h4>Guest information</h4></div>
+            <div class="field" style="margin-bottom:16px">
+              <label class="label">Check-in guest <span class="req">*</span></label>
+              <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:4px">
+                <label class="opt"><input type="radio" name="cig" value="same" checked><span>Same as contact information</span></label>
+                <label class="opt"><input type="radio" name="cig" value="different"><span>Different guest</span></label>
+              </div>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px" id="diffGuest" hidden>
+              <div class="field"><label class="label" for="gFirst">Guest first name <span class="req">*</span></label>
+                <input class="input" id="gFirst"><span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="gLast">Guest last name <span class="req">*</span></label>
+                <input class="input" id="gLast"><span class="err-msg"></span></div>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr" id="natRow">
+              <div class="field"><label class="label" for="nationality">Nationality <span class="req">*</span></label>
+                <select class="select" id="nationality" required></select><span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="dob">Date of birth</label>
+                <input class="input" type="date" id="dob" max="2026-09-12"><span class="err-msg"></span></div>
+            </div>
+          </div>
+
+          <!-- requests -->
+          <div class="card">
+            <div class="card__hd">${ICON_CHAT}<h4>Additional requests <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--tx-3)">(optional)</span></h4></div>
+            <div class="field">
+              <label class="label" for="requests">Special requests</label>
+              <textarea class="textarea" id="requests" maxlength="500" placeholder="Late check-in, high floor, quiet room, twin beds…"></textarea>
+              <div style="display:flex;justify-content:space-between">
+                <span class="hint">Requests are subject to availability and cannot be guaranteed.</span>
+                <span class="hint"><span id="charN">0</span>/500</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- arrival -->
+          <div class="card">
+            <div class="card__hd">${ICON_CLOCK}<h4>Arrival details</h4></div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="arrRow">
+              <div class="field"><label class="label" for="arrival">Estimated arrival time</label>
+                <select class="select" id="arrival"></select></div>
+              <div class="field"><label class="label" for="purpose">Purpose of trip</label>
+                <select class="select" id="purpose">
+                  <option>Leisure</option><option>Business</option><option>Family visit</option>
+                  <option>Event or conference</option><option>Other</option></select></div>
+              <div class="field"><label class="label" for="heard">How did you hear about us?</label>
+                <select class="select" id="heard">
+                  <option>Google</option><option>Agoda</option><option>Booking.com</option>
+                  <option>Friend or family</option><option>Social media</option>
+                  <option>Returning guest</option><option>Other</option></select></div>
+            </div>
+          </div>
+
+          <!-- room guests -->
+          <div class="card">
+            <div class="card__hd">${ICON_BED}<h4>Room guests</h4></div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="guestsRow"></div>
+            <p class="hint" style="margin-top:14px" id="occNote"></p>
+            <span class="err-msg" id="occErr"></span>
+          </div>
+
+          <!-- payment -->
+          <div class="card">
+            <div class="card__hd">${ICON_CARD}<h4>Payment method</h4></div>
+            <div class="pays" id="pays"></div>
+            <span class="err-msg" id="payErr"></span>
+            <div class="alert alert--demo" style="margin-top:16px">${ICON_INFO}
+              <span>This is a demonstration. No payment is processed and no card details are collected or stored.</span></div>
+          </div>
+
+          <div class="between" style="margin-top:6px;flex-wrap:wrap;gap:14px">
+            <a class="btn btn--link" id="backRoom" style="display:inline-flex;align-items:center;gap:6px"></a>
+            <button class="btn btn--gold btn--lg" type="submit" id="submitBtn">Continue to review ${ICON_ARR}</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============ SIDEBAR ============ -->
+      <aside class="split__side">
+        <div class="sticky stack" style="gap:16px">
+          <div class="panel">
+            <div style="aspect-ratio:16/10;background:var(--beige);overflow:hidden" id="sideImg"></div>
+            <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
+              <h4 style="color:var(--tx)">Your stay</h4>
+              <a class="btn btn--link" id="editStay" href="#">Edit</a></div>
+            <div id="stayPanel"></div>
+          </div>
+          <div class="panel">
+            <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
+              <h4 style="color:var(--tx)">Price summary</h4>
+              <span class="tiny muted" id="nightsLbl"></span></div>
+            <div class="panel__b" id="sidePrice"></div>
+          </div>
+          <div class="panel"><div class="panel__b" id="trustBadges"></div></div>
+          <div class="panel" id="assist"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
+
+  /* Swap icon placeholders BEFORE any listeners are bound, and only inside
+     the static form markup — never on document.body, which would discard
+     the header/footer listeners App.boot attaches. */
+  (function swapIcons() {
+    var ICONS = { ICON_USER:['user',18], ICON_USERS:['users',18], ICON_CHAT:['chat',18],
+                  ICON_CLOCK:['clock',18], ICON_BED:['bed',18], ICON_CARD:['card',18],
+                  ICON_INFO:['info',16], ICON_ARR:['arrR',14] };
+    var scope = U.$('.split__main');
+    if (!scope) return;
+    scope.innerHTML = scope.innerHTML.replace(/\$\{(ICON_[A-Z]+)\}/g, function (m, k) {
+      return ICONS[k] ? U.icon(ICONS[k][0], ICONS[k][1]) : '';
+    });
+  })();
+
+  App.boot({ active: 'my kas' });
+
+  var c = B.requireRoom();
+  if (!c) return;
+  var hotel = D.getHotel(c.hotelId), room = D.getRoom(c.hotelId, c.roomId);
+
+  App.renderSteps(U.$('#steps'), 2, [
+    U.fmtDate(c.checkIn) + ' – ' + U.fmtDate(c.checkOut), room.name
+  ]);
+  U.$('#crumb').innerHTML =
+    '<a href="index.html">Home</a><span class="sep">›</span>' +
+    '<a href="hotels.html">Hotels</a><span class="sep">›</span>' +
+    '<a href="hotel-detail.html?hotel=' + hotel.id + '">' + U.esc(hotel.name) + '</a><span class="sep">›</span>' +
+    '<a href="room-detail.html?hotel=' + hotel.id + '&room=' + room.id + '">' + U.esc(room.name) + '</a>' +
+    '<span class="sep">›</span><span class="cur">Your booking</span>';
+  var br = U.$('#backRoom');
+  br.innerHTML = U.icon('arrL', 13) + ' Back to room details';
+  br.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
+
+  /* ---- nationality ---- */
+  var NAT = ['Vietnam','Australia','Cambodia','Canada','China','France','Germany','Hong Kong',
+    'India','Indonesia','Italy','Japan','Laos','Malaysia','Netherlands','New Zealand','Philippines',
+    'Russia','Singapore','South Korea','Spain','Sweden','Switzerland','Taiwan','Thailand',
+    'United Kingdom','United States','Other'];
+  U.$('#nationality').innerHTML = '<option value="">Select nationality</option>' +
+    NAT.map(function (n) { return '<option' + (n === 'Vietnam' ? ' selected' : '') + '>' + n + '</option>'; }).join('');
+
+  /* ---- arrival times ---- */
+  var times = ['I don\'t know yet'];
+  for (var h = 12; h <= 23; h++) times.push(String(h).padStart(2, '0') + ':00 – ' + String(h + 1).padStart(2, '0') + ':00');
+  times.push('After 00:00');
+  U.$('#arrival').innerHTML = times.map(function (t, i) {
+    return '<option' + (i === 3 ? ' selected' : '') + '>' + t + '</option>';
+  }).join('');
+
+  /* ---- guest counters ---- */
+  var counts = { adults: +c.adults || 2, children: +c.children || 0, infants: 0 };
+  var maxA = room.maxGuests, maxC = room.children != null ? room.children : 2;
+  U.$('#guestsRow').innerHTML = [
+    ['adults', 'Adults', 'Ages 13+', 1, maxA],
+    ['children', 'Children', 'Ages 2–12', 0, maxC],
+    ['infants', 'Infants', 'Under 2', 0, 2]
+  ].map(function (g) {
+    return '<div class="field"><label class="label">' + g[1] + '<span style="text-transform:none;letter-spacing:0;color:var(--tx-3);font-weight:400"> · ' + g[2] + '</span></label>' +
+      '<div class="stepper" data-k="' + g[0] + '" data-min="' + g[3] + '" data-max="' + g[4] + '" ' +
+      'style="border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;justify-content:space-between;background:var(--surface)">' +
+      '<button type="button" data-d="-" aria-label="Decrease ' + g[1] + '">' + U.icon('minus', 14) + '</button>' +
+      '<output>' + counts[g[0]] + '</output>' +
+      '<button type="button" data-d="+" aria-label="Increase ' + g[1] + '">' + U.icon('plus', 14) + '</button></div></div>';
+  }).join('');
+  U.$('#occNote').textContent = 'This room type sleeps a maximum of ' + maxA + ' guest' +
+    (maxA === 1 ? '' : 's') + (maxC ? ' and up to ' + maxC + ' child' + (maxC === 1 ? '' : 'ren') : '') +
+    '. You have booked ' + c.rooms + ' room' + (c.rooms === 1 ? '' : 's') + '.';
+
+  U.$$('.stepper[data-k]').forEach(function (st) {
+    var k = st.dataset.k, lo = +st.dataset.min, hi = +st.dataset.max, out = U.$('output', st);
+    var btns = U.$$('button', st);
+    function sync() {
+      out.textContent = counts[k];
+      btns[0].disabled = counts[k] <= lo;
+      btns[1].disabled = counts[k] >= hi;
+      U.$('#occErr').classList.remove('show');
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        counts[k] = Math.min(hi, Math.max(lo, counts[k] + (b.dataset.d === '+' ? 1 : -1)));
+        sync();
+        S.patchCurrent({ adults: counts.adults, children: counts.children });
+        paintSide();
+      });
+    });
+    sync();
+  });
+
+  /* ---- payment methods ---- */
+  var PAYS = [
+    ['pay-later', 'wallet', 'Pay later', 'Pay at the hotel. No payment needed now.', true],
+    ['card', 'card', 'Credit / debit card', 'Secure payment powered by our trusted partners.', false],
+    ['zalopay', 'phone', 'Pay with ZaloPay', 'Pay securely with your ZaloPay account.', false],
+    ['bank', 'bank', 'Bank transfer', 'Complete your booking and pay by bank transfer.', false]
+  ];
+  U.$('#pays').innerHTML = PAYS.map(function (p) {
+    return '<label class="pay' + (p[4] ? ' is-on' : '') + '" data-pay="' + p[0] + '">' +
+      '<div class="pay__hd"><input type="radio" name="pay" value="' + p[0] + '"' + (p[4] ? ' checked' : '') + ' ' +
+      'style="appearance:none;width:17px;height:17px;border:1.5px solid var(--line-2);border-radius:50%;flex-shrink:0;position:relative">' +
+      '<b>' + p[2] + '</b>' + (p[0] === 'card' ?
+        '<span class="cards">' + ['VISA','MC','JCB','AMEX'].map(function (x) {
+          return '<span style="font-size:.54rem;font-weight:700;letter-spacing:.02em;border:1px solid var(--line-2);border-radius:2px;padding:2px 4px;color:var(--tx-3)">' + x + '</span>';
+        }).join('') + '</span>' : '') +
+      '</div><p>' + p[3] + '</p></label>';
+  }).join('');
+  U.$$('.pay').forEach(function (p) {
+    p.addEventListener('click', function () {
+      U.$$('.pay').forEach(function (x) { x.classList.remove('is-on'); });
+      p.classList.add('is-on');
+      U.$('input', p).checked = true;
+      U.$('#payErr').classList.remove('show');
+    });
+  });
+  /* style the radio dot */
+  var st = document.createElement('style');
+  st.textContent = '.pay input:checked{border-color:var(--gold)!important;background:var(--gold)}' +
+    '.pay input:checked::after{content:"";position:absolute;inset:3.5px;border-radius:50%;background:var(--black)}';
+  document.head.appendChild(st);
+
+  /* ---- different guest toggle ---- */
+  U.$$('input[name=cig]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      U.$('#diffGuest').hidden = r.value !== 'different';
+    });
+  });
+
+  /* ---- char counter ---- */
+  var req = U.$('#requests');
+  req.addEventListener('input', function () { U.$('#charN').textContent = req.value.length; });
+
+  /* ---- prefill from saved guest ---- */
+  var saved = (c.guest) || S.getGuest();
+  if (saved) {
+    setVal('title', saved.title); setVal('firstName', saved.firstName); setVal('lastName', saved.lastName);
+    setVal('email', saved.email); setVal('dial', saved.dial); setVal('phone', saved.phone);
+    setVal('nationality', saved.nationality); setVal('dob', saved.dob);
+    setVal('requests', saved.specialRequests); setVal('arrival', saved.arrivalTime);
+    setVal('purpose', saved.purpose); setVal('heard', saved.heardFrom);
+    if (saved.checkInGuest === 'different') {
+      U.$('input[name=cig][value=different]').checked = true;
+      U.$('#diffGuest').hidden = false;
+      setVal('gFirst', saved.guestFirstName); setVal('gLast', saved.guestLastName);
+    }
+    if (saved.paymentMethod) {
+      var pe = U.$('.pay[data-pay="' + saved.paymentMethod + '"]');
+      if (pe) pe.click();
+    }
+    U.$('#charN').textContent = (saved.specialRequests || '').length;
+  }
+  function setVal(id, v) { var e = U.$('#' + id); if (e && v != null && v !== '') e.value = v; }
+
+  /* ---- live validation ---- */
+  ['firstName','lastName','email','phone','nationality'].forEach(function (id) {
+    var e = U.$('#' + id);
+    e.addEventListener('input', function () { U.clearErr(e); });
+    e.addEventListener('change', function () { U.clearErr(e); });
+    e.addEventListener('blur', function () {
+      if (id === 'email' && e.value && !U.isEmail(e.value)) U.setErr(e, 'Please enter a valid email address.');
+      if (id === 'phone' && e.value && !U.isPhone(e.value)) U.setErr(e, 'Please enter a valid phone number.');
+    });
+  });
+
+  function collect() {
+    return {
+      title: U.$('#title').value,
+      firstName: U.$('#firstName').value.trim(),
+      lastName: U.$('#lastName').value.trim(),
+      email: U.$('#email').value.trim(),
+      dial: U.$('#dial').value,
+      phone: U.$('#phone').value.trim(),
+      phoneFull: U.$('#dial').value + ' ' + U.$('#phone').value.trim(),
+      nationality: U.$('#nationality').value,
+      dob: U.$('#dob').value,
+      checkInGuest: U.$('input[name=cig]:checked').value,
+      guestFirstName: U.$('#gFirst').value.trim(),
+      guestLastName: U.$('#gLast').value.trim(),
+      specialRequests: U.$('#requests').value.trim(),
+      arrivalTime: U.$('#arrival').value,
+      purpose: U.$('#purpose').value,
+      heardFrom: U.$('#heard').value,
+      createAccount: U.$('#createAcct').checked,
+      adults: counts.adults, children: counts.children, infants: counts.infants,
+      paymentMethod: (U.$('input[name=pay]:checked') || {}).value || ''
+    };
+  }
+
+  U.$('#gForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    U.clearAllErrs();
+    var g = collect();
+    var v = B.validateGuest(g);
+
+    /* occupancy sanity check */
+    if (g.adults + g.children > room.maxGuests * (+c.rooms || 1)) {
+      v.ok = false;
+      v.errors.adults = 'This room type sleeps ' + room.maxGuests + ' guests. Please reduce the guest count or add a room.';
+    }
+
+    if (!v.ok) {
+      var first = null;
+      Object.keys(v.errors).forEach(function (k) {
+        var map = { guestFirstName: 'gFirst', guestLastName: 'gLast' };
+        var node = U.$('#' + (map[k] || k));
+        if (node) { U.setErr(node, v.errors[k]); if (!first) first = node; }
+      });
+      if (v.errors.paymentMethod) {
+        var pe2 = U.$('#payErr'); pe2.textContent = v.errors.paymentMethod; pe2.classList.add('show');
+      }
+      if (v.errors.adults && !U.$('#adults')) {
+        var oe = U.$('#occErr'); oe.textContent = v.errors.adults; oe.classList.add('show');
+        if (!first) first = U.$('#guestsRow');
+      }
+      U.toast('Please correct the highlighted fields.');
+      (first || U.$('#gForm')).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (first && first.focus) first.focus({ preventScroll: true });
+      return;
+    }
+
+    S.patchCurrent({ guest: g, adults: g.adults, children: g.children });
+    S.setGuest(g);
+    location.href = 'review-confirm.html';
+  });
+
+  /* ---- sidebar ---- */
+  function paintSide() {
+    var cur = B.reprice();
+    U.$('#sideImg').innerHTML = U.img(room.images[0], room.name);
+    U.$('#stayPanel').innerHTML =
+      '<div class="panel__b" style="padding-bottom:0">' +
+        '<h4 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:2px">' + U.esc(hotel.name) + '</h4>' +
+        '<p class="tiny" style="color:var(--gold-dk);margin:0 0 2px;font-weight:600">' + U.esc(room.name) + '</p>' +
+        '<p class="tiny muted" style="margin:0">' + U.esc(hotel.address) + '</p></div>' +
+      B.stayPanelHTML(Object.assign({}, cur, {
+        checkInTime: hotel.checkIn, checkOutTime: hotel.checkOut
+      }), { header: false });
+    U.$('#nightsLbl').textContent = cur.nights + ' night' + (cur.nights === 1 ? '' : 's');
+    var _q = window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id)
+      ? window.KAS_RATES.quote(room.id, cur.checkIn, cur.checkOut) : null;
+    U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(cur.price, {
+      nights: _q ? _q.nights : null, rateSource: room.rateSource });
+  }
+  paintSide();
+
+  U.$('#editStay').addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
+  });
+  U.$('#assist').innerHTML = B.assistHTML();
+  U.$('#trustBadges').innerHTML = B.trustBadgesHTML();
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  function collapse() {
+    var w = window.innerWidth;
+    U.$('#nameRow').style.gridTemplateColumns = w < 700 ? '1fr' : '170px 1fr 1fr';
+    ['#contactRow','#natRow','#diffGuest'].forEach(function (s) {
+      var n = U.$(s); if (n) n.style.gridTemplateColumns = w < 700 ? '1fr' : '1fr 1fr';
+    });
+    U.$('#arrRow').style.gridTemplateColumns = w < 820 ? '1fr' : 'repeat(3,1fr)';
+    U.$('#guestsRow').style.gridTemplateColumns = w < 620 ? '1fr' : 'repeat(3,1fr)';
+  }
+  collapse(); window.addEventListener('resize', U.debounce(collapse, 120));
+})();
+</script>
+</body>
+</html>

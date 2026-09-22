@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: kas-hotel-reference
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: ADMIN_KEY
+        sync: false
+    disk:
+      name: kas-room-uploads
+      mountPath: /app/uploads
+      sizeGB: 1

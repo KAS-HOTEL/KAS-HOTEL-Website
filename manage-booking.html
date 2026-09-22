@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manage Your Booking — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+
+<section class="hero hero--sm" style="min-height:300px">
+  <div class="hero__bg" id="heroBg"></div>
+  <div class="container hero__in">
+    <div class="hero__ct">
+      <span class="eyebrow eyebrow--lt">My KAS</span>
+      <h1 style="margin-top:.7rem">Manage Your Booking</h1>
+      <p style="margin-top:.7rem">Look up your reservation to view, modify or cancel it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container container--narrow">
+
+    <!-- lookup -->
+    <div class="card" id="lookupCard" style="max-width:620px;margin:0 auto">
+      <div class="card__hd" id="lookupHd"></div>
+      <form id="lookupForm" novalidate>
+        <div class="field" style="margin-bottom:16px">
+          <label class="label" for="ref">Booking number <span class="req">*</span></label>
+          <input class="input" id="ref" placeholder="KAS0412345" autocomplete="off" required>
+          <span class="err-msg"></span>
+          <span class="hint">Format: KAS + 2-digit branch code + 5 digits.</span>
+        </div>
+        <div class="field" style="margin-bottom:20px">
+          <label class="label" for="email">Email address <span class="req">*</span></label>
+          <input class="input" type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+          <span class="err-msg"></span>
+        </div>
+        <button class="btn btn--gold btn--block" type="submit">Find my booking</button>
+      </form>
+      <div class="divider"></div>
+      <div id="recent"></div>
+    </div>
+
+    <!-- result -->
+    <div id="result" style="margin-top:26px"></div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
+  App.boot({ active: 'my kas' });
+
+  U.$('#heroBg').innerHTML = U.img(D.getHotel('hotel-08').images[0], 'KAS Hotel Collection', '', false, false);
+  U.$('#lookupHd').innerHTML = U.icon('key', 18) + '<h4>Find your booking</h4>';
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  var PAY_LABEL = { 'pay-later': 'Pay later — at the hotel', card: 'Credit / debit card',
+                    zalopay: 'ZaloPay', bank: 'Bank transfer' };
+
+  /* ---- recent bookings in this browser ---- */
+  function paintRecent() {
+    var all = S.getBookings();
+    var host = U.$('#recent');
+    if (!all.length) {
+      host.innerHTML = '<p class="tiny muted" style="margin:0">No bookings are stored in this browser yet. ' +
+        '<a href="hotels.html" style="color:var(--gold-dk)">Find a stay →</a></p>';
+      return;
+    }
+    host.innerHTML = '<div class="tiny muted" style="margin-bottom:10px">Bookings saved in this browser</div>' +
+      all.slice(0, 6).map(function (b) {
+        return '<button class="btn btn--ghost btn--block" type="button" data-ref="' + U.esc(b.bookingNumber) +
+          '" data-em="' + U.esc(b.guest.email) + '" style="justify-content:space-between;margin-bottom:8px;text-transform:none;letter-spacing:0;font-size:.85rem">' +
+          '<span style="text-align:left"><b>' + U.esc(b.bookingNumber) + '</b><br>' +
+          '<span class="tiny muted">' + U.esc(b.hotelName) + ' · ' + U.fmtDate(b.checkIn) + '</span></span>' +
+          '<span class="chip ' + (b.status === 'CANCELLED' ? '' : 'chip--ok') + '" style="font-size:.6rem">' + b.status + '</span>' +
+          '</button>';
+      }).join('');
+    U.$$('[data-ref]', host).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        U.$('#ref').value = btn.dataset.ref;
+        U.$('#email').value = btn.dataset.em;
+        lookup();
+      });
+    });
+  }
+  paintRecent();
+
+  /* ---- lookup ---- */
+  function lookup() {
+    U.clearAllErrs();
+    var refEl = U.$('#ref'), emEl = U.$('#email');
+    var ref = refEl.value.trim(), em = emEl.value.trim();
+    var bad = false;
+    if (!U.notEmpty(ref)) { U.setErr(refEl, 'Please enter your booking number.'); bad = true; }
+    if (!U.notEmpty(em)) { U.setErr(emEl, 'Please enter your email address.'); bad = true; }
+    else if (!U.isEmail(em)) { U.setErr(emEl, 'Please enter a valid email address.'); bad = true; }
+    if (bad) return;
+
+    var bk = S.findBooking(ref, em);
+    if (!bk) {
+      var any = S.getByNumber(ref);
+      U.setErr(refEl, any
+        ? 'That email does not match this booking number.'
+        : 'No booking found with that number in this browser.');
+      U.$('#result').innerHTML = '';
+      U.toast('Booking not found.');
+      return;
+    }
+    render(bk);
+    U.toast('Booking ' + bk.bookingNumber + ' found.');
+    setTimeout(function () {
+      U.$('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 120);
+  }
+  U.$('#lookupForm').addEventListener('submit', function (e) { e.preventDefault(); lookup(); });
+  ['ref','email'].forEach(function (id) {
+    U.$('#' + id).addEventListener('input', function () { U.clearErr(U.$('#' + id)); });
+  });
+
+  /* ---- render a found booking ---- */
+  function render(bk) {
+    var cancelled = bk.status === 'CANCELLED';
+    var hotel = D.getHotel(bk.hotelId);
+    U.$('#result').innerHTML =
+      '<div class="card">' +
+        '<div class="between" style="margin-bottom:20px;flex-wrap:wrap;gap:12px">' +
+          '<div><span class="eyebrow">Booking ' + U.esc(bk.bookingNumber) + '</span>' +
+            '<h2 style="font-size:1.6rem;margin-top:6px">' + U.esc(bk.hotelName) + '</h2>' +
+            '<p class="tiny muted" style="margin:3px 0 0">' + U.esc(bk.hotelAddress) + '</p></div>' +
+          '<span class="chip ' + (cancelled ? '' : 'chip--ok') + '">' +
+            U.icon(cancelled ? 'x' : 'checkC', 13) + bk.status + '</span>' +
+        '</div>' +
+
+        '<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;margin-bottom:20px">' +
+          '<div style="width:190px;aspect-ratio:4/3;border-radius:var(--r-sm);overflow:hidden;background:var(--beige);flex-shrink:0' +
+            (cancelled ? ';filter:grayscale(1);opacity:.6' : '') + '">' + U.img(bk.roomImage, bk.roomName) + '</div>' +
+          '<div style="flex:1;min-width:230px">' +
+            '<h4 style="font-family:var(--serif);font-size:1.25rem;margin-bottom:9px">' + U.esc(bk.roomName) + '</h4>' +
+            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 16px">' +
+              sp('size', bk.roomSize || 'Size not published') + sp('bed', bk.roomBed) +
+              sp('view', bk.roomView || 'View not published') + sp('users', 'Max ' + bk.roomMaxGuests + ' guests') +
+            '</div></div></div>' +
+
+        '<div class="divider"></div>' +
+        '<div class="dl">' +
+          f('Check-in', U.fmtDateFull(bk.checkIn), 'From ' + bk.checkInTime) +
+          f('Check-out', U.fmtDateFull(bk.checkOut), 'Until ' + bk.checkOutTime) +
+          f('Duration', bk.nights + ' Night' + (bk.nights === 1 ? '' : 's'), '') +
+          f('Guests & rooms', B.guestLabel(bk), '') +
+          f('Lead guest', bk.guest.title + ' ' + bk.guest.firstName + ' ' + bk.guest.lastName, bk.guest.email) +
+          f('Payment', PAY_LABEL[bk.paymentMethod] || bk.paymentMethod, 'No payment taken (demo)') +
+        '</div>' +
+        (bk.specialRequests ? '<div class="divider"></div><div class="dt">Special requests</div>' +
+          '<p style="font-size:.88rem;color:var(--tx-2);margin:4px 0 0">' + U.esc(bk.specialRequests) + '</p>' : '') +
+
+        '<div class="divider"></div>' +
+        B.priceBreakdownHTML({
+          nightly: bk.nightlyRate, nights: bk.nights, rooms: bk.rooms,
+          subtotal: bk.roomRate, serviceCharge: bk.serviceCharge, vat: bk.vat,
+          total: bk.total, serviceChargeRate: bk.serviceChargeRate, vatRate: bk.vatRate,
+          nightlyRates: bk.nightlyRates || null
+        }, {
+          nights: (bk.nightlyRates && window.KAS_RATES && window.KAS_RATES.hasSheetRate(bk.roomId))
+            ? window.KAS_RATES.quote(bk.roomId, bk.checkIn, bk.checkOut).nights : null,
+          rateSource: bk.rateSource || 'DEMO'
+        }) +
+
+        '<div class="divider"></div>' +
+        (cancelled
+          ? '<div class="alert alert--err">' + U.icon('alert', 18) +
+            '<div><b>Booking cancelled</b>Cancelled on ' +
+            U.fmtDate(U.toISO(new Date(bk.cancelledAt || bk.createdAt))) + '. No charge has been made.</div></div>'
+          : '<div class="alert alert--ok">' + U.icon('checkC', 18) +
+            '<div><b>Free cancellation</b>Cancel for free until ' + U.esc(bk.cancellationDeadline) +
+            ' (local time). After that, 1 night is charged.</div></div>') +
+
+        '<div style="display:flex;gap:11px;flex-wrap:wrap;margin-top:22px" id="mbActions"></div>' +
+      '</div>';
+
+    var acts = U.$('#mbActions');
+    acts.innerHTML =
+      '<a class="btn btn--ghost" href="booking-confirmed.html?ref=' + encodeURIComponent(bk.bookingNumber) + '">' +
+        U.icon('cal', 14) + ' View full confirmation</a>' +
+      (cancelled ? '' :
+        '<button class="btn btn--ghost" id="modBtn" type="button">' + U.icon('edit', 14) + ' Modify booking</button>' +
+        '<button class="btn btn--dark" id="canBtn" type="button">' + U.icon('x', 14) + ' Cancel booking</button>') +
+      '<button class="btn btn--ghost" id="prtBtn" type="button">' + U.icon('print', 14) + ' Print</button>';
+
+    U.$('#prtBtn').addEventListener('click', function () { window.print(); });
+
+    var mb = U.$('#modBtn');
+    if (mb) mb.addEventListener('click', function () { openModify(bk); });
+
+    var cb = U.$('#canBtn');
+    if (cb) cb.addEventListener('click', function () {
+      App.modal({
+        icon: 'alert', tone: 'err', danger: true,
+        title: 'Cancel this booking?',
+        body: 'Booking <b>' + U.esc(bk.bookingNumber) + '</b> at ' + U.esc(bk.hotelName) +
+              ' for ' + U.fmtDate(bk.checkIn) + ' will be cancelled.<br><br>' +
+              'Free cancellation applies until ' + U.esc(bk.cancellationDeadline) + '. This cannot be undone.',
+        ok: 'Yes, cancel booking', cancel: 'Keep booking',
+        onOk: function () {
+          var updated = B.cancelBooking(bk.bookingNumber);
+          U.toast('Booking ' + bk.bookingNumber + ' has been cancelled.');
+          render(updated); paintRecent();
+        }
+      });
+    });
+  }
+
+  /* ---- modify (dates / guests) ---- */
+  function openModify(bk) {
+    var room = D.getRoom(bk.hotelId, bk.roomId);
+    var m = U.el('div', { class: 'modal' });
+    m.innerHTML =
+      '<div class="modal__box" style="max-width:520px"><div class="modal__b">' +
+        '<h3 style="margin-bottom:6px">Modify booking</h3>' +
+        '<p class="tiny muted" style="margin-bottom:20px">Change your dates or guest count. The price will be recalculated.</p>' +
+        '<div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px">' +
+          '<div class="field"><label class="label" for="mIn">Check-in</label>' +
+            '<input class="input" type="date" id="mIn" value="' + bk.checkIn + '" min="' + U.today() + '"></div>' +
+          '<div class="field"><label class="label" for="mOut">Check-out</label>' +
+            '<input class="input" type="date" id="mOut" value="' + bk.checkOut + '" min="' + U.addDays(bk.checkIn, 1) + '"></div>' +
+        '</div>' +
+        '<div class="grid" style="grid-template-columns:1fr 1fr 1fr;margin-bottom:16px">' +
+          '<div class="field"><label class="label" for="mA">Adults</label>' +
+            '<input class="input" type="number" id="mA" min="1" max="' + (room ? room.maxGuests : 4) + '" value="' + bk.adults + '"></div>' +
+          '<div class="field"><label class="label" for="mC">Children</label>' +
+            '<input class="input" type="number" id="mC" min="0" max="4" value="' + bk.children + '"></div>' +
+          '<div class="field"><label class="label" for="mR">Rooms</label>' +
+            '<input class="input" type="number" id="mR" min="1" max="6" value="' + bk.rooms + '"></div>' +
+        '</div>' +
+        '<div class="field"><label class="label" for="mReq">Special requests</label>' +
+          '<textarea class="textarea" id="mReq" maxlength="500" style="min-height:70px">' + U.esc(bk.specialRequests || '') + '</textarea></div>' +
+        '<div class="alert alert--info" style="margin-top:16px" id="mPrev"></div>' +
+        '<span class="err-msg" id="mErr"></span>' +
+      '</div>' +
+      '<div class="modal__ft">' +
+        '<button class="btn btn--ghost" data-a="cancel">Discard</button>' +
+        '<button class="btn btn--gold" data-a="ok">Save changes</button>' +
+      '</div></div>';
+    document.body.appendChild(m);
+    requestAnimationFrame(function () { m.classList.add('open'); });
+    document.body.style.overflow = 'hidden';
+
+    var mIn = U.$('#mIn', m), mOut = U.$('#mOut', m), mA = U.$('#mA', m),
+        mC = U.$('#mC', m), mR = U.$('#mR', m), prev = U.$('#mPrev', m), err = U.$('#mErr', m);
+
+    function preview() {
+      var n = U.nights(mIn.value, mOut.value);
+      if (n < 1) { prev.innerHTML = U.icon('alert', 15) + '<span>Check-out must be after check-in.</span>'; return null; }
+      var p = U.calcPrice(bk.nightlyRate, n, +mR.value || 1);
+      prev.innerHTML = U.icon('tag', 15) + '<span><b>New total: ' + U.vnd(p.total) + ' VND</b>' +
+        n + ' night' + (n === 1 ? '' : 's') + ' × ' + U.vnd(bk.nightlyRate) + ' VND' +
+        ((+mR.value || 1) > 1 ? ' × ' + mR.value + ' rooms' : '') +
+        ' + service charge + VAT. Previously ' + U.vnd(bk.total) + ' VND.</span>';
+      return p;
+    }
+    [mIn, mOut, mA, mC, mR].forEach(function (e2) {
+      e2.addEventListener('change', function () {
+        if (e2 === mIn) {
+          mOut.min = U.addDays(mIn.value, 1);
+          if (U.nights(mIn.value, mOut.value) < 1) mOut.value = U.addDays(mIn.value, 1);
+        }
+        err.classList.remove('show');
+        preview();
+      });
+    });
+    preview();
+
+    function close() { m.classList.remove('open'); document.body.style.overflow = ''; setTimeout(function () { m.remove(); }, 240); }
+    U.$('[data-a=cancel]', m).onclick = close;
+    m.onclick = function (e) { if (e.target === m) close(); };
+
+    U.$('[data-a=ok]', m).onclick = function () {
+      var n = U.nights(mIn.value, mOut.value);
+      var a = +mA.value, k = +mC.value, r = +mR.value;
+      if (n < 1) { err.textContent = 'Check-out must be after check-in.'; err.classList.add('show'); return; }
+      if (!(a >= 1)) { err.textContent = 'At least 1 adult is required.'; err.classList.add('show'); return; }
+      if (!(r >= 1)) { err.textContent = 'At least 1 room is required.'; err.classList.add('show'); return; }
+      if (room && a + k > room.maxGuests * r) {
+        err.textContent = 'This room sleeps ' + room.maxGuests + ' guests. Add a room or reduce guests.';
+        err.classList.add('show'); return;
+      }
+      var p = U.calcPrice(bk.nightlyRate, n, r);
+      var updated = S.updateBooking(bk.bookingNumber, {
+        checkIn: mIn.value, checkOut: mOut.value, nights: n,
+        adults: a, children: k, rooms: r,
+        specialRequests: U.$('#mReq', m).value.trim(),
+        roomRate: p.subtotal, serviceCharge: p.serviceCharge, vat: p.vat, total: p.total,
+        cancellationDeadline: U.cancelBy(mIn.value),
+        status: 'MODIFIED'
+      });
+      close();
+      U.toast('Booking updated.');
+      render(updated); paintRecent();
+    };
+  }
+
+  function sp(ic, t) { return '<span class="spec">' + U.icon(ic, 14) + U.esc(t) + '</span>'; }
+  function f(a, b, c) {
+    return '<div><div class="dt">' + a + '</div><div class="dd">' + U.esc(b) +
+      (c ? '<small>' + U.esc(c) + '</small>' : '') + '</div></div>';
+  }
+
+  /* ---- deep link ?ref=&email= ---- */
+  var q = U.qs();
+  if (q.ref) {
+    U.$('#ref').value = q.ref;
+    if (q.email) U.$('#email').value = q.email;
+    if (q.ref && q.email) lookup();
+  }
+})();
+</script>
+</body>
+</html>
