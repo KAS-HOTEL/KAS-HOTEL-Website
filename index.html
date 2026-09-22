@@ -27,16 +27,10 @@
       <h1>Stay in the heart<br>of<br>Ho Chi Minh<br>City.</h1>
       <p>Thoughtfully designed stays in the places that make the city worth discovering.</p>
       <div class="home-hero__actions">
-        <a class="btn btn--ghost-lt" href="hotels.html">Explore our hotels <span>→</span></a>
+        <a class="btn btn--ghost-lt" href="about.html">Explore our KAS <span>→</span></a>
         <a class="btn btn--gold" href="hotels.html">Find your stay</a>
       </div>
     </div>
-  </div>
-</section>
-
-<section class="home-booking-search home-grid__booking" aria-label="Booking search">
-  <div class="home-booking-search__in">
-    <div id="homeHeroSearch"></div>
   </div>
 </section>
 
@@ -106,7 +100,7 @@
 </section>
 
 <section class="home-cta home-grid__section">
-  <div class="container home-cta__in"><span class="eyebrow eyebrow--gold">KAS Hotel Collection</span><h2>Make Ho Chi Minh City<br>your next stay.</h2><p>Discover a KAS property and find your place in the city.</p><a class="btn btn--gold" href="hotels.html">Explore our hotels</a></div>
+  <div class="container home-cta__in"><span class="eyebrow eyebrow--gold">KAS Hotel Collection</span><h2>Make Ho Chi Minh City<br>your next stay.</h2><p>Discover a KAS property and find your place in the city.</p><a class="btn btn--gold" href="index.html#top">Explore Ho Chi Minh City</a></div>
 </section>
 
 </main>
@@ -129,16 +123,13 @@
   App.boot({floating:true,active:''});
   var hero=D.getHotel('hotel-04')||D.hotels[3], serenity=D.getHotel('hotel-08')||hero;
   U.$('#homeHeroBg').innerHTML=U.img(hero.images[0],hero.name,'',false,false);
-  if (window.Search && U.$('#homeHeroSearch')) {
-    window.Search.render(U.$('#homeHeroSearch'), {cta:'Search Rooms'});
-  }
   U.$('#stayImage').innerHTML=U.img(serenity.images[0],serenity.name,'',false,false);
   U.$('#cityImage').innerHTML=U.img(hero.images[0],hero.name,'',false,false);
   var room=(hero.rooms&&hero.rooms[0])||null;
   U.$('#roomImage').innerHTML=U.img((room&&room.images&&room.images[0])||hero.images[1]||hero.images[0],hero.name,'',false,false);
   var usp=[['shield','Best Rate Guarantee'],['tag','Exclusive Offers'],['rot','Flexible Cancellation'],['gift','Direct Benefits'],['crown','Member Privileges']];
   U.$('#homeUsp').innerHTML=usp.map(function(x){return '<div>'+U.icon(x[0],16)+'<span>'+x[1]+'</span></div>';}).join('');
-  U.$('#homeCards').innerHTML=D.hotels.slice(0,5).map(function(h){return '<a class="home-card" href="hotel-detail.html?hotel='+h.id+'"><div class="home-card__img">'+U.img(h.images[0],h.name,'',true,false)+'</div><div class="home-card__body"><h3>'+U.esc(h.name)+'</h3><p>'+U.esc(h.address)+'</p><strong>from '+U.vnd(h.startingPrice)+' VND</strong></div></a>';}).join('');
+  U.$('#homeCards').innerHTML=D.hotels.map(function(h){return '<a class="home-card" href="hotel-detail.html?hotel='+h.id+'"><div class="home-card__img">'+U.img(h.images[0],h.name,'',true,false)+'</div><div class="home-card__body"><h3>'+U.esc(h.name)+'</h3><p>'+U.esc(h.address)+'</p><strong>from '+U.vnd(h.startingPrice)+' VND</strong></div></a>';}).join('');
   var cards=U.$('#homeCards');function step(){var c=U.$('.home-card',cards);return c?c.getBoundingClientRect().width+14:300;}
   U.$('#homePrev').onclick=function(){cards.scrollBy({left:-step(),behavior:'smooth'});};U.$('#homeNext').onclick=function(){cards.scrollBy({left:step(),behavior:'smooth'});};
   App.reveal();

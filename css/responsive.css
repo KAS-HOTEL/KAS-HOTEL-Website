@@ -357,6 +357,8 @@
 .home-hero #homeHeroSearch{position:absolute;left:50%;right:auto;bottom:-38px;width:min(92%,1264px);transform:translateX(-50%);z-index:10}
 .home-redesign .home-hero__copy h1{font-size:clamp(3rem,5vw,4.8rem);line-height:.9}
 @media(max-width:767px){
+  .home-usp{padding-top:16px}
+  .home-usp__in{padding-block:8px}
   .home-hero #homeHeroSearch{left:16px;right:16px;bottom:-32px;width:auto;transform:none}
   .home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr; border-radius:18px}
   .home-hero #homeHeroSearch .btn{width:calc(100% - 12px);min-height:46px}
@@ -1316,4 +1318,491 @@ body.home-redesign {
 }
 @media (max-width: 560px) {
   .home-page-grid__content .home-hero__copy h1 { font-size: 3.15rem; }
+}
+
+
+/* V21.5 — full-screen hero + stable collection carousel + lighter editorial headings. */
+.home-page-grid__content .home-hero{
+  width:100vw;
+  max-width:none;
+  min-height:0;
+  height:100svh;
+  margin-left:calc((100% - 100vw)/2);
+  overflow:hidden;
+}
+.home-page-grid__content .home-hero__inner{
+  width:min(100%,1440px);
+  max-width:1440px;
+  margin-inline:auto;
+  padding-inline:56px;
+}
+.home-page-grid__content .home-hero__copy{
+  width:min(620px,100%);
+  max-width:620px;
+}
+.home-page-grid__content .home-cards{
+  display:flex;
+  flex-wrap:nowrap !important;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+.home-page-grid__content .home-card{
+  flex:0 0 calc((100% - 42px)/4);
+}
+.home-city__copy h2,
+.home-cta h2{
+  font-weight:400 !important;
+  text-shadow:none;
+}
+@media (max-width:900px){
+  .home-page-grid__content .home-hero{
+    width:100vw;
+    height:100svh;
+    min-height:0;
+    margin-left:calc((100% - 100vw)/2);
+  }
+  .home-page-grid__content .home-hero__inner{
+    width:100%;
+    padding-inline:32px;
+  }
+  .home-page-grid__content .home-card{
+    flex:0 0 calc((100% - 14px)/2);
+  }
+}
+@media (max-width:560px){
+  .home-page-grid__content .home-hero{
+    height:100svh;
+    min-height:0;
+  }
+  .home-page-grid__content .home-hero__inner{
+    padding-inline:20px;
+  }
+  .home-page-grid__content .home-card{
+    flex:0 0 86vw;
+  }
+}
+
+
+/* V21.5 — INDEX HERO / NAV / FOOTER FINAL LAYOUT FIX
+   Homepage-only visual corrections. No JS/function behavior is changed. */
+
+/* Header: use the same full KAS wordmark scale as the non-floating header. */
+.home-redesign #hdr.hdr--float .hdr__in {
+  width: min(1320px, calc(100vw - 64px));
+  max-width: 1320px;
+  gap: 24px;
+}
+.home-redesign #hdr.hdr--float .logo img {
+  width: 180px !important;
+  max-width: 42vw !important;
+  height: auto !important;
+}
+.home-redesign #hdr.hdr--float .nav {
+  gap: 26px;
+}
+.home-redesign #hdr.hdr--float .nav a {
+  font-size: .71rem;
+  letter-spacing: .15em;
+}
+.home-redesign #hdr.hdr--float .hdr__right {
+  gap: 16px;
+}
+
+/* Hero: full viewport, CSS Grid centering, stable focal point. */
+.home-page-grid__content .home-hero {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  height: 100svh;
+  min-height: 640px;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-items: center;
+  overflow: hidden;
+}
+.home-page-grid__content .home-hero__bg {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: 100%;
+}
+.home-page-grid__content .home-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 50%;
+}
+.home-page-grid__content .home-hero__inner {
+  grid-area: 1 / 1;
+  width: min(1120px, calc(100vw - 64px));
+  max-width: 1120px;
+  height: 100%;
+  margin-inline: auto;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  justify-items: center;
+}
+.home-page-grid__content .home-hero__copy {
+  width: min(700px, 100%);
+  max-width: 700px;
+  margin-inline: auto;
+  text-align: center;
+}
+.home-page-grid__content .home-hero__copy h1 {
+  max-width: none;
+}
+.home-page-grid__content .home-hero__copy p {
+  margin-inline: auto;
+}
+.home-page-grid__content .home-hero__actions {
+  justify-content: center;
+}
+
+/* Search is intentionally removed from the homepage composition. */
+.home-page-grid__content .home-booking-search,
+.home-page-grid__content #homeHeroSearch {
+  display: none !important;
+}
+
+/* Footer: keep the editorial grid centered to the same viewport frame. */
+.home-redesign #ftr {
+  width: 100%;
+  overflow: hidden;
+}
+.home-redesign #ftr .container {
+  width: min(1320px, calc(100% - 64px));
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.home-redesign #ftr .ftr__main {
+  grid-template-columns: minmax(240px,1.45fr) repeat(4,minmax(135px,1fr));
+  grid-template-rows: auto auto;
+  gap: 28px 32px;
+}
+.home-redesign #ftr .ftr__brand { grid-column: 1; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 5; grid-row: 1; }
+.home-redesign #ftr .ftr__contact { grid-column: 1 / span 2; grid-row: 2; }
+.home-redesign #ftr .ftr__news { grid-column: 4 / span 2; grid-row: 2; }
+
+@media (max-width: 1100px) {
+  .home-redesign #hdr.hdr--float .hdr__in {
+    width: calc(100vw - 48px);
+    max-width: 1120px;
+  }
+  .home-redesign #hdr.hdr--float .logo img { width: 160px !important; }
+  .home-page-grid__content .home-hero__inner { width: calc(100vw - 48px); }
+  .home-redesign #ftr .container { width: calc(100% - 48px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: minmax(220px,1.35fr) repeat(3,minmax(130px,1fr));
+  }
+  .home-redesign #ftr .ftr__brand { grid-column: 1; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 1; grid-row: 2; }
+  .home-redesign #ftr .ftr__contact { grid-column: 2 / span 2; grid-row: 2; }
+  .home-redesign #ftr .ftr__news { grid-column: 4; grid-row: 2; }
+}
+
+@media (max-width: 700px) {
+  .home-redesign #hdr.hdr--float .hdr__in {
+    width: calc(100vw - 32px);
+    max-width: none;
+  }
+  .home-redesign #hdr.hdr--float .logo img { width: 140px !important; }
+  .home-page-grid__content .home-hero {
+    min-height: 0;
+    height: 100svh;
+  }
+  .home-page-grid__content .home-hero__inner {
+    width: calc(100vw - 32px);
+  }
+  .home-page-grid__content .home-hero__copy {
+    width: 100%;
+    max-width: 560px;
+  }
+  .home-redesign #ftr .container { width: calc(100% - 32px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 26px 18px;
+  }
+  .home-redesign #ftr .ftr__brand,
+  .home-redesign #ftr .ftr__contact,
+  .home-redesign #ftr .ftr__news { grid-column: 1 / -1; grid-row: auto; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+/* V21.7 — FULL-BLEED SECTION BACKGROUNDS
+   Keep the 3-column centered content system, but let every homepage section
+   background extend to the full viewport width. Inner .container/.grid
+   elements remain centered and constrained. */
+.home-redesign .home-page-grid {
+  overflow: visible;
+}
+
+.home-redesign .home-page-grid__content {
+  overflow: visible;
+}
+
+.home-redesign .home-page-grid__content > section,
+.home-redesign .home-page-grid__content > .home-grid__section,
+.home-redesign .home-page-grid__content > .home-usp {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: 0;
+}
+
+/* Preserve centered editorial measure inside full-width sections. */
+.home-redesign .home-page-grid__content > section > .container,
+.home-redesign .home-page-grid__content > .home-grid__section > .container,
+.home-redesign .home-page-grid__content > .home-usp > .container {
+  margin-inline: auto;
+}
+
+/* Split sections: background/image are full-width, copy remains proportionate. */
+.home-redesign .home-page-grid__content .home-city,
+.home-redesign .home-page-grid__content .home-stay,
+.home-redesign .home-page-grid__content .home-rooms {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+}
+
+/* Collection / experience / CTA backgrounds also run edge-to-edge. */
+.home-redesign .home-page-grid__content .home-collection,
+.home-redesign .home-page-grid__content .home-experience,
+.home-redesign .home-page-grid__content .home-cta,
+.home-redesign .home-page-grid__content .home-usp {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+}
+
+/* Mobile: keep the same full-bleed rule without horizontal overflow. */
+@media (max-width: 700px) {
+  .home-redesign .home-page-grid__content > section,
+  .home-redesign .home-page-grid__content > .home-grid__section,
+  .home-redesign .home-page-grid__content > .home-usp,
+  .home-redesign .home-page-grid__content .home-city,
+  .home-redesign .home-page-grid__content .home-stay,
+  .home-redesign .home-page-grid__content .home-rooms,
+  .home-redesign .home-page-grid__content .home-collection,
+  .home-redesign .home-page-grid__content .home-experience,
+  .home-redesign .home-page-grid__content .home-cta {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: 0;
+  }
+}
+
+/* V21.8 — CENTERED CONTENT MEASURE
+   Full-bleed backgrounds remain intact, while editorial content follows the
+   same centered reading width as hotels.html. This prevents text/images from
+   sitting against the viewport edge at wide screens and during browser zoom. */
+.home-redesign .home-page-grid {
+  grid-template-columns: minmax(24px, 1fr) minmax(0, 1280px) minmax(24px, 1fr);
+}
+
+.home-redesign .home-page-grid__content {
+  max-width: 1280px;
+  overflow: visible;
+}
+
+.home-redesign .home-page-grid__content > section > .container,
+.home-redesign .home-page-grid__content > .home-grid__section > .container,
+.home-redesign .home-page-grid__content > .home-usp > .container,
+.home-redesign .home-page-grid__content .home-stay__grid,
+.home-redesign .home-page-grid__content .home-rooms__grid,
+.home-redesign .home-page-grid__content .home-collection .container,
+.home-redesign .home-page-grid__content .home-experience .container,
+.home-redesign .home-page-grid__content .home-cta__in {
+  width: min(calc(100% - 64px), 1200px);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+.home-redesign .home-page-grid__content .home-hero__inner {
+  width: min(calc(100% - 64px), 1200px);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+/* Keep the split location section full-bleed, but inset its copy so the
+   reading column starts on the same centered measure as other sections. */
+.home-redesign .home-page-grid__content .home-city__copy {
+  padding-left: max(48px, calc((100vw - 1200px) / 2 + 48px));
+  padding-right: 72px;
+}
+
+@media (max-width: 1279px) {
+  .home-redesign .home-page-grid {
+    grid-template-columns: 24px minmax(0, 1fr) 24px;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-redesign .home-page-grid {
+    grid-template-columns: 16px minmax(0, 1fr) 16px;
+  }
+  .home-redesign .home-page-grid__content > section > .container,
+  .home-redesign .home-page-grid__content > .home-grid__section > .container,
+  .home-redesign .home-page-grid__content > .home-usp > .container,
+  .home-redesign .home-page-grid__content .home-stay__grid,
+  .home-redesign .home-page-grid__content .home-rooms__grid,
+  .home-redesign .home-page-grid__content .home-collection .container,
+  .home-redesign .home-page-grid__content .home-experience .container,
+  .home-redesign .home-page-grid__content .home-cta__in,
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    width: min(calc(100% - 32px), 1200px);
+  }
+  .home-redesign .home-page-grid__content .home-city__copy {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+}
+
+
+/* V21.9 — HERO LEFT ALIGN + TOP-ONLY TRANSPARENT NAV
+   Hero copy follows the same left editorial rail as the KAS reference.
+   The nav stays transparent only at scroll=0, then becomes solid black. */
+.home-redesign .home-page-grid__content .home-hero__inner {
+  width: min(calc(100% - 64px), 1200px);
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.home-redesign .home-page-grid__content .home-hero__copy {
+  width: min(620px, 52%);
+  max-width: 620px;
+  margin: 0;
+  text-align: left;
+}
+.home-redesign .home-page-grid__content .home-hero__copy h1 {
+  max-width: 10.5ch;
+}
+.home-redesign .home-page-grid__content .home-hero__copy p {
+  margin-inline: 0;
+}
+.home-redesign .home-page-grid__content .home-hero__actions {
+  justify-content: flex-start;
+}
+
+@media (max-width: 900px) {
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    width: calc(100% - 48px);
+  }
+  .home-redesign .home-page-grid__content .home-hero__copy {
+    width: min(620px, 70%);
+    max-width: 620px;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    width: calc(100% - 32px);
+  }
+  .home-redesign .home-page-grid__content .home-hero__copy {
+    width: 100%;
+    max-width: 560px;
+  }
+}
+
+/* V21.9.2 — KEEP HERO COPY CLEAR OF FIXED NAV
+   The hero remains full-screen, but its editorial copy starts below the
+   fixed navigation safe area instead of being allowed to sit underneath it. */
+.home-redesign .home-page-grid__content .home-hero__inner {
+  box-sizing: border-box;
+  padding-top: calc(var(--nav-h) + 24px);
+}
+
+@media (max-width: 700px) {
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    padding-top: calc(var(--nav-h) + 16px);
+  }
+}
+
+
+/* V21.9.4 — HERO TRUE LEFT RAIL + VI COPY SAFE
+   The Hero copy uses a stable viewport-left rail, matching the editorial
+   alignment of the reference layout instead of the centered 1200px rail. */
+.home-redesign .home-page-grid__content .home-hero__inner {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-left: 48px;
+  padding-right: 48px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.home-redesign .home-page-grid__content .home-hero__copy {
+  width: min(620px, 100%);
+  max-width: 620px;
+  margin-left: 0;
+  margin-right: auto;
+  text-align: left;
+}
+@media (max-width: 900px) {
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    width: 100%;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  .home-redesign .home-page-grid__content .home-hero__copy {
+    width: min(620px, 100%);
+    max-width: 620px;
+  }
+}
+@media (max-width: 560px) {
+  .home-redesign .home-page-grid__content .home-hero__inner {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* V21.9.6 — VI HERO title: roomier leading, keep city name on one line, slightly shorter hero */
+html[lang=vi] .home-redesign .home-page-grid__content .home-hero__copy h1 {
+  line-height: 1.2;
+  max-width: none;
+  width: 100%;
+}
+
+.home-redesign .home-page-grid__content .home-hero {
+  min-height: 660px;
+  height: min(100svh, 820px);
+}
+
+@media (max-width: 1100px) {
+  .home-redesign .home-page-grid__content .home-hero {
+    min-height: 640px;
+    height: min(100svh, 780px);
+  }
+}
+
+@media (max-width: 700px) {
+  .home-redesign .home-page-grid__content .home-hero {
+    min-height: 620px;
+    height: 100svh;
+  }
+  html[lang=vi] .home-redesign .home-page-grid__content .home-hero__copy h1 {
+    max-width: 100%;
+  }
 }

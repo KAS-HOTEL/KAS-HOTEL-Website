@@ -72,6 +72,7 @@
     'within reach.':'trong tầm tay.',
     "Start the morning with coffee around the corner, walk to the city's landmarks, or return to a quiet room after a day in Ho Chi Minh City. KAS places you close to the neighbourhoods, food, culture and energy that define the city.":'Bắt đầu buổi sáng với một ly cà phê quanh góc phố, đi bộ tới những điểm đến biểu tượng, hoặc trở về căn phòng yên tĩnh sau một ngày ở Thành phố Hồ Chí Minh. KAS đưa bạn đến gần những khu phố, ẩm thực, văn hóa và nhịp sống làm nên thành phố.',
     'Explore Ho Chi Minh City':'Khám phá Thành phố Hồ Chí Minh',
+    'Explore our KAS':'Khám phá KAS của chúng tôi',
     'The KAS experience':'Trải nghiệm KAS',
     'Made for the way you travel.':'Dành cho cách bạn khám phá.',
     'Comfort, without complication':'Thoải mái, không cầu kỳ',
@@ -733,11 +734,22 @@
     });
   }
 
+  function syncHomepageHeroTitle() {
+    var h1 = document.querySelector('.home-hero__copy h1');
+    if (!h1) return;
+    if (LANG === 'vi') {
+      h1.innerHTML = 'Lưu trú giữa lòng<br>Thành phố<br>Hồ Chí Minh.';
+    } else {
+      h1.innerHTML = 'Stay in the heart<br>of<br>Ho Chi Minh<br>City.';
+    }
+  }
+
   function apply() {
     applying = true;
     if (observer) observer.disconnect();
     document.documentElement.lang = LANG;
     applyText(LANG);
+    syncHomepageHeroTitle();
     var titleMap = {
       'KAS Hotel Collection — Timeless Places. Meaningful Stays.':'KAS Hotel Collection — Những điểm đến vượt thời gian. Những kỳ nghỉ đáng nhớ.',
       'Find Your Stay — KAS Hotel Collection':'Tìm nơi lưu trú — KAS Hotel Collection',
