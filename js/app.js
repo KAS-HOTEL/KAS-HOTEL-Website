@@ -88,6 +88,8 @@
           close();
         });
       });
+      if (host.__kasLangClose) document.removeEventListener('click', host.__kasLangClose);
+      host.__kasLangClose = close;
       document.addEventListener('click', close);
     }());
 
@@ -102,6 +104,7 @@
         /* Backward-compatible state class for existing styles. */
         host.classList.toggle('hdr--solid', scrolled);
       };
+      if (host.__kasScrollHandler) window.removeEventListener('scroll', host.__kasScrollHandler);
       host.__kasScrollHandler = onScroll;
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
@@ -182,7 +185,7 @@
             moreLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
           '</div>' +
           '<div class="ftr__col"><h5>Discover</h5>' +
-            '<a href="about.html">About KAS</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
+            '<a href="about.html">About KAS</a><a href="city-guide.html">City Guide</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
           '</div>' +
           '<div class="ftr__col"><h5>Guest services</h5>' +
             '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
@@ -349,13 +352,16 @@
         x0 = null;
       }, { passive: true });
     }
-    // keyboard
-    document.addEventListener('keydown', function (e) {
+    // keyboard — one handler per gallery host; re-rendering replaces it instead of stacking listeners
+    if (host.__kasGalKey) document.removeEventListener('keydown', host.__kasGalKey);
+    host.__kasGalKey = function (e) {
+      if (!host.isConnected || !U.$('.gal__main', host)) return;
       if (U.$('.lb.open')) return;
       if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;  // arrows move the caret / change a date there
       if (e.key === 'ArrowLeft') show(i - 1);
       if (e.key === 'ArrowRight') show(i + 1);
-    });
+    };
+    document.addEventListener('keydown', host.__kasGalKey);
     return { show: show };
   }
 

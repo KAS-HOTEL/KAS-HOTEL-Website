@@ -52,7 +52,8 @@
   }
   function fmtDate(s) {
     var d = parseDate(s); if (!d) return '—';
-    if (isVietnamese()) return String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth() + 1).padStart(2,'0') + '/' + d.getFullYear();
+    /* Always the English source format; i18n.js renders it as dd/mm/yyyy in VI.
+       Formatting by language here left VI dates on screen after switching to EN. */
     return d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
   }
   function fmtDateFull(s) {
@@ -279,6 +280,8 @@
       (cls ? ' class="' + cls + '"' : '') +
       (lazy === false ? '' : ' loading="lazy"') +
       ' decoding="async"' +
+      /* Hotlinked OTA/CDN photos: send no referrer, which some CDNs require for cross-site images. */
+      (/^https?:\/\//i.test(chain[0]) ? ' referrerpolicy="no-referrer"' : '') +
       ' data-fb="' + esc(chain.slice(1).join('|')) + '"' +
       ' data-fblabel="' + esc(lbl) + '"' +
       ' onerror="window.U&&U.imgError(this)">';

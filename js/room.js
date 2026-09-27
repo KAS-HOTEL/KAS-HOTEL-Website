@@ -82,9 +82,9 @@
             return '<div class="revcard">' +
               '<div class="revcard__hd"><span class="avatar">' + U.initials(r.name) + '</span>' +
                 '<div style="min-width:0"><b style="font-size:.85rem;display:block">' + U.esc(r.name) + '</b>' +
-                '<span class="tiny muted">' + (window.KAS_I18N ? window.KAS_I18N.t('Stayed') : 'Stayed') + ' ' + (window.KAS_I18N ? window.KAS_I18N.t(r.date) : U.esc(r.date)) + '</span></div>' +
+                '<span class="tiny muted">' + 'Stayed ' + U.esc(r.date) + '</span></div>' +
                 '<span style="margin-left:auto;color:var(--gold)">' + U.stars(r.stars, 12) + '</span></div>' +
-              '<p style="font-size:.86rem;line-height:1.65;margin:0">“' + U.esc(window.KAS_I18N ? window.KAS_I18N.t(r.text) : r.text) + '”</p></div>';
+              '<p style="font-size:.86rem;line-height:1.65;margin:0">“' + U.esc(r.text) + '”</p></div>';
           }).join('') :
             '<p class="muted">Individual review text is not available from source for this property.</p>') +
         '</div>' +

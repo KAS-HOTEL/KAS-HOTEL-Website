@@ -17,11 +17,21 @@ const UPLOAD_FILE = path.join(UPLOAD_DIR, 'manifest.json');
 const RATE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'rate-overrides.json');
 const COLLECTION_FILE = path.join(CONFIG_DIR, 'collection-images.json');
 const PORT = Number(process.env.PORT || 3000);
-const ADMIN_KEY = process.env.ADMIN_KEY || 'kas-admin-2026';
-if (process.env.NODE_ENV === 'production' && !process.env.ADMIN_KEY) {
-  console.error('ADMIN_KEY is required in production. Set it as an environment variable.');
+const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+/* Production always requires ADMIN_KEY. Local development may run without one;
+   in that case the server binds to loopback and admin routes are local-only. */
+const ADMIN_KEY = String(process.env.ADMIN_KEY || '').trim();
+const PLACEHOLDER_KEYS = new Set(['kas-admin-2026', 'change-this-strong-admin-key', 'doi-key-nay',
+  'your-long-random-key', '<key-dai-ngau-nhien-cua-ban>']);
+if (IS_PRODUCTION && (!ADMIN_KEY || PLACEHOLDER_KEYS.has(ADMIN_KEY) || /^<.*>$/.test(ADMIN_KEY))) {
+  console.error('ADMIN_KEY is missing or is a placeholder. Set a strong ADMIN_KEY environment variable before starting the server.');
   process.exit(1);
 }
+if (ADMIN_KEY && (PLACEHOLDER_KEYS.has(ADMIN_KEY) || /^<.*>$/.test(ADMIN_KEY))) {
+  console.warn('Warning: ADMIN_KEY looks like a placeholder. Use a strong key for production.');
+}
+if (ADMIN_KEY && ADMIN_KEY.length < 12) console.warn('Warning: ADMIN_KEY is shorter than 12 characters. Use a longer key.');
+const ADMIN_KEY_DIGEST = ADMIN_KEY ? crypto.createHash('sha256').update(ADMIN_KEY).digest() : null;
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -83,9 +93,83 @@ function effectiveRates(key, room) {
   };
 }
 
+/* Constant-time key comparison + a small in-memory brake on repeated failures. */
+const failedAuth = new Map();
+const AUTH_WINDOW_MS = 15 * 60 * 1000;
+const AUTH_MAX_FAILS = 20;
+function keyMatches(value) {
+  if (!ADMIN_KEY_DIGEST) return false;
+  const digest = crypto.createHash('sha256').update(String(value || '')).digest();
+  return crypto.timingSafeEqual(digest, ADMIN_KEY_DIGEST);
+}
+function isLoopback(req) {
+  const ip = String(req.ip || req.socket?.remoteAddress || '');
+  return ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+}
 function auth(req, res, next) {
-  if (req.get('x-admin-key') !== ADMIN_KEY) return res.status(401).json({ error: 'Sai mã quản trị.' });
+  if (!IS_PRODUCTION && !ADMIN_KEY && isLoopback(req)) return next();
+  const ip = req.ip || 'unknown';
+  const now = Date.now();
+  const rec = failedAuth.get(ip);
+  if (rec && now - rec.first > AUTH_WINDOW_MS) failedAuth.delete(ip);
+  const cur = failedAuth.get(ip);
+  if (cur && cur.count >= AUTH_MAX_FAILS) {
+    return res.status(429).json({ error: 'Quá nhiều lần thử sai. Vui lòng thử lại sau.' });
+  }
+  if (!keyMatches(req.get('x-admin-key'))) {
+    if (cur) cur.count += 1; else failedAuth.set(ip, { count: 1, first: now });
+    return res.status(401).json({ error: 'Sai mã quản trị.' });
+  }
+  failedAuth.delete(ip);
   next();
+}
+
+/* ---------- upload safety helpers ---------- */
+const IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.webp'];
+function safeExtension(originalname) {
+  const ext = path.extname(originalname || '').toLowerCase();
+  return IMAGE_EXT.includes(ext) ? ext : '.jpg';
+}
+/* Resolve a stored "/uploads/..." URL to a file path that is guaranteed to be
+   inside UPLOAD_DIR. Returns null for anything that would escape it. */
+function uploadPathFromUrl(url) {
+  const rel = String(url || '').replace(/^\/uploads\//, '');
+  if (!rel || rel.includes('\0')) return null;
+  const file = path.resolve(UPLOAD_DIR, rel);
+  const root = path.resolve(UPLOAD_DIR) + path.sep;
+  return file.startsWith(root) ? file : null;
+}
+function removeUploadedFile(file) {
+  if (!file) return;
+  try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
+}
+/* Check the real file signature; the browser-supplied MIME type is not proof. */
+function hasImageSignature(file) {
+  let fd;
+  try {
+    fd = fs.openSync(file, 'r');
+    const b = Buffer.alloc(12);
+    const n = fs.readSync(fd, b, 0, 12, 0);
+    if (n < 12) return false;
+    if (b[0] === 0xFF && b[1] === 0xD8 && b[2] === 0xFF) return true;                       // JPEG
+    if (b.slice(0, 8).equals(Buffer.from([0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]))) return true; // PNG
+    if (b.toString('ascii', 0, 4) === 'RIFF' && b.toString('ascii', 8, 12) === 'WEBP') return true;      // WEBP
+    return false;
+  } catch (_) {
+    return false;
+  } finally {
+    if (fd !== undefined) try { fs.closeSync(fd); } catch (_) {}
+  }
+}
+/* Returns true when every uploaded file is a real image; otherwise deletes them all. */
+function verifyImages(files) {
+  const list = (files || []).filter(Boolean);
+  if (list.every(f => hasImageSignature(f.path))) return true;
+  list.forEach(f => removeUploadedFile(f.path));
+  return false;
+}
+function isBranch(hotelId) {
+  return !!(rateData.branches && Object.prototype.hasOwnProperty.call(rateData.branches, hotelId));
 }
 
 const storage = multer.diskStorage({
@@ -98,8 +182,7 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename(req, file, cb) {
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
+    const safeExt = safeExtension(file.originalname);
     cb(null, Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -116,14 +199,13 @@ const upload = multer({
 const collectionStorage = multer.diskStorage({
   destination(req, file, cb) {
     const hotelId = String(req.body.hotelId || '');
-    if (!rateData.branches || !rateData.branches[hotelId]) return cb(new Error('Chi nhánh không hợp lệ.'));
+    if (!isBranch(hotelId)) return cb(new Error('Chi nhánh không hợp lệ.'));
     const dir = path.join(UPLOAD_DIR, 'collection', hotelId);
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename(req, file, cb) {
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
+    const safeExt = safeExtension(file.originalname);
     cb(null, 'collection-' + hotelIdSafe(req.body.hotelId) + '-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -140,14 +222,13 @@ const collectionUpload = multer({
 const propertyStorage = multer.diskStorage({
   destination(req, file, cb) {
     const hotelId = String(req.body.hotelId || '');
-    if (!rateData.branches || !rateData.branches[hotelId]) return cb(new Error('Chi nhánh không hợp lệ.'));
+    if (!isBranch(hotelId)) return cb(new Error('Chi nhánh không hợp lệ.'));
     const dir = path.join(UPLOAD_DIR, 'property', hotelId);
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename(req, file, cb) {
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
+    const safeExt = safeExtension(file.originalname);
     cb(null, 'property-' + hotelIdSafe(req.body.hotelId) + '-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -161,15 +242,40 @@ const propertyUpload = multer({
 });
 
 const app = express();
+app.disable('x-powered-by');
+app.set('trust proxy', 1);
 app.use(function(req, res, next) {
-  if (/^\/(?:server\.js|package(?:\.json|-lock\.json)?|\.env(?:\..*)?)$/.test(req.path)) return res.sendStatus(404);
-  if (req.path === '/uploads/manifest.json') return res.sendStatus(404);
+  res.set('X-Content-Type-Options', 'nosniff');
+  res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.set('X-Frame-Options', 'SAMEORIGIN');
   next();
 });
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(ROOT, { extensions: ['html'] }));
-app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '1h' }));
+
+/* ---------- public static files: explicit allowlist ----------
+   Only the site's pages and its css/, js/ and assets/ folders are public.
+   Everything else in the project folder (data/, tools/, .claude/, *.md,
+   server and deploy configuration, package files, dotfiles) returns 404. */
+const PUBLIC_PAGES = new Set(fs.readdirSync(ROOT).filter(f => /^[a-z0-9-]+\.html$/.test(f)));
+const staticOpts = { dotfiles: 'deny', index: false, redirect: false };
+app.use('/css', express.static(path.join(ROOT, 'css'), staticOpts));
+app.use('/js', express.static(path.join(ROOT, 'js'), staticOpts));
+app.use('/assets', express.static(path.join(ROOT, 'assets'), staticOpts));
+/* Uploaded photos only; manifest.json and any non-image file stay private. */
+app.use('/uploads', function(req, res, next) {
+  if (!/\.(?:jpe?g|png|webp)$/i.test(req.path)) return res.sendStatus(404);
+  next();
+}, express.static(UPLOAD_DIR, Object.assign({ maxAge: '1h' }, staticOpts)));
+app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'index.html')));
+/* No favicon file exists; answer quietly instead of a 404 on every page view. */
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+app.get('/:page', (req, res, next) => {
+  const raw = req.params.page;
+  const file = /\.html$/.test(raw) ? raw : raw + '.html';   /* clean URLs: /hotels -> hotels.html */
+  if (!PUBLIC_PAGES.has(file)) return next();
+  res.sendFile(path.join(ROOT, file));
+});
 
 function publicCatalog() {
   const branches = Object.entries(rateData.branches || {}).map(([hotelId, b]) => ({
@@ -214,9 +320,11 @@ app.post('/api/admin/upload', auth, (req, res) => {
     const key = String(req.body.roomKey || '');
     const room = roomIndex.get(key);
     if (!room) {
-      (req.files || []).forEach(f => { try { fs.unlinkSync(f.path); } catch (_) {} });
+      (req.files || []).forEach(f => removeUploadedFile(f.path));
       return res.status(400).json({ error: 'Hạng phòng không hợp lệ.' });
     }
+    if (!verifyImages(req.files)) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
+    if (!uploads.rooms || typeof uploads.rooms !== 'object') uploads.rooms = {};
     if (!uploads.rooms[key]) uploads.rooms[key] = [];
     (req.files || []).forEach(file => {
       uploads.rooms[key].push({
@@ -241,9 +349,7 @@ app.delete('/api/admin/upload/:id', auth, (req, res) => {
     return true;
   });
   if (!found) return res.status(404).json({ error: 'Không tìm thấy ảnh.' });
-  const rel = found.item.url.replace(/^\/uploads\//, '');
-  const file = path.join(UPLOAD_DIR, rel);
-  try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
+  removeUploadedFile(uploadPathFromUrl(found.item.url));
   uploads.rooms[found.key].splice(found.idx, 1);
   writeJsonAtomic(UPLOAD_FILE, uploads);
   res.json({ ok: true });
@@ -259,6 +365,7 @@ app.put('/api/admin/room-rates', auth, (req, res) => {
     if (!pair) return res.status(400).json({ error: 'Giá của ' + season + ' phải gồm 2 số không âm.' });
     next[season] = pair;
   }
+  if (!rateOverrides.rooms || typeof rateOverrides.rooms !== 'object') rateOverrides.rooms = {};
   rateOverrides.rooms[key] = next;
   writeJsonAtomic(RATE_OVERRIDE_FILE, rateOverrides);
   res.json({ ok: true, roomKey: key, rates: effectiveRates(key, room) });
@@ -268,16 +375,14 @@ app.post('/api/admin/collection-image', auth, (req, res) => {
   collectionUpload.single('image')(req, res, err => {
     if (err) return res.status(400).json({ error: err.message });
     const hotelId = String(req.body.hotelId || '');
-    if (!rateData.branches || !rateData.branches[hotelId]) {
-      if (req.file) { try { fs.unlinkSync(req.file.path); } catch (_) {} }
+    if (!isBranch(hotelId)) {
+      if (req.file) removeUploadedFile(req.file.path);
       return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
     }
     if (!req.file) return res.status(400).json({ error: 'Hãy chọn ảnh.' });
+    if (!verifyImages([req.file])) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
     const old = collectionImages.hotels && collectionImages.hotels[hotelId];
-    if (old && old.filename) {
-      const oldFile = path.join(UPLOAD_DIR, 'collection', hotelId, old.filename);
-      try { if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile); } catch (_) {}
-    }
+    if (old && old.filename) removeUploadedFile(uploadPathFromUrl('/uploads/collection/' + hotelId + '/' + old.filename));
     const item = {
       id: crypto.randomUUID(),
       filename: req.file.filename,
@@ -297,11 +402,12 @@ app.post('/api/admin/property-images', auth, (req, res) => {
   propertyUpload.array('images', 20)(req, res, err => {
     if (err) return res.status(400).json({ error: err.message });
     const hotelId = String(req.body.hotelId || '');
-    if (!rateData.branches || !rateData.branches[hotelId]) {
-      (req.files || []).forEach(f => { try { fs.unlinkSync(f.path); } catch (_) {} });
+    if (!isBranch(hotelId)) {
+      (req.files || []).forEach(f => removeUploadedFile(f.path));
       return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
     }
     if (!req.files || !req.files.length) return res.status(400).json({ error: 'Hãy chọn ít nhất 1 ảnh.' });
+    if (!verifyImages(req.files)) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
     if (!collectionImages.hotels) collectionImages.hotels = {};
     if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
     if (!Array.isArray(collectionImages.hotels[hotelId].gallery)) collectionImages.hotels[hotelId].gallery = [];
@@ -330,9 +436,7 @@ app.delete('/api/admin/property-images/:id', auth, (req, res) => {
     return true;
   });
   if (!found) return res.status(404).json({ error: 'Không tìm thấy ảnh nội thất/khách sạn.' });
-  const rel = String(found.item.url || '').replace(/^\/uploads\//, '');
-  const file = path.join(UPLOAD_DIR, rel);
-  try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
+  removeUploadedFile(uploadPathFromUrl(found.item.url));
   collectionImages.hotels[found.hotelId].gallery.splice(found.idx, 1);
   writeJsonAtomic(COLLECTION_FILE, collectionImages);
   res.json({ ok: true });
@@ -340,10 +444,10 @@ app.delete('/api/admin/property-images/:id', auth, (req, res) => {
 
 app.delete('/api/admin/collection-image/:hotelId', auth, (req, res) => {
   const hotelId = String(req.params.hotelId || '');
+  if (!isBranch(hotelId)) return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
   const old = collectionImages.hotels && collectionImages.hotels[hotelId];
   if (!old) return res.status(404).json({ error: 'Chi nhánh chưa có ảnh collection riêng.' });
-  const oldFile = path.join(UPLOAD_DIR, 'collection', hotelId, old.filename || '');
-  try { if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile); } catch (_) {}
+  if (old.filename) removeUploadedFile(uploadPathFromUrl('/uploads/collection/' + hotelId + '/' + old.filename));
   const gallery = Array.isArray(old.gallery) ? old.gallery : [];
   if (gallery.length) {
     collectionImages.hotels[hotelId] = { gallery: gallery };
@@ -358,13 +462,20 @@ app.get('/health', (req, res) => res.json({ ok: true, service: 'KAS Hotel Collec
 app.get('/reference', (req, res) => res.sendFile(path.join(ROOT, 'reference.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(ROOT, 'admin.html')));
 
+app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
+app.use((req, res) => res.status(404).type('text').send('Not found'));
+
 app.use((err, req, res, next) => {
-  console.error(err);
   if (res.headersSent) return next(err);
-  res.status(500).json({ error: err.message || 'Server error' });
+  const status = Number(err.status || err.statusCode) || 500;
+  if (status >= 500) {
+    console.error(err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+  res.status(status).json({ error: status === 400 ? 'Yêu cầu không hợp lệ.' : 'Request error' });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, IS_PRODUCTION || ADMIN_KEY ? '0.0.0.0' : '127.0.0.1', () => {
   console.log('KAS server running on http://localhost:' + PORT);
   console.log('Upload directory: ' + UPLOAD_DIR);
   console.log('Config directory: ' + CONFIG_DIR);

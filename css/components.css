@@ -3,7 +3,7 @@
    ========================================================================== */
 
 /* ---------- hero ---------- */
-.hero{position:relative;min-height:640px;display:flex;align-items:flex-end;background:var(--black)}
+.hero{position:relative;display:flex;background:var(--black)}
 /* NOTE: no overflow:hidden here — the search bar overhangs the hero by design.
    Clipping is done on .hero__bg instead, which is what actually needs it. */
 .hero--sm{min-height:340px;align-items:center}
@@ -14,17 +14,13 @@
   content:'';position:absolute;inset:0;
   background:linear-gradient(100deg,rgba(14,13,11,.94) 0%,rgba(14,13,11,.72) 38%,rgba(14,13,11,.34) 70%,rgba(14,13,11,.55) 100%);
 }
-.hero__in{position:relative;z-index:2;width:100%;padding-block:clamp(5rem,11vw,7rem) 0}
+.hero__in{position:relative;z-index:2;width:100%}
 .hero--sm .hero__in .searchbar,.hero .searchbar{z-index:3}
-.hero__ct{max-width:640px;color:var(--tx-inv)}
+.hero__ct{color:var(--tx-inv)}
 .hero__ct h1{color:var(--ivory);margin:.9rem 0 0}
-.hero__ct p{color:var(--tx-inv-2);font-size:1rem;max-width:460px;margin-top:1.5rem}
+.hero__ct p{color:var(--tx-inv-2);margin-top:1.5rem}
 .hero--sm .hero__in{padding-block:0 10px}
 .hero--sm .hero__ct h1{font-size:clamp(2.1rem,4vw,3.2rem)}
-/* V19: keep the edit-search control compact and inside the hero, 10px above its bottom edge. */
-.hero--sm .searchbar--sum{margin-bottom:0}
-.hero--sm .searchbar--sum > .btn{width:212px;min-width:212px;padding-inline:12px;white-space:nowrap}
-
 
 /* ---------- search bar ---------- */
 .searchbar{
@@ -96,19 +92,6 @@
 
 /* ---------- property rail (home) ---------- */
 .rail{display:grid;grid-template-columns:repeat(8,1fr);gap:14px}
-.pcard{
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
-  overflow:hidden;transition:all var(--t);cursor:pointer;display:flex;flex-direction:column;
-}
-.pcard:hover{transform:translateY(-5px);box-shadow:var(--sh-3);border-color:var(--sand)}
-.pcard__img{aspect-ratio:3/4;overflow:hidden;background:var(--beige);position:relative;contain:paint}
-.pcard__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.pcard:hover .pcard__img img{transform:scale(1.07)}
-.pcard__b{padding:13px 10px 15px;text-align:center;display:flex;flex-direction:column;min-width:0}
-.pcard__b h4{font-size:.93rem;line-height:1.25;margin-bottom:5px;overflow-wrap:anywhere}
-.pcard__b .area{font-size:.68rem;color:var(--tx-3);letter-spacing:.02em;line-height:1.4}
-.pcard__address{display:block;min-height:2.8em}
-.pcard__rate{font-size:.7rem;color:var(--gold-dk);font-weight:600;margin-top:6px}
 
 /* ---------- hotel card (listing) ---------- */
 .hcard{
@@ -117,7 +100,7 @@
   transition:all var(--t);
 }
 .hcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
-.hcard__media{position:relative;background:var(--beige);min-height:250px;overflow:hidden;contain:paint}
+.hcard__media{position:relative;background:var(--beige);overflow:hidden;contain:paint}
 .hcard__media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .7s var(--ease)}
 .hcard:hover .hcard__media img{transform:scale(1.05)}
 .hcard__b{padding:24px 26px;display:flex;flex-direction:column;gap:12px}
@@ -173,10 +156,10 @@
 /* ---------- room card ---------- */
 .rcard{
   display:grid;grid-template-columns:300px 1fr 226px;background:var(--surface);
-  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all var(--t);
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
 }
 .rcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
-.rcard__media{position:relative;background:var(--beige);min-height:224px;overflow:hidden;contain:paint}
+.rcard__media{position:relative;background:var(--beige);overflow:hidden;contain:paint}
 .rcard__b{padding:22px 24px;display:flex;flex-direction:column;gap:11px;min-width:0}
 .rcard__b h3{font-size:1.32rem}
 .rcard__specs{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px}
@@ -222,7 +205,7 @@
 .gal__t:hover img{opacity:.82}
 .gal__t.is-active{border-color:var(--gold)}
 .gal__more{
-  position:absolute;inset:0;background:rgba(14,13,11,.68);color:var(--ivory);
+  position:absolute;inset:0;color:var(--ivory);
   display:grid;place-items:center;font-size:.76rem;text-align:center;line-height:1.3;
 }
 
@@ -426,8 +409,6 @@
 /* ---------- misc ---------- */
 .fade-up{opacity:0;transform:translateY(22px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
 .fade-up.in{opacity:1;transform:none}
-
-.skel{background:linear-gradient(90deg,var(--beige) 25%,var(--ivory-2) 50%,var(--beige) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
 @keyframes shimmer{to{background-position:-200% 0}}
 
 /* Branded placeholder — shown only when every candidate URL fails.
@@ -454,7 +435,7 @@
 /* ensure image containers can host the absolute placeholder.
    NOTE: .mini is intentionally EXCLUDED — it is position:absolute;inset:0
    and must stay that way, or it collapses to zero height. */
-.pcard__img,.hcard__media,.rcard__media,.gal__main,.gal__t{position:relative}
+.hcard__media,.rcard__media,.gal__main,.gal__t{position:relative}
 
 .divider{height:1px;background:var(--line);margin-block:22px}
 .srcnote{font-size:.7rem;color:var(--tx-3);font-style:italic}
@@ -476,20 +457,12 @@
 .mobile-cta{display:none}
 
 /* V12.1: featured gallery must be seamless — no dark slivers between image tiles. */
-.featured-gallery{gap:0!important;line-height:0}
-.featured-gallery>div{margin:0!important;padding:0!important;line-height:0;background:transparent!important}
-.featured-gallery>div img{display:block;width:100%;height:100%;margin:0!important;vertical-align:top}
 
 /* room-detail + reviews responsive helpers */
 @media (max-width:1100px){ .specstrip{grid-template-columns:repeat(3,1fr)!important} }
 @media (max-width:980px){ .revgrid{grid-template-columns:1fr!important} }
 @media (max-width:720px){ .revlist{grid-template-columns:1fr!important} }
 @media (max-width:560px){ .specstrip{grid-template-columns:repeat(2,1fr)!important} }
-
-/* summary bar variant — grid lives in CSS (not inline) so the
-   responsive media queries in responsive.css can override it. */
-.searchbar--sum{margin:0;grid-template-columns:1.5fr 1fr 1fr 1.2fr 212px}
-.searchbar--sum .sf__ctl > div{min-width:0}
 
 /* guests trigger must inherit the same light treatment as the other fields
    on the dark hero variant (it is a <button>, not an <input>) */
@@ -589,23 +562,13 @@
 .rcard__media .mini img,.hcard__media .mini img{transition:transform .8s var(--ease)}
 .rcard:hover .mini img.is-on,.hcard:hover .mini img.is-on{transform:scale(1.045)}
 /* photo-provenance chip on room cards */
-.photochip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;
-  font-size:.64rem;letter-spacing:.06em;background:rgba(194,162,92,.12);
-  border:1px solid rgba(194,162,92,.32);color:var(--brown)}
-.photochip--warn{background:rgba(168,118,44,.1);border-color:rgba(168,118,44,.35);color:var(--warn)}
-.photochip svg{flex-shrink:0}
 
 
 /* V11.1 footer contact/travel-trade spacing */
-.ftr__contact .ct-link,
-.ftr__trade > a{display:flex;align-items:center;gap:13px;padding:7px 0;line-height:1.35;min-height:32px}
-.ftr__contact .ct-link svg,
-.ftr__trade > a svg{width:17px;height:17px;flex:0 0 17px}
+.ftr__contact .ct-link{display:flex;align-items:center;gap:13px;padding:7px 0;line-height:1.35;min-height:32px}
+.ftr__contact .ct-link svg{width:17px;height:17px;flex:0 0 17px}
 .ftr__contact .ct-stack--footer{gap:5px;margin-top:8px}
 .ftr__contact .tiny{line-height:1.65}
-.ftr__trade-intro{font-size:.76rem;color:var(--tx-3);line-height:1.55;margin:0 0 8px;max-width:190px}
-.ftr__trade > a{font-size:.82rem;color:var(--tx-2)}
-.ftr__trade > a:hover{color:var(--gold-dk)}
 
 /* ---------- KAS member sign-in ---------- */
 .kas-auth{position:fixed;inset:0;z-index:1000;background:rgba(10,9,7,.72);backdrop-filter:blur(7px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
@@ -624,113 +587,21 @@
 .kas-auth__switch{text-align:center;color:var(--tx-2);font-size:.74rem;margin:18px 0 0}.kas-auth__switch button{border:0;background:none;color:var(--gold-dk);font-weight:700;cursor:pointer;font:inherit}
 .kas-auth__message{min-height:18px;text-align:center;font-size:.72rem;margin:9px 0 0;color:var(--gold-dk)}
 .kas-auth__remember{display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--tx-2);margin:8px 0 14px}.kas-auth__remember input{accent-color:var(--gold)}
-.dest-d3-cta{text-align:right;margin-top:18px}
-.dest-experiences--three{margin-top:0}
-@media(max-width:560px){.kas-auth__box{padding:30px 22px 24px}.dest-d3-cta{text-align:left}}
+@media (max-width:560px){.kas-auth__box{padding:30px 22px 24px}}
 
 /* Homepage — horizontal KAS discovery rail */
-.kas-discover{padding-top:clamp(4rem,6vw,5.5rem);padding-bottom:clamp(3.2rem,5vw,4.8rem);overflow:hidden}
-.kas-discover__head{display:flex;justify-content:space-between;align-items:end;gap:40px;margin-bottom:1.8rem}
-.kas-discover__head .section-title{text-align:left;margin-top:.45rem}
-.kas-discover__intro{max-width:340px;color:var(--tx-2);font-size:.82rem;line-height:1.65;margin:0 0 .35rem}
-.kas-rail-wrap{width:100%;overflow:hidden}
-.kas-rail{
-  display:flex;gap:12px;
-  overflow-x:auto;overflow-y:hidden;
-  padding:0 max(22px,calc((100vw - var(--container))/2)) 18px;
-  scroll-snap-type:x mandatory;
-  scrollbar-width:thin;
-  scrollbar-color:var(--gold) transparent;
-  -webkit-overflow-scrolling:touch;
-}
-.kas-rail::-webkit-scrollbar{height:6px}
-.kas-rail::-webkit-scrollbar-track{background:transparent}
-.kas-rail::-webkit-scrollbar-thumb{background:rgba(151,117,48,.45);border-radius:99px}
-.kas-rail .pcard{
-  flex:0 0 clamp(190px,18vw,245px);
-  scroll-snap-align:start;
-  border-radius:0;
-}
-.kas-rail .pcard__img{aspect-ratio:4/4.8}
-.kas-rail .pcard__b{text-align:left;padding:15px 14px 17px}
-.kas-rail .pcard__b h4{font-family:var(--serif);font-size:1.05rem;font-weight:400}
-.kas-discover__actions{text-align:right;margin-top:1rem}
-.kas-discover__actions .btn{margin-left:8px}
 
 /* More cinematic homepage hero, with the booking search floating over the image. */
-.hero{min-height:min(760px,78vh)}
 .hero__in{padding-block:clamp(6rem,12vw,8rem) 0}
-.hero__ct{max-width:600px;padding-bottom:2.8rem}
 .hero__ct h1{font-size:clamp(3.2rem,6vw,5.5rem);line-height:.93;letter-spacing:-.025em}
 .hero__ct p{font-size:.95rem;line-height:1.75}
-.hero .searchbar{margin-top:0;transform:translateY(42px)}
 
 /* Homepage hero fills the full viewport on first load, matching the full-screen Vietnamese homepage treatment. */
-.hero{min-height:100svh}
 
 /* Homepage KAS Collection — clean editorial carousel */
-.kas-carousel{
-  position:relative;
-  margin-inline:-2px;
-}
-.kas-carousel__viewport{
-  overflow-x:auto;
-  overflow-y:hidden;
-  scroll-behavior:smooth;
-  scrollbar-width:none;
-  -webkit-overflow-scrolling:touch;
-  scroll-snap-type:x mandatory;
-  padding:2px 2px 12px;
-}
-.kas-carousel__viewport::-webkit-scrollbar{display:none}
-.kas-carousel .kas-rail{
-  width:max-content;
-  display:flex;
-  gap:16px;
-  overflow:visible;
-  padding:0;
-}
-.kas-carousel .kas-rail .pcard{
-  flex:0 0 calc((100vw - 80px)/4);
-  width:calc((100vw - 80px)/4);
-  max-width:290px;
-  scroll-snap-align:start;
-}
-.kas-carousel__arrow{
-  position:absolute;
-  z-index:4;
-  top:50%;
-  transform:translateY(-50%);
-  width:42px;height:42px;
-  border:1px solid var(--line);
-  border-radius:50%;
-  background:rgba(255,255,255,.96);
-  color:var(--tx);
-  box-shadow:0 5px 20px rgba(0,0,0,.10);
-  display:grid;
-  place-items:center;
-  font-family:var(--serif);
-  font-size:1.8rem;
-  line-height:1;
-  cursor:pointer;
-  transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
-}
-.kas-carousel__arrow:hover{
-  transform:translateY(-50%) scale(1.05);
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
-  background:#fff;
-}
-.kas-carousel__arrow--prev{left:-21px}
-.kas-carousel__arrow--next{right:-21px}
-.kas-discover__actions{
-  text-align:center;
-  margin-top:1.25rem;
-}
-.kas-discover__actions .btn{margin:0 4px}
 
 /* ---------- Homepage hero: fixed Vietnamese reference frame ---------- */
 .hero{
-  min-height:100svh;
   height:100svh;
   align-items:stretch;
 }
@@ -751,7 +622,6 @@
 }
 .hero__ct h1{max-width:600px}
 .hero__ct p{max-width:460px}
-.hero #heroSearch{width:100%;margin-top:0}
 .hero .searchbar{margin-top:0;transform:translateY(0)}
 
 /* Desktop reference frame: EN and VI share exactly the same hero geometry.
@@ -759,20 +629,18 @@
 @media (min-width:901px){
   .hero__in{position:relative;padding-top:0}
   .hero__ct{position:absolute;left:0;top:clamp(8rem,13.2vh,9.2rem);min-height:0;padding:0}
-  .hero #heroSearch{position:absolute;left:0;right:0;bottom:48px;width:100%}
 }
 
-/* HOTELS PAGE V19 — compact Find Your Stay frame.
-   Keep the search summary in normal document flow so EN/VI naturally
-   place the bar according to the amount of hero copy, matching the
-   approved reference frames instead of pinning it to the same bottom edge. */
-.hero.hero--sm{min-height:340px;height:340px;align-items:stretch;overflow:hidden}
-.hero.hero--sm .hero__in{height:100%;display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding-top:0;padding-bottom:0}
-.hero.hero--sm .hero__ct{position:static;width:100%;max-width:640px;min-height:0;padding:0;color:var(--tx-inv);margin-top:clamp(3rem,5vw,4rem);order:1}
+/* HOTELS PAGE — single editable search frame.
+   The search bar stays in the hero and is re-rendered in the same host after
+   a search, so there is never a second summary/edit bar to jump to. */
+.hero.hero--sm{min-height:390px;height:auto;align-items:stretch;overflow:visible}
+.hero.hero--sm .hero__in{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding-top:0;padding-bottom:34px}
+.hero.hero--sm .hero__ct{position:static;width:100%;max-width:640px;min-height:0;padding:0;color:var(--tx-inv);margin-top:clamp(3rem,5vw,4rem)}
 .hero.hero--sm .hero__ct h1{font-size:clamp(2.5rem,4vw,3.2rem);line-height:1;margin:.9rem 0 0}
 .hero.hero--sm .hero__ct p{font-size:1rem;line-height:1.5;margin-top:.9rem}
-.hero.hero--sm #sumBar{position:static;left:auto;right:auto;bottom:auto;width:auto;margin:2rem 0 0!important;order:2}
-.hero.hero--sm .searchbar--sum{transform:none;margin:0}
+.hero.hero--sm #hotelSearch{width:100%;margin-top:2rem}
+.hero.hero--sm #hotelSearch .searchbar{margin-top:0;transform:none}
 
 /* Footer alignment — match the approved compact editorial reference. */
 .ftr--dark .ftr__main{grid-template-columns:1.45fr 1.1fr 1.1fr 1.1fr 1.25fr;grid-template-rows:auto auto;gap:24px 38px;padding-bottom:2.4rem}
@@ -783,219 +651,357 @@
 .ftr--dark .ftr__main>.ftr__col:nth-child(5){grid-column:5;grid-row:1}
 .ftr--dark .ftr__contact{grid-column:1 / span 2;grid-row:2}
 .ftr--dark .ftr__news{grid-column:4 / span 2;grid-row:2}
-@media(max-width:1100px){.ftr--dark .ftr__main{grid-template-columns:1.35fr repeat(4,1fr);gap:22px 24px}.ftr--dark .ftr__contact{grid-column:1 / span 2}.ftr--dark .ftr__news{grid-column:4 / span 2}}
-@media(max-width:760px){.ftr--dark .ftr__main{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}.ftr--dark .ftr__brand{grid-column:1/-1;grid-row:auto}.ftr--dark .ftr__main>.ftr__col:nth-child(2),.ftr--dark .ftr__main>.ftr__col:nth-child(3),.ftr--dark .ftr__main>.ftr__col:nth-child(4),.ftr--dark .ftr__main>.ftr__col:nth-child(5){grid-column:auto;grid-row:auto}.ftr--dark .ftr__contact,.ftr--dark .ftr__news{grid-column:1/-1;grid-row:auto}}
+@media (max-width:1100px){.ftr--dark .ftr__main{grid-template-columns:1.35fr repeat(4,1fr);gap:22px 24px}.ftr--dark .ftr__contact{grid-column:1 / span 2}.ftr--dark .ftr__news{grid-column:4 / span 2}}
+@media (max-width:767px){.ftr--dark .ftr__main{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}.ftr--dark .ftr__brand{grid-column:1/-1;grid-row:auto}.ftr--dark .ftr__main>.ftr__col:nth-child(2),.ftr--dark .ftr__main>.ftr__col:nth-child(3),.ftr--dark .ftr__main>.ftr__col:nth-child(4),.ftr--dark .ftr__main>.ftr__col:nth-child(5){grid-column:auto;grid-row:auto}.ftr--dark .ftr__contact,.ftr--dark .ftr__news{grid-column:1/-1;grid-row:auto}}
 
-/* ================= HOME REDESIGN — V19 editorial reference ================= */
-.home-redesign #hdr{position:fixed;left:0;right:0;top:0;z-index:900;background:transparent;border-bottom-color:rgba(194,162,92,.12);backdrop-filter:none;-webkit-backdrop-filter:none;transition:background-color .4s ease,backdrop-filter .4s ease,box-shadow .4s ease,border-color .4s ease}.home-redesign #hdr.header--transparent{background:transparent;border-bottom-color:rgba(194,162,92,.12);box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}.home-redesign #hdr.header--scrolled{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);box-shadow:0 2px 24px rgba(0,0,0,.32);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
-.home-redesign #hdr .nav a,.home-redesign #hdr .hdr__tel,.home-redesign #hdr .lang-button{color:#f5efe3}
-.home-hero{position:relative;width:100%;min-height:100vh;height:100vh;background:#0e0d0b;overflow:visible;display:flex;align-items:stretch}
-.home-hero__bg{position:absolute;inset:0}.home-hero__bg img{width:100%;height:100%;object-fit:cover;object-position:center;filter:saturate(.86);transform:scale(1.01)}
-.home-hero__bg:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,9,7,.82) 0%,rgba(10,9,7,.58) 34%,rgba(10,9,7,.16) 72%,rgba(10,9,7,.34) 100%),linear-gradient(0deg,rgba(10,9,7,.46),rgba(10,9,7,.06) 58%,rgba(10,9,7,.22) 100%)}
-.home-hero__inner{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:flex-start;padding-top:clamp(9rem,17vh,11rem);padding-bottom:0;height:100%}
-.home-hero__copy{max-width:500px;color:var(--ivory)}.home-redesign .home-hero__copy h1{color:var(--ivory);text-shadow:0 2px 18px rgba(0,0,0,.58);font-size:clamp(3rem,5vw,4.8rem);line-height:.9;letter-spacing:-.035em;margin:.9rem 0 1.6rem}.home-hero__copy p{max-width:380px;color:#f1eadf;font-size:.9rem;line-height:1.65;text-shadow:0 1px 10px rgba(0,0,0,.35)}.home-hero__actions{display:flex;gap:9px;margin-top:1.6rem}.home-hero__actions .btn{min-width:145px}.home-hero #homeHeroSearch{position:absolute;left:50%;right:auto;bottom:-38px;width:min(92%,1264px);transform:translateX(-50%);margin:0;z-index:10}.home-hero #homeHeroSearch .searchbar{margin:0;transform:none;border-radius:2px;background:linear-gradient(180deg,#1d1c1a,#292825);border:1px solid rgba(196,160,78,.42);box-shadow:0 16px 34px rgba(0,0,0,.24);overflow:hidden;grid-template-columns:1.5fr 1fr 1fr 1.08fr 184px}.home-hero #homeHeroSearch .sf{padding:12px 20px;border-right:1px solid rgba(196,160,78,.28)}.home-hero #homeHeroSearch .sf__lb{color:#d0b46e;letter-spacing:.16em}.home-hero #homeHeroSearch .sf__ctl{color:#f5f0e6}.home-hero #homeHeroSearch .sf__ctl svg{color:#c8a85f}.home-hero #homeHeroSearch .sf select,.home-hero #homeHeroSearch .sf input,.home-hero #homeHeroSearch #sbGuests{color:#f5f0e6!important;background:transparent}.home-hero #homeHeroSearch .sf select option{background:#25231f;color:#f5f0e6}.home-hero #homeHeroSearch .btn{height:100%;min-width:0;border:0;border-radius:0;margin:0;background:#c9aa63;color:#171511;padding-inline:22px;letter-spacing:.14em}.home-hero #homeHeroSearch .btn:hover{background:#d7ba73}
+/* ================= HOME REDESIGN — HERO =================
+   Single source of truth for the homepage hero.
+   - Navigation overlays the hero at Y=0.
+   - Desktop/tablet heights are fixed by breakpoint.
+   - Mobile uses the dynamic viewport height.
+   - Hero content has one positioning system.
+   - Left fade is owned by the hero background only.
+   ================================================================ */
+.home-redesign #hdr .nav a,
+.home-redesign #hdr .hdr__tel,
+.home-redesign #hdr .lang-button{
+  color:#f5efe3;
+}
+
+
+.home-redesign .home-page-grid__content .home-hero{
+  position:relative;
+  width:100vw;
+  max-width:none;
+  min-width:0;
+  height:640px;
+  min-height:640px;
+  margin-left:calc(50% - 50vw);
+  margin-right:0;
+  overflow:hidden;
+  background:#0e0d0b;
+  display:flex;
+  align-items:stretch;
+  box-sizing:border-box;
+}
+
+.home-redesign .home-page-grid__content .home-hero__bg{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+}
+
+.home-redesign .home-page-grid__content .home-hero__bg img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  filter:saturate(.86);
+  transform:scale(1.01);
+}
+
+.home-redesign .home-page-grid__content .home-hero__bg::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:linear-gradient(90deg,
+    rgba(8,7,6,.88) 0%,
+    rgba(8,7,6,.72) 14%,
+    rgba(8,7,6,.48) 30%,
+    rgba(8,7,6,.24) 46%,
+    rgba(8,7,6,.08) 62%,
+    rgba(8,7,6,0) 76%
+  );
+}
+
+/* Destination slideshow */
+.home-redesign .home-page-grid__content .home-hero__slide{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity .5s ease,visibility .5s ease;
+  z-index:0;
+}
+
+.home-redesign .home-page-grid__content .home-hero__slide.is-active{
+  opacity:1;
+  visibility:visible;
+  z-index:1;
+}
+
+.home-redesign .home-page-grid__content .home-hero__slide img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  transform:scale(1.045);
+  transition:transform 4.5s cubic-bezier(.2,.65,.2,1),filter .5s ease;
+  filter:saturate(.9) contrast(.98);
+}
+
+.home-redesign .home-page-grid__content .home-hero__slide.is-active img{
+  transform:scale(1);
+}
+
+/* Hero content stays anchored inside the same content column. */
+.home-redesign .home-page-grid__content .home-hero__inner{
+  position:relative;
+  z-index:4;
+  width:100%;
+  max-width:1440px;
+  height:100%;
+  margin:0 auto;
+  padding:0;
+  pointer-events:none;
+  box-sizing:border-box;
+}
+
+.home-redesign .home-page-grid__content .home-hero__copy{
+  --hero-content-x:clamp(32px,6vw,96px);
+  position:absolute;
+  top:calc(var(--nav-h) + 42px);
+  left:var(--hero-content-x);
+  width:min(560px,calc(100% - (var(--hero-content-x) * 2)));
+  max-width:560px;
+  pointer-events:auto;
+  margin:0;
+  color:var(--ivory);
+  text-align:left;
+}
+
+.home-redesign .home-page-grid__content .home-hero__copy h1{
+  max-width:560px;
+  margin:.45rem 0 1.1rem;
+  padding-bottom:22px;
+  color:var(--ivory);
+  font-size:clamp(3rem,3.8vw,4rem);
+  line-height:1.17;
+  background:linear-gradient(#c9a968,#c9a968) left bottom / 52px 2px no-repeat;
+  letter-spacing:-.035em;
+  text-shadow:0 3px 22px rgba(0,0,0,.72),0 1px 3px rgba(0,0,0,.92);
+}
+
+.home-redesign .home-page-grid__content .home-hero__copy p{
+  max-width:470px;
+  margin:0;
+  color:#fffaf2;
+  font-family:"Inter", "Helvetica Neue", Arial, sans-serif;
+  font-size:.94rem;
+  line-height:1.55;
+  text-shadow:0 2px 12px rgba(0,0,0,.72),0 1px 3px rgba(0,0,0,.88);
+}
+
+.home-redesign .home-page-grid__content .home-hero__actions{
+  display:flex;
+  justify-content:flex-start;
+  align-items:center;
+  gap:12px;
+  margin-top:1.55rem;
+}
+
+.home-redesign .home-page-grid__content .home-hero__actions .btn{
+  min-width:180px;
+  text-shadow:none;
+  box-shadow:0 6px 20px rgba(0,0,0,.22);
+}
+
+.home-redesign .home-page-grid__content .home-hero__actions .btn:first-child{
+  background:rgba(20,18,15,.58);
+  border-color:rgba(255,250,240,.78);
+  color:#fffaf2;
+  backdrop-filter:blur(5px);
+}
+
+.home-redesign .home-page-grid__content .home-hero__actions .btn:last-child{
+  background:#c9a968;
+  border-color:#e0c487;
+  color:#201b15;
+  font-weight:600;
+}
+
+.home-redesign .home-page-grid__content .home-hero__actions .btn:first-child:hover{
+  background:rgba(20,18,15,.82);
+}
+
+/* Hero dots */
+.home-redesign .home-page-grid__content .home-hero__dots{
+  position:absolute;
+  right:20px;
+  bottom:20px;
+  z-index:5;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
+.home-redesign .home-page-grid__content .home-hero__dot{
+  width:9px;
+  height:9px;
+  padding:0;
+  border:1px solid rgba(255,255,255,.82);
+  border-radius:50%;
+  background:rgba(255,255,255,.35);
+  cursor:pointer;
+  transition:transform .3s ease,background .3s ease,border-color .3s ease,box-shadow .3s ease;
+  box-shadow:0 1px 5px rgba(0,0,0,.18);
+}
+
+.home-redesign .home-page-grid__content .home-hero__dot:hover{
+  transform:scale(1.18);
+  background:rgba(255,255,255,.78);
+}
+
+.home-redesign .home-page-grid__content .home-hero__dot.is-active{
+  width:11px;
+  height:11px;
+  background:#c9a968;
+  border-color:#fff4d6;
+  box-shadow:0 0 0 3px rgba(201,169,104,.28),0 1px 6px rgba(0,0,0,.24);
+}
+
+@media (max-width:1100px){
+  .home-redesign .home-page-grid__content .home-hero{
+    height:580px;
+    min-height:580px;
+  }
+
+}
+
+@media (max-width:700px){
+  .home-redesign .home-page-grid__content .home-hero{
+    width:100%;
+    height:100dvh;
+    min-height:100dvh;
+    margin-left:0;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__copy{
+    --hero-content-x:20px;
+    top:calc(var(--nav-h) + 26px);
+    left:var(--hero-content-x);
+    width:calc(100% - (var(--hero-content-x) * 2));
+    max-width:none;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__copy h1{
+    max-width:100%;
+    font-size:clamp(2.15rem,9vw,2.55rem);
+    line-height:1.12;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__copy p{
+    max-width:36rem;
+    font-size:.84rem;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__actions{
+    flex-wrap:wrap;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__dots{
+    right:18px;
+    bottom:18px;
+  }
+}
+
+@media (max-width:560px){
+  .home-redesign .home-page-grid__content .home-hero__copy h1{
+    max-width:100%;
+    font-size:clamp(2.1rem,9vw,2.5rem);
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__dots{
+    right:18px;
+    bottom:18px;
+    gap:7px;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__dot{
+    width:8px;
+    height:8px;
+  }
+
+  .home-redesign .home-page-grid__content .home-hero__dot.is-active{
+    width:10px;
+    height:10px;
+  }
+}
+
+/* V22.2 — Find Your KAS editorial section */
+.kas-find-home{background:var(--ivory-2);padding-block:clamp(5rem,8vw,7.5rem)}
+.kas-find-home .container{max-width:1160px}
+.kas-find-home__head{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);gap:48px;align-items:end;padding-bottom:38px}
+.kas-find-home__head h2{font-family:var(--serif);font-weight:400;font-size:clamp(3.4rem,6vw,5.2rem);line-height:.94;letter-spacing:-.045em;margin:.7rem 0 0;color:#24221f}
+.kas-find-home__head p{max-width:390px;margin:0 0 4px;color:#777168;font-size:.78rem;line-height:1.75}
+.kas-find-home__choices{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid #d8d1c7;border-bottom:1px solid #d8d1c7}
+.kas-find-home__choice{position:relative;display:flex;flex-direction:column;min-height:145px;padding:27px 20px 24px 0;margin-right:20px;border-right:1px solid #d8d1c7;color:#24221f;text-decoration:none;transition:background-color .3s ease,padding-left .3s ease}
+.kas-find-home__choice:first-child{padding-left:0}.kas-find-home__choice:last-child{border-right:0;margin-right:0}
+.kas-find-home__choice .eyebrow{font-size:.56rem;color:#a09588;letter-spacing:.2em}
+.kas-find-home__choice strong{font-family:var(--serif);font-size:1.35rem;font-weight:400;margin:10px 0 5px}
+.kas-find-home__choice p{margin:0;max-width:235px;color:#777168;font-size:.67rem;line-height:1.55}
+.kas-find-home__choice:hover{background:rgba(139,118,88,.045);padding-left:8px}.kas-find-home__choice:hover strong{color:#8b7658}
+.kas-find-home__arrow{position:absolute;right:18px;bottom:23px;font-size:.85rem;color:#8b7658;opacity:0;transform:translate(-4px,4px);transition:opacity .25s ease,transform .25s ease}.kas-find-home__choice:hover .kas-find-home__arrow{opacity:1;transform:none}
+.kas-find-home__foot{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;padding-top:39px}.kas-find-home__foot p{max-width:580px;margin:0;color:#777168;font-size:.68rem;line-height:1.7}
+.kas-find-home__cta{flex:0 0 auto;margin-top:3px;color:#24221f;text-decoration:none;text-transform:uppercase;letter-spacing:.17em;font-size:.62rem;border-bottom:1px solid #24221f;padding-bottom:9px;transition:letter-spacing .25s ease,color .25s ease}.kas-find-home__cta:hover{letter-spacing:.21em;color:#8b7658}
+@media(max-width:900px){.kas-find-home__head{grid-template-columns:1fr;gap:20px}.kas-find-home__head p{max-width:560px}.kas-find-home__choices{grid-template-columns:repeat(2,minmax(0,1fr))}.kas-find-home__choice:nth-child(2){border-right:0;margin-right:0}.kas-find-home__choice:nth-child(-n+2){border-bottom:1px solid #d8d1c7}}
+@media(max-width:560px){.kas-find-home{padding-block:4.5rem}.kas-find-home__head h2{font-size:3.15rem}.kas-find-home__choices{grid-template-columns:1fr}.kas-find-home__choice,.kas-find-home__choice:nth-child(2),.kas-find-home__choice:last-child{border-right:0;border-bottom:1px solid #d8d1c7;margin-right:0;padding:21px 28px 21px 0;min-height:126px}.kas-find-home__choice:last-child{border-bottom:0}.kas-find-home__choice:hover{padding-left:6px}.kas-find-home__foot{display:block;padding-top:28px}.kas-find-home__cta{display:inline-block;margin-top:22px}}
 
 /* V20 — homepage booking search bar: directly below the hero */
-.home-booking-search{
-  position:relative;
-  z-index:20;
-  background:var(--ivory);
-  min-height:0;
-}
-.home-booking-search__in{
-  position:relative;
-}
-.home-booking-search #homeHeroSearch{
-  width:min(92%,1264px);
-  margin:-48px auto 0;
-  position:relative;
-  left:auto;
-  right:auto;
-  bottom:auto;
-  transform:none;
-  z-index:20;
-}
-.home-booking-search #homeHeroSearch .searchbar{
-  margin:0;
-  transform:none;
-}
-@media(max-width:900px){
-  .home-booking-search #homeHeroSearch{
-    width:calc(100% - 36px);
-    margin:-36px auto 0;
-  }
-}
-@media(max-width:560px){
-  .home-booking-search #homeHeroSearch{
-    width:calc(100% - 24px);
-    margin:-24px auto 0;
-  }
-}
-.home-usp{background:var(--ivory);border-bottom:1px solid var(--line);padding-top:18px}.home-usp__in{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;padding:9px 0}.home-usp__in>div{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--tx-2);font-size:.72rem}.home-usp__in svg{color:var(--gold-dk)}
-.home-stay{background:#fff;padding-block:clamp(5rem,9vw,8rem)}.home-stay__grid{display:grid;grid-template-columns:1fr 1fr;min-height:590px}.home-stay__copy{padding:2rem clamp(1rem,4vw,5rem) 2rem 0;display:flex;flex-direction:column;justify-content:center}.home-stay__copy h2,.home-city h2,.home-experience h2,.home-rooms h2,.home-cta h2{font-family:var(--serif);font-weight:400;letter-spacing:-.025em}.home-stay__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.92;margin:.8rem 0 1.3rem}.home-stay__copy .rule{margin:0 0 1.4rem}.home-stay__copy p{max-width:520px;color:var(--tx-2);line-height:1.8;font-size:.92rem;margin-bottom:1.9rem}.home-stay__visual{position:relative;min-height:590px}.home-stay__image{height:100%;overflow:hidden}.home-stay__image img{width:100%;height:100%;object-fit:cover}.home-stay__caption{position:absolute;right:0;bottom:0;background:rgba(255,255,255,.96);padding:22px 28px;min-width:58%;font-family:var(--serif);font-size:1rem;color:#6b553a}
-.home-collection{background:var(--ivory);padding-block:clamp(5rem,8vw,7rem);overflow:hidden}.home-section-head{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:2.2rem}.home-section-head h2{font-family:var(--serif);font-weight:400;font-size:clamp(2.7rem,4vw,4rem);margin-top:.55rem}.home-section-head p{max-width:310px;color:var(--tx-2);line-height:1.6}.home-cards-wrap{position:relative}.home-cards{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:2px 1px 12px;scroll-snap-type:x mandatory}.home-cards::-webkit-scrollbar{display:none}.home-card{flex:0 0 calc((100% - 42px)/4);min-width:250px;background:#fff;border:1px solid var(--line);scroll-snap-align:start;color:inherit}.home-card__img{aspect-ratio:1.08/1;overflow:hidden}.home-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.home-card:hover .home-card__img img{transform:scale(1.04)}.home-card__body{padding:15px 16px 18px}.home-card__body h3{font-family:var(--serif);font-size:1.2rem;font-weight:400;margin-bottom:5px}.home-card__body p{font-size:.68rem;color:var(--tx-3);min-height:2.8em;line-height:1.45}.home-card__body strong{display:block;color:var(--gold-dk);font-size:.7rem;margin-top:10px}.home-cards__arrow{position:absolute;top:45%;transform:translateY(-50%);z-index:3;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:#fff;box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1.7rem}.home-cards__arrow--prev{left:-20px}.home-cards__arrow--next{right:-20px}.home-collection__actions{text-align:center;margin-top:1.6rem}.home-collection__actions .btn{margin:0 4px}
-.home-city{display:grid;grid-template-columns:1fr 1fr;min-height:590px}.home-city__copy{background:var(--black);color:var(--ivory);display:flex;flex-direction:column;justify-content:center;padding:clamp(3rem,7vw,6rem)}.home-city__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-city__copy p{max-width:520px;color:#d2c9bb;line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}.home-city__image{min-height:590px}.home-city__image img{width:100%;height:100%;object-fit:cover}
-.home-experience{background:#f5f0e7;padding-block:clamp(5rem,8vw,7rem)}.home-experience h2{font-size:clamp(3rem,4.8vw,4.4rem);margin:.8rem 0 3.3rem}.home-feature-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px}.home-feature-grid article{border-top:1px solid #cdbf9f;padding-top:10px}.home-feature-grid article>span{font-size:.66rem;color:var(--gold-dk)}.home-feature-grid h3{font-family:var(--serif);font-weight:400;font-size:1.05rem;margin:1.1rem 0 .45rem}.home-feature-grid p{font-size:.74rem;color:var(--tx-2);line-height:1.55}
-.home-rooms{background:#fff;padding-block:clamp(5rem,9vw,8rem)}.home-rooms__grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(3rem,7vw,6rem);align-items:center}.home-rooms__image{aspect-ratio:1.15/1;overflow:hidden}.home-rooms__image img{width:100%;height:100%;object-fit:cover}.home-rooms__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-rooms__copy p{max-width:430px;color:var(--tx-2);line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}
-.home-cta{background:var(--black);color:var(--ivory);padding:clamp(6rem,10vw,9rem) 0;text-align:center}.home-cta__in{display:flex;align-items:center;flex-direction:column}.home-cta h2{font-size:clamp(3rem,5.5vw,5rem);line-height:.9;margin:1rem 0 1rem}.home-cta p{color:#cfc5b7;margin-bottom:1.8rem}.eyebrow--gold{color:var(--gold-lt)}
-@media(max-width:900px){.home-hero__inner{padding-top:8rem}.home-hero #homeHeroSearch{left:18px;right:18px;bottom:18px}.home-hero__copy h1{font-size:clamp(3rem,11vw,5rem)}.home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr 1fr;border-radius:18px}.home-hero #homeHeroSearch .sf:nth-child(3){display:none}.home-hero #homeHeroSearch .btn{grid-column:1/-1;border-radius:0;margin:0;height:52px}.home-usp__in{grid-template-columns:repeat(2,1fr)}.home-stay__grid,.home-city,.home-rooms__grid{grid-template-columns:1fr}.home-stay__copy{padding-right:0;padding-bottom:3rem}.home-stay__visual,.home-city__image{min-height:480px}.home-feature-grid{grid-template-columns:repeat(2,1fr)}.home-card{flex-basis:calc((100% - 14px)/2)}.home-section-head{align-items:start;flex-direction:column}.home-cards__arrow--prev{left:5px}.home-cards__arrow--next{right:5px}}
-@media(max-width:560px){.home-hero{min-height:900px;height:auto}.home-hero__inner{height:auto;min-height:900px;padding-top:7.5rem;padding-bottom:230px}.home-hero #homeHeroSearch{position:absolute;left:18px;right:18px;bottom:18px}.home-hero__copy h1{font-size:3.25rem}.home-hero__actions{flex-wrap:wrap}.home-hero #homeHeroSearch{padding-bottom:16px}.home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr;border-radius:14px}.home-hero #homeHeroSearch .sf{border-right:0;border-bottom:1px solid var(--line)}.home-hero #homeHeroSearch .sf:nth-child(3){display:block}.home-usp__in{grid-template-columns:1fr;padding-inline:18px}.home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}.home-stay__grid{min-height:0}.home-stay__visual,.home-city__image{min-height:360px}.home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3rem}.home-card{flex-basis:86vw}.home-feature-grid{grid-template-columns:1fr}.home-city__copy{padding:4rem 24px}.home-cards__arrow{display:none}.home-collection__actions .btn{display:block;margin:8px 0}.home-cta h2{font-size:3rem}}
+.home-usp{background:var(--ivory);border-bottom:1px solid var(--line);padding-top:18px}.home-usp__in{display:grid;padding:9px 0}.home-usp__in>div{display:flex;justify-content:center;align-items:center;gap:8px;color:var(--tx-2);font-size:.72rem}.home-usp__in svg{color:var(--gold-dk)}
+.home-stay{background:#F3EEE4;padding-block:clamp(5rem,9vw,8rem)}.home-stay__grid{display:grid;grid-template-columns:1fr 1fr;min-height:590px}.home-stay__copy{display:flex;flex-direction:column;justify-content:center}.home-stay__copy h2,.home-city h2,.home-rooms h2,.home-cta h2{font-family:var(--serif);font-weight:400;letter-spacing:-.025em}.home-stay__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.92;margin:.8rem 0 1.3rem}.home-stay__copy .rule{margin:0 0 1.4rem}.home-stay__copy p{max-width:520px;color:var(--tx-2);line-height:1.8;font-size:.92rem;margin-bottom:1.9rem}.home-stay__visual{position:relative}.home-stay__image{height:100%;overflow:hidden}.home-stay__image img{width:100%;height:100%;object-fit:cover}.home-stay__caption{position:absolute;right:0;bottom:0;background:rgba(255,255,255,.96);padding:22px 28px;min-width:58%;font-family:var(--serif);font-size:1rem;color:#6b553a}
+.home-collection{background:#EEE9DF;padding-block:clamp(5rem,8vw,7rem);overflow:hidden}.home-section-head{justify-content:space-between;margin-bottom:2.2rem}.home-section-head h2{font-family:var(--serif);font-weight:400;margin-top:.55rem}.home-section-head p{max-width:310px;color:var(--tx-2);line-height:1.6}.home-cards-wrap{position:relative}.home-cards{overflow-x:auto;scrollbar-width:none;padding:2px 1px 12px;scroll-snap-type:x mandatory}.home-cards::-webkit-scrollbar{display:none}.home-card{flex:0 0 calc((100% - 42px)/4);background:#F8F5EE;border:1px solid var(--line);scroll-snap-align:start;color:inherit}.home-card__img{overflow:hidden}.home-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s ease}.home-card:hover .home-card__img img{transform:scale(1.04)}.home-card__body{padding:15px 16px 18px}.home-card__body h3{font-family:var(--serif);font-size:1.2rem;font-weight:400;margin-bottom:5px}.home-card__body p{font-size:.68rem;color:var(--tx-3);min-height:2.8em;line-height:1.45}.home-card__body strong{display:block;color:var(--gold-dk);font-size:.7rem;margin-top:10px}.home-cards__arrow{position:absolute;top:45%;transform:translateY(-50%);z-index:3;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;background:var(--ivory);box-shadow:0 6px 18px rgba(0,0,0,.12);font-size:1.7rem}.home-cards__arrow--prev{left:-20px}.home-cards__arrow--next{right:-20px}.home-collection__actions{text-align:center;margin-top:1.6rem}.home-collection__actions .btn{margin:0 4px}.home-city__copy{background:var(--black);color:var(--ivory);display:flex;flex-direction:column;justify-content:center}.home-city__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-city__copy p{max-width:520px;color:#d2c9bb;line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}.home-city__image img{width:100%;height:100%;object-fit:cover}
+.home-experience{background:#F8F5EE;padding-block:clamp(5rem,8vw,7rem)}.home-experience h2{margin:.8rem 0 3.3rem}.home-feature-grid article>span{font-size:.66rem;color:var(--gold-dk)}.home-feature-grid h3{font-family:var(--serif);font-weight:400;font-size:1.05rem;margin:1.1rem 0 .45rem}.home-feature-grid p{font-size:.74rem;color:var(--tx-2);line-height:1.55}
+.home-rooms{background:#EAE4D8;padding-block:clamp(5rem,9vw,8rem)}.home-rooms__grid{display:grid;grid-template-columns:1.15fr .85fr;align-items:center}.home-rooms__image{aspect-ratio:1.15/1;overflow:hidden}.home-rooms__image img{width:100%;height:100%;object-fit:cover}.home-rooms__copy h2{font-size:clamp(3rem,5vw,4.7rem);line-height:.9;margin:.9rem 0 1.5rem}.home-rooms__copy p{max-width:430px;color:var(--tx-2);line-height:1.75;font-size:.9rem;margin-bottom:1.8rem}
+.home-cta{background:#5A5145;color:var(--ivory);text-align:center}.home-cta__in{display:flex;align-items:center;flex-direction:column}.home-cta h2{margin:1rem 0 1rem}.home-cta p{color:#cfc5b7;margin-bottom:1.8rem}.eyebrow--gold{color:var(--gold-lt)}
+@media (max-width:900px){.home-usp__in{grid-template-columns:repeat(2,1fr)}.home-stay__grid,.home-city,.home-rooms__grid{grid-template-columns:1fr}.home-stay__copy{padding-right:0;padding-bottom:3rem}.home-stay__visual,.home-city__image{min-height:480px}.home-card{flex-basis:calc((100% - 14px)/2)}.home-section-head{align-items:start;flex-direction:column}.home-cards__arrow--prev{left:5px}.home-cards__arrow--next{right:5px}}
+@media (max-width:560px){.home-usp__in{padding-inline:18px}.home-stay__grid{min-height:0}.home-stay__visual,.home-city__image{min-height:360px}.home-cards__arrow{display:none}.home-collection__actions .btn{display:block;margin:8px 0}}
 
 /* V20.1 — homepage hero is full-screen; booking search is intentionally removed. */
-.home-hero #homeHeroSearch{display:none!important}
-.home-booking-search{display:none!important}
 
 /* V20.2 — strengthen headings on dark homepage sections */
 .home-city__copy h2,
 .home-cta h2{
   color:#fff !important;
-  font-weight:600 !important;
-  text-shadow:0 2px 14px rgba(0,0,0,.35);
 }
 
 /* V20.5 — zoom/viewport stability: homepage uses fixed desktop scales, not vw/vh sizing. */
-.home-hero__inner{padding-top:9rem;padding-bottom:0}
-.home-redesign .home-hero__copy h1{font-size:4.5rem}
-.home-hero__copy p{font-size:.95rem}
-.home-stay,.home-collection,.home-experience,.home-rooms{padding-block:6rem}
 .home-stay__copy{padding:2rem 4rem 2rem 0}
-.home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:4.25rem}
-.home-city__copy{padding:5rem 5rem}
-.home-experience h2{font-size:4rem}
-.home-rooms__grid{gap:5rem}
 .home-cta{padding:8rem 0}
-.home-cta h2{font-size:4.6rem}
-.home-section-head h2{font-size:3.6rem}
 
 /* Keep desktop composition intact through ordinary browser zoom; reflow only at real layout widths. */
 @media (max-width:1100px){
-  .home-hero__inner{padding-top:8.5rem}
-  .home-redesign .home-hero__copy h1{font-size:4rem}
   .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3.75rem}
   .home-city__copy{padding:4rem}
   .home-rooms__grid{gap:3.5rem}
   .home-cta h2{font-size:4.1rem}
 }
 @media (max-width:900px){
-  .home-redesign .home-hero__copy h1{font-size:3.4rem}
-  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4.5rem}
-  .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3.25rem}
-  .home-experience h2{font-size:3.2rem}
   .home-cta{padding:6rem 0}
-  .home-cta h2{font-size:3.5rem}
-}
-@media (max-width:560px){
-  .home-redesign .home-hero__copy h1{font-size:3.25rem}
-  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}
-  .home-stay__copy h2,.home-city__copy h2,.home-rooms__copy h2{font-size:3rem}
-  .home-experience h2{font-size:2.8rem}
-  .home-cta h2{font-size:3rem}
 }
 
-/* V20.6 — zoom compensation without transform/zoom.
-   Browser zoom changes the CSS viewport width. Keep the editorial layout
-   desktop-sized until the genuine tablet breakpoint, then widen the canvas
-   on very large CSS viewports so 50–80% zoom does not make the page tiny. */
-.home-redesign .container{max-width:min(2400px,calc(100vw - 56px));}
 
-@media (min-width:901px){
-  .home-redesign .home-hero__inner{padding-top:9rem;}
-  .home-redesign .home-hero__copy{max-width:700px;}
-  .home-redesign .home-redesign .home-hero__copy h1,
-  .home-redesign .home-hero__copy h1{font-size:4.75rem;}
-  .home-redesign .home-stay__copy h2,
-  .home-redesign .home-city__copy h2,
-  .home-redesign .home-rooms__copy h2{font-size:4.35rem;}
-  .home-redesign .home-section-head h2{font-size:3.55rem;}
-  .home-redesign .home-experience h2{font-size:4rem;}
-  .home-redesign .home-cta h2{font-size:4.65rem;}
-  .home-redesign .home-stay__copy{padding-right:4rem;}
-  .home-redesign .home-city__copy{padding:5rem;}
-  .home-redesign .home-rooms__grid{gap:4.5rem;}
-}
-
-/* At high browser zoom-out the CSS viewport becomes very wide. Increase the
-   usable canvas and a few UI dimensions instead of scaling the whole page. */
-@media (min-width:1800px){
-  .home-redesign .container{max-width:2400px;}
-  .home-redesign #hdr .hdr__in{max-width:2400px;}
-  .home-redesign #hdr .nav{gap:30px;}
-  .home-redesign #hdr .nav a{font-size:.82rem;}
-  .home-redesign #hdr .hdr__tel{font-size:.84rem;}
-  .home-redesign #hdr .lang-button{font-size:.82rem;}
-  .home-redesign #hdr .hdr__join{font-size:.78rem;}
-  .home-redesign .home-hero__copy{max-width:760px;}
-  .home-redesign .home-hero__copy h1{font-size:5rem;}
-  .home-redesign .home-hero__copy p{max-width:560px;font-size:1rem;}
-  .home-redesign .home-stay__copy p,
-  .home-redesign .home-city__copy p{max-width:700px;}
-  .home-redesign .home-section-head p{max-width:430px;}
-  .home-redesign .home-card{min-width:280px;}
-}
-
-@media (min-width:2300px){
-  .home-redesign .home-hero__copy h1{font-size:5.25rem;}
-  .home-redesign .home-stay__copy h2,
-  .home-redesign .home-city__copy h2,
-  .home-redesign .home-rooms__copy h2{font-size:4.75rem;}
-  .home-redesign .home-section-head h2{font-size:3.9rem;}
-  .home-redesign .home-experience h2{font-size:4.3rem;}
-  .home-redesign .home-cta h2{font-size:5rem;}
-}
 
 /* V20.7 — grid-based homepage layout for stable resizing/zoom.
    The page is organized as full-width grid rows; internal content uses
    explicit minmax() tracks instead of viewport-sized scaling. */
-.home-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1fr);
-  width:100%;
-  min-width:0;
-}
-.home-grid > section{min-width:0;}
-.home-grid .container{
-  width:100%;
-  max-width:none;
-  margin-inline:auto;
-  padding-inline:clamp(24px,4vw,64px);
-}
 .home-grid__hero{grid-row:auto;}
 .home-grid__usp{grid-row:auto;}
 .home-grid__section{grid-row:auto;}
 .home-grid__split{grid-row:auto;}
 
 /* 12-column editorial grid for the main content blocks. */
-.home-stay__grid,
-.home-rooms__grid{
-  display:grid;
-  grid-template-columns:repeat(12,minmax(0,1fr));
-  gap:clamp(28px,3vw,56px);
-  align-items:center;
-}
-.home-stay__copy{grid-column:1 / span 5;min-width:0;}
-.home-stay__visual{grid-column:7 / -1;min-width:0;}
-.home-rooms__image{grid-column:1 / span 7;min-width:0;}
-.home-rooms__copy{grid-column:9 / -1;min-width:0;}
 
 .home-section-head{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(240px,360px);
-  gap:40px;
   align-items:end;
 }
 .home-section-head > *{min-width:0;}
-.home-feature-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:clamp(18px,2.5vw,40px);
-}
-.home-city{
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  min-height:0;
-}
 .home-city__copy,.home-city__image{min-width:0;min-height:clamp(520px,55vw,760px);}
-.home-city__copy{padding:clamp(48px,5vw,88px);}
 .home-city__copy h2,
 .home-stay__copy h2,
 .home-rooms__copy h2,
@@ -1004,15 +1010,6 @@
 .home-section-head h2{
   font-size:clamp(3rem,4rem,5rem);
 }
-.home-redesign .home-hero__inner{
-  width:100%;
-  max-width:none;
-  padding-inline:clamp(24px,4vw,64px);
-}
-.home-redesign .home-hero__copy{
-  width:min(620px,100%);
-}
-.home-redesign .home-hero__copy h1{font-size:clamp(3.5rem,4.25rem,5rem);}
 
 @media (max-width:1100px){
   .home-stay__copy{grid-column:1 / span 6;}
@@ -1027,13 +1024,613 @@
   .home-city{grid-template-columns:1fr;}
   .home-city__copy,.home-city__image{min-height:460px;}
   .home-feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-  .home-redesign .home-hero__copy h1{font-size:clamp(3rem,3.5rem,4rem);}
 }
 @media (max-width:560px){
   .home-grid .container{padding-inline:20px;}
-  .home-feature-grid{grid-template-columns:1fr;}
   .home-stay__grid,.home-rooms__grid{grid-template-columns:1fr;}
-  .home-city__copy{padding:48px 24px;}
   .home-city__copy,.home-city__image{min-height:360px;}
-  .home-redesign .home-hero__copy h1{font-size:3.25rem;}
+}
+
+
+/* V22.7 — Equal four-card collection carousel
+   Four equal editorial cards visible at once. Arrow controls advance one card. */
+.home-redesign .home-page-grid__content .home-collection{
+  background:#ece9e2;
+  padding-block:3.2rem 2.8rem;
+}
+.home-redesign .home-page-grid__content .home-section-head{
+  align-items:end;
+  margin-bottom:1.55rem;
+}
+.home-redesign .home-page-grid__content .home-section-head h2{
+  font-size:clamp(2.65rem,4vw,3.65rem);
+  line-height:.96;
+}
+.home-redesign .home-page-grid__content .home-section-head p{
+  margin:0 0 .15rem;
+  max-width:340px;
+}
+.home-redesign .home-page-grid__content .home-cards-wrap--editorial{position:relative}
+.home-redesign .home-page-grid__content .home-cards{
+  display:flex !important;
+  flex-wrap:nowrap !important;
+  gap:22px;
+  align-items:stretch;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding:0 1px 3px;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+  overscroll-behavior-x:contain;
+}
+.home-redesign .home-page-grid__content .home-cards::-webkit-scrollbar{display:none}
+.home-redesign .home-page-grid__content .home-card,
+.home-redesign .home-page-grid__content .home-card:nth-child(3n + 1){
+  position:relative;
+  flex:0 0 calc((100% - 66px)/4) !important;
+  width:calc((100% - 66px)/4);
+  height:320px !important;
+  min-width:0;
+  overflow:hidden;
+  border:0;
+  background:#aaa;
+  color:#fff;
+  scroll-snap-align:start;
+  isolation:isolate;
+}
+.home-redesign .home-page-grid__content .home-card__img{
+  position:absolute;
+  inset:0;
+  aspect-ratio:auto;
+  overflow:hidden;
+}
+.home-redesign .home-page-grid__content .home-card__img:after{
+  content:"";
+  position:absolute;
+  inset:38% 0 0;
+  background:linear-gradient(to bottom,transparent 0%,rgba(12,12,10,.10) 20%,rgba(12,12,10,.82) 100%);
+  pointer-events:none;
+}
+.home-redesign .home-page-grid__content .home-card__img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform .7s ease;
+}
+.home-redesign .home-page-grid__content .home-card:hover .home-card__img img{transform:scale(1.045)}
+.home-redesign .home-page-grid__content .home-card__overlay{
+  position:absolute;
+  z-index:2;
+  left:18px;
+  right:18px;
+  bottom:18px;
+  color:#fff;
+}
+.home-redesign .home-page-grid__content .home-card__overlay span{
+  display:block;
+  font-family:Inter,Arial,sans-serif;
+  font-size:.58rem;
+  font-weight:700;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  opacity:.9;
+  margin-bottom:4px;
+}
+.home-redesign .home-page-grid__content .home-card__overlay h3{
+  margin:0;
+  font-family:var(--serif);
+  font-size:clamp(1.18rem,1.55vw,1.55rem);
+  line-height:1;
+  font-weight:700 !important;
+  color:#fff !important;
+  white-space:nowrap !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+  letter-spacing:-.01em;
+  text-shadow:0 2px 10px rgba(0,0,0,.42);
+}
+.home-redesign .home-page-grid__content .home-card__body{display:none}
+.home-redesign .home-page-grid__content .home-cards__arrow{
+  width:38px;
+  height:38px;
+  top:50%;
+  border:1px solid rgba(32,32,29,.18);
+  background:#fff;
+  color:#20201d;
+  box-shadow:0 5px 16px rgba(0,0,0,.10);
+}
+.home-redesign .home-page-grid__content .home-cards__arrow--prev{left:-19px}
+.home-redesign .home-page-grid__content .home-cards__arrow--next{right:-19px}
+.home-redesign .home-page-grid__content .home-collection__actions{margin-top:1.15rem}
+
+@media (max-width:1100px){
+  .home-redesign .home-page-grid__content .home-card,
+  .home-redesign .home-page-grid__content .home-card:nth-child(3n + 1){
+    flex-basis:calc((100% - 44px)/3) !important;
+    width:calc((100% - 44px)/3);
+    height:300px !important;
+  }
+}
+@media (max-width:900px){
+  .home-redesign .home-page-grid__content .home-collection{padding-block:2.8rem 2.5rem}
+  .home-redesign .home-page-grid__content .home-card,
+  .home-redesign .home-page-grid__content .home-card:nth-child(3n + 1){
+    flex-basis:calc((100% - 22px)/2) !important;
+    width:calc((100% - 22px)/2);
+    height:300px !important;
+  }
+  .home-redesign .home-page-grid__content .home-cards__arrow--prev{left:5px}
+  .home-redesign .home-page-grid__content .home-cards__arrow--next{right:5px}
+}
+@media (max-width:560px){
+  .home-redesign .home-page-grid__content .home-collection{padding-block:2.4rem 2.2rem}
+  .home-redesign .home-page-grid__content .home-section-head h2{font-size:2.6rem}
+  .home-redesign .home-page-grid__content .home-section-head p{max-width:100%}
+  .home-redesign .home-page-grid__content .home-card,
+  .home-redesign .home-page-grid__content .home-card:nth-child(3n + 1){
+    flex-basis:84vw !important;
+    width:84vw;
+    height:280px !important;
+  }
+  .home-redesign .home-page-grid__content .home-card__overlay{left:16px;right:16px;bottom:16px}
+  .home-redesign .home-page-grid__content .home-card__overlay h3{font-size:1.28rem !important}
+  .home-redesign .home-page-grid__content .home-cards__arrow{display:flex}
+}
+
+
+/* V22.9 — A Day in Saigon: compact editorial section
+   Kept inside the homepage center column. Do not use 100vw here: the
+   homepage intentionally uses a three-column frame with content only in
+   the middle column. */
+.home-day {
+  width: 100%;
+  max-width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+  box-sizing: border-box;
+  background: #F5F1E8 !important;
+  padding: 28px 0;
+}
+.home-day__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 410px;
+}
+.home-day__copy {
+  background: #F5F1E8 !important;
+  color: #332E27;
+  padding: 38px clamp(40px, 7vw, 96px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.home-day__copy h2 {
+  font-family: var(--serif);
+  font-size: clamp(2.5rem, 4vw, 3.7rem);
+  line-height: .92;
+  font-weight: 400;
+  letter-spacing: -.025em;
+  margin: .65rem 0 1.1rem;
+}
+.home-day__copy > p {
+  max-width: 520px;
+  color: #766e64;
+  line-height: 1.6;
+  font-size: .82rem;
+  margin: 0 0 1.1rem;
+}
+.home-day__image { min-width: 0; min-height: 410px; overflow: hidden; }
+.home-day__image img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.home-day__timeline { border-top: 1px solid rgba(65,58,50,.2); max-width: 520px; }
+.home-day__timeline > div {
+  display: grid; grid-template-columns: 54px 1fr; gap: 0;
+  align-items: center; min-height: 32px;
+  border-bottom: 1px solid rgba(65,58,50,.18);
+}
+.home-day__timeline span { font-size: .62rem; color: #b08b42; letter-spacing: .02em; }
+.home-day__timeline p { margin: 0; font-size: .68rem; color: #5f5952; }
+
+/* Homepage — Four neighbourhood stories */
+.home-neighborhoods{background:#3A3934;color:#fff;margin-left:calc(-1 * var(--gutter, 0px));margin-right:calc(-1 * var(--gutter, 0px));}
+.home-neighborhoods .container{max-width:1080px;padding-top:72px;padding-bottom:64px}
+.home-neighborhoods__head{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:42px;align-items:end;margin-bottom:30px}
+.home-neighborhoods__head h2{font-family:var(--serif);font-weight:400;font-size:clamp(3.2rem,5vw,5rem);line-height:.94;letter-spacing:-.035em;margin:12px 0 0;color:#fff}
+.home-neighborhoods__head p{font-size:12px;line-height:1.65;color:rgba(255,255,255,.72);margin:0 0 3px;max-width:420px}
+.home-neighborhoods__grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;background:#3A3934}
+.home-neighborhoods__card{position:relative;display:block;overflow:hidden;min-height:245px;color:#fff;background:#3A3934;isolation:isolate}
+.home-neighborhoods__card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.82) contrast(1.04);transition:transform .65s ease}
+.home-neighborhoods__overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 22%,rgba(0,0,0,.2) 48%,rgba(0,0,0,.84) 100%);z-index:1}
+.home-neighborhoods__copy{position:absolute;z-index:2;left:18px;right:18px;bottom:17px}
+.home-neighborhoods__copy span{display:block;font-size:7px;line-height:1.2;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#eee5d8;margin-bottom:6px;text-shadow:0 1px 8px rgba(0,0,0,.7)}
+.home-neighborhoods__copy h3{font-family:var(--serif);font-size:clamp(1.55rem,2.5vw,2.15rem);font-weight:400;line-height:1.02;letter-spacing:-.02em;color:#fff;margin:0 0 5px;text-shadow:0 2px 12px rgba(0,0,0,.72)}
+.home-neighborhoods__copy p{font-size:8px;line-height:1.45;color:rgba(255,255,255,.9);margin:0 0 9px;max-width:480px;text-shadow:0 1px 9px rgba(0,0,0,.72)}
+.home-neighborhoods__copy b{font-size:6.5px;line-height:1.2;letter-spacing:.15em;text-transform:uppercase;font-weight:600;color:#fff;border-bottom:1px solid rgba(255,255,255,.68);padding-bottom:3px}
+.home-neighborhoods__card:hover img{transform:scale(1.035)}
+.home-neighborhoods__links{display:flex;gap:18px;flex-wrap:wrap;margin-top:24px}
+.home-neighborhoods__links a{font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:rgba(255,255,255,.8);border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:5px}
+@media(max-width:900px){.home-neighborhoods .container{padding-top:58px;padding-bottom:52px}.home-neighborhoods__head{grid-template-columns:1fr;gap:14px}.home-neighborhoods__grid{grid-template-columns:1fr 1fr}.home-neighborhoods__card{min-height:220px}}
+@media(max-width:560px){.home-neighborhoods .container{padding-top:48px;padding-bottom:44px}.home-neighborhoods__head h2{font-size:3rem}.home-neighborhoods__grid{grid-template-columns:1fr;gap:3px}.home-neighborhoods__card{min-height:245px}.home-neighborhoods__links{gap:12px}}
+
+/* V22.17 — Homepage vertical rhythm / viewport polish
+   - Shorter KAS City Guide neighbourhood section
+   - Fixed A Day in Saigon frame height on desktop
+   - Hero no longer stacks 100svh on top of the site header
+   - Smaller hero typography for a calmer first viewport
+*/
+.home-redesign .home-page-grid__content .home-neighborhoods .container{
+  padding-top:48px;
+  padding-bottom:44px;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__head{
+  margin-bottom:22px;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__card{
+  min-height:198px;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__copy{
+  left:16px;
+  right:16px;
+  bottom:14px;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__copy h3{
+  font-size:clamp(1.35rem,2.15vw,1.85rem);
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__copy p{
+  font-size:7.5px;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods__links{
+  margin-top:18px;
+}
+
+.home-redesign .home-page-grid__content .home-day{
+  height:560px;
+  min-height:560px;
+  padding:0;
+  overflow:hidden;
+}
+.home-redesign .home-page-grid__content .home-day__grid{
+  height:100%;
+  min-height:0;
+}
+.home-redesign .home-page-grid__content .home-day__copy,
+.home-redesign .home-page-grid__content .home-day__image{
+  min-height:0;
+  height:100%;
+}
+
+
+@media(max-width:900px){
+  .home-redesign .home-page-grid__content .home-neighborhoods .container{
+    padding-top:42px;
+    padding-bottom:38px;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods__card{
+    min-height:190px;
+  }
+  .home-redesign .home-page-grid__content .home-day{
+    height:520px;
+    min-height:520px;
+  }
+  .home-redesign .home-page-grid__content .home-day__grid{
+    grid-template-columns:1fr;
+    height:100%;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{
+    height:56%;
+    padding:30px 32px;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    height:44%;
+    min-height:0;
+  }
+}
+
+@media(max-width:560px){
+  .home-redesign .home-page-grid__content .home-neighborhoods .container{
+    padding-top:36px;
+    padding-bottom:32px;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods__card{
+    min-height:205px;
+  }
+  .home-redesign .home-page-grid__content .home-day{
+    height:640px;
+    min-height:640px;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{
+    height:62%;
+    padding:28px 22px;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    height:38%;
+  }
+}
+
+/* V22.18 — A Day in Saigon column containment fix
+   Prevent long copy/timeline content from escaping its grid column. */
+.home-redesign .home-page-grid__content .home-day__grid{
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+}
+.home-redesign .home-page-grid__content .home-day__copy{
+  min-width:0;
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+  overflow:hidden;
+}
+.home-redesign .home-page-grid__content .home-day__copy h2,
+.home-redesign .home-page-grid__content .home-day__copy > p,
+.home-redesign .home-page-grid__content .home-day__timeline{
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  box-sizing:border-box;
+}
+.home-redesign .home-page-grid__content .home-day__copy h2{
+  overflow-wrap:break-word;
+  word-break:normal;
+}
+.home-redesign .home-page-grid__content .home-day__timeline > div{
+  min-width:0;
+}
+.home-redesign .home-page-grid__content .home-day__timeline p{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+@media(max-width:900px){
+  .home-redesign .home-page-grid__content .home-day__grid{
+    grid-template-columns:minmax(0,1fr);
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{
+    overflow:visible;
+  }
+}
+
+
+/* V22.20 — City Guide homepage height + link cleanup */
+.home-neighborhoods .container{padding-top:44px;padding-bottom:38px}
+.home-neighborhoods__head{margin-bottom:22px}
+.home-neighborhoods__grid{gap:2px}
+.home-neighborhoods__card{min-height:198px}
+.home-neighborhoods__links{display:none!important}
+@media(max-width:900px){
+  .home-neighborhoods .container{padding-top:38px;padding-bottom:34px}
+  .home-neighborhoods__card{min-height:185px}
+}
+@media(max-width:560px){
+  .home-neighborhoods .container{padding-top:32px;padding-bottom:30px}
+  .home-neighborhoods__card{min-height:205px}
+}
+
+/* V22.21 — City Guide section frame height only
+   Keep the four cards unchanged; remove the oversized section-level
+   .section padding that was creating excessive black space around them.
+*/
+.home-neighborhoods.section{
+  padding-block:18px 24px;
+}
+.home-neighborhoods.section .container{
+  padding-top:0;
+  padding-bottom:0;
+}
+@media(max-width:900px){
+  .home-neighborhoods.section{padding-block:16px 20px}
+}
+@media(max-width:560px){
+  .home-neighborhoods.section{padding-block:14px 18px}
+}
+
+
+/* KAS HOMEPAGE — unified warm editorial palette
+   Layout is unchanged. This block only standardizes the visual palette. */
+.home-redesign .home-page-grid__content .kas-find-home { background: #E5DED1; }
+.home-redesign .home-page-grid__content .home-collection { background: #E5DED1; }
+.home-redesign .home-page-grid__content .home-day,
+.home-redesign .home-page-grid__content .home-day__copy { background: #F3EEE4; }
+.home-redesign .home-page-grid__content .home-rooms { background: #EDE6DB; }
+.home-redesign .home-page-grid__content .home-neighborhoods { background: #25231F; }
+.home-redesign .home-page-grid__content .home-cta { background: #332E27; }
+.home-redesign .home-page-grid__content .home-card { background: #F3EEE4; border-color: var(--line); }
+.home-redesign .home-page-grid__content .home-cards__arrow { background: #F3EEE4; border-color: var(--line-2); }
+.home-redesign .home-page-grid__content .home-collection__actions .btn--ghost { border-color: var(--line-2); }
+.home-redesign .home-page-grid__content .home-day__timeline { border-color: rgba(65,58,50,.18); }
+.home-redesign .home-page-grid__content .home-day__timeline > div { border-color: rgba(65,58,50,.16); }
+.home-redesign .home-page-grid__content .home-day__timeline span { color: var(--gold-dk); }
+
+
+/* KAS HOMEPAGE — final refined color rhythm */
+.home-redesign .home-page-grid__content .kas-find-home{background:#E5DED1 !important;color:#2E2A24;}
+.home-redesign .home-page-grid__content .home-usp{background:#F8F4EC !important;}
+.home-redesign .home-page-grid__content .home-stay{background:#F3EEE4 !important;}
+.home-redesign .home-page-grid__content .home-collection{background:#E5DED1 !important;}
+.home-redesign .home-page-grid__content .home-day,.home-redesign .home-page-grid__content .home-day__copy{background:#F3EEE4 !important;}
+.home-redesign .home-page-grid__content .home-neighborhoods{background:#25231F !important;}
+.home-redesign .home-page-grid__content .home-rooms{background:#EDE6DB !important;}
+.home-redesign .home-page-grid__content .home-cta{background:#332E27 !important;}
+.home-redesign .home-page-grid__content .home-card{background:#F3EEE4 !important;border-color:#CEC5B7;}
+.home-redesign .home-page-grid__content .home-cards__arrow{background:#F3EEE4 !important;border-color:#C3B9A9;}
+.home-redesign .home-page-grid__content .home-stay__caption{background:rgba(243,238,228,.96);color:#6A5338;}
+
+/* KAS PALETTE — exact light editorial palette requested by client */
+.home-redesign .home-page-grid__content .kas-find-home{background:#F8F5EE !important;}
+.home-redesign .home-page-grid__content .home-usp{background:#F8F5EE !important;}
+.home-redesign .home-page-grid__content .home-collection{background:#EEE9DF !important;}
+.home-redesign .home-page-grid__content .home-day,
+.home-redesign .home-page-grid__content .home-day__copy{background:#F5F1E8 !important;}
+.home-redesign .home-page-grid__content .home-neighborhoods{background:#3A3934 !important;}
+.home-redesign .home-page-grid__content .home-rooms{background:#EAE4D8 !important;}
+.home-redesign .home-page-grid__content .home-cta{background:#5A5145 !important;}
+.ftr--dark{background:#292822 !important;}
+/* Header background states are defined once in style.css; do not override them here. */
+
+/* V22.23 — Unified homepage section typography + contrast
+   Keep the 3-column editorial layout unchanged. Standardize all major
+   homepage headings on the same serif family and increase hierarchy. */
+.home-redesign .home-page-grid__content .kas-find-home__head h2,
+.home-redesign .home-page-grid__content .home-section-head h2,
+.home-redesign .home-page-grid__content .home-day__copy h2,
+.home-redesign .home-page-grid__content .home-neighborhoods__head h2,
+.home-redesign .home-page-grid__content .home-rooms__copy h2,
+.home-redesign .home-page-grid__content .home-cta h2,
+.home-redesign .home-page-grid__content .home-stay__copy h2,
+.home-redesign .home-page-grid__content .home-city__copy h2,
+.home-redesign .home-page-grid__content .home-experience h2{
+  font-family:"Cormorant Garamond", Georgia, "Times New Roman", serif !important;
+  font-weight:400 !important;
+  letter-spacing:-.035em !important;
+  text-wrap:balance;
+}
+
+.home-redesign .home-page-grid__content .kas-find-home__head h2,
+.home-redesign .home-page-grid__content .home-section-head h2,
+.home-redesign .home-page-grid__content .home-day__copy h2,
+.home-redesign .home-page-grid__content .home-rooms__copy h2{
+  font-size:clamp(3.45rem,5.2vw,5.2rem) !important;
+  line-height:.9 !important;
+  color:#24231F !important;
+}
+
+.home-redesign .home-page-grid__content .home-neighborhoods__head h2,
+.home-redesign .home-page-grid__content .home-cta h2,
+.home-redesign .home-page-grid__content .home-city__copy h2{
+  font-size:clamp(3.6rem,5.4vw,5.4rem) !important;
+  line-height:.88 !important;
+  color:#FFF9F0 !important;
+  text-shadow:0 2px 18px rgba(0,0,0,.18);
+}
+
+.home-redesign .home-page-grid__content .home-day__copy h2{
+  color:#24231F !important;
+}
+
+.home-redesign .home-page-grid__content .home-section-head p,
+.home-redesign .home-page-grid__content .home-neighborhoods__head p,
+.home-redesign .home-page-grid__content .home-day__copy > p,
+.home-redesign .home-page-grid__content .home-rooms__copy p{
+  font-family:var(--sans) !important;
+}
+
+.home-redesign .home-page-grid__content .home-neighborhoods__head p,
+.home-redesign .home-page-grid__content .home-cta p,
+.home-redesign .home-page-grid__content .home-city__copy p{
+  color:rgba(255,249,240,.9) !important;
+}
+
+.home-redesign .home-page-grid__content .eyebrow{
+  color:#8A6A38 !important;
+  font-weight:700;
+}
+.home-redesign .home-page-grid__content .home-neighborhoods .eyebrow,
+.home-redesign .home-page-grid__content .home-cta .eyebrow,
+.home-redesign .home-page-grid__content .home-city__copy .eyebrow{
+  color:#D8B978 !important;
+}
+
+.home-redesign .home-page-grid__content .home-card__overlay h3,
+.home-redesign .home-page-grid__content .home-card__body h3,
+.home-redesign .home-page-grid__content .home-feature-grid h3{
+  font-family:"Cormorant Garamond", Georgia, "Times New Roman", serif !important;
+  font-weight:500 !important;
+}
+
+@media(max-width:900px){
+  .home-redesign .home-page-grid__content .kas-find-home__head h2,
+  .home-redesign .home-page-grid__content .home-section-head h2,
+  .home-redesign .home-page-grid__content .home-day__copy h2,
+  .home-redesign .home-page-grid__content .home-rooms__copy h2{
+    font-size:clamp(2.8rem,8vw,4.2rem) !important;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods__head h2,
+  .home-redesign .home-page-grid__content .home-cta h2,
+  .home-redesign .home-page-grid__content .home-city__copy h2{
+    font-size:clamp(3rem,8.5vw,4.5rem) !important;
+  }
+}
+
+@media(max-width:560px){
+  .home-redesign .home-page-grid__content .kas-find-home__head h2,
+  .home-redesign .home-page-grid__content .home-section-head h2,
+  .home-redesign .home-page-grid__content .home-day__copy h2,
+  .home-redesign .home-page-grid__content .home-rooms__copy h2{
+    font-size:2.65rem !important;
+    line-height:.92 !important;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods__head h2,
+  .home-redesign .home-page-grid__content .home-cta h2,
+  .home-redesign .home-page-grid__content .home-city__copy h2{
+    font-size:2.9rem !important;
+    line-height:.9 !important;
+  }
+}
+
+/* KAS V22.24 — description typography: Inter
+   Keep Cormorant Garamond for editorial headings; use Inter for readable
+   descriptive copy, hotel summaries and supporting text. */
+.hcard__desc,
+.rcard__desc,
+.home-redesign .home-page-grid__content .home-stay__copy p,
+.home-redesign .home-page-grid__content .home-section-head p,
+.home-redesign .home-page-grid__content .home-card__body p,
+.home-redesign .home-page-grid__content .home-city__copy p,
+.home-redesign .home-page-grid__content .home-feature-grid p,
+.home-redesign .home-page-grid__content .home-rooms__copy p,
+.home-redesign .home-page-grid__content .home-cta p,
+.home-redesign .home-page-grid__content .home-day__copy > p,
+.home-redesign .home-page-grid__content .home-day__timeline p,
+.home-redesign .home-page-grid__content .home-neighborhoods__head p,
+.home-redesign .home-page-grid__content .home-neighborhoods__copy p,
+.kas-find-page .find-page-lead,
+.kas-find-page .find-page-choice-intro p,
+.kas-find-page .find-page-choice span:last-child,
+.kas-find-page .find-page-results-head p,
+.kas-find-page .find-page-hotel-copy,
+.kas-find-page .find-page-note {
+  font-family:"Inter", "Helvetica Neue", Arial, sans-serif !important;
+}
+
+
+/* KAS CTA VI — lighter Vietnamese line density */
+.home-redesign .home-page-grid__content .home-cta h2{
+  font-size:clamp(3.05rem,4.6vw,4.6rem) !important;
+  line-height:1.02 !important;
+  letter-spacing:-.02em !important;
+}
+@media(max-width:900px){
+  .home-redesign .home-page-grid__content .home-cta h2{
+    font-size:clamp(2.65rem,7.4vw,4rem) !important;
+    line-height:1.04 !important;
+  }
+}
+@media(max-width:560px){
+  .home-redesign .home-page-grid__content .home-cta h2{
+    font-size:2.5rem !important;
+    line-height:1.06 !important;
+  }
+}
+
+
+
+/* V22.27 — A Day in Saigon: center the editorial frame like the other sections.
+   Keep the section background full-bleed, but constrain the two-column content
+   to the shared 1200px editorial measure. */
+.home-redesign .home-page-grid__content .home-day__grid{
+  width:min(calc(100% - 48px), var(--home-content, 1200px));
+  max-width:var(--home-content, 1200px);
+  margin-inline:auto;
+  box-sizing:border-box;
+}
+
+@media (max-width:1100px){
+  .home-redesign .home-page-grid__content .home-day__grid{
+    width:100%;
+    max-width:none;
+  }
+}
+
+@media (max-width:700px){
+  .home-redesign .home-page-grid__content .home-day__grid{
+    width:100%;
+    max-width:none;
+  }
 }

@@ -1,6 +1,8 @@
 # Fallback host if Vercel is unavailable. Same static output, same clean URLs.
 [build]
-  command = "npm run build"
+  # The build check runs first, then internal files are removed from the
+  # published tree so they cannot be downloaded from the static host.
+  command = "npm run build && rm -rf .claude data tools uploads server.js Dockerfile render.yaml KEEP_UPLOADS.txt *.md .env .env.*"
   publish = "."
 
 [[redirects]]

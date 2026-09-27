@@ -29,8 +29,9 @@
     if(!html)html='<div class="empty">Không có chi nhánh phù hợp.</div>';
     content.innerHTML=html;
   }
-  Promise.all([fetch('data/rate-sheet.json').then(function(r){return r.json();}),fetch('api/catalog').then(function(r){return r.json();})]).then(function(res){
-    data=res[1]; data.seasons=res[0].seasons||data.seasons; data.policy=res[0].policy||data.policy;
+  /* /api/catalog already carries seasons + policy; data/ is not publicly served. */
+  fetch('api/catalog').then(function(r){if(!r.ok)throw new Error('catalog '+r.status);return r.json();}).then(function(res){
+    data=res;
     data.branches.forEach(function(b){var o=document.createElement('option');o.value=b.hotelId;o.textContent=b.address;br.appendChild(o);});render();
   }).catch(function(e){content.innerHTML='<div class="empty">Không tải được dữ liệu. Hãy chạy website bằng <b>npm run server</b> thay vì mở file HTML trực tiếp.</div>';console.error(e);});
   [ci,co,br].forEach(function(el){el.addEventListener('change',function(){if(ci.value>=co.value){var d=new Date(ci.value+'T00:00:00');d.setDate(d.getDate()+1);co.value=iso(d);}render();});});

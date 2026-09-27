@@ -84,7 +84,7 @@
       '<div class="rcard__side">' +
         '<div class="price"><span class="price__lb">From</span>' + U.priceHTML(displayRate) +
           '<div class="price__u">per night</div>' +
-          '<div class="tiny muted" style="margin-top:2px">Giá KAS · không VAT · không service charge</div></div>' +
+          '<div class="tiny muted" style="margin-top:2px">KAS rate · excl. VAT · excl. service charge</div></div>' +
         '<div class="rcard__perks">' +
           '<span class="perk perk--gold">' + U.icon(r.breakfast ? 'coffee' : 'x', 13) +
             (r.breakfast ? 'Breakfast included' : 'Breakfast not included') + '</span>' +
