@@ -241,7 +241,10 @@
   function goBook() {
     var phone = (D.config && D.config.contact) ? D.config.contact.displayPhone : '0869 768 885';
     var zalo = '0869768885';
-    alert('Trang web hiện tại chưa hoạt động chính thức.\n\nVui lòng liên hệ Zalo ' + phone + ' để đặt phòng nha.\nZalo: ' + zalo);
+    var en = window.KAS_I18N && window.KAS_I18N.getLanguage && window.KAS_I18N.getLanguage() === 'en';
+    alert(en
+      ? 'Online booking is not available yet.\n\nPlease contact us on Zalo ' + phone + ' to book your room.\nZalo: ' + zalo
+      : 'Trang web hiện tại chưa hoạt động chính thức.\n\nVui lòng liên hệ Zalo ' + phone + ' để đặt phòng nha.\nZalo: ' + zalo);
   }
   U.$('#bookBtn').addEventListener('click', goBook);
 

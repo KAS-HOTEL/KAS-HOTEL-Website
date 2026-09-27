@@ -48,9 +48,12 @@
     /* guests popover */
     btnG.addEventListener('click', function (e) { e.stopPropagation(); pop.classList.toggle('open'); });
     U.$('#sbDone', host).addEventListener('click', function () { pop.classList.remove('open'); });
-    document.addEventListener('click', function (e) {
+    /* One outside-click handler per host: re-rendering the panel replaces it. */
+    if (host.__kasSearchOutside) document.removeEventListener('click', host.__kasSearchOutside);
+    host.__kasSearchOutside = function (e) {
       if (!pop.contains(e.target) && e.target !== btnG) pop.classList.remove('open');
-    });
+    };
+    document.addEventListener('click', host.__kasSearchOutside);
     U.$$('.gpop__row', pop).forEach(function (r) {
       var key = r.dataset.k, out = U.$('output', r),
           lo = +r.dataset.min, hi = +r.dataset.max;

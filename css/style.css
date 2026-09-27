@@ -5,34 +5,34 @@
 
 :root{
   /* ---- brand palette ---- */
-  --black:#0E0D0B;
-  --black-soft:#1A1815;
-  --char:#2A2621;
-  --ink:#221F1A;
-  --ivory:#FBF9F5;
-  --ivory-2:#F5F1E9;
-  --beige:#EDE6D9;
-  --sand:#E3D9C6;
-  --gold:#C2A25C;
-  --gold-lt:#D9BE85;
-  --gold-dk:#9C7F3E;
-  --champagne:#E8D7B4;
-  --brown:#6B553A;
-  --brown-dk:#4A3A26;
+  --black:#24231F;
+  --black-soft:#292822;
+  --char:#3A3934;
+  --ink:#332E27;
+  --ivory:#F5F1E8;
+  --ivory-2:#EAE4D8;
+  --beige:#EEE9DF;
+  --sand:#EAE3D8;
+  --gold:#A98955;
+  --gold-lt:#C5AD78;
+  --gold-dk:#80643D;
+  --champagne:#D9C49A;
+  --brown:#6A5338;
+  --brown-dk:#493A2B;
 
   /* ---- text ---- */
-  --tx:#221F1A;
-  --tx-2:#5D564C;
-  --tx-3:#8B8275;
-  --tx-inv:#FBF9F5;
-  --tx-inv-2:#C9C1B3;
+  --tx:#2E2A24;
+  --tx-2:#665F55;
+  --tx-3:#8E8578;
+  --tx-inv:#F8F4EC;
+  --tx-inv-2:#D0C6B8;
 
   /* ---- lines & surfaces ---- */
-  --line:#E4DCCC;
-  --line-2:#D2C7B2;
-  --line-dk:#3A342C;
-  --surface:#FFFFFF;
-  --surface-2:#FBF9F5;
+  --line:#CEC5B7;
+  --line-2:#C3B9A9;
+  --line-dk:#4A433A;
+  --surface:#F8F4EC;
+  --surface-2:#F0E9DE;
 
   /* ---- status ---- */
   --ok:#4A7A52;
@@ -42,8 +42,6 @@
   --err-bg:#FBEFEC;
 
   /* ---- type ---- */
-  --serif:'Cormorant Garamond',Georgia,'Times New Roman',serif;
-  --sans:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
 
   /* ---- metrics ---- */
   --container:1320px;
@@ -60,7 +58,7 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip;background:var(--ivory)}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;background:var(--ivory)}
 /* The off-canvas drawer is translated past the right edge; without this it
    would extend scrollWidth at tablet widths. `clip` keeps position:sticky
    working, which `overflow-x:hidden` would not. */
@@ -78,9 +76,9 @@ input,select,textarea{font:inherit;color:inherit}
 
 /* ---------- typography ---------- */
 h1,h2,h3,h4,h5{font-family:var(--serif);font-weight:400;margin:0;letter-spacing:-.01em;color:var(--tx)}
-h1{font-size:clamp(2.6rem,5.2vw,4.3rem);line-height:1.04}
-h2{font-size:clamp(1.9rem,3.2vw,2.75rem);line-height:1.14}
-h3{font-size:clamp(1.35rem,2vw,1.85rem);line-height:1.2}
+h1{line-height:1.04}
+h2{line-height:1.14}
+h3{line-height:1.2}
 h4{font-size:1.2rem;line-height:1.3}
 p{margin:0 0 1em}
 p:last-child{margin-bottom:0}
@@ -90,10 +88,7 @@ p:last-child{margin-bottom:0}
   letter-spacing:.24em;text-transform:uppercase;color:var(--gold-dk);
 }
 .eyebrow--lt{color:var(--gold-lt)}
-.section-title{text-align:center;margin-bottom:.5rem}
-.section-sub{text-align:center;color:var(--tx-2);font-size:.95rem;margin-bottom:3rem}
 .rule{width:56px;height:1px;background:var(--gold);border:0;margin:1.4rem 0}
-.rule--c{margin-left:auto;margin-right:auto}
 .muted{color:var(--tx-2)}
 .tiny{font-size:.78rem}
 .nowrap{white-space:nowrap}
@@ -103,8 +98,6 @@ p:last-child{margin-bottom:0}
 .container--narrow{max-width:1060px}
 .section{padding-block:clamp(3.5rem,7vw,6rem)}
 .section--tight{padding-block:clamp(2.5rem,4vw,3.5rem)}
-.section--dark{background:var(--black);color:var(--tx-inv)}
-.section--dark h1,.section--dark h2,.section--dark h3{color:var(--tx-inv)}
 .section--alt{background:var(--ivory-2)}
 .grid{display:grid;gap:22px}
 .flex{display:flex}
@@ -119,21 +112,26 @@ p:last-child{margin-bottom:0}
 }
 .hdr--float{position:fixed;left:0;right:0;background:transparent;border-bottom-color:rgba(194,162,92,.12);
   backdrop-filter:none;-webkit-backdrop-filter:none}
+/* Homepage header states have one source of truth. JS toggles these classes on scroll. */
 .hdr--float.header--transparent{background:transparent;border-bottom-color:rgba(194,162,92,.12);
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
 .hdr--float.header--scrolled{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);
-  box-shadow:0 2px 24px rgba(0,0,0,.32);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0)}
-/* Explicit state aliases requested for the header scroll interaction. */
+  box-shadow:0 2px 24px rgba(0,0,0,.32);backdrop-filter:none;-webkit-backdrop-filter:none}
 .header--transparent{background:transparent}
 .header--scrolled{background:#0d0d0d}
 .hdr--solid{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);box-shadow:0 2px 24px rgba(0,0,0,.32)}
 .hdr__in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:var(--nav-h)}
+/* Reserve the header's space before app.js renders it, so page content does not jump down (CLS). */
+#hdr:empty{display:block;min-height:calc(var(--nav-h) + 1px);background:var(--black)}
+.home-redesign #hdr:empty{min-height:0;background:transparent}
+/* Inner pages are rendered by JS right after the header. Keep the static skeleton
+   invisible until then, so it neither jumps (CLS) nor flashes untranslated text.
+   Failsafe: content is revealed after 3s even if a script fails. */
+body:not(.home-redesign) #hdr:empty ~ *{visibility:hidden;animation:kas-boot-failsafe 0s linear 3s forwards}
+@keyframes kas-boot-failsafe{to{visibility:visible}}
 
 .logo{display:flex;align-items:center;gap:11px;flex-shrink:0}
 .logo__mark{width:34px;height:34px;flex-shrink:0}
-.logo__tx{display:flex;flex-direction:column;line-height:1}
-.logo__name{font-family:var(--serif);font-size:1.62rem;letter-spacing:.18em;color:var(--ivory);font-weight:500}
-.logo__sub{font-size:.5rem;letter-spacing:.34em;color:var(--gold);text-transform:uppercase;margin-top:3px}
 
 .nav{display:flex;align-items:center;gap:26px}
 .nav a{
@@ -250,7 +248,6 @@ p:last-child{margin-bottom:0}
 /* ---------- footer ---------- */
 .ftr{background:var(--ivory-2);border-top:1px solid var(--line);padding-top:3.5rem}
 .ftr__main{display:grid;grid-template-columns:1.45fr repeat(5,minmax(0,1fr)) 1.25fr 1.25fr;gap:24px;padding-bottom:3rem;align-items:start}
-.ftr__brand .logo__name{color:var(--tx)}
 .ftr__brand p{font-size:.83rem;color:var(--tx-2);margin:1.1rem 0 1.4rem;max-width:230px}
 .ftr__col h5{
   font-size:.64rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
@@ -296,138 +293,6 @@ p:last-child{margin-bottom:0}
    KAS HOMEPAGE — HERITAGE SECTION
    A tighter, more editorial luxury-hotel composition.
    ========================================================================== */
-.kas-heritage{
-  position:relative;
-  overflow:hidden;
-  background:
-    radial-gradient(circle at 82% 18%, rgba(194,162,92,.10), transparent 28%),
-    linear-gradient(135deg,#12110f 0%,#0d0d0c 55%,#15120d 100%);
-  color:var(--tx-inv);
-  border-top:1px solid rgba(194,162,92,.18);
-  border-bottom:1px solid rgba(194,162,92,.18);
-}
-.kas-heritage::before{
-  content:"";
-  position:absolute;
-  width:360px;height:360px;
-  right:-170px;top:-190px;
-  border:1px solid rgba(194,162,92,.16);
-  border-radius:50%;
-  box-shadow:0 0 0 42px rgba(194,162,92,.025),0 0 0 84px rgba(194,162,92,.018);
-}
-.kas-heritage__in{
-  position:relative;
-  z-index:1;
-  padding:clamp(3.8rem,7vw,6.2rem) 0;
-  display:grid;
-  grid-template-columns:minmax(0,1.08fr) minmax(390px,.92fr);
-  column-gap:clamp(3rem,7vw,7rem);
-  row-gap:3rem;
-  align-items:start;
-}
-.kas-heritage__copy{
-  max-width:650px;
-}
-.kas-heritage__copy h2{
-  color:var(--ivory);
-  font-family:var(--serif);
-  font-weight:400;
-  font-size:clamp(2.5rem,4.5vw,4.15rem);
-  line-height:.98;
-  letter-spacing:-.025em;
-  margin:.65rem 0 1.25rem;
-}
-.kas-heritage__lead{
-  max-width:560px;
-  color:var(--tx-inv-2);
-  font-size:clamp(.9rem,1.15vw,1.02rem);
-  line-height:1.85;
-  margin-bottom:1.8rem;
-}
-.kas-heritage__stats{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-.kas-stat{
-  min-height:128px;
-  padding:20px 20px 18px;
-  border:1px solid rgba(194,162,92,.20);
-  background:rgba(255,255,255,.025);
-  border-radius:2px;
-}
-.kas-stat__icon{
-  color:var(--gold);
-  height:22px;
-  margin-bottom:13px;
-}
-.kas-stat__value{
-  font-family:var(--serif);
-  color:var(--ivory);
-  font-size:clamp(1.7rem,2.4vw,2.25rem);
-  line-height:1;
-}
-.kas-stat__label{
-  color:var(--tx-inv-2);
-  font-size:.66rem;
-  letter-spacing:.10em;
-  text-transform:uppercase;
-  margin-top:9px;
-}
-.kas-heritage__experiences{
-  grid-column:1 / -1;
-  display:grid;
-  grid-template-columns:.78fr 1.55fr auto;
-  gap:32px;
-  align-items:center;
-  border-top:1px solid rgba(194,162,92,.20);
-  padding-top:30px;
-}
-.kas-heritage__experiences h3{
-  color:var(--ivory);
-  font-family:var(--serif);
-  font-size:clamp(1.45rem,2vw,1.9rem);
-  font-weight:400;
-  line-height:1.12;
-  margin:.5rem 0 0;
-}
-.kas-heritage__expgrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:20px;
-}
-.kas-exp{
-  position:relative;
-  padding-left:15px;
-  border-left:1px solid rgba(194,162,92,.28);
-}
-.kas-exp__icon{color:var(--gold);margin-bottom:9px}
-.kas-exp h4{
-  color:var(--ivory);
-  font-family:var(--serif);
-  font-size:1.12rem;
-  font-weight:400;
-  margin-bottom:5px;
-}
-.kas-exp p{
-  color:var(--tx-inv-2);
-  font-size:.72rem;
-  line-height:1.55;
-  margin:0;
-}
-@media(max-width:1050px){
-  .kas-heritage__in{grid-template-columns:1fr}
-  .kas-heritage__stats{max-width:760px}
-  .kas-heritage__experiences{grid-template-columns:1fr}
-  .kas-heritage__expgrid{grid-template-columns:repeat(2,1fr)}
-  .kas-heritage__experiences>.btn{justify-self:start}
-}
-@media(max-width:600px){
-  .kas-heritage__in{padding:3.2rem 0}
-  .kas-heritage__stats{grid-template-columns:1fr 1fr}
-  .kas-stat{min-height:112px;padding:16px}
-  .kas-heritage__expgrid{grid-template-columns:1fr}
-}
 
 /* KAS typography — editorial luxury pairing */
 :root{
@@ -437,7 +302,7 @@ p:last-child{margin-bottom:0}
 html,body,button,input,select,textarea{
   font-family:var(--sans);
 }
-h1,h2,h3,h4,h5,h6,.section-title,.hero h1{
+h1,h2,h3,h4,h5,h6,.hero h1{
   font-family:var(--serif);
   font-weight:400;
 }
@@ -470,18 +335,11 @@ h1,h2,h3,h4,h5,h6,.section-title,.hero h1{
 
 /* V18.6 RESTORE — dark editorial footer matching the approved KAS reference */
 .ftr--dark{
-  background:#0b0a09;
+  background:#292822;
   color:#f5efe3;
   border-top:1px solid rgba(194,162,92,.08);
   padding-top:3.5rem;
 }
-.ftr--dark .ftr__main{
-  grid-template-columns:1.45fr repeat(4,minmax(0,1fr)) 1.55fr 1.55fr;
-  gap:28px;
-  padding-bottom:3.1rem;
-}
-.ftr--dark .ftr__brand .logo__name,
-.ftr--dark .ftr__brand .logo__sub{color:#f5efe3}
 .ftr--dark .ftr__brand p{
   color:rgba(245,239,227,.72);
   max-width:230px;
@@ -541,11 +399,6 @@ h1,h2,h3,h4,h5,h6,.section-title,.hero h1{
 }
 .ftr--dark .ftr__btm a{color:rgba(194,162,92,.65)}
 .ftr--dark .ftr__btm a:hover{color:#f5efe3}
-@media(max-width:1100px){
-  .ftr--dark .ftr__main{grid-template-columns:1.4fr repeat(3,1fr);gap:22px}
-}
-@media(max-width:760px){
-  .ftr--dark .ftr__main{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 18px}
-  .ftr--dark .ftr__brand{grid-column:1/-1}
+@media (max-width:767px){
   .ftr--dark .ftr__news{grid-column:1/-1}
 }

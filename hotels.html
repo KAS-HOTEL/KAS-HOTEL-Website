@@ -24,13 +24,9 @@
       <h1>Find Your Stay</h1>
       <p style="margin-top:.9rem">Signature hotels in the heart of Ho Chi Minh City.</p>
     </div>
-    <div id="sumBar" style="margin-top:2rem"></div>
+    <div id="hotelSearch" style="margin-top:2rem"></div>
   </div>
 </section>
-
-<div id="editSearch" style="background:var(--surface);border-bottom:1px solid var(--line);display:none">
-  <div class="container" style="padding-block:22px"><div id="searchWrap"></div></div>
-</div>
 
 <section class="section section--tight">
   <div class="container">
@@ -147,35 +143,26 @@
      repaint so hotel cards use the same uploaded property gallery as the
      hotel-detail page. */
   var search = B.readSearch();
-  /* This page always lists the whole collection, so a hotel remembered from a
-     hotel-detail visit must not appear in the "Where" summary. */
-  search.hotelId = '';
+  /* Keep the selected hotel from the search bar so the result set can
+     reflect the user's destination choice. Empty hotelId means all properties. */
 
-  /* ---- search summary + modify ---- */
-  function paintSummary() {
-    window.Search.summaryBar(U.$('#sumBar'), search, function () {
-      var box = U.$('#editSearch');
-      var open = box.style.display !== 'none';
-      box.style.display = open ? 'none' : 'block';
-      if (!open) window.Search.render(U.$('#searchWrap'), {
-        solid: true, cta: 'Search', values: search,
-        onSearch: function (s) {
-          B.saveSearch(s);
-          if (s.hotelId) {
-            location.href = 'hotel-detail.html?' + U.buildQS({
-              hotel: s.hotelId, checkIn: s.checkIn, checkOut: s.checkOut,
-              adults: s.adults, children: s.children, rooms: s.rooms });
-            return;
-          }
-          search = s;
-          box.style.display = 'none';
-          paintSummary(); paint();
-          U.toast('Search updated.');
-        }
-      });
+  /* ---- single search bar ----
+     The Hotels page uses one editable search bar only. Searching updates
+     this same host in place; no second summary/edit bar is created. */
+  var searchHost = U.$('#hotelSearch');
+  function paintSearch() {
+    window.Search.render(searchHost, {
+      solid: true, cta: 'Search', values: search,
+      onSearch: function (s) {
+        B.saveSearch(s);
+        search = s;
+        paintSearch();
+        paint();
+        U.toast('Search updated.');
+      }
     });
   }
-  paintSummary();
+  paintSearch();
 
   /* ---- filter definitions ---- */
   var TYPES = [['standard','Standard'],['superior','Superior'],['deluxe','Deluxe'],
@@ -231,9 +218,11 @@
   function paint() {
     var f = readFilters();
     var list = D.hotels.filter(function (h) {
-      // NOTE: a hotelId carried over from a previous search must NOT filter
-      // this page — "Find Your Stay" always presents the full collection.
-      // Choosing a specific hotel in the search box navigates to its own page.
+      /* Destination is a real search constraint on the Hotels listing.
+         Empty hotelId means all properties; a selected hotel means that
+         property only. This keeps the result list consistent with the
+         search bar without creating another search UI. */
+      if (search.hotelId && h.id !== search.hotelId) return false;
       if (f.stars.length && f.stars.indexOf(h.starRating) < 0) return false;
       var ok = h.rooms.filter(function (r) { return H.roomMatches(r, f); });
       h._matching = ok;

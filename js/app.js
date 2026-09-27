@@ -15,7 +15,7 @@
   }
   function logo(dark, href) {
     return '<a class="logo" href="' + (href || 'index.html') + '" aria-label="KAS Hotel Collection — home">' +
-      '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:150px;max-width:40vw;height:auto;display:block">' +
+      '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:180px;max-width:42vw;height:auto;display:block">' +
       '</a>';
   }
 
@@ -88,24 +88,23 @@
           close();
         });
       });
+      if (host.__kasLangClose) document.removeEventListener('click', host.__kasLangClose);
+      host.__kasLangClose = close;
       document.addEventListener('click', close);
     }());
 
     if (opts.floating) {
       var onScroll = function () {
-        /* Homepage: keep the header transparent for the entire Hero.
-           Only switch to solid black after the Hero has completely left
-           the viewport. This avoids the header turning black while the
-           user is still looking at the Hero. */
-        var hero = U.$('.home-hero');
-        var scrolled = hero
-          ? hero.getBoundingClientRect().bottom <= 0
-          : window.scrollY > 50;
+        /* Homepage: transparent only at the very top.
+           As soon as the page moves away from scroll=0, switch smoothly
+           to the solid black navigation. */
+        var scrolled = window.scrollY > 8;
         host.classList.toggle('header--transparent', !scrolled);
         host.classList.toggle('header--scrolled', scrolled);
         /* Backward-compatible state class for existing styles. */
         host.classList.toggle('hdr--solid', scrolled);
       };
+      if (host.__kasScrollHandler) window.removeEventListener('scroll', host.__kasScrollHandler);
       host.__kasScrollHandler = onScroll;
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
@@ -186,7 +185,7 @@
             moreLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
           '</div>' +
           '<div class="ftr__col"><h5>Discover</h5>' +
-            '<a href="about.html">About KAS</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
+            '<a href="about.html">About KAS</a><a href="city-guide.html">City Guide</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
           '</div>' +
           '<div class="ftr__col"><h5>Guest services</h5>' +
             '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
@@ -353,13 +352,16 @@
         x0 = null;
       }, { passive: true });
     }
-    // keyboard
-    document.addEventListener('keydown', function (e) {
+    // keyboard — one handler per gallery host; re-rendering replaces it instead of stacking listeners
+    if (host.__kasGalKey) document.removeEventListener('keydown', host.__kasGalKey);
+    host.__kasGalKey = function (e) {
+      if (!host.isConnected || !U.$('.gal__main', host)) return;
       if (U.$('.lb.open')) return;
       if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;  // arrows move the caret / change a date there
       if (e.key === 'ArrowLeft') show(i - 1);
       if (e.key === 'ArrowRight') show(i + 1);
-    });
+    };
+    document.addEventListener('keydown', host.__kasGalKey);
     return { show: show };
   }
 

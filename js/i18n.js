@@ -11,16 +11,17 @@
     /* Explicit URL language wins for the current navigation. This makes every
        header/footer link deterministic. Stored preference is the fallback for
        JS redirects and pages without a lang query. */
+    var fromUrl = '';
+    try { fromUrl = String(new URLSearchParams(window.location.search).get('lang') || '').toLowerCase(); } catch (e) {}
+    if (fromUrl === 'vi' || fromUrl === 'en') return fromUrl;
+
     var saved = '';
     try { saved = localStorage.getItem(KEY) || ''; } catch (e) {}
     if (!saved) {
       try { var m = document.cookie.match(/(?:^|; )kas-language=([^;]+)/); saved = m ? decodeURIComponent(m[1]) : ''; } catch (e) {}
     }
-    if (String(saved).toLowerCase() === 'vi' || String(saved).toLowerCase() === 'en') return String(saved).toLowerCase();
-
-    var fromUrl = '';
-    try { fromUrl = new URLSearchParams(window.location.search).get('lang') || ''; } catch (e) {}
-    if (String(fromUrl).toLowerCase() === 'vi') return 'vi';
+    saved = String(saved).toLowerCase();
+    if (saved === 'vi' || saved === 'en') return saved;
     return 'en';
   }
   LANG = readSavedLanguage();
@@ -30,7 +31,7 @@
 
   var T = {
     /* header / footer */
-    'Destinations':'Điểm đến','Hotels':'Khách sạn','Experiences':'Trải nghiệm','Offers':'Ưu đãi',
+    'Destinations':'Điểm đến','Hotels':'Khách sạn','City Guide':'Cẩm nang thành phố','Experiences':'Trải nghiệm','Offers':'Ưu đãi',
     'My KAS':'My KAS','About KAS':'Về KAS','Support':'Hỗ trợ',
     'Sign in / Join':'Đăng nhập / Tham gia','Find your stay':'Tìm nơi lưu trú',
     'Manage booking':'Quản lý đặt phòng','Manage a booking':'Quản lý đặt phòng',
@@ -51,9 +52,25 @@
 
         'Discover KAS':'Khám phá KAS',
         'Eight distinctive stays across the heart of Ho Chi Minh City.':'Tám điểm lưu trú khác biệt giữa lòng Thành phố Hồ Chí Minh.',
+    /* Find Your KAS editorial section */
+    'Find Your KAS':'Tìm KAS phù hợp',
+    'Choose the way':'Chọn cách',
+    'you want to stay.':'bạn muốn lưu trú.',
+    'Not every stay needs the same address. Choose the rhythm that matches your trip, then discover the KAS hotel that fits it.':'Mỗi hành trình có một nhịp điệu riêng. Chọn cách lưu trú phù hợp với chuyến đi của bạn, rồi khám phá khách sạn KAS dành cho bạn.',
+    'Family trip':'Du lịch cùng gia đình',
+    'Central sights, easy movement and a comfortable base for discovering Saigon together.':'Gần các điểm tham quan trung tâm, thuận tiện di chuyển và là điểm nghỉ thoải mái để cùng khám phá Sài Gòn.',
+    'Slow traveller':'Du lịch thong thả',
+    'Neighbourhood walks, cafés and a more local rhythm.':'Tản bộ trong khu phố, ghé quán cà phê và tận hưởng nhịp sống địa phương.',
+    'Business':'Công tác',
+    'Connected locations and a comfortable base between meetings.':'Vị trí thuận tiện kết nối và một nơi nghỉ thoải mái giữa những cuộc gặp.',
+    'Longer stay':'Lưu trú dài ngày',
+    'More space, familiar surroundings and room to settle in.':'Nhiều không gian hơn, môi trường quen thuộc và đủ thoải mái để ở lâu hơn.',
+    'Four ways into the KAS collection. Explore the full guide to see how all eight hotels fit different ways of experiencing Saigon.':'Bốn cách để bước vào bộ sưu tập KAS. Khám phá hướng dẫn đầy đủ để xem tám khách sạn phù hợp với những cách trải nghiệm Sài Gòn khác nhau.',
+    'Explore your KAS':'Khám phá KAS dành cho bạn',
     /* homepage editorial redesign */
     'Ho Chi Minh City':'Thành phố Hồ Chí Minh',
     'Stay in the heart':'Lưu trú giữa lòng',
+    'Stay in the heart of Ho Chi Minh City.':'Lưu trú giữa lòng Thành phố Hồ Chí Minh.',
     'Thoughtfully designed stays in the places that make the city worth discovering.':'Những điểm lưu trú được chăm chút tại những nơi làm nên sức hấp dẫn của thành phố.',
     'Explore our hotels':'Khám phá khách sạn',
     'Find your stay':'Tìm nơi lưu trú',
@@ -68,11 +85,43 @@
     'View all properties':'Xem tất cả khách sạn',
     'Guest prices & photos':'Giá tham khảo & hình ảnh',
     'Location':'Vị trí',
+    'A Day in Saigon':'Một ngày ở Sài Gòn',
+    'Follow the rhythm':'Theo nhịp sống',
+    'of the city.':'của thành phố.',
+    'A stay at KAS is not only about where you sleep. It is about the small moments between check-in and check-out.':'Một kỳ lưu trú tại KAS không chỉ là nơi bạn ngủ. Đó còn là những khoảnh khắc nhỏ giữa lúc nhận phòng và trả phòng.',
+    'Vietnamese coffee and a quiet morning':'Cà phê Việt Nam và một buổi sáng yên bình',
+    'Walk the neighbourhood':'Dạo bước trong khu phố',
+    'Local lunch worth remembering':'Bữa trưa địa phương đáng nhớ',
+    'Back to KAS, slow down':'Trở về KAS, chậm lại một chút',
+    'Golden hour above the city':'Giờ vàng trên thành phố',
+    'Saigon after dark':'Sài Gòn khi màn đêm buông xuống',
     'The city,':'Thành phố,',
     'within reach.':'trong tầm tay.',
     "Start the morning with coffee around the corner, walk to the city's landmarks, or return to a quiet room after a day in Ho Chi Minh City. KAS places you close to the neighbourhoods, food, culture and energy that define the city.":'Bắt đầu buổi sáng với một ly cà phê quanh góc phố, đi bộ tới những điểm đến biểu tượng, hoặc trở về căn phòng yên tĩnh sau một ngày ở Thành phố Hồ Chí Minh. KAS đưa bạn đến gần những khu phố, ẩm thực, văn hóa và nhịp sống làm nên thành phố.',
     'Explore Ho Chi Minh City':'Khám phá Thành phố Hồ Chí Minh',
+    'Explore our KAS':'Khám phá KAS của chúng tôi',
     'The KAS experience':'Trải nghiệm KAS',
+    'The KAS City Guide':'Cẩm nang thành phố KAS',
+    'Four neighbourhood stories.':'Bốn câu chuyện khu phố.',
+    'Each guide connects KAS hotels with real places nearby. Explore the landmarks, food, culture, shopping and nightlife around the KAS collection.':'Mỗi câu chuyện kết nối các khách sạn KAS với những địa điểm thực tế gần đó. Khám phá điểm tham quan, ẩm thực, văn hóa, mua sắm và nhịp sống về đêm quanh KAS.',
+    '01 — The City at Your Doorstep':'01 — Thành phố ngay trước cửa',
+    'Start with the city.':'Bắt đầu từ thành phố.',
+    'Markets, parks, historic landmarks and the central streets of Saigon.':'Chợ, công viên, những công trình lịch sử và các con phố trung tâm Sài Gòn.',
+    '02 — The Taste of Saigon':'02 — Hương vị Sài Gòn',
+    'Eat your way through the city.':'Thưởng thức thành phố qua ẩm thực.',
+    'Local food, coffee, markets and the streets that give Saigon its flavour.':'Ẩm thực địa phương, cà phê, chợ và những con phố làm nên hương vị Sài Gòn.',
+    '03 — The Slow Side':'03 — Một Sài Gòn chậm rãi',
+    'Leave room for wandering.':'Để dành chỗ cho những bước lang thang.',
+    'Architecture, museums, shopping and quiet streets.':'Kiến trúc, bảo tàng, mua sắm và những con phố yên tĩnh.',
+    '04 — Saigon After Dark':'04 — Sài Gòn sau khi trời tối',
+    'Stay out a little later.':'Ở ngoài lâu hơn một chút.',
+    'Walking streets, evening culture, city views and late-night energy.':'Phố đi bộ, văn hóa buổi tối, góc nhìn thành phố và nhịp sống về đêm.',
+    'Explore 10 places →':'Khám phá 10 địa điểm →',
+    'Start with the city →':'Bắt đầu từ thành phố →',
+    'Taste the city →':'Nếm vị thành phố →',
+    'Leave room for wandering →':'Để dành chỗ cho lang thang →',
+    'After dark →':'Sau khi trời tối →',
+
     'Made for the way you travel.':'Dành cho cách bạn khám phá.',
     'Comfort, without complication':'Thoải mái, không cầu kỳ',
     'Thoughtful rooms with the essentials for an easy stay.':'Những căn phòng được chăm chút với đầy đủ điều cần thiết cho một kỳ lưu trú dễ chịu.',
@@ -88,7 +137,7 @@
     "From practical city stays to more spacious rooms, discover accommodation designed around comfort, privacy and a good night's rest.":'Từ những kỳ lưu trú tiện lợi trong thành phố đến những căn phòng rộng rãi hơn, khám phá không gian được thiết kế quanh sự thoải mái, riêng tư và một giấc ngủ ngon.',
     'Explore rooms':'Khám phá phòng',
     'Make Ho Chi Minh City':'Hãy để Thành phố Hồ Chí Minh',
-    'your next stay.':'trở thành điểm dừng chân tiếp theo.',
+    'your next stay.':'là điểm dừng chân tiếp theo.',
     'Discover a KAS property and find your place in the city.':'Khám phá một khách sạn KAS và tìm nơi thuộc về bạn trong thành phố.',
     'Explore our hotels':'Khám phá khách sạn',
     /* homepage heritage */
@@ -577,14 +626,230 @@
     'guest': 'khách'
   };
 
+  /* ======================================================================
+     V22 — EN/VI consistency pass.
+     Entries below only ADD missing translations; existing entries win.
+     ====================================================================== */
+  (function addMissing(extra) {
+    Object.keys(extra).forEach(function (k) { if (!(k in T)) T[k] = extra[k]; });
+  })({
+    /* header / footer / chrome */
+    'Language':'Ngôn ngữ', 'Main':'Điều hướng chính', 'Open menu':'Mở menu', 'Close menu':'Đóng menu',
+    'Back to top':'Lên đầu trang', 'Call KAS':'Gọi KAS', 'KAS member':'Thành viên KAS',
+    'KAS Hotel Collection — home':'KAS Hotel Collection — trang chủ',
+    'Previous properties':'Khách sạn trước', 'Next properties':'Khách sạn tiếp theo',
+    'Distinctive hotels in the heart of Ho Chi Minh City, united by a passion for heartfelt service and memorable experiences.':
+      'Những khách sạn khác biệt giữa lòng Thành phố Hồ Chí Minh, cùng chung niềm đam mê phục vụ tận tâm và mang đến những trải nghiệm đáng nhớ.',
+    'More properties':'Thêm khách sạn', 'Discover':'Khám phá', 'Meetings & Events':'Hội họp & Sự kiện',
+    'Guest services':'Dịch vụ khách hàng', 'Book a Room':'Đặt phòng', 'Manage Booking':'Quản lý đặt phòng',
+    'KAS Member':'Thành viên KAS', 'Special Offers':'Ưu đãi đặc biệt', 'Gift Cards':'Thẻ quà tặng', 'Contact':'Liên hệ',
+    'Seasonal offers, new openings, and KAS stories.':'Ưu đãi theo mùa, khách sạn mới và những câu chuyện KAS.',
+    '© 2026 KAS Hotel Collection. All rights reserved.':'© 2026 KAS Hotel Collection. Bảo lưu mọi quyền.',
+    'Terms of Service':'Điều khoản dịch vụ', 'Chat with us':'Trò chuyện với chúng tôi',
+    /* home / hotels */
+    'KAS Dilly Luxury · garden courtyard':'KAS Dilly Luxury · sân vườn',
+    'Find Your Stay':'Tìm nơi lưu trú',
+    'Signature hotels in the heart of Ho Chi Minh City.':'Những khách sạn tiêu biểu giữa lòng Thành phố Hồ Chí Minh.',
+    'Maximum price per night (VND)':'Giá tối đa mỗi đêm (VND)',
+    'Bar & lounge':'Quầy bar & lounge', 'KAS rate · excl. VAT · excl. service charge':'Giá KAS · không VAT · không phí dịch vụ', 'Confirmed':'Đã xác nhận', 'CONFIRMED':'ĐÃ XÁC NHẬN',
+    /* hotel / room data vocabulary */
+    'Flat-screen TV':'TV màn hình phẳng', 'Mini fridge':'Tủ lạnh mini', 'Electric kettle':'Ấm đun nước điện',
+    'Hair dryer':'Máy sấy tóc', 'Safe box':'Két an toàn', 'In-room telephone':'Điện thoại trong phòng',
+    'Non-smoking':'Không hút thuốc', 'Rain shower':'Vòi sen phun mưa', 'Bathtub':'Bồn tắm',
+    'Private bathroom':'Phòng tắm riêng', 'Air conditioning':'Điều hòa', 'Free Wi-Fi':'Wi-Fi miễn phí',
+    '24/7 reception':'Lễ tân 24/7', 'Elevator':'Thang máy', 'Daily housekeeping':'Dọn phòng hằng ngày',
+    'Laundry service':'Dịch vụ giặt ủi', 'Airport shuttle':'Đưa đón sân bay', 'Luggage storage':'Giữ hành lý',
+    'No window':'Không có cửa sổ', 'Window':'Có cửa sổ', 'Has window':'Có cửa sổ', 'Fixed window':'Cửa sổ cố định',
+    'Small window':'Cửa sổ nhỏ', 'May not have a window':'Có thể không có cửa sổ', 'Not published':'Chưa công bố',
+    'City view':'Nhìn ra thành phố',
+    'Room size and other physical details were not published in the supplied rate sheet.':
+      'Diện tích và các thông số khác của phòng chưa được công bố trong bảng giá được cung cấp.',
+    'Central District 1 location':'Vị trí trung tâm Quận 1', 'Friendly, attentive team':'Đội ngũ thân thiện, chu đáo',
+    'Clean, comfortable rooms':'Phòng sạch sẽ, thoải mái', 'Good value for money':'Đáng giá tiền',
+    'Easy walk to Ben Thanh Market':'Dễ dàng đi bộ đến Chợ Bến Thành',
+    'Double Or Twin Room':'Phòng Double hoặc Twin', 'Queen Suite-Non-Smoking':'Suite Queen không hút thuốc',
+    'Premium Suite Room':'Phòng Premium Suite', 'Studio':'Studio',
+    /* booking panels */
+    'Your booking':'Đặt phòng của bạn', 'Duration':'Thời gian lưu trú', 'Room rate':'Giá phòng',
+    'Service charge (5%)':'Phí dịch vụ (5%)', 'Total':'Tổng cộng', 'Including taxes & fees':'Đã bao gồm thuế & phí',
+    'Operator rate sheet':'Bảng giá của khách sạn', 'exclude breakfast':'không bao gồm bữa sáng',
+    'Weekday (Mon–Thu) and weekend (Fri–Sun) rates differ and are seasonal. Rates':
+      'Giá ngày thường (T2–T5) và cuối tuần (T6–CN) khác nhau và thay đổi theo mùa. Giá',
+    'Need help with your booking?':'Cần hỗ trợ đặt phòng?', 'Need help with your reservation?':'Cần hỗ trợ về đặt phòng?',
+    'Save for later':'Lưu để xem sau', 'Until 12:00':'Đến 12:00',
+    /* guest details */
+    'First name is required.':'Vui lòng nhập tên.', 'Last name is required.':'Vui lòng nhập họ.',
+    'Email address is required.':'Vui lòng nhập địa chỉ email.', 'Please enter a valid email address.':'Vui lòng nhập địa chỉ email hợp lệ.',
+    'Phone number is required.':'Vui lòng nhập số điện thoại.', 'Please enter a valid phone number.':'Vui lòng nhập số điện thoại hợp lệ.',
+    'Guest first name is required.':'Vui lòng nhập tên khách lưu trú.', 'Guest last name is required.':'Vui lòng nhập họ khách lưu trú.',
+    'Please select a nationality.':'Vui lòng chọn quốc tịch.', 'Please choose a payment method.':'Vui lòng chọn phương thức thanh toán.',
+    'Please correct the highlighted fields.':'Vui lòng sửa các trường được đánh dấu.',
+    'Please select a check-in date.':'Vui lòng chọn ngày nhận phòng.', 'Please select a check-out date.':'Vui lòng chọn ngày trả phòng.',
+    'Check-in date cannot be in the past.':'Ngày nhận phòng không thể ở trong quá khứ.',
+    'Check-out must be after check-in.':'Ngày trả phòng phải sau ngày nhận phòng.',
+    'At least 1 adult is required.':'Cần ít nhất 1 người lớn.', 'At least 1 room is required.':'Cần ít nhất 1 phòng.',
+    'Children cannot be negative.':'Số trẻ em không hợp lệ.',
+    'Additional requests':'Yêu cầu thêm', '(optional)':'(không bắt buộc)',
+    '· Ages 13+':'· Từ 13 tuổi', '· Ages 2–12':'· 2–12 tuổi', '· Under 2':'· Dưới 2 tuổi', 'Infants':'Em bé',
+    'Pay later':'Thanh toán sau', 'Pay at the hotel. No payment needed now.':'Thanh toán tại khách sạn. Không cần thanh toán bây giờ.',
+    'Credit / debit card':'Thẻ tín dụng / ghi nợ', 'Secure payment powered by our trusted partners.':'Thanh toán an toàn qua các đối tác tin cậy.',
+    'Pay with ZaloPay':'Thanh toán bằng ZaloPay', 'Pay securely with your ZaloPay account.':'Thanh toán an toàn bằng tài khoản ZaloPay.',
+    'Bank transfer':'Chuyển khoản ngân hàng', 'Complete your booking and pay by bank transfer.':'Hoàn tất đặt phòng và thanh toán bằng chuyển khoản.',
+    'Back to room details':'Quay lại chi tiết phòng', 'Country calling code':'Mã quốc gia',
+    'Late check-in, high floor, quiet room, twin beds…':'Nhận phòng muộn, tầng cao, phòng yên tĩnh, hai giường đơn…',
+    "I don't know yet":'Chưa biết', 'After 00:00':'Sau 00:00', 'Heard about us':'Biết đến chúng tôi qua',
+    /* review / confirmation / manage */
+    'Lead guest':'Khách chính', 'Estimated arrival':'Thời gian đến dự kiến', 'Name':'Họ tên', 'Phone':'Điện thoại',
+    'Guests':'Khách', 'Guests & rooms':'Khách & phòng', 'Hotel':'Khách sạn', 'Not provided':'Chưa cung cấp',
+    'No special requests added.':'Không có yêu cầu đặc biệt.',
+    'Special requests are subject to availability and cannot be guaranteed.':'Yêu cầu đặc biệt tùy thuộc tình trạng sẵn có và không được đảm bảo.',
+    'Please review your booking details before confirming.':'Vui lòng kiểm tra thông tin đặt phòng trước khi xác nhận.',
+    'Review & confirm':'Kiểm tra & xác nhận', 'Room & rate details':'Chi tiết phòng & giá', 'Back to edit':'Quay lại chỉnh sửa',
+    'Confirm booking':'Xác nhận đặt phòng', 'Cancellation & important information':'Hủy phòng & thông tin quan trọng',
+    'Important information':'Thông tin quan trọng',
+    'A valid ID or passport is required at check-in.':'Cần xuất trình giấy tờ tùy thân hoặc hộ chiếu hợp lệ khi nhận phòng.',
+    'Taxes and fees are included in the total price shown.':'Thuế và phí đã được bao gồm trong tổng giá hiển thị.',
+    'Taxes and fees are included in the total price.':'Thuế và phí đã được bao gồm trong tổng giá.',
+    'No payment is processed in this demo.':'Bản demo này không xử lý thanh toán.', 'No payment taken (demo)':'Chưa thu tiền (demo)',
+    "You won't be charged — this is a demo.":'Bạn sẽ không bị tính phí — đây là bản demo.',
+    'This is a demonstration booking. No payment is taken and no real reservation is created.':'Đây là đặt phòng minh họa. Không thu tiền và không tạo đặt phòng thật.',
+    'Demonstration booking — stored only in this browser, no real reservation exists.':'Đặt phòng minh họa — chỉ lưu trên trình duyệt này, không có đặt phòng thật.',
+    'Pay later — at the hotel':'Thanh toán sau — tại khách sạn', 'Secured':'Đã bảo mật',
+    'Booking confirmed':'Đặt phòng đã xác nhận', 'Thank you, your booking is confirmed!':'Cảm ơn bạn, đặt phòng đã được xác nhận!',
+    'Your booking number':'Mã đặt phòng của bạn', 'Booking no.':'Mã đặt phòng', 'Booking details':'Chi tiết đặt phòng', 'Copy':'Sao chép',
+    "We've sent the booking confirmation to":'Chúng tôi đã gửi xác nhận đặt phòng đến',
+    "We've sent all the details to your inbox.":'Chúng tôi đã gửi toàn bộ thông tin vào hộp thư của bạn.',
+    'Check your email':'Kiểm tra email', 'Add to calendar':'Thêm vào lịch', 'Save your stay dates to your calendar.':'Lưu ngày lưu trú vào lịch của bạn.',
+    'Apple Calendar (.ics)':'Lịch Apple (.ics)', 'Download confirmation':'Tải xác nhận', 'Print booking':'In đặt phòng',
+    "What's next?":'Tiếp theo là gì?', "We're preparing your stay":'Chúng tôi đang chuẩn bị cho kỳ lưu trú của bạn',
+    'The team will have everything ready.':'Đội ngũ sẽ chuẩn bị sẵn mọi thứ.', 'See you soon!':'Hẹn sớm gặp bạn!',
+    'Manage your booking':'Quản lý đặt phòng', 'View, modify or cancel your booking at any time.':'Xem, thay đổi hoặc hủy đặt phòng bất cứ lúc nào.',
+    'Explore more stays':'Khám phá thêm nơi lưu trú', 'Talk to the KAS team':'Trao đổi với đội ngũ KAS', 'KAS guest':'Khách KAS',
+    'Bookings saved in this browser':'Đặt phòng đã lưu trên trình duyệt này', 'Find a stay →':'Tìm nơi lưu trú →', 'Find a stay':'Tìm nơi lưu trú',
+    /* toasts */
+    'Availability updated.':'Đã cập nhật tình trạng phòng.', 'Booking not found.':'Không tìm thấy đặt phòng.',
+    'Booking number copied.':'Đã sao chép mã đặt phòng.', 'Booking updated.':'Đã cập nhật đặt phòng.',
+    'Calendar file downloaded.':'Đã tải tệp lịch.', 'Confirmation downloaded.':'Đã tải xác nhận.',
+    'Filters applied.':'Đã áp dụng bộ lọc.', 'Filters cleared.':'Đã xóa bộ lọc.',
+    'Please complete your guest details first.':'Vui lòng hoàn tất thông tin khách trước.',
+    'Please select a room to continue.':'Vui lòng chọn phòng để tiếp tục.', 'Search updated.':'Đã cập nhật tìm kiếm.',
+    'That room is no longer available.':'Phòng này hiện không còn trống.', 'Your stay has been updated.':'Kỳ lưu trú của bạn đã được cập nhật.'
+  });
+
+  var DAY_VI = { Mon:'T2', Tue:'T3', Wed:'T4', Thu:'T5', Fri:'T6', Sat:'T7', Sun:'CN' };
+  var BED_VI = { 'small double':'đôi nhỏ', 'double':'đôi', 'single':'đơn', 'queen':'Queen', 'king':'King', 'twin':'Twin' };
+  var SUB_VI = { Location:'Vị trí', Cleanliness:'Sạch sẽ', Service:'Dịch vụ', Value:'Đáng giá tiền', Rooms:'Phòng' };
+  var TIER_VI = { 'Family':'Gia đình', 'Deluxe Family':'Deluxe Gia đình' };
+  var FEAT_VI = { 'with Window':'có cửa sổ', 'No Window':'không cửa sổ', 'Small Window':'cửa sổ nhỏ',
+    'with City View':'nhìn ra thành phố', 'with Balcony & City View':'có ban công & tầm nhìn thành phố', 'with Balcony':'có ban công' };
+  function bedVI(s) {
+    return String(s).replace(/(\d+)\s+(small double|double|single|queen|king|twin)\s+beds?/gi, function (_, n, t) {
+      return n + ' giường ' + BED_VI[t.toLowerCase()];
+    }).replace(/\s+or\s+/gi, ' hoặc ').replace(/\s+and\s+/gi, ' và ');
+  }
+  function bathVI(s) {
+    return String(s).split(/,\s*/).map(function (x) {
+      return ({ 'toilet':'bồn cầu', 'sink':'lavabo', 'stand-up shower':'vòi sen đứng', 'bathtub':'bồn tắm',
+        'private bathroom':'phòng tắm riêng', 'shower':'vòi sen' })[x.toLowerCase()] || x;
+    }).join(', ');
+  }
+  function segmentsVI(s) {
+    /* Address-like strings ("05 Truong Dinh, Ben Thanh Ward, District 1, Ho Chi Minh City"):
+       translate the segments the dictionary knows, keep street names as written. */
+    var parts = s.split(', ');
+    if (parts.length < 2) return null;
+    var known = 0;
+    var out = parts.map(function (p) {
+      if (T[p] != null && /(?:Ward|City|^District \d+)$/.test(p)) { known++; return T[p]; }
+      return /^[0-9A-Za-z–\-\/ ]+$/.test(p) ? p : null;
+    });
+    return known && out.indexOf(null) < 0 ? out.join(', ') : null;
+  }
+  /* Whole-string rules: return the finished translation (no further processing). */
+  var FULL_RULES = [
+    [/^(Standard|Superior|Deluxe|Premium|Family|Deluxe Family)(?: (Double|Queen|King|Twin))? Room(?: (with Window|No Window|Small Window|with City View|with Balcony & City View|with Balcony))?$/,
+      function (_, tier, bed, feat) { return 'Phòng ' + (TIER_VI[tier] || tier) + (bed ? ' ' + bed : '') + (feat ? ' ' + FEAT_VI[feat] : ''); }],
+    [/^A (?:(.+?) )?room with a (.+?)(?: and a (.+?))?( plus a private balcony)?\.(?: Bathroom: (.+?)\.)?(?: (.+))?$/,
+      function (_, size, bed, view, balc, bath, notes) {
+        return 'Phòng' + (size ? ' ' + size : '') + ' với ' + bedVI(bed) +
+          (view ? ' và ' + (/city view/i.test(view) ? 'tầm nhìn thành phố' : view) : '') +
+          (balc ? ', có ban công riêng' : '') + '.' +
+          (bath ? ' Phòng tắm: ' + bathVI(bath) + '.' : '') + (notes ? ' ' + translateString(notes) : '');
+      }],
+    [/^\d+ (?:small double|double|single|queen|king|twin) beds?(?: (?:or|and) \d+ (?:small double|double|single|queen|king|twin) beds?)?$/i, bedVI],
+    [/^(Location|Cleanliness|Service|Value|Rooms) — (.+)$/, function (_, k, v) { return SUB_VI[k] + ' — ' + v; }],
+    [/^Free until (.+)$/, 'Miễn phí đến $1'],
+    [/^Verified reviews from (.+)$/, 'Đánh giá đã xác minh từ $1'],
+    [/^(\d) stars?$/, '$1 sao'], [/^(\d)-star$/, '$1 sao'], [/^(\d+) types?$/, '$1 loại'],
+    [/^\+(\d+) more$/, '+$1 tiện nghi khác'],
+    [/^Photo (\d+)$/, 'Ảnh $1'],
+    [/^(Increase|Decrease) (Adults|Children|Infants)$/, function (_, a, b) {
+      return (a === 'Increase' ? 'Tăng ' : 'Giảm ') + ({ Adults:'người lớn', Children:'trẻ em', Infants:'em bé' })[b]; }],
+    [/^Call KAS on (.+)$/, 'Gọi KAS theo số $1'],
+    [/^Our KAS team is here for you (.+)\.$/, 'Đội ngũ KAS luôn sẵn sàng hỗ trợ bạn $1.'],
+    [/^Check-in (.+?) · Check-out (.+)$/, 'Nhận phòng $1 · Trả phòng $2'],
+    [/^Check-in from (.+?), check-out until (.+?)\.$/, 'Nhận phòng từ $1, trả phòng đến $2.'],
+    [/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) · (?:from|từ) (.+)$/, function (_, d, t) { return DAY_VI[d] + ' · từ ' + t; }],
+    [/^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) · until (.+)$/, function (_, d, t) { return DAY_VI[d] + ' · đến ' + t; }],
+    [/^This room type sleeps a maximum of (\d+) guests?(?: and up to (\d+) child(?:ren)?)?\. You have booked (\d+) rooms?\.$/,
+      function (_, a, c, r) { return 'Hạng phòng này tối đa ' + a + ' khách' + (c ? ' và tối đa ' + c + ' trẻ em' : '') + '. Bạn đã đặt ' + r + ' phòng.'; }],
+    [/^\. Extra adult ([\d.,]+) VND and extra child \(([^)]+)\) ([\d.,]+) VND per person per night above room standard\.$/,
+      '. Phụ thu người lớn $1 VND và trẻ em ($2) $3 VND mỗi người mỗi đêm khi vượt tiêu chuẩn phòng.'],
+    [/^Cancel for free until (.+?) \(local time\)\. After that, 1 night is charged\.$/, 'Hủy miễn phí đến $1 (giờ địa phương). Sau thời điểm đó, tính phí 1 đêm.'],
+    [/^We look forward to welcoming you to (.+)\.$/, 'Chúng tôi mong được đón tiếp bạn tại $1.'],
+    [/^A confirmation SMS has also been sent to (.+)\.$/, 'Tin nhắn SMS xác nhận cũng đã được gửi đến $1.'],
+    [/^Booked on (.+) · Branch code (\d+)$/, 'Đặt lúc $1 · Mã chi nhánh $2'],
+    [/^Quote booking number (\S+) and we will take care of it\.$/, 'Hãy cung cấp mã đặt phòng $1, chúng tôi sẽ hỗ trợ bạn.'],
+    [/^Booking (\S+) found\.$/, 'Đã tìm thấy đặt phòng $1.'],
+    [/^Booking (\S+) has been cancelled\.$/, 'Đặt phòng $1 đã được hủy.'],
+    [/^Booking number: (.+)$/, 'Mã đặt phòng: $1'],
+    [/^Call us on (.+)$/, 'Gọi cho chúng tôi theo số $1'],
+    [/^Our team replies on Zalo · (.+)$/, 'Đội ngũ của chúng tôi phản hồi qua Zalo · $1'],
+    [/^(.+) saved to your list\.$/, function (_, n) { return translateString(n) + ' đã được lưu vào danh sách của bạn.'; }],
+    [/^Price · (\d+) nights?$/, 'Giá · $1 đêm'],
+    [/^([\d.,]+) VND for (\d+) nights?$/, '$1 VND cho $2 đêm'],
+    [/^Max (\d+) guests?$/i, 'Tối đa $1 khách']
+  ];
+  /* Fragment rules: run before the existing chain of replacements. */
+  var CHAIN_RULES = [
+    [/\b(\d+)\s+Adults?\b/g, '$1 Người lớn'], [/\b(\d+)\s+Child(?:ren)?\b/g, '$1 Trẻ em'], [/\b(\d+)\s+Infants?\b/g, '$1 Em bé'],
+    [/ · Weekday\b/g, ' · Ngày thường'], [/ · Weekend\b/g, ' · Cuối tuần'],
+    [/\bservice charge\b/g, 'phí dịch vụ']
+  ];
+  var MM = {Jan:'01',Feb:'02',Mar:'03',Apr:'04',May:'05',Jun:'06',Jul:'07',Aug:'08',Sep:'09',Oct:'10',Nov:'11',Dec:'12'};
+  function datesVI(out) {
+    return out
+      .replace(/\b(20\d{2})-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])\b/g, function(_, y, m, d){ return d + '/' + m + '/' + y; })
+      .replace(/\b(0?[1-9]|[12]\d|3[01]) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (20\d{2})\b/g, function(_, d, m, y){ return String(d).padStart(2,'0') + '/' + MM[m] + '/' + y; });
+  }
+  function applyFullRules(core) {
+    for (var i = 0; i < FULL_RULES.length; i++) {
+      var r = FULL_RULES[i];
+      if (r[0].test(core)) { r[0].lastIndex = 0; return core.replace(r[0], r[1]); }
+    }
+    return segmentsVI(core);
+  }
+
+  var memo = new Map();
   function translateString(s) {
     if (!s) return s;
+    var hit = memo.get(s);
+    if (hit !== undefined) return hit;
+    var res = translateStringRaw(s);
+    if (memo.size > 5000) memo.clear();
+    memo.set(s, res);
+    return res;
+  }
+  function translateStringRaw(s) {
     var lead = (s.match(/^\s*/) || [''])[0], trail = (s.match(/\s*$/) || [''])[0];
     var core = s.slice(lead.length, s.length - trail.length);
     var normalized = core.replace(/\s+/g, ' ').trim();
     if (T[core] != null) return lead + T[core] + trail;
     if (T[normalized] != null) return lead + T[normalized] + trail;
+    var full = applyFullRules(normalized);
+    if (full != null) return lead + datesVI(full) + trail;
     var out = core;
+    CHAIN_RULES.forEach(function (r) { out = out.replace(r[0], r[1]); });
     /* common generated fragments */
     out = out.replace(/\bfrom\s+/gi, 'từ ');
     out = out.replace(/\bBest Rate Guarantee\b/g, 'Cam kết giá tốt nhất');
@@ -612,7 +877,6 @@
     out = out.replace(/\bFIND YOUR BOOKING\b/g, 'TRA CỨU ĐẶT PHÒNG');
     out = out.replace(/\bFind your booking\b/g, 'Tra cứu đặt phòng');
     out = out.replace(/\bNo bookings are stored in this browser yet\.\s*Find a stay\s*→?/gi, 'Chưa có đặt phòng nào được lưu trên trình duyệt này. Tìm nơi lưu trú →');
-    out = out.replace(/\s—\sKAS Hotel Collection$/i, ' — Bộ sưu tập khách sạn KAS');
     out = out.replace(/\bProperty rating\b/gi, 'Xếp hạng khách sạn');
     out = out.replace(/\bRooms in property\b/gi, 'Số phòng tại khách sạn');
     out = out.replace(/\bRoom types\b/gi, 'Loại phòng');
@@ -699,8 +963,14 @@
   }
 
   var ATTRS = ['placeholder','aria-label','title','alt'];
-  function translateAttrs() {
-    document.querySelectorAll('input,textarea,button,a,[title],[aria-label],img').forEach(function(el) {
+  var ATTR_SEL = 'input,textarea,button,a,[title],[aria-label],img';
+  function attrTargets(root) {
+    var list = Array.prototype.slice.call((root || document).querySelectorAll(ATTR_SEL));
+    if (root && root.matches && root.matches(ATTR_SEL)) list.unshift(root);
+    return list;
+  }
+  function translateAttrs(root) {
+    attrTargets(root).forEach(function(el) {
       ATTRS.forEach(function(a) {
         if (!el.hasAttribute(a)) return;
         var val = el.getAttribute(a), key = 'kas-i18n-' + a;
@@ -719,8 +989,10 @@
     });
   }
 
-  function persistLanguageLinks() {
-    document.querySelectorAll('a[href]').forEach(function (a) {
+  function persistLanguageLinks(root) {
+    var links = Array.prototype.slice.call((root || document).querySelectorAll('a[href]'));
+    if (root && root.matches && root.matches('a[href]')) links.unshift(root);
+    links.forEach(function (a) {
       if (!a.getAttribute('data-kas-lang-base')) a.setAttribute('data-kas-lang-base', a.getAttribute('href'));
       var base = a.getAttribute('data-kas-lang-base');
       if (!base || /^(?:#|mailto:|tel:|javascript:)/i.test(base)) return;
@@ -733,10 +1005,30 @@
     });
   }
 
+
+
+  /* Homepage hero title uses deliberate editorial line breaks. Keeping the
+     line structure here avoids CSS width hacks and keeps EN/VI deterministic. */
+  var HERO_TITLE_LINES = {
+    en: ['Stay in the', 'heart of', 'Ho Chi Minh', 'City.'],
+    vi: ['Lưu trú', 'giữa lòng', 'Thành phố', 'Hồ Chí Minh.']
+  };
+  function applyHeroTitle() {
+    var el = document.querySelector('[data-hero-title]');
+    if (!el) return;
+    var lines = HERO_TITLE_LINES[LANG] || HERO_TITLE_LINES.en;
+    el.textContent = '';
+    lines.forEach(function(line, i) {
+      if (i) el.appendChild(document.createElement('br'));
+      el.appendChild(document.createTextNode(line));
+    });
+  }
+
   function apply() {
     applying = true;
     if (observer) observer.disconnect();
     document.documentElement.lang = LANG;
+    applyHeroTitle();
     applyText(LANG);
     var titleMap = {
       'KAS Hotel Collection — Timeless Places. Meaningful Stays.':'KAS Hotel Collection — Những điểm đến vượt thời gian. Những kỳ nghỉ đáng nhớ.',
@@ -752,11 +1044,23 @@
       'Booking Confirmed — KAS Hotel Collection':'Đặt phòng đã xác nhận — KAS Hotel Collection',
       'Room — KAS Hotel Collection':'Phòng — KAS Hotel Collection',
       'Destinations — KAS Hotel Collection':'Điểm đến — KAS Hotel Collection',
+      'KAS Hotel Collection — Stay in the heart of Ho Chi Minh City.':'KAS Hotel Collection — Lưu trú giữa lòng Thành phố Hồ Chí Minh.',
 };
+    applyTitle(titleMap);
+    persistLanguageLinks();
+    applying = false;
+    observe();
+  }
+  var TITLE_MAP = null;
+  function applyTitle(titleMap) {
+    titleMap = titleMap || TITLE_MAP;
+    if (!titleMap) return;
+    TITLE_MAP = titleMap;
     var title = document.title;
     if (LANG === 'vi') {
+      if (title === document.__kasTitleVi) return;   /* already translated: keep it stable */
       /* remember the page's own English title so EN can restore it later */
-      if (title !== document.__kasTitleVi) document.__kasTitleEn = title;
+      document.__kasTitleEn = title;
       document.title = titleMap[title] || translateString(title);
       document.__kasTitleVi = document.title;
     }
@@ -765,18 +1069,61 @@
       if (found) document.title = found;
       else if (document.__kasTitleEn && title === document.__kasTitleVi) document.title = document.__kasTitleEn;
     }
-    persistLanguageLinks();
-    applying = false;
-    observe();
   }
 
+  function translateTextNode(n) {
+    if (isExcluded(n)) return;
+    var prev = originals.get(n);
+    /* A node that was moved (not new) is already translated: keep its original. */
+    if (prev != null && translateString(prev) === n.nodeValue) return;
+    var o = n.nodeValue;
+    originals.set(n, o);
+    var tr = translateString(o);
+    if (tr !== o) n.nodeValue = tr;
+  }
+  function translateSubtree(root) {
+    if (root.nodeType === 3) { translateTextNode(root); return; }
+    if (root.nodeType !== 1) return;
+    var walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), list = [];
+    while (walker.nextNode()) list.push(walker.currentNode);
+    list.forEach(translateTextNode);
+    translateAttrs(root);
+  }
+  function onAttributeChange(el, a) {
+    var key = 'kas-i18n-' + a, stored = el.getAttribute(key), val = el.getAttribute(a);
+    if (val == null) return;
+    if (LANG !== 'vi') { if (stored != null) el.setAttribute(key, val); return; }
+    if (stored != null && val === translateString(stored)) return;   /* our own write */
+    el.setAttribute(key, val);
+    el.setAttribute(a, translateString(val));
+  }
+  /* Handle DOM changes incrementally. Previously every mutation re-walked and
+     re-translated the entire page (and re-wrote every link), which made each
+     carousel/gallery/toast update cost a full-document pass. */
+  function processMutations(records) {
+    if (applying) return;
+    observer.disconnect();
+    try {
+      records.forEach(function (r) {
+        if (r.type === 'attributes') { onAttributeChange(r.target, r.attributeName); return; }
+        r.addedNodes.forEach(function (node) {
+          if (!node.isConnected) return;
+          if (LANG === 'vi') translateSubtree(node);
+          if (node.nodeType === 1) persistLanguageLinks(node);
+        });
+      });
+      applyTitle();
+    } finally {
+      connect();
+    }
+  }
+  function connect() {
+    observer.observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:ATTRS});
+  }
   function observe() {
     if (observer) observer.disconnect();
-    observer = new MutationObserver(function() {
-      if (applying) return;
-      apply();
-    });
-    observer.observe(document.body, {childList:true, subtree:true});
+    observer = observer || new MutationObserver(processMutations);
+    connect();
   }
 
   function syncLanguagePicker() {
@@ -800,6 +1147,13 @@
     LANG = String(lang).toLowerCase() === 'vi' ? 'vi' : 'en';
     try { localStorage.setItem(KEY, LANG); } catch (e) {}
     try { document.cookie = 'kas-language=' + encodeURIComponent(LANG) + '; path=/; max-age=31536000; SameSite=Lax'; } catch (e) {}
+    try {
+      var cur = new URL(window.location.href);
+      if (cur.searchParams.has('lang') || LANG === 'vi') {
+        if (LANG === 'vi') cur.searchParams.set('lang', 'vi'); else cur.searchParams.delete('lang');
+        history.replaceState(history.state, '', cur.pathname + cur.search + cur.hash);
+      }
+    } catch (e) {}
     apply();
     syncLanguagePicker();
     document.dispatchEvent(new CustomEvent('kas:language', {detail:{lang:LANG}}));
@@ -854,6 +1208,8 @@
 
   global.KAS_I18N = {
     init:init, apply:apply, setLanguage:setLanguage, withLang:withLang,
-    getLanguage:function(){return LANG;}, t:translateString
+    getLanguage:function(){return LANG;},
+    /* Language-aware: returns the English source unchanged while EN is active. */
+    t:function(s){ return LANG === 'vi' ? translateString(s) : s; }
   };
 })(window);

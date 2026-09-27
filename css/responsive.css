@@ -1,5 +1,19 @@
 /* ==========================================================================
-   KAS — RESPONSIVE  ( desktop 1440+ / tablet 768–1439 / mobile <768 )
+   KAS — RESPONSIVE
+   Breakpoint scale (max-width, desktop-first). Use these for new rules:
+     1200px  small desktop / tablet landscape  (container goes fluid)
+     1024px  tablet landscape                  (navigation collapses)
+      900px  tablet portrait                   (two-column layouts stack)
+      767px  large phone / small tablet
+      560px  phone
+      360px  small phone
+   Large screens (min-width): 1441px, 1800px, 2400px.
+   A few component-specific values (max 1400, 1279, 1180, 1100, 980, 800,
+   720, 700, 600, 520, 400; min 1201, 1920, 2300) remain where a component
+   needs its own switch point;
+   they are kept to avoid visual changes and are candidates to fold into
+   the scale above during the redesign.
+   Load order on every page: style.css → components.css → responsive.css.
    ========================================================================== */
 
 /* ---------------- large desktop down ---------------- */
@@ -21,7 +35,6 @@
   .ftr__main{grid-template-columns:1.35fr repeat(3,minmax(0,1fr));row-gap:34px}
   .ftr__main .ftr__col:nth-child(5){grid-column:2}
   .ftr__main .ftr__contact{grid-column:3}
-  .ftr__main .ftr__trade{grid-column:4}
   .ftr__news{grid-column:1/-1}
   .amgrid{grid-template-columns:repeat(4,1fr)}
 }
@@ -76,12 +89,8 @@
   .gpop{width:calc(100vw - 46px);right:auto;left:0}
 
   .section{padding-block:2.6rem}
-  .section-sub{margin-bottom:2rem}
 
   .rail{grid-template-columns:repeat(2,1fr);gap:11px}
-  .pcard__img{aspect-ratio:4/5}
-  .pcard__b h4{overflow-wrap:anywhere}
-  .pcard__address{min-height:0}
 
   /* vertical cards on mobile */
   .hcard,.rcard{grid-template-columns:1fr}
@@ -108,9 +117,9 @@
   .trust--pad .trust__in{flex-direction:column;gap:18px}
   .trust--pad .trust__i{min-width:0}
 
-  .ftr__main{grid-template-columns:1fr 1fr;gap:26px}
+  .ftr__main{gap:26px}
   .ftr__brand,.ftr__news{grid-column:1/-1}
-  .ftr__contact,.ftr__trade{min-width:0}
+  .ftr__contact{min-width:0}
   .ftr__btm{flex-direction:column;gap:10px}
 
   .modal__b{padding:24px 22px}
@@ -185,15 +194,16 @@
   .step__line{margin-inline:9px;min-width:14px}
 }
 
-/* ---- summary bar collapse ---- */
-@media (max-width:1024px){
-  .searchbar--sum{grid-template-columns:1fr 1fr}
-  .searchbar--sum .btn{grid-column:1/-1}
-}
 @media (max-width:767px){
-  .searchbar--sum{grid-template-columns:1fr}
   body{max-width:100%}
   .searchbar .btn{white-space:normal}
+}
+
+
+@media (max-width:767px){
+  .hero.hero--sm{min-height:0;height:auto}
+  .hero.hero--sm .hero__in{padding-bottom:24px}
+  .hero.hero--sm #hotelSearch{margin-top:1.5rem}
 }
 
 /* ---- contact ---- */
@@ -217,11 +227,21 @@
   .hdr__right > .btn--gold{display:none}
   .hdr__in{gap:12px}
   .hdr__right{gap:8px}
-  .logo__sub{letter-spacing:.26em}
 }
 @media (max-width:360px){
   .hdr__tel{display:none}
 }
+/* The header sign-in button overflowed the bar (horizontal scroll, burger
+   pushed off-screen) at 521–560px in EN and up to ~620px in VI, where the
+   label is longer. Hide it a little earlier; sign-in stays in the page flow. */
+@media (max-width:560px){ .hdr__right > .btn--gold{display:none} }
+@media (max-width:640px){ html[lang="vi"] .hdr__right > .btn--gold{display:none} }
+/* Sticky booking bar: on phones narrower than 375px the "Book this room"
+   button ran ~11px past the right edge. Tighten its padding there only. */
+@media (max-width:374px){ .mobile-cta{gap:10px} .mobile-cta .btn{padding-inline:16px} }
+/* Home "Rooms & Suites" image: aspect-ratio + min-height made it wider than
+   the phone viewport (cropped on the right edge). Keep it inside the column. */
+@media (max-width:767px){ .home-rooms__image{max-width:100%} }
 
 
 /* V11.2 footer spacious two-row layout */
@@ -239,16 +259,11 @@
   .ftr__main > .ftr__col:nth-child(5){grid-column:5}
   .ftr__main > .ftr__col:nth-child(6){grid-column:6}
   .ftr__contact{grid-column:1 / span 2 !important;padding-top:4px}
-  .ftr__trade{grid-column:3 / span 2 !important;padding-top:4px}
   .ftr__news{grid-column:5 / span 2 !important;padding-top:4px}
   .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:16px;padding:8px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .ct-link{gap:16px;padding:8px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
   .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
-  .ftr__trade-intro{margin-bottom:12px;max-width:220px}
-  .ftr__trade > a{font-size:.82rem}
 }
 
 @media (min-width:768px) and (max-width:1200px){
@@ -264,13 +279,10 @@
   .ftr__main > .ftr__col:nth-child(5){grid-column:1}
   .ftr__main > .ftr__col:nth-child(6){grid-column:2}
   .ftr__contact{grid-column:1 !important}
-  .ftr__trade{grid-column:2 !important}
   .ftr__news{grid-column:3 !important}
   .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:15px;padding:8px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .ct-link{gap:15px;padding:8px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
   .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
 }
 
@@ -279,52 +291,17 @@
   .ftr__brand,
   .ftr__main > .ftr__col,
   .ftr__contact,
-  .ftr__trade,
   .ftr__news{grid-column:1 !important}
   .ftr__contact .ct-stack--footer{gap:8px;margin-top:10px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:15px;padding:7px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .ct-link{gap:15px;padding:7px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
   .ftr__contact .tiny{margin-top:14px !important;line-height:1.7}
-  .ftr__trade-intro{margin-bottom:10px}
 }
 
 /* Homepage discovery rail */
-@media(max-width:1024px){
-  .kas-discover__head{align-items:flex-start;flex-direction:column;gap:8px}
-  .kas-discover__intro{max-width:520px}
-  .kas-rail{padding-inline:22px}
-  .kas-rail .pcard{flex-basis:220px}
-}
-@media(max-width:600px){
-  .kas-discover{padding-top:3.2rem}
-  .kas-rail{gap:10px;padding-inline:16px}
-  .kas-rail .pcard{flex-basis:205px}
-  .kas-discover__actions{text-align:left}
-  .kas-discover__actions .btn{margin:0 6px 0 0}
+@media (max-width:600px){
   .hero{min-height:680px}
   .hero__ct h1{font-size:clamp(2.8rem,14vw,4rem)}
-}
-
-@media(max-width:1024px){
-  .kas-carousel .kas-rail .pcard{
-    flex-basis:calc((100vw - 68px)/2.2);
-    width:calc((100vw - 68px)/2.2);
-  }
-  .kas-carousel__arrow--prev{left:-8px}
-  .kas-carousel__arrow--next{right:-8px}
-}
-@media(max-width:600px){
-  .kas-carousel .kas-rail{gap:12px}
-  .kas-carousel .kas-rail .pcard{
-    flex-basis:78vw;
-    width:78vw;
-    max-width:none;
-  }
-  .kas-carousel__arrow{width:38px;height:38px}
-  .kas-carousel__arrow--prev{left:6px}
-  .kas-carousel__arrow--next{right:6px}
 }
 
 
@@ -341,7 +318,6 @@
   .lang-menu{right:-2px}
   .hero__in{padding-top:clamp(6.5rem,15vh,8rem);padding-inline:18px}
   .hero__ct{min-height:430px;max-width:100%}
-  .hero__ct h1{font-size:clamp(2.8rem,13vw,4rem)}
   .hero__ct p{font-size:.9rem}
 }
 
@@ -350,22 +326,13 @@
 @media (max-width:900px){
   .hero__in{position:relative}
   .hero__ct{position:relative;top:auto;left:auto}
-  .hero #heroSearch{position:relative;left:auto;right:auto;bottom:auto}
 }
 
 /* V19 homepage hero search placement: overlap just below hero */
-.home-hero #homeHeroSearch{position:absolute;left:50%;right:auto;bottom:-38px;width:min(92%,1264px);transform:translateX(-50%);z-index:10}
-.home-redesign .home-hero__copy h1{font-size:clamp(3rem,5vw,4.8rem);line-height:.9}
-@media(max-width:767px){
-  .home-hero #homeHeroSearch{left:16px;right:16px;bottom:-32px;width:auto;transform:none}
-  .home-hero #homeHeroSearch .searchbar{grid-template-columns:1fr; border-radius:18px}
-  .home-hero #homeHeroSearch .btn{width:calc(100% - 12px);min-height:46px}
+@media (max-width:767px){
+  .home-usp__in{padding-block:8px}
   .home-usp{padding-top:40px}
 }
-
-/* V20.1 — full-screen homepage hero on mobile as well. */
-@media(max-width:900px){.home-hero{min-height:100vh;height:100vh}}
-@media(max-width:560px){.home-hero{min-height:100vh;height:100vh}}
 
 /* V20.3 — responsive scale stabilization
    Keep typography and major spacing visually stable across viewport/zoom changes.
@@ -376,31 +343,18 @@ h1{font-size:4.25rem}
 h2{font-size:2.65rem}
 h3{font-size:1.65rem}
 
-/* Homepage editorial typography: fixed visual steps, not vw scaling. */
-.home-redesign .home-hero__copy h1{font-size:4.75rem}
-.home-stay__copy h2,
-.home-city__copy h2,
-.home-rooms__copy h2{font-size:4.35rem}
-.home-section-head h2{font-size:3.55rem}
-.home-experience h2{font-size:4rem}
-.home-cta h2{font-size:4.65rem}
-
 /* Major homepage spacing stays stable while columns still reflow naturally. */
-.home-hero__inner{padding-top:9.5rem}
 .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:6rem}
-.home-city__copy{padding:5rem 5.5rem}
 .home-rooms__grid{gap:4.5rem}
 .home-cta{padding-block:7rem}
 
 @media (max-width:1200px){
-  .home-redesign .home-hero__copy h1{font-size:4.35rem}
   .home-stay__copy h2,
   .home-city__copy h2,
   .home-rooms__copy h2{font-size:4rem}
   .home-section-head h2{font-size:3.25rem}
   .home-experience h2{font-size:3.7rem}
   .home-cta h2{font-size:4.25rem}
-  .home-hero__inner{padding-top:8.75rem}
   .home-city__copy{padding:4rem 4.25rem}
   .home-rooms__grid{gap:3.5rem}
 }
@@ -409,14 +363,12 @@ h3{font-size:1.65rem}
   h1{font-size:3.5rem}
   h2{font-size:2.35rem}
   h3{font-size:1.5rem}
-  .home-redesign .home-hero__copy h1{font-size:3.75rem}
   .home-stay__copy h2,
   .home-city__copy h2,
   .home-rooms__copy h2{font-size:3.5rem}
   .home-section-head h2{font-size:2.9rem}
   .home-experience h2{font-size:3.3rem}
   .home-cta h2{font-size:3.8rem}
-  .home-hero__inner{padding-top:8rem}
   .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:5rem}
   .home-city__copy{padding:4rem 3rem}
 }
@@ -425,14 +377,8 @@ h3{font-size:1.65rem}
   h1{font-size:3rem}
   h2{font-size:2.15rem}
   h3{font-size:1.4rem}
-  .home-redesign .home-hero__copy h1{font-size:3.25rem}
-  .home-stay__copy h2,
-  .home-city__copy h2,
-  .home-rooms__copy h2{font-size:3rem}
   .home-section-head h2{font-size:2.55rem}
   .home-experience h2{font-size:3rem}
-  .home-cta h2{font-size:3.2rem}
-  .home-hero__inner{padding-top:7.5rem}
   .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}
   .home-city__copy{padding:4rem 24px}
   .home-rooms__grid{gap:2.5rem}
@@ -478,63 +424,8 @@ h3{font-size:1.65rem}
   padding-inline: 0;
 }
 
-/* HERO: full viewport frame, content anchored to a stable grid column. */
-.home-grid__hero,
-.home-hero {
-  width: 100%;
-  min-width: 0;
-  min-height: 100svh;
-  height: 100svh;
-}
-
-.home-redesign .home-hero__inner {
-  width: min(100% - 48px, 1440px);
-  max-width: 1440px;
-  margin-inline: auto;
-  padding-inline: 0;
-  padding-top: 9.25rem;
-}
-
-.home-redesign .home-hero__copy {
-  width: min(620px, 48%);
-  max-width: 620px;
-}
-
-.home-redesign .home-hero__copy h1 {
-  font-size: 4.5rem;
-  line-height: .92;
-  max-width: 10.5ch;
-}
 
 /* Booking bar: its own grid row, never scaled with the hero. */
-.home-booking-search {
-  position: relative;
-  z-index: 20;
-  background: var(--ivory);
-  min-width: 0;
-}
-
-.home-booking-search__in {
-  width: min(100% - 48px, 1440px);
-  max-width: 1440px;
-  margin-inline: auto;
-}
-
-.home-booking-search #homeHeroSearch {
-  width: 100%;
-  margin: -38px 0 0;
-  position: relative;
-  left: auto;
-  right: auto;
-  bottom: auto;
-  transform: none;
-}
-
-.home-booking-search #homeHeroSearch .searchbar {
-  width: 100%;
-  margin: 0;
-  grid-template-columns: minmax(240px, 1.45fr) minmax(160px, 1fr) minmax(160px, 1fr) minmax(190px, 1.08fr) 180px;
-}
 
 /* USP remains a five-column grid until tablet. */
 .home-grid__usp .container {
@@ -639,12 +530,6 @@ h3{font-size:1.65rem}
   min-height: 620px;
 }
 
-.home-feature-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 40px;
-}
-
 .home-feature-grid article {
   min-width: 0;
 }
@@ -673,10 +558,8 @@ h3{font-size:1.65rem}
 
 /* Wide CSS viewports (often produced by browser zoom-out):
    expand the editorial frame by breakpoint rather than by continuous vw scaling. */
-@media (min-width: 1800px) {
+@media (min-width:1800px){
   .home-grid .container,
-  .home-redesign .home-hero__inner,
-  .home-booking-search__in,
   .home-stay__grid,
   .home-rooms__grid,
   .home-collection .container,
@@ -684,15 +567,6 @@ h3{font-size:1.65rem}
   .home-grid__usp .container {
     width: min(100% - 72px, 1800px);
     max-width: 1800px;
-  }
-
-  .home-redesign .home-hero__copy {
-    width: 600px;
-    max-width: 600px;
-  }
-
-  .home-redesign .home-hero__copy h1 {
-    font-size: 5rem;
   }
 
   .home-stay__copy h2,
@@ -710,10 +584,8 @@ h3{font-size:1.65rem}
   }
 }
 
-@media (min-width: 2400px) {
+@media (min-width:2400px){
   .home-grid .container,
-  .home-redesign .home-hero__inner,
-  .home-booking-search__in,
   .home-stay__grid,
   .home-rooms__grid,
   .home-collection .container,
@@ -723,30 +595,12 @@ h3{font-size:1.65rem}
     max-width: 2160px;
   }
 
-  .home-redesign .home-hero__copy {
-    width: 660px;
-    max-width: 660px;
-  }
-
-  .home-redesign .home-hero__copy h1 {
-    font-size: 5.25rem;
-  }
 }
 
 /* Tablet: reduce tracks, not the entire page. */
-@media (max-width: 1100px) {
-  .home-grid .container,
-  .home-redesign .home-hero__inner,
-  .home-booking-search__in {
+@media (max-width:1100px){
+  .home-grid .container {
     width: min(100% - 40px, 1100px);
-  }
-
-  .home-redesign .home-hero__copy {
-    width: min(580px, 62%);
-  }
-
-  .home-redesign .home-hero__copy h1 {
-    font-size: 4rem;
   }
 
   .home-stay__grid,
@@ -758,49 +612,13 @@ h3{font-size:1.65rem}
     grid-auto-columns: calc((100% - 36px) / 3);
   }
 
-  .home-feature-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    row-gap: 34px;
   }
-}
 
 /* Mobile/tablet portrait: stack the editorial grids naturally. */
-@media (max-width: 800px) {
-  .home-grid .container,
-  .home-redesign .home-hero__inner,
-  .home-booking-search__in {
+@media (max-width:800px){
+  .home-grid .container {
     width: calc(100% - 32px);
     max-width: none;
-  }
-
-  .home-redesign .home-hero__inner {
-    padding-top: 8rem;
-  }
-
-  .home-redesign .home-hero__copy {
-    width: min(560px, 100%);
-  }
-
-  .home-redesign .home-hero__copy h1 {
-    font-size: 3.6rem;
-    max-width: 11ch;
-  }
-
-  .home-booking-search #homeHeroSearch {
-    margin-top: -28px;
-  }
-
-  .home-booking-search #homeHeroSearch .searchbar {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .home-booking-search #homeHeroSearch .searchbar .sf:first-child {
-    grid-column: 1 / -1;
-  }
-
-  .home-booking-search #homeHeroSearch .searchbar > .btn {
-    grid-column: 1 / -1;
-    min-height: 52px;
   }
 
   .home-usp__in {
@@ -863,38 +681,12 @@ h3{font-size:1.65rem}
     padding: 56px 32px;
   }
 
-  .home-feature-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 28px;
-  }
-
   .home-cta h2 {
     font-size: 3.6rem;
   }
 }
 
-@media (max-width: 560px) {
-  .home-redesign .home-hero__inner {
-    padding-top: 7.2rem;
-  }
-
-  .home-redesign .home-hero__copy h1 {
-    font-size: 3.15rem;
-    max-width: 11ch;
-  }
-
-  .home-booking-search #homeHeroSearch {
-    margin-top: -20px;
-  }
-
-  .home-booking-search #homeHeroSearch .searchbar {
-    grid-template-columns: 1fr;
-  }
-
-  .home-booking-search #homeHeroSearch .searchbar .sf:first-child,
-  .home-booking-search #homeHeroSearch .searchbar > .btn {
-    grid-column: auto;
-  }
+@media (max-width:560px){
 
   .home-usp__in {
     grid-template-columns: 1fr;
@@ -907,10 +699,6 @@ h3{font-size:1.65rem}
     font-size: 2.9rem;
   }
 
-  .home-feature-grid {
-    grid-template-columns: 1fr;
-  }
-
   .home-cta h2 {
     font-size: 3rem;
   }
@@ -918,235 +706,14 @@ h3{font-size:1.65rem}
 
 
 /* ==========================================================================
-   V21 — INDEX STRUCTURE MATCHING HOTELS.HTML
-   Three-column page grid: flexible side gutters + bounded center content.
-   The center column is the only layout column that carries homepage content.
-   This prevents browser zoom from proportionally shrinking the whole page.
+   HOMEPAGE FRAME — SINGLE SOURCE OF TRUTH
+   One centered rail for the page; hero is full-bleed inside the rail.
    ========================================================================== */
+html{overflow-x:hidden}
+body.home-redesign{overflow-x:hidden}
 
-html {
-  overflow-x: hidden;
-}
-
-body.home-redesign {
-  overflow-x: hidden;
-}
-
-.home-page-grid {
-  width: 100%;
-  display: grid;
-  grid-template-columns: minmax(24px, 1fr) minmax(0, 1440px) minmax(24px, 1fr);
-  align-items: stretch;
-  min-width: 0;
-}
-
-.home-page-grid__side {
-  min-width: 0;
-  background: transparent;
-}
-
-.home-page-grid__content {
-  grid-column: 2;
-  width: 100%;
-  min-width: 0;
-  max-width: 1440px;
-  margin: 0;
-  overflow: clip;
-}
-
-/* Behave like hotels.html's .container: stable inner measure, not vw scaling. */
-.home-page-grid__content > .section > .container,
-.home-page-grid__content > .home-grid__section > .container,
-.home-page-grid__content > .home-usp > .container {
-  width: 100%;
-  max-width: 100%;
-  padding-inline: 32px;
-  margin-inline: auto;
-}
-
-/* Hero stays a strong visual, but is bounded by the same central column. */
-.home-page-grid__content .home-hero {
-  width: 100%;
-  min-width: 0;
-  min-height: 720px;
-  height: min(100svh, 900px);
-}
-
-.home-page-grid__content .home-hero__inner {
-  width: 100%;
-  max-width: 100%;
-  padding-inline: 56px;
-  margin: 0;
-}
-
-.home-page-grid__content .home-hero__copy {
-  width: min(620px, 52%);
-  max-width: 620px;
-}
-
-.home-page-grid__content .home-hero__copy h1 {
-  font-size: clamp(3.5rem, 4.2rem, 4.5rem);
-  line-height: .93;
-  max-width: 11ch;
-}
-
-/* Booking bar aligns exactly to the center column. */
-.home-page-grid__content .home-booking-search__in {
-  width: 100%;
-  max-width: 100%;
-  padding-inline: 32px;
-  margin-inline: auto;
-}
-
-.home-page-grid__content .home-booking-search #homeHeroSearch {
-  width: 100%;
-  max-width: 100%;
-}
-
-/* Stable section measures. */
-.home-page-grid__content .home-stay__grid,
-.home-page-grid__content .home-rooms__grid {
-  width: calc(100% - 64px);
-  max-width: 1344px;
-  margin-inline: auto;
-}
-
-.home-page-grid__content .home-collection .container,
-.home-page-grid__content .home-experience .container {
-  width: calc(100% - 64px);
-  max-width: 1344px;
-  margin-inline: auto;
-}
-
-.home-page-grid__content .home-city {
-  width: 100%;
-  max-width: 1440px;
-  margin-inline: auto;
-}
-
-.home-page-grid__content .home-cta__in {
-  width: calc(100% - 64px);
-  max-width: 900px;
-  margin-inline: auto;
-}
-
-/* Never let a wide CSS viewport make type continuously grow. */
-@media (min-width: 1441px) {
-  .home-page-grid {
-    grid-template-columns: minmax(48px, 1fr) minmax(0, 1440px) minmax(48px, 1fr);
-  }
-}
-
-@media (min-width: 1920px) {
-  .home-page-grid {
-    grid-template-columns: minmax(80px, 1fr) minmax(0, 1440px) minmax(80px, 1fr);
-  }
-}
-
-@media (min-width: 2400px) {
-  .home-page-grid {
-    grid-template-columns: minmax(120px, 1fr) minmax(0, 1440px) minmax(120px, 1fr);
-  }
-}
-
-/* At normal laptop/tablet widths, keep a small stable gutter. */
-@media (max-width: 1100px) {
-  .home-page-grid {
-    grid-template-columns: 16px minmax(0, 1fr) 16px;
-  }
-
-  .home-page-grid__content .home-hero__inner {
-    padding-inline: 40px;
-  }
-
-  .home-page-grid__content .home-hero__copy {
-    width: min(580px, 70%);
-  }
-}
-
-/* Mobile: collapse the three-column frame into one content column. */
-@media (max-width: 700px) {
-  .home-page-grid {
-    grid-template-columns: 0 minmax(0, 1fr) 0;
-  }
-
-  .home-page-grid__content {
-    grid-column: 2;
-  }
-
-  .home-page-grid__content > .section > .container,
-  .home-page-grid__content > .home-grid__section > .container,
-  .home-page-grid__content > .home-usp > .container,
-  .home-page-grid__content .home-booking-search__in {
-    padding-inline: 16px;
-  }
-
-  .home-page-grid__content .home-hero {
-    min-height: 680px;
-    height: 100svh;
-  }
-
-  .home-page-grid__content .home-hero__inner {
-    padding-inline: 24px;
-  }
-
-  .home-page-grid__content .home-hero__copy {
-    width: 100%;
-    max-width: 560px;
-  }
-
-  .home-page-grid__content .home-stay__grid,
-  .home-page-grid__content .home-rooms__grid,
-  .home-page-grid__content .home-collection .container,
-  .home-page-grid__content .home-experience .container,
-  .home-page-grid__content .home-cta__in {
-    width: calc(100% - 32px);
-    max-width: none;
-  }
-}
-
-
-/* ==========================================================================
-   V21.1 — FULL-BLEED HERO + CENTERED HEADER/CONTENT
-   Reference layout: full viewport hero image, centered narrow content rail.
-   ========================================================================== */
-
-/* Hero image must span the complete viewport even though the page body uses
-   a centered 3-column content grid. */
-.home-page-grid__content .home-hero {
-  width: 100vw;
-  max-width: none;
-  margin-left: calc(50% - 50vw);
-  margin-right: 0;
-  min-height: 720px;
-  height: min(100svh, 900px);
-  position: relative;
-}
-
-/* The hero copy follows the same centered rail as the reference. */
-.home-page-grid__content .home-hero__inner {
-  width: min(840px, calc(100vw - 48px));
-  max-width: 840px;
-  margin-inline: auto;
-  padding-inline: 0;
-}
-
-.home-page-grid__content .home-hero__copy {
-  width: min(560px, 100%);
-  max-width: 560px;
-}
-
-.home-page-grid__content .home-hero__copy h1 {
-  font-size: clamp(3.25rem, 4rem, 4.35rem);
-  line-height: .94;
-  max-width: 11ch;
-}
-
-/* Header remains full-screen and transparent over the hero. Only its inner
-   navigation rail is centered and bounded, matching the reference. */
+/* Homepage header uses the same centered rail as the page content. */
 .hdr.hdr--float .hdr__in {
-  width: min(840px, calc(100vw - 48px));
-  max-width: 840px;
   padding-inline: 0;
   margin-inline: auto;
   gap: 14px;
@@ -1188,20 +755,8 @@ body.home-redesign {
 }
 
 /* Search bar, when present, aligns to the same centered rail. */
-.home-page-grid__content .home-booking-search__in {
-  width: min(840px, calc(100vw - 48px));
-  max-width: 840px;
-  padding-inline: 0;
-  margin-inline: auto;
-}
 
-@media (max-width: 1100px) {
-  .home-page-grid__content .home-hero__inner,
-  .hdr.hdr--float .hdr__in,
-  .home-page-grid__content .home-booking-search__in {
-    width: calc(100vw - 48px);
-    max-width: none;
-  }
+@media (max-width:1100px){
 
   .hdr.hdr--float .nav {
     gap: 12px;
@@ -1212,24 +767,7 @@ body.home-redesign {
   }
 }
 
-@media (max-width: 700px) {
-  .home-page-grid__content .home-hero {
-    width: 100vw;
-    margin-left: 0;
-    min-height: 680px;
-    height: 100svh;
-  }
-
-  .home-page-grid__content .home-hero__inner,
-  .hdr.hdr--float .hdr__in,
-  .home-page-grid__content .home-booking-search__in {
-    width: calc(100vw - 32px);
-  }
-
-  .home-page-grid__content .home-hero__copy {
-    width: 100%;
-    max-width: 560px;
-  }
+@media (max-width:700px){
 
   .hdr.hdr--float .logo img {
     width: 92px !important;
@@ -1237,83 +775,316 @@ body.home-redesign {
 }
 
 
-/* V21.2 — fix full-bleed hero being clipped by the 3-column content rail.
-   The page remains a centered grid; only the hero escapes that rail. */
-.home-page-grid__content {
-  overflow: visible;
-}
-
-.home-page-grid__content .home-hero {
-  position: relative;
-  width: 100vw;
-  max-width: none;
-  margin-left: calc((100% - 100vw) / 2);
-  margin-right: 0;
-  min-height: 720px;
-  height: min(100svh, 900px);
-}
-
-.home-page-grid__content .home-hero__inner {
-  width: min(1120px, calc(100vw - 64px));
-  max-width: 1120px;
-  margin-inline: auto;
-  padding-inline: 0;
-}
-
-.home-page-grid__content .home-hero__copy {
-  width: min(620px, 100%);
-  max-width: 620px;
-}
-
-.home-page-grid__content .home-hero__copy h1 {
-  font-size: clamp(3.25rem, 4.2rem, 4.5rem);
-  line-height: .94;
-  max-width: 11ch;
-}
-
-/* At very wide CSS viewports (including browser zoom-out), keep a substantial
-   centered composition rather than collapsing into a tiny 840px island. */
-@media (min-width: 1800px) {
-  .home-page-grid__content .home-hero__inner {
-    width: min(1440px, calc(100vw - 96px));
-    max-width: 1440px;
-  }
-  .home-page-grid__content .home-hero__copy {
-    max-width: 620px;
-  }
-}
-
 /* Header itself stays full width; its controls follow a bounded central rail. */
 .hdr.hdr--float .hdr__in {
   width: min(1120px, calc(100vw - 64px));
   max-width: 1120px;
 }
 
-@media (min-width: 1800px) {
+@media (min-width:1800px){
   .hdr.hdr--float .hdr__in {
     width: min(1440px, calc(100vw - 96px));
     max-width: 1440px;
   }
 }
 
-@media (max-width: 700px) {
-  .home-page-grid__content .home-hero {
-    width: 100vw;
-    margin-left: 0;
+
+
+
+/* V21.5 — INDEX HERO / NAV / FOOTER FINAL LAYOUT FIX
+   Homepage-only visual corrections. No JS/function behavior is changed. */
+
+/* Header: use the same full KAS wordmark scale as the non-floating header. */
+.home-redesign #hdr.hdr--float .hdr__in {
+  width: min(1320px, calc(100vw - 64px));
+  max-width: 1320px;
+  gap: 24px;
+}
+.home-redesign #hdr.hdr--float .logo img {
+  width: 180px !important;
+  max-width: 42vw !important;
+  height: auto !important;
+}
+.home-redesign #hdr.hdr--float .nav {
+  gap: 26px;
+}
+.home-redesign #hdr.hdr--float .nav a {
+  font-size: .71rem;
+  letter-spacing: .15em;
+}
+.home-redesign #hdr.hdr--float .hdr__right {
+  gap: 16px;
+}
+
+/* Search is intentionally removed from the homepage composition. */
+
+/* Footer: keep the editorial grid centered to the same viewport frame. */
+.home-redesign #ftr {
+  width: 100%;
+  overflow: hidden;
+}
+.home-redesign #ftr .container {
+  width: min(1320px, calc(100% - 64px));
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.home-redesign #ftr .ftr__main {
+  grid-template-columns: minmax(240px,1.45fr) repeat(4,minmax(135px,1fr));
+  grid-template-rows: auto auto;
+  gap: 28px 32px;
+}
+.home-redesign #ftr .ftr__brand { grid-column: 1; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 5; grid-row: 1; }
+.home-redesign #ftr .ftr__contact { grid-column: 1 / span 2; grid-row: 2; }
+.home-redesign #ftr .ftr__news { grid-column: 4 / span 2; grid-row: 2; }
+
+@media (max-width:1100px){
+  .home-redesign #hdr.hdr--float .hdr__in {
+    width: calc(100vw - 48px);
+    max-width: 1120px;
   }
-  .home-page-grid__content .home-hero__inner,
-  .hdr.hdr--float .hdr__in {
+  .home-redesign #hdr.hdr--float .logo img { width: 160px !important; }
+  .home-redesign #ftr .container { width: calc(100% - 48px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: minmax(220px,1.35fr) repeat(3,minmax(130px,1fr));
+  }
+  .home-redesign #ftr .ftr__brand { grid-column: 1; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 1; grid-row: 2; }
+  .home-redesign #ftr .ftr__contact { grid-column: 2 / span 2; grid-row: 2; }
+  .home-redesign #ftr .ftr__news { grid-column: 4; grid-row: 2; }
+}
+
+@media (max-width:700px){
+  .home-redesign #hdr.hdr--float .hdr__in {
     width: calc(100vw - 32px);
     max-width: none;
   }
+  .home-redesign #hdr.hdr--float .logo img { width: 140px !important; }
+  .home-redesign #ftr .container { width: calc(100% - 32px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 26px 18px;
+  }
+  .home-redesign #ftr .ftr__brand,
+  .home-redesign #ftr .ftr__contact,
+  .home-redesign #ftr .ftr__news { grid-column: 1 / -1; grid-row: auto; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) {
+    grid-column: auto;
+    grid-row: auto;
+  }
 }
 
-/* Fix: the unscoped V21 / V21.2 hero-title sizes above override the V20.8
-   mobile sizes, leaving a 67px title on phones (hero buttons clipped at
-   320×568). Re-apply the existing V20.8 values at the same breakpoints. */
-@media (max-width: 800px) {
-  .home-page-grid__content .home-hero__copy h1 { font-size: 3.6rem; }
+/* ================================================================
+   KAS HOMEPAGE — CLEAN RESPONSIVE SYSTEM
+   One layout model only. Keep the desktop 3-column frame, keep the
+   homepage editorial content in the middle rail, and give the HERO a
+   wider middle rail than the inner content used by the other sections.
+   ================================================================ */
+
+:root{--nav-h:76px;--home-rail:1728px;--home-content:1200px;--home-gutter:24px}
+
+/* ---------- Desktop frame ---------- */
+.home-redesign .home-page-grid{
+  display:grid !important;
+  grid-template-columns:minmax(var(--home-gutter),1fr) minmax(0,var(--home-rail)) minmax(var(--home-gutter),1fr) !important;
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  overflow:visible !important;
 }
-@media (max-width: 560px) {
-  .home-page-grid__content .home-hero__copy h1 { font-size: 3.15rem; }
+.home-redesign .home-page-grid__side{min-width:0}
+.home-redesign .home-page-grid__content{
+  grid-column:2 !important;
+  width:100% !important;
+  max-width:var(--home-rail) !important;
+  min-width:0 !important;
+  margin:0 !important;
+  overflow:visible !important;
+}
+
+/* All non-hero sections use the narrower editorial measure. Their section
+   backgrounds can still span the viewport; only their inner content is
+   constrained to the common 1200px measure. */
+.home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+.home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+.home-redesign .home-page-grid__content > .home-usp > .container,
+.home-redesign .home-page-grid__content .home-stay__grid,
+.home-redesign .home-page-grid__content .home-rooms__grid,
+.home-redesign .home-page-grid__content .home-collection .container,
+.home-redesign .home-page-grid__content .home-experience .container,
+.home-redesign .home-page-grid__content .home-cta__in{
+  width:min(calc(100% - 48px),var(--home-content));
+  max-width:var(--home-content);
+  margin-inline:auto;
+  padding-inline:0;
+  box-sizing:border-box;
+}
+
+/* Full-width section backgrounds — never apply this to the hero. */
+.home-redesign .home-page-grid__content > section:not(.home-hero),
+.home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+.home-redesign .home-page-grid__content > .home-usp{
+  width:100vw;
+  max-width:none;
+  margin-left:calc(50% - 50vw);
+  margin-right:0;
+}
+
+/* ---------- HERO: wider middle rail than other section content ---------- */
+/* ---------- Tablet ---------- */
+@media (max-width:1100px){
+  :root{--nav-h:76px;--home-gutter:20px;--home-rail:100%;--home-content:calc(100% - 40px)}
+  .home-redesign .home-page-grid{grid-template-columns:20px minmax(0,1fr) 20px !important}
+  .home-redesign .home-page-grid__content{max-width:none !important}
+  .home-redesign .home-page-grid__content > section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-usp{
+    width:100% !important;
+    margin-left:0 !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-usp > .container,
+  .home-redesign .home-page-grid__content .home-stay__grid,
+  .home-redesign .home-page-grid__content .home-rooms__grid,
+  .home-redesign .home-page-grid__content .home-collection .container,
+  .home-redesign .home-page-grid__content .home-experience .container,
+  .home-redesign .home-page-grid__content .home-cta__in{
+    width:100%;max-width:none;padding-inline:0;
+  }
+}
+
+/* ---------- Mobile: one clean column ---------- */
+@media (max-width:700px){
+  :root{--nav-h:62px}
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  .home-redesign .home-page-grid{
+    grid-template-columns:0 minmax(0,1fr) 0 !important;
+    width:100% !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content{
+    grid-column:2 !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    overflow:visible !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-usp,
+  .home-redesign .home-page-grid__content .home-day,
+  .home-redesign .home-page-grid__content .home-neighborhoods{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    box-sizing:border-box !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-usp > .container,
+  .home-redesign .home-page-grid__content .home-stay__grid,
+  .home-redesign .home-page-grid__content .home-rooms__grid,
+  .home-redesign .home-page-grid__content .home-collection .container,
+  .home-redesign .home-page-grid__content .home-experience .container,
+  .home-redesign .home-page-grid__content .home-cta__in{
+    width:100% !important;
+    max-width:none !important;
+    padding-inline:16px !important;
+    box-sizing:border-box !important;
+  }
+
+
+  /* A Day in Saigon: one predictable mobile stack. */
+  .home-redesign .home-page-grid__content .home-day{
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    width:100% !important;
+    min-height:0 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+    padding:34px 20px 30px !important;
+    overflow:visible !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy h2{
+    font-size:clamp(2.2rem,10vw,2.8rem) !important;
+    line-height:.96 !important;
+    max-width:100% !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy > p{
+    max-width:none !important;
+    font-size:.84rem !important;
+    line-height:1.6 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline,
+  .home-redesign .home-page-grid__content .home-day__timeline > div{
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline > div{
+    grid-template-columns:50px minmax(0,1fr) !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline p{
+    min-width:0 !important;
+    overflow-wrap:break-word !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    width:100% !important;
+    height:300px !important;
+    min-height:300px !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image img{
+    width:100% !important;height:100% !important;object-fit:cover !important;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods .container{
+    width:100% !important;
+    max-width:none !important;
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+}
+
+@media (max-width:560px){
+  :root{--nav-h:58px}
+  .home-redesign .home-page-grid__content .home-day__copy{
+    padding-left:20px !important;
+    padding-right:20px !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    height:280px !important;
+    min-height:280px !important;
+  }
+}
+
+/* ---------- Wide screens: retain the 3-column strip ---------- */
+@media (min-width:1441px){
+  :root{--home-gutter:48px}
+}
+@media (min-width:1920px){
+  :root{--home-gutter:80px}
+}
+@media (min-width:2400px){
+  :root{--home-gutter:120px}
 }

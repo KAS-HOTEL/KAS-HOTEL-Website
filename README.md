@@ -21,9 +21,11 @@ python3 -m http.server 8000     # → http://localhost:8000
 # or
 npx serve .
 
-# Full app with admin upload endpoint
+# Full app with admin upload endpoint (ADMIN_KEY is required; the server
+# refuses to start without it or with a placeholder value)
 npm install
-npm start
+ADMIN_KEY="your-long-random-key" npm start          # macOS / Linux
+$env:ADMIN_KEY="your-long-random-key"; npm start     # Windows PowerShell
 ```
 
 > Open it through a server, not `file://` — the pages share modules across files and
@@ -298,3 +300,8 @@ The suite drives a real headless browser through the whole product:
 - **Branch 05 mapping** (`tuyet-lan-corner` → KAS Zody) is by elimination rather than a direct
   indexed title; it is the one mapping of the eight carrying residual uncertainty.
 - Language switcher, sign-in and newsletter are UI only.
+
+
+## V22.6 — Collection card names
+- Collection card display names remove the trailing “Hotel” suffix.
+- Hotel names are white, bold, and kept on one line to match the editorial reference layout.
