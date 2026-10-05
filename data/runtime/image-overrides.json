@@ -1,0 +1,236 @@
+{
+  "version": 2,
+  "collection": {},
+  "property": {},
+  "rooms": {},
+  "site": {
+    "home.hero.03": {
+      "id": "f558136c-b377-43b0-8027-729cbba00a4e",
+      "url": "https://images.unsplash.com/photo-1559640932-dfb3a77c90c9?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:56:38.463Z",
+      "source": "admin-url"
+    },
+    "home.heroExtra2": {
+      "id": "1c43d0ca-dc2d-4754-a7a3-b8ac2a7e2938",
+      "url": "https://images.unsplash.com/photo-1621094305060-081171d1c171?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:58:28.841Z",
+      "source": "admin-url"
+    },
+    "home.hero.01": {
+      "id": "cad2aaf2-22db-4791-940d-7bc999e90268",
+      "url": "https://images.unsplash.com/photo-1697850084120-4896a446a04d?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:11:21.654Z",
+      "source": "admin-url"
+    },
+    "home.hero.04": {
+      "id": "64f664fb-f2b7-49b1-a072-5bc056c06135",
+      "url": "https://images.unsplash.com/photo-1785740508398-df8fb4054584?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:56:57.423Z",
+      "source": "admin-url"
+    },
+    "home.hero.02": {
+      "id": "a344c0fe-94a4-4c5c-be83-93d86a0f229c",
+      "url": "https://images.unsplash.com/photo-1685584280839-a51ba5a1908d?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:12:38.199Z",
+      "source": "admin-url"
+    },
+    "home.hero.05": {
+      "id": "9aaa6d65-7dec-4065-9e6b-242c72af83b5",
+      "url": "https://images.unsplash.com/photo-1738627760098-51b0df6f2ac9?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:57:05.223Z",
+      "source": "admin-url"
+    },
+    "home.hero.06": {
+      "id": "10c93a5f-9587-492b-9965-39b5f41c97e7",
+      "url": "https://images.unsplash.com/photo-1776813191005-b46e34d722bf?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:57:12.855Z",
+      "source": "admin-url"
+    },
+    "home.hero.07": {
+      "id": "3a711bc2-d8ba-4646-9266-eb7b99c2fe25",
+      "url": "https://images.unsplash.com/photo-1651146220117-edce81331ad6?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T08:57:21.295Z",
+      "source": "admin-url"
+    },
+    "home.hero.08": {
+      "id": "6bff4c15-df60-44b6-8434-1206aa993c96",
+      "url": "https://images.unsplash.com/photo-1786760756331-09ccdd718b95?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:03:21.895Z",
+      "source": "admin-url"
+    },
+    "home.heroExtra1": {
+      "id": "a95075d2-496d-4cc0-a14d-59c61f2725bc",
+      "url": "https://images.unsplash.com/photo-1586004551686-d9c4fab26471?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:14:23.726Z",
+      "source": "admin-url"
+    },
+    "home.heroExtra3": {
+      "id": "36623e47-5d57-4cd3-b5b0-894cafdce547",
+      "url": "https://images.unsplash.com/photo-1730714103959-5d5a30acf547?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:00:15.014Z",
+      "source": "admin-url"
+    },
+    "home.heroExtra4": {
+      "id": "45291e9d-c85f-4136-92f3-4e51dd28981c",
+      "url": "https://images.unsplash.com/photo-1514864151880-d1bef4892f29?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:10:38.128Z",
+      "source": "admin-url"
+    },
+    "home.neighborhood.city": {
+      "id": "6739163d-6871-4e72-867f-df56c86630d9",
+      "url": "https://images.unsplash.com/photo-1558722141-c57f8beded32?auto=format&fit=crop&w=2560&q=95",
+      "name": "URL image",
+      "updatedAt": "2026-10-01T09:19:05.078Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.ben-thanh-market": {
+      "id": "73fee106-9647-4e45-89d0-36ec2c917a20",
+      "url": "https://images.pexels.com/photos/25566888/pexels-photo-25566888.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:44:54.451Z",
+      "source": "admin-url"
+    },
+    "page.hero.experiences": {
+      "id": "48bd4a2a-8460-41c8-a3cb-411441bb7ddb",
+      "url": "https://images.unsplash.com/photo-1675111066042-9baa4c343157?q=100&w=4000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T06:20:15.655Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.tao-dan-park": {
+      "id": "af44fe51-4c3f-4d03-a6d4-80b0717b4e7e",
+      "url": "https://images.pexels.com/photos/17067683/pexels-photo-17067683.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:39:51.673Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.independence-palace": {
+      "id": "7d518ee9-80d8-44ed-858b-2943b5dd257b",
+      "url": "https://images.unsplash.com/photo-1742888827024-6d85caf1d09b?q=90&w=2000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:40:35.574Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.war-remnants-museum": {
+      "id": "3ba6b80c-5c5a-4f9f-80f5-8576d65d1f3e",
+      "url": "https://images.pexels.com/photos/13600319/pexels-photo-13600319.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:40:47.903Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.central-post-office": {
+      "id": "3978ec29-e730-4103-a897-8a178e9f6b84",
+      "filename": "site-guidebook_entry_central-post-office-1791106865434-15044cf0.jpg",
+      "originalName": "thai-an-lxe9OnfRQWE-unsplash.jpg",
+      "url": "/uploads/site/site-guidebook_entry_central-post-office-1791106865434-15044cf0.jpg",
+      "name": "thai-an-lxe9OnfRQWE-unsplash.jpg",
+      "updatedAt": "2026-10-04T09:41:05.443Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.notre-dame-cathedral": {
+      "id": "cfe6d101-12bd-477d-b1c7-a7fffa459986",
+      "url": "https://images.pexels.com/photos/5659452/pexels-photo-5659452.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:41:36.520Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.saigon-opera-house": {
+      "id": "244c30c1-8a4e-496e-86c8-d51c84a62840",
+      "url": "https://images.pexels.com/photos/31256134/pexels-photo-31256134.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:41:43.420Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.nguyen-hue": {
+      "id": "a9f46d88-5d20-4564-8499-05dec7149c8e",
+      "url": "https://images.pexels.com/photos/38674874/pexels-photo-38674874.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:41:49.613Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.bitexco": {
+      "id": "0072ae9e-0e9f-4d94-ab42-d48e87500c1e",
+      "url": "https://images.pexels.com/photos/27399542/pexels-photo-27399542.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:41:56.708Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.ben-thanh-street-food": {
+      "id": "9f2d60d0-dfac-48c1-a1e0-0c168b65cf23",
+      "url": "https://images.pexels.com/photos/32371915/pexels-photo-32371915.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:47:50.753Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.ben-thanh-market-walk": {
+      "id": "b08bccc9-79b9-4b1d-b7bc-9d93b841d573",
+      "url": "https://images.pexels.com/photos/25566888/pexels-photo-25566888.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:44:28.777Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.bui-vien": {
+      "id": "aa34abe5-1be5-451f-ba69-5f221adb3ac7",
+      "url": "https://images.pexels.com/photos/18976506/pexels-photo-18976506.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:51:56.862Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.pham-ngu-lao": {
+      "id": "16495c01-13cf-40e5-906a-9f0098cf98e1",
+      "filename": "site-guidebook_entry_pham-ngu-lao-1791107557882-ec01f66c.png",
+      "originalName": "Phá» ÄÃªm SÃ i GÃ²n rá»±c rá»¡ Ã¡nh neon.png",
+      "url": "/uploads/site/site-guidebook_entry_pham-ngu-lao-1791107557882-ec01f66c.png",
+      "name": "Phá» ÄÃªm SÃ i GÃ²n rá»±c rá»¡ Ã¡nh neon.png",
+      "updatedAt": "2026-10-04T09:52:37.899Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.fine-arts-museum": {
+      "id": "018afa0b-af49-4f7c-9286-dc6e9018ab77",
+      "url": "https://images.pexels.com/photos/32601126/pexels-photo-32601126.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-04T09:58:47.352Z",
+      "source": "admin-url"
+    },
+    "page.hero.offers": {
+      "id": "85ecfd9e-43a2-4b69-8c0a-e0c0dbed338e",
+      "url": "https://plus.unsplash.com/premium_photo-1719955783083-6a0bd66c5f75?q=100&w=4000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T06:20:57.484Z",
+      "source": "admin-url"
+    },
+    "page.hero.my-kas": {
+      "id": "aefd7f19-ee74-4ce3-be44-b271e009aa83",
+      "url": "https://images.unsplash.com/photo-1503539680555-732099a55a56?q=100&w=4000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T06:38:22.361Z",
+      "source": "admin-url"
+    },
+    "page.hero.about": {
+      "id": "5080bef7-4c1d-4513-b23f-f612132f8111",
+      "url": "https://plus.unsplash.com/premium_photo-1692731798026-19776d12132a?q=100&w=4000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T06:45:06.208Z",
+      "source": "admin-url"
+    },
+    "page.hero.support": {
+      "id": "2d2f850f-578f-4b6e-a864-589556fa7812",
+      "url": "https://images.unsplash.com/photo-1570559120097-e6c3388329e6?q=100&w=4000&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T06:45:25.512Z",
+      "source": "admin-url"
+    }
+  }
+}

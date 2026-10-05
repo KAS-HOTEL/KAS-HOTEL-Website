@@ -41,17 +41,28 @@
 
 /* ---------------- tablet ---------------- */
 @media (max-width:1024px){
+  .propbar{grid-template-columns:88px minmax(0,1fr);gap:16px}
+  .propbar__rating{grid-column:2;text-align:left;min-width:0}
+  .propbar__score{justify-content:flex-start}
+  .propbar__rating .btn{margin-top:10px}
+
   .container{padding-inline:22px}
   .nav,.lang{display:none}
   .burger{display:grid;place-items:center}
   .hdr__right{gap:10px}
 
-  .searchbar{grid-template-columns:1fr 1fr;transform:translateY(26px)}
+  .searchbar{grid-template-columns:1fr 1fr;transform:none;overflow:visible}
   .sf{border-right:none;border-bottom:1px solid rgba(194,162,92,.2)}
   .searchbar--solid .sf{border-bottom-color:var(--line)}
   .sf:nth-child(odd){border-right:1px solid rgba(194,162,92,.2)}
   .searchbar--solid .sf:nth-child(odd){border-right-color:var(--line)}
   .searchbar .btn{grid-column:1/-1;border-radius:0 0 var(--r) var(--r);padding-block:15px}
+  .searchbar__submit{min-height:52px}
+  .searchbar__hotel-pop{left:12px;right:12px}
+  .kas-quick-search{margin-top:8px}
+  .hotel-search-wrap.is-search-open .kas-quick-search{max-height:520px}
+  .kas-quick-search__tags{gap:7px}
+  .kas-quick-tag{padding:7px 10px;font-size:.74rem}
 
   .split,.split--filters{grid-template-columns:1fr}
   .sticky{position:static}
@@ -77,16 +88,32 @@
 
 /* ---------------- mobile ---------------- */
 @media (max-width:767px){
+  .propbar{grid-template-columns:76px minmax(0,1fr);gap:14px}
+  .propbar__media{width:76px;height:76px}
+  .propbar__title h3{font-size:1.35rem}
+  .propbar__loc{font-size:.78rem}
+  .propbar__amenities{gap:6px;margin-top:9px}
+  .propbar__amenities .chip{font-size:.68rem;padding:4px 8px}
+  .propbar__rating{grid-column:2}
+  .propbar__score-num{font-size:1.65rem}
+  .propbar__reviews{font-size:.66rem}
+
   body{font-size:14.5px}
   .container{padding-inline:16px}
   :root{--nav-h:62px}
 
   .hero{min-height:520px}
   .hero__ct p{font-size:.92rem}
-  .searchbar{grid-template-columns:1fr;transform:translateY(20px);margin-top:2rem}
+  .searchbar{grid-template-columns:1fr;transform:none;margin-top:0;overflow:visible}
   .sf{border-right:none!important;padding:13px 17px}
   .sf:last-of-type{border-bottom:none}
   .gpop{width:calc(100vw - 46px);right:auto;left:0}
+  .searchbar__hotel-pop{left:0;right:0;max-height:280px}
+  .kas-quick-search{margin-top:8px}
+  .kas-quick-search__group + .kas-quick-search__group{margin-top:13px}
+  .hotel-search-wrap.is-search-open .kas-quick-search{max-height:620px}
+  .kas-quick-search__tags{gap:6px}
+  .kas-quick-tag{padding:7px 9px;font-size:.72rem}
 
   .section{padding-block:2.6rem}
 
@@ -207,17 +234,102 @@
 }
 
 /* ---- contact ---- */
+/* Room-detail support channels are always horizontal rows stacked vertically.
+   Keep the layout here as the single canonical rule; mobile only tunes spacing. */
+.split--sidefirst .split__side #assist .ct-channels{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:var(--support-gap,9px);
+  width:100%;
+  min-width:0;
+}
+.split--sidefirst .split__side #assist .ct-ch{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  padding:11px 12px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  overflow:hidden;
+}
+.split--sidefirst .split__side #assist .ct-ch svg{
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+}
+.split--sidefirst .split__side #assist .ct-ch span{
+  display:block;
+  flex:1 1 auto;
+  width:auto;
+  min-width:0;
+}
+.split--sidefirst .split__side #assist .ct-ch b{
+  display:block;
+  width:100%;
+  max-width:100%;
+  font-size:.76rem;
+  line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.split--sidefirst .split__side #assist .ct-ch small{
+  display:block;
+  width:100%;
+  max-width:100%;
+  margin-top:2px;
+  font-size:.68rem;
+  line-height:1.3;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+
 @media (max-width:1180px){ .hdr__tel span{display:none} .hdr__tel{padding:7px 9px} }
 @media (max-width:1024px){ .hdr__tel{display:inline-flex} }
 @media (max-width:767px){
-  .ct-channels{grid-template-columns:1fr}
   .ct-fab{right:14px;bottom:14px}
   .ct-fab__btn{padding:11px 17px;font-size:.75rem}
   .ct-fab__label{display:none}
   .ct-fab__menu{min-width:min(248px,calc(100vw - 44px))}
   /* never cover the sticky booking CTA / price */
   body.has-mcta .ct-fab{bottom:80px}
+
+  
+  /* Room-detail support card: mobile spacing only. */
+  .split__side #assist{
+    --support-panel-pad:16px;
+    --support-gap:8px;
+  }
+  .split__side #assist .panel__b{
+    padding:var(--support-panel-pad);
+  }
+  .split__side #assist .ct-support__hd{
+    gap:9px;
+    margin-bottom:12px;
+  }
+  .split__side #assist .ct-support__hd b{
+    font-size:.86rem;
+    line-height:1.3;
+  }
+  .split__side #assist .ct-support__hd span{
+    font-size:.74rem;
+    line-height:1.4;
+  }
+  .split__side #assist > .panel__b > .divider{
+    margin-block:12px!important;
+  }
+  .split__side #assist .ct-link{
+    padding:5px 0;
+    font-size:.8rem;
+  }
+
 }
+
+
 
 /* ---- header crowding ----
    The header now carries the official phone. Below 520px the Sign in / Join
@@ -1087,4 +1199,108 @@ body.home-redesign{overflow-x:hidden}
 }
 @media (min-width:2400px){
   :root{--home-gutter:120px}
+}
+
+
+/* ========================================================================
+   HOTELS SEARCH — MOBILE / SMALL TABLET SINGLE SOURCE OF TRUTH
+   The desktop search selector is intentionally specific, so mobile overrides
+   target the same selector instead of stacking competing patches.
+   ======================================================================== */
+@media (max-width:767px){
+  .hero.hero--sm{
+    min-height:auto;
+    height:auto;
+    overflow:visible;
+  }
+  .hero.hero--sm .hero__in{
+    padding-bottom:24px;
+  }
+  .hero.hero--sm .hero__ct{
+    margin-top:28px;
+    max-width:100%;
+  }
+  .hero.hero--sm #hotelSearch{
+    width:100%;
+    margin-top:20px;
+  }
+  .hero.hero--sm .hero__in .searchbar{
+    grid-template-columns:1fr;
+    width:100%;
+    min-width:0;
+    min-height:0;
+    border-radius:14px;
+    overflow:visible;
+  }
+  .hero.hero--sm .hero__in .searchbar .sf{
+    width:100%;
+    min-width:0;
+    border-right:0!important;
+    border-bottom:1px solid var(--line);
+    padding:13px 16px;
+  }
+  .hero.hero--sm .hero__in .searchbar .sf:last-of-type{
+    border-bottom:0;
+  }
+  .hero.hero--sm .hero__in .searchbar .searchbar__submit{
+    width:100%;
+    min-height:58px;
+    border-radius:0 0 13px 13px!important;
+  }
+  .hero.hero--sm .hero__in .searchbar__field-btn,
+  .hero.hero--sm .hero__in .searchbar .sf input{
+    max-width:100%;
+  }
+  .hotel-search-wrap.is-search-open .kas-quick-search{
+    max-height:min(78vh,680px);
+    overflow:auto;
+  }
+  .kas-quick-search__inner{
+    grid-template-columns:1fr;
+    min-height:0;
+  }
+  .kas-quick-search__hotels{
+    border-right:0;
+    border-bottom:1px solid rgba(120,96,55,.12);
+  }
+  .kas-quick-hotel-list{
+    max-height:220px;
+  }
+  .kas-quick-search__content{
+    padding:18px 16px 20px;
+  }
+}
+
+@media (max-width:420px){
+  .hero.hero--sm .hero__in{padding-inline:12px;padding-bottom:18px}
+  .hero.hero--sm .hero__ct{margin-top:22px}
+  .hero.hero--sm .hero__ct h1{font-size:2.15rem}
+  .hero.hero--sm .hero__ct p{font-size:.9rem}
+  .hero.hero--sm .hero__in .searchbar .sf{padding:12px 14px}
+  .hero.hero--sm .hero__in .searchbar .sf__lb{font-size:.55rem}
+  .hero.hero--sm .hero__in .searchbar .sf input,
+  .hero.hero--sm .hero__in .searchbar .searchbar__field-btn{font-size:.9rem}
+  .hero.hero--sm .hero__in .searchbar .searchbar__submit{min-height:54px}
+}
+
+
+/* Hotels mobile filter hierarchy: area and nearby location stay distinct. */
+@media (max-width:767px){
+  .filters .fgrp{padding-block:14px}
+  .filters .fgrp h5{margin-bottom:9px}
+  .filters .fgrp .opt{padding:4px 0;font-size:.8rem}
+  .filters #fArea,
+  .filters #fPriority{display:grid;grid-template-columns:1fr;row-gap:0}
+}
+
+@media (max-width:380px){
+  .split__side #assist{
+    --support-panel-pad:13px;
+    --support-gap:6px;
+  }
+  .split__side #assist .ct-ch{
+    padding:10px;
+  }
+  .split__side #assist .ct-ch b{font-size:.74rem}
+  .split__side #assist .ct-ch small{font-size:.66rem}
 }

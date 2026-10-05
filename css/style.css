@@ -399,6 +399,3 @@ h1,h2,h3,h4,h5,h6,.hero h1{
 }
 .ftr--dark .ftr__btm a{color:rgba(194,162,92,.65)}
 .ftr--dark .ftr__btm a:hover{color:#f5efe3}
-@media (max-width:767px){
-  .ftr--dark .ftr__news{grid-column:1/-1}
-}

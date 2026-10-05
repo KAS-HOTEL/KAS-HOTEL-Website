@@ -169,7 +169,7 @@
       '<div class="container">' +
         '<div class="ftr__main">' +
           '<div class="ftr__brand">' + logo(false) +
-            '<p>Distinctive hotels in the heart of Ho Chi Minh City, united by a passion for heartfelt service and memorable experiences.</p>' +
+            '<p>Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.</p>' +
             '<div class="social">' +
               ['ig','fb','phone'].map(function (s) {
                 var label = { ig: 'Instagram', fb: 'Facebook', phone: 'Call KAS' }[s];
@@ -178,16 +178,16 @@
               }).join('') +
             '</div>' +
           '</div>' +
-          '<div class="ftr__col"><h5>Properties</h5>' +
+          '<div class="ftr__col"><h5>KAS Hotels</h5>' +
             footerLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
           '</div>' +
-          '<div class="ftr__col"><h5>More properties</h5>' +
+          '<div class="ftr__col"><h5>More KAS Hotels</h5>' +
             moreLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
           '</div>' +
           '<div class="ftr__col"><h5>Discover</h5>' +
             '<a href="about.html">About KAS</a><a href="city-guide.html">City Guide</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
           '</div>' +
-          '<div class="ftr__col"><h5>Guest services</h5>' +
+          '<div class="ftr__col"><h5>Guest Services</h5>' +
             '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
           '</div>' +
           '<div class="ftr__col ftr__contact"><h5>Contact</h5>' +
@@ -195,8 +195,8 @@
             '<a href="mailto:' + CT.email + '" class="ftr-contact-row">' + U.icon('mail', 15) + '<span>' + U.esc(CT.email) + '</span></a>' +
           '</div>' +
           '<div class="ftr__col ftr__news"><h5>Stay in the know</h5>' +
-            '<p>Seasonal offers, new openings, and KAS stories.</p>' +
-            '<form class="news" onsubmit="return false"><input type="email" aria-label="Email address" placeholder="Your email address"><button type="submit" aria-label="Subscribe">' + U.icon('send', 15) + '</button></form>' +
+            '<p>Seasonal offers, new openings, and stories from the KAS collection.</p>' +
+            '<form class="news" onsubmit="return false"><input type="email" aria-label="Email address" placeholder="Email của bạn"><button type="submit" aria-label="Subscribe">' + U.icon('send', 15) + '</button></form>' +
           '</div>' +
         '</div>' +
         '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="reference.html">Privacy Policy</a><a href="reference.html">Terms of Service</a><a href="support.html#contact">Contact</a></div></div>' +

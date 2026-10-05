@@ -146,6 +146,7 @@
     'From a single boutique house to a growing collection in the heart of Ho Chi Minh City, KAS is dedicated to genuine hospitality, thoughtful details and memorable stays.':'Từ một khách sạn boutique đầu tiên đến bộ sưu tập ngày càng phát triển giữa lòng Thành phố Hồ Chí Minh, KAS theo đuổi lòng hiếu khách chân thành, những chi tiết tinh tế và những kỳ nghỉ đáng nhớ.',
     'Our story':'Câu chuyện của chúng tôi',
     'Properties':'Khách sạn',
+    'KAS Hotels':'Khách sạn KAS',
     'One neighbourhood':'Một khu vực trung tâm',
     'Average guest rating':'Điểm đánh giá trung bình',
     'Guest reviews':'Đánh giá của khách',
@@ -240,7 +241,8 @@
     'Search rooms':'Tìm phòng','Best Rate Guarantee':'Cam kết giá tốt nhất','Exclusive Offers':'Ưu đãi độc quyền',
     'Flexible Cancellation':'Hủy linh hoạt','Direct Benefits':'Quyền lợi đặt trực tiếp','Member Privileges':'Quyền lợi thành viên',
     'Featured Property':'Khách sạn nổi bật','Discover now':'Khám phá ngay',
-    'Properties':'Khách sạn','One neighbourhood':'Một khu vực trung tâm','Average guest rating':'Điểm đánh giá trung bình','Guest reviews':'Đánh giá của khách',
+    'Properties':'Khách sạn',
+    'KAS Hotels':'Khách sạn KAS','One neighbourhood':'Một khu vực trung tâm','Average guest rating':'Điểm đánh giá trung bình','Guest reviews':'Đánh giá của khách',
     'Local Experiences':'Trải nghiệm địa phương',
 
     /* search / booking */
@@ -638,12 +640,12 @@
     'Back to top':'Lên đầu trang', 'Call KAS':'Gọi KAS', 'KAS member':'Thành viên KAS',
     'KAS Hotel Collection — home':'KAS Hotel Collection — trang chủ',
     'Previous properties':'Khách sạn trước', 'Next properties':'Khách sạn tiếp theo',
-    'Distinctive hotels in the heart of Ho Chi Minh City, united by a passion for heartfelt service and memorable experiences.':
-      'Những khách sạn khác biệt giữa lòng Thành phố Hồ Chí Minh, cùng chung niềm đam mê phục vụ tận tâm và mang đến những trải nghiệm đáng nhớ.',
-    'More properties':'Thêm khách sạn', 'Discover':'Khám phá', 'Meetings & Events':'Hội họp & Sự kiện',
-    'Guest services':'Dịch vụ khách hàng', 'Book a Room':'Đặt phòng', 'Manage Booking':'Quản lý đặt phòng',
+    'Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.':
+      'Những điểm lưu trú khác biệt giữa lòng Thành phố Hồ Chí Minh, được chăm chút với dịch vụ tận tâm và những trải nghiệm đáng nhớ.',
+    'More KAS Hotels':'Các khách sạn KAS khác', 'Discover':'Khám phá', 'Meetings & Events':'Hội họp & Sự kiện',
+    'Guest Services':'Dịch vụ khách hàng', 'Book a Room':'Đặt phòng', 'Manage Booking':'Quản lý đặt phòng',
     'KAS Member':'Thành viên KAS', 'Special Offers':'Ưu đãi đặc biệt', 'Gift Cards':'Thẻ quà tặng', 'Contact':'Liên hệ',
-    'Seasonal offers, new openings, and KAS stories.':'Ưu đãi theo mùa, khách sạn mới và những câu chuyện KAS.',
+    'Seasonal offers, new openings, and stories from the KAS collection.':'Ưu đãi theo mùa, khách sạn mới và những câu chuyện từ bộ sưu tập KAS.',
     '© 2026 KAS Hotel Collection. All rights reserved.':'© 2026 KAS Hotel Collection. Bảo lưu mọi quyền.',
     'Terms of Service':'Điều khoản dịch vụ', 'Chat with us':'Trò chuyện với chúng tôi',
     /* home / hotels */

@@ -25,8 +25,6 @@
           '<div style="min-width:0">' +
             '<h3><a href="' + href + '">' + U.esc(h.name) + '</a></h3>' +
             '<div class="hcard__loc">' + U.icon('pin', 14) + U.esc(h.address) + '</div>' +
-            '<div class="legacy">Former listing: “' + U.esc(h.legacyName) + '”</div>' +
-            (h.tripUrl ? '<a class="tiny" href="' + h.tripUrl + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:5px;color:var(--gold-dk)">Property reference ↗</a>' : '') +
           '</div>' +
           '<div class="rate"><span class="rate__n">' + h.rating.toFixed(1) + '</span>' +
             '<div class="rate__m">' + U.stars(h.rating / 2, 11) +
