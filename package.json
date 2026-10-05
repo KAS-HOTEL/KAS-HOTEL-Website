@@ -1,0 +1,19 @@
+{
+  "name": "kas-hotel-collection",
+  "version": "22.0.0",
+  "private": true,
+  "description": "KAS Hotel Collection — hotel reference catalog + persistent room-photo admin",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node tools/build.js",
+    "start": "node server.js",
+    "server": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  }
+}

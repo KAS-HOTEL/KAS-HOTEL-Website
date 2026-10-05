@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KAS — Find Your KAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+:root{--fy-paper:#f3efe7;--fy-paper2:#e9e2d7;--fy-ink:#201e1a;--fy-muted:#746d63;--fy-line:#d4ccbf;--fy-gold:#b18a4a;--fy-dark:#11110f;--fy-dark2:#1a1916}
+.kas-find-page{margin:0;background:var(--fy-paper);color:var(--fy-ink);font-family:"Inter",Arial,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+.kas-find-page h1,.kas-find-page h2,.kas-find-page h3{font-family:"Cormorant Garamond","Times New Roman",serif;font-weight:400}
+.kas-find-page .find-eyebrow{font-size:9px;letter-spacing:.25em;text-transform:uppercase;color:var(--fy-gold);font-weight:600}
+/* Hero — editorial split / visual first */
+.kas-find-page .find-page-hero{width:min(1360px,calc(100% - 56px));margin:0 auto;padding:28px 0 0;display:grid;grid-template-columns:43% 57%;min-height:620px}
+.kas-find-page .find-page-hero-copy{background:var(--fy-dark);color:#f8f3eb;padding:clamp(54px,7vw,92px) clamp(34px,5vw,78px);display:flex;flex-direction:column;justify-content:space-between;min-width:0;position:relative;overflow:hidden}
+.kas-find-page .find-page-hero-copy:after{content:"KAS";position:absolute;right:-28px;bottom:-82px;font-family:"Cormorant Garamond",serif;font-size:250px;line-height:1;color:rgba(255,255,255,.035);pointer-events:none}
+.kas-find-page .find-page-hero-copy .find-eyebrow{color:#c9a66d}
+.kas-find-page .find-page-hero h1{font-size:clamp(60px,7vw,106px);line-height:.82;letter-spacing:-.055em;margin:18px 0 24px;color:#faf6ef;max-width:620px;position:relative;z-index:1}
+.kas-find-page .find-page-lead{max-width:510px;color:rgba(255,255,255,.68);font-size:12px;line-height:1.75;margin:0;position:relative;z-index:1}
+.kas-find-page .find-page-hero-meta{display:flex;gap:28px;margin-top:34px;position:relative;z-index:1}
+.kas-find-page .find-page-meta-item{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.52)}
+.kas-find-page .find-page-meta-item strong{display:block;color:#f8f3eb;font-size:20px;font-family:"Cormorant Garamond",serif;font-weight:400;letter-spacing:0;margin-bottom:2px}
+.kas-find-page .find-page-hero-visual{position:relative;min-width:0;overflow:hidden;background:#ddd5c8}
+.kas-find-page .find-page-hero-main{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.01)}
+.kas-find-page .find-page-hero-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 40%),linear-gradient(180deg,transparent 60%,rgba(0,0,0,.42));pointer-events:none}
+.kas-find-page .find-page-hero-card{position:absolute;right:28px;bottom:28px;width:min(280px,48%);height:180px;z-index:2;background-size:cover;background-position:center;box-shadow:0 22px 55px rgba(0,0,0,.28);border:5px solid rgba(247,243,236,.92)}
+.kas-find-page .find-page-hero-label{position:absolute;left:26px;bottom:24px;z-index:3;color:#fff;font-size:9px;letter-spacing:.17em;text-transform:uppercase;text-shadow:0 2px 12px #000}
+.kas-find-page .find-page-hero-index{position:absolute;right:28px;top:28px;z-index:3;color:#fff;font-size:8px;letter-spacing:.2em}
+/* choices */
+.kas-find-page .find-page-choices{width:min(1280px,calc(100% - 112px));margin:0 auto}
+.kas-find-page .find-page-choice-intro{display:flex;justify-content:space-between;align-items:end;gap:30px;padding:64px 0 22px}
+.kas-find-page .find-page-choice-intro h2{font-size:46px;line-height:.9;margin:7px 0 0;letter-spacing:-.03em}
+.kas-find-page .find-page-choice-intro p{max-width:400px;margin:0;color:var(--fy-muted);font-size:11px;line-height:1.7}
+.kas-find-page .find-page-choice-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kas-find-page .find-page-choice{min-width:0;border:1px solid var(--fy-line);background:#f8f5ef;text-align:left;padding:22px 22px 24px;cursor:pointer;color:var(--fy-ink);position:relative;transition:transform .25s,background .25s,border-color .25s;min-height:142px}
+.kas-find-page .find-page-choice:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:transparent;transition:.25s}
+.kas-find-page .find-page-choice:hover{transform:translateY(-4px);border-color:#b8aa98}
+.kas-find-page .find-page-choice.active{background:var(--fy-dark);color:#fff;border-color:var(--fy-dark);transform:translateY(-4px);box-shadow:0 16px 30px rgba(32,28,23,.12)}
+.kas-find-page .find-page-choice.active:before{background:var(--fy-gold)}
+.kas-find-page .find-page-choice .num{display:block;font-size:8px;letter-spacing:.18em;color:#9b9082}
+.kas-find-page .find-page-choice.active .num{color:#c6a36b}
+.kas-find-page .find-page-choice strong{display:block;font-family:"Cormorant Garamond",serif;font-size:28px;line-height:1;margin:9px 0 8px;font-weight:500}
+.kas-find-page .find-page-choice span:last-child{display:block;color:var(--fy-muted);font-size:9.5px;line-height:1.55;max-width:250px}
+.kas-find-page .find-page-choice.active span:last-child{color:rgba(255,255,255,.64)}
+/* results */
+.kas-find-page .find-page-results{padding:72px 0 88px}
+.kas-find-page .find-page-results-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:30px;margin-bottom:28px;border-top:1px solid var(--fy-line);padding-top:28px}
+.kas-find-page .find-page-results-head h2{font-size:52px;line-height:.9;letter-spacing:-.035em;margin:8px 0 10px}
+.kas-find-page .find-page-results-head p{max-width:620px;margin:0;color:var(--fy-muted);font-size:11px;line-height:1.7}
+.kas-find-page .find-page-count{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--fy-gold-dark,#8d6b35);white-space:nowrap;padding-bottom:7px}
+.kas-find-page .find-page-hotels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(300px,28vw,420px);gap:12px}
+.kas-find-page .find-page-hotel{min-width:0;min-height:0;position:relative;overflow:hidden;color:#fff;background:#333;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 12px 30px rgba(38,31,23,.08)}
+.kas-find-page .find-page-hotel-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .7s ease}
+.kas-find-page .find-page-hotel:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.78) 100%)}
+.kas-find-page .find-page-hotel:hover .find-page-hotel-bg{transform:scale(1.05)}
+.kas-find-page .find-page-hotel-top{position:absolute;top:16px;left:18px;right:18px;display:flex;justify-content:space-between;z-index:3}
+.kas-find-page .find-page-hotel-no,.kas-find-page .find-page-hotel-badge{font-size:7px;letter-spacing:.15em;text-transform:uppercase}
+.kas-find-page .find-page-hotel-badge{padding:6px 8px;border:1px solid rgba(255,255,255,.4);background:rgba(0,0,0,.16)}
+.kas-find-page .find-page-hotel-content{position:relative;z-index:2;padding:20px 22px}
+.kas-find-page .find-page-hotel h3{color:#fff;font-size:34px;line-height:.9;margin:0 0 6px;letter-spacing:-.02em}
+.kas-find-page .find-page-hotel-location{font-size:8px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;margin-bottom:9px}
+.kas-find-page .find-page-hotel-copy{font-size:9.5px;line-height:1.55;color:rgba(255,255,255,.84);max-width:600px;margin:0}
+.kas-find-page .find-page-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.kas-find-page .find-page-tag{font-size:7px;letter-spacing:.05em;padding:5px 7px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.17)}
+.kas-find-page .find-page-hotel-link{display:inline-flex;margin-top:10px;color:#fff;font-size:7px;letter-spacing:.15em;text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,.6);padding-bottom:4px}
+.kas-find-page .find-page-note{width:min(1280px,calc(100% - 112px));margin:0 auto;padding:0 0 55px;color:#91887c;font-size:9px;line-height:1.7}
+@media(max-width:1000px){.kas-find-page .find-page-hero{width:calc(100% - 40px);grid-template-columns:1fr;min-height:720px}.kas-find-page .find-page-hero-copy{min-height:420px}.kas-find-page .find-page-hero-visual{min-height:360px}.kas-find-page .find-page-hero-card{width:240px;height:150px}.kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 64px)}.kas-find-page .find-page-choice-nav{grid-template-columns:repeat(2,1fr)}.kas-find-page .find-page-hotels{grid-template-columns:1fr 1fr}.kas-find-page .find-page-hotel:nth-child(n){grid-column:auto}}
+@media(max-width:620px){.kas-find-page .find-page-hero{width:100%;padding-top:0;min-height:0}.kas-find-page .find-page-hero-copy{padding:48px 22px 44px;min-height:390px}.kas-find-page .find-page-hero h1{font-size:clamp(52px,15vw,72px)}.kas-find-page .find-page-hero-visual{min-height:300px}.kas-find-page .find-page-hero-card{right:16px;bottom:16px;width:180px;height:118px}.kas-find-page .find-page-hero-label{left:16px;bottom:16px}.kas-find-page .find-page-choice-intro{display:block;padding:48px 0 20px}.kas-find-page .find-page-choice-intro p{margin-top:14px}.kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 32px)}.kas-find-page .find-page-choice{min-height:132px;padding:18px 16px}.kas-find-page .find-page-choice strong{font-size:23px}.kas-find-page .find-page-results{padding:52px 0 60px}.kas-find-page .find-page-results-head{display:block}.kas-find-page .find-page-results-head h2{font-size:42px}.kas-find-page .find-page-count{margin-top:12px}.kas-find-page .find-page-hotels{grid-template-columns:1fr;grid-auto-rows:360px}.kas-find-page .find-page-hotel-content{padding:20px}.kas-find-page .find-page-hotel h3{font-size:34px}}
+@media(prefers-reduced-motion:reduce){.kas-find-page *{scroll-behavior:auto!important;transition:none!important}}
+
+/* V22.25 — Find Your KAS layout / zoom robustness
+   Keep the editorial page wide at large CSS viewports (including browser
+   zoom-out), while retaining a bounded reading width at normal desktop sizes.
+*/
+.kas-find-page .find-page-hero,
+.kas-find-page .find-page-choices,
+.kas-find-page .find-page-note{
+  width:min(2400px,calc(100vw - 96px));
+}
+.kas-find-page .find-page-hero{
+  min-height:clamp(560px,42vw,760px);
+  grid-template-columns:minmax(0,43%) minmax(0,57%);
+}
+.kas-find-page .find-page-choices{width:min(2200px,calc(100vw - 128px));}
+.kas-find-page .find-page-note{width:min(2200px,calc(100vw - 128px));}
+.kas-find-page .find-page-choice-intro{padding-top:clamp(44px,5vw,72px)}
+.kas-find-page .find-page-results{padding-top:clamp(54px,6vw,90px)}
+.kas-find-page .find-page-hotels{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(300px,28vw,420px)}
+@media(max-width:1400px){
+  .kas-find-page .find-page-hero{width:calc(100% - 56px);grid-template-columns:43% 57%;min-height:620px}
+  .kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 112px)}
+}
+@media(max-width:1000px){
+  .kas-find-page .find-page-hero{width:calc(100% - 40px);grid-template-columns:1fr;min-height:720px}
+  .kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 64px)}
+}
+@media(max-width:620px){
+  .kas-find-page .find-page-hero{width:100%;min-height:0}
+  .kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 32px)}
+}
+
+</style>
+</head>
+<body class="kas-find-page">
+<header id="hdr"></header>
+
+<main>
+<section class="find-page-hero">
+  <div class="find-page-hero-copy">
+    <div>
+      <div class="find-eyebrow">Find Your KAS</div>
+      <h1>Choose the way<br>you want to stay.</h1>
+      <p class="find-page-lead">Not every stay needs the same address. Choose the rhythm that matches your trip — then discover the KAS hotel that fits it.</p>
+    </div>
+    <div class="find-page-hero-meta"><div class="find-page-meta-item"><strong>08</strong>KAS addresses</div><div class="find-page-meta-item"><strong>04</strong>ways to stay</div><div class="find-page-meta-item"><strong>01</strong>city to discover</div></div>
+  </div>
+  <div class="find-page-hero-visual">
+    <div class="find-page-hero-main" style="background-image:url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=88')"></div>
+    <div class="find-page-hero-card" style="background-image:url('https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=88')"></div>
+    <div class="find-page-hero-label">Saigon · Central District 1</div><div class="find-page-hero-index">01 / THE COLLECTION</div>
+  </div>
+</section>
+
+<section class="find-page-choices">
+  <div class="find-page-choice-intro"><div><div class="find-eyebrow">Start with your rhythm</div><h2>How do you want to experience Saigon?</h2></div><p>Choose a way of travelling. The collection below changes with your choice, so the city starts to feel personal before you even arrive.</p></div>
+  <nav class="find-page-choice-nav" aria-label="Stay preferences">
+    <button class="find-page-choice active" data-filter="family">
+      <span class="num">01</span><strong>Family trip</strong>
+      <span>Central sights, easy movement and a comfortable base for discovering Saigon together.</span>
+    </button>
+    <button class="find-page-choice" data-filter="slow">
+      <span class="num">02</span><strong>Slow traveller</strong>
+      <span>Neighbourhood walks, cafés and a more local rhythm.</span>
+    </button>
+    <button class="find-page-choice" data-filter="business">
+      <span class="num">03</span><strong>Business</strong>
+      <span>Connected locations and a comfortable base between meetings.</span>
+    </button>
+    <button class="find-page-choice" data-filter="long">
+      <span class="num">04</span><strong>Longer stay</strong>
+      <span>More space, familiar surroundings and room to settle in.</span>
+    </button>
+  </nav>
+
+  <div class="find-page-results">
+    <div class="find-page-results-head">
+      <div>
+        <div class="find-eyebrow">The Collection</div>
+        <h2 id="resultTitle">For your first Saigon stay.</h2>
+        <p id="resultIntro">Start close to the city's best-known landmarks and everyday centre.</p>
+      </div>
+      <div class="find-page-count" id="resultCount">4 hotels</div>
+    </div>
+    <div class="find-page-hotels" id="hotels"></div>
+  </div>
+</section>
+
+<div class="find-page-note">
+  Demo content is based on the eight KAS properties and their central Ho Chi Minh City locations. The “best for” groupings are editorial recommendations for the website experience, not objective hotel rankings.
+</div>
+</main>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/live.js"></script>
+<script>
+if (window.App && window.App.boot) window.App.boot({active:""});
+
+const hotels = [
+  {
+    id:"passion", name:"KAS Passion Boutique", address:"05 Trương Định",
+    tags:["Central","Heritage","First stay"], groups:["family","slow"],
+    image:"https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=1400&q=85",
+    copy:"A compact base for guests who want the classic centre close at hand — ideal for combining city landmarks with easy neighbourhood wandering.",
+    viCopy:"Điểm nghỉ gọn gàng giữa trung tâm, phù hợp để kết hợp các điểm tham quan nổi bật với những bước dạo quanh khu phố.",
+    badge:"City at your door", viBadge:"Thành phố ngay trước cửa"
+  },
+  {
+    id:"elegance", name:"KAS Elegance", address:"260 Lý Tự Trọng",
+    tags:["Central","Landmarks","Business"], groups:["family","business"],
+    image:"https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=85",
+    copy:"A central choice for a short city break, with a location suited to guests moving between major sights, shopping streets and meetings.",
+    viCopy:"Lựa chọn ở trung tâm cho chuyến đi ngắn, thuận tiện di chuyển giữa các điểm tham quan, phố mua sắm và những cuộc gặp.",
+    badge:"Central classic", viBadge:"Tinh thần trung tâm"
+  },
+  {
+    id:"ancient", name:"KAS Ancient Boutique", address:"47A Nguyễn Trãi",
+    tags:["Local life","Shopping","Food"], groups:["slow","family","long"],
+    image:"https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1400&q=85",
+    copy:"For travellers who prefer a more everyday view of the city — street life, food, shopping and the energy of Nguyễn Trãi nearby.",
+    viCopy:"Dành cho những ai muốn cảm nhận một Sài Gòn đời thường hơn — phố xá, ẩm thực, mua sắm và nhịp sống Nguyễn Trãi ngay gần đó.",
+    badge:"Local rhythm", viBadge:"Nhịp sống địa phương"
+  },
+  {
+    id:"milestone", name:"KAS Milestone Premium", address:"170–174 Nguyễn Thái Bình",
+    tags:["Market","Central","Connected"], groups:["family","business"],
+    image:"https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85",
+    copy:"A practical central base for guests who want quick access to the market district, city centre and the business side of District 1.",
+    viCopy:"Điểm nghỉ thuận tiện ở trung tâm, dễ tiếp cận khu chợ, trung tâm thành phố và khu vực công việc của Quận 1.",
+    badge:"Well connected", viBadge:"Kết nối thuận tiện"
+  },
+  {
+    id:"zody", name:"KAS Zody Boutique", address:"278 Lê Thánh Tôn",
+    tags:["Walkable","Shopping","Slow"], groups:["slow","long","first"],
+    image:"https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1400&q=85",
+    copy:"A good fit for guests who like to leave the itinerary open: walk, eat, browse and return to a familiar central neighbourhood.",
+    viCopy:"Phù hợp với những ai thích để lịch trình rộng mở: đi bộ, ăn uống, khám phá rồi trở về một khu phố trung tâm quen thuộc.",
+    badge:"Walk the city", viBadge:"Đi bộ khám phá thành phố"
+  },
+  {
+    id:"sonata", name:"KAS Sonata Luxury", address:"40–42 Bùi Thị Xuân",
+    tags:["Central","Food","Evening"], groups:["slow","business","long"],
+    image:"https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1400&q=85",
+    copy:"A central stay for travellers who want the city close but prefer a neighbourhood with plenty to discover after the working day.",
+    viCopy:"Một điểm lưu trú trung tâm dành cho những ai muốn thành phố ở gần nhưng vẫn có nhiều điều để khám phá sau giờ làm.",
+    badge:"After hours", viBadge:"Sau giờ làm"
+  },
+  {
+    id:"eliana", name:"KAS Eliana Luxury", address:"13 Bùi Thị Xuân",
+    tags:["Central","Food","Longer stay"], groups:["business","long","slow"],
+    image:"https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1400&q=85",
+    copy:"A comfortable base for a longer city rhythm, balancing central access with the everyday restaurants, cafés and streets around Bùi Thị Xuân.",
+    viCopy:"Điểm nghỉ thoải mái cho nhịp sống dài ngày, cân bằng khả năng kết nối trung tâm với nhà hàng, quán cà phê và những con phố quanh Bùi Thị Xuân.",
+    badge:"Settle in", viBadge:"Ở lại thật lâu"
+  },
+  {
+    id:"dilly", name:"KAS Dilly Luxury", address:"191 Lê Thánh Tôn",
+    tags:["Shopping","Local life","Longer stay"], groups:["slow","long","business"],
+    image:"https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=1400&q=85",
+    copy:"For guests who want to stay in the middle of the city for a little longer, with shopping, food and everyday movement nearby.",
+    viCopy:"Dành cho những ai muốn ở giữa thành phố lâu hơn một chút, với mua sắm, ẩm thực và nhịp sống thường ngày ngay gần.",
+    badge:"Stay awhile", viBadge:"Ở lại lâu hơn"
+  }
+];
+
+const content = {
+  family:{
+    en:{title:"For a family trip to Saigon.",intro:"Choose a central base that makes it easier to explore the city together, with landmarks, food and everyday discoveries close by."},
+    vi:{title:"Cho chuyến đi cùng gia đình đến Sài Gòn.",intro:"Chọn một điểm nghỉ ở trung tâm để cả gia đình dễ dàng khám phá thành phố, từ điểm tham quan, ẩm thực đến những trải nghiệm đời thường."}
+  },
+  slow:{
+    en:{title:"For a slower city rhythm.",intro:"Choose a base that makes room for walking, cafés, local streets and unplanned discoveries."},
+    vi:{title:"Cho một nhịp sống thong thả hơn.",intro:"Chọn một điểm nghỉ để dành thời gian tản bộ, ghé quán cà phê, khám phá phố địa phương và những điều bất ngờ."}
+  },
+  business:{
+    en:{title:"For work, with the city close.",intro:"Central addresses make it easier to move between meetings and still experience Saigon after hours."},
+    vi:{title:"Cho chuyến công tác, với thành phố ngay gần.",intro:"Các địa chỉ trung tâm giúp bạn dễ dàng di chuyển giữa những cuộc gặp mà vẫn có thời gian cảm nhận Sài Gòn sau giờ làm."}
+  },
+  long:{
+    en:{title:"For stays that need more time.",intro:"Look for a neighbourhood that feels easy to return to — with food, shopping and daily life nearby."},
+    vi:{title:"Cho những kỳ lưu trú cần nhiều thời gian hơn.",intro:"Chọn một khu phố dễ dàng trở về mỗi ngày, với ẩm thực, mua sắm và nhịp sống thường nhật ở ngay gần."}
+  }
+};
+
+const viLabels = {
+  "Central":"Trung tâm","Heritage":"Di sản","First stay":"Lần đầu","Landmarks":"Điểm tham quan","Business":"Công tác",
+  "Local life":"Đời sống địa phương","Shopping":"Mua sắm","Food":"Ẩm thực","Market":"Khu chợ","Connected":"Kết nối",
+  "Walkable":"Dễ đi bộ","Slow":"Thong thả","Evening":"Buổi tối","Longer stay":"Lưu trú dài ngày"
+};
+function currentLang(){ return window.KAS_I18N && window.KAS_I18N.getLanguage ? window.KAS_I18N.getLanguage() : ((new URLSearchParams(location.search).get('lang')||'en').toLowerCase()==='vi'?'vi':'en'); }
+function txTag(tag){ return currentLang()==='vi' ? (viLabels[tag] || tag) : tag; }
+
+
+function applyFindLanguage(){
+  const vi=currentLang()==='vi';
+  const set=(sel,en,viText)=>{ const el=document.querySelector(sel); if(el) el.innerHTML=vi?viText:en; };
+  set('.find-page-hero-copy .find-eyebrow','Find Your KAS','Tìm KAS phù hợp');
+  set('.find-page-hero-copy h1','Choose the way<br>you want to stay.','Chọn cách<br>bạn muốn lưu trú.');
+  set('.find-page-lead','Not every stay needs the same address. Choose the rhythm that matches your trip — then discover the KAS hotel that fits it.','Mỗi hành trình có một nhịp điệu riêng. Chọn cách lưu trú phù hợp với chuyến đi của bạn — rồi khám phá khách sạn KAS dành cho chuyến đi ấy.');
+  const meta=document.querySelectorAll('.find-page-meta-item');
+  if(meta.length>=3){ meta[0].innerHTML='<strong>08</strong>'+(vi?'địa chỉ KAS':'KAS addresses'); meta[1].innerHTML='<strong>04</strong>'+(vi?'cách lưu trú':'ways to stay'); meta[2].innerHTML='<strong>01</strong>'+(vi?'thành phố để khám phá':'city to discover'); }
+  const label=document.querySelector('.find-page-hero-label'); if(label) label.textContent=vi?'Sài Gòn · Trung tâm Quận 1':'Saigon · Central District 1';
+  const idx=document.querySelector('.find-page-hero-index'); if(idx) idx.textContent=vi?'01 / BỘ SƯU TẬP':'01 / THE COLLECTION';
+  set('.find-page-choice-intro .find-eyebrow','Start with your rhythm','Bắt đầu với nhịp điệu của bạn');
+  set('.find-page-choice-intro h2','How do you want to experience Saigon?','Bạn muốn trải nghiệm Sài Gòn như thế nào?');
+  const introP=document.querySelector('.find-page-choice-intro p'); if(introP) introP.textContent=vi?'Chọn một cách du lịch. Bộ sưu tập bên dưới sẽ thay đổi theo lựa chọn của bạn, để thành phố trở nên riêng tư và gần gũi hơn ngay từ trước khi bạn đến.':'Choose a way of travelling. The collection below changes with your choice, so the city starts to feel personal before you even arrive.';
+  const choices=[
+    ['Du lịch cùng gia đình','Gần các điểm tham quan trung tâm, thuận tiện di chuyển và là điểm nghỉ thoải mái để cùng khám phá Sài Gòn.'],
+    ['Du lịch thong thả','Tản bộ trong khu phố, ghé quán cà phê và tận hưởng nhịp sống địa phương.'],
+    ['Công tác','Vị trí thuận tiện kết nối và một nơi nghỉ thoải mái giữa những cuộc gặp.'],
+    ['Lưu trú dài ngày','Nhiều không gian hơn, môi trường quen thuộc và đủ thoải mái để ở lâu hơn.']
+  ];
+  document.querySelectorAll('.find-page-choice').forEach((b,i)=>{ const strong=b.querySelector('strong'), spans=b.querySelectorAll('span'); if(strong) strong.textContent=vi?choices[i][0]:['Family trip','Slow traveller','Business','Longer stay'][i]; if(spans[1]) spans[1].textContent=vi?choices[i][1]:['Central sights, easy movement and a comfortable base for discovering Saigon together.','Neighbourhood walks, cafés and a more local rhythm.','Connected locations and a comfortable base between meetings.','More space, familiar surroundings and room to settle in.'][i]; });
+  set('.find-page-results-head .find-eyebrow','The Collection','Bộ sưu tập');
+  const note=document.querySelector('.find-page-note'); if(note) note.textContent=vi?'Nội dung giới thiệu dựa trên tám khách sạn KAS và các địa chỉ tại trung tâm Thành phố Hồ Chí Minh. Các nhóm “phù hợp với” là gợi ý biên tập cho trải nghiệm website, không phải bảng xếp hạng khách sạn khách quan.':'Demo content is based on the eight KAS properties and their central Ho Chi Minh City locations. The “best for” groupings are editorial recommendations for the website experience, not objective hotel rankings.';
+}
+
+function render(filter){
+  document.querySelectorAll(".find-page-choice").forEach(b=>b.classList.toggle("active",b.dataset.filter===filter));
+  const lang=currentLang();
+  document.getElementById("resultTitle").textContent=content[filter][lang].title;
+  document.getElementById("resultIntro").textContent=content[filter][lang].intro;
+  const items=hotels.filter(h=>h.groups.includes(filter));
+  document.getElementById("resultCount").textContent=items.length+(lang==='vi'?' khách sạn':' hotels');
+  document.getElementById("hotels").innerHTML=items.map((h,i)=>`
+    <article class="find-page-hotel">
+      <div class="find-page-hotel-bg" style="background-image:url('${h.image}')"></div>
+      <div class="find-page-hotel-top">
+        <span class="find-page-hotel-no">${String(i+1).padStart(2,"0")} / KAS COLLECTION</span>
+        <span class="find-page-hotel-badge">${lang==='vi'?(h.viBadge||h.badge):h.badge}</span>
+      </div>
+      <div class="find-page-hotel-content">
+        <div class="find-page-hotel-location">${h.address} · ${lang==='vi'?'Thành phố Hồ Chí Minh':'Ho Chi Minh City'}</div>
+        <h3>${h.name}</h3>
+        <p class="find-page-hotel-copy">${lang==='vi'?(h.viCopy||h.copy):h.copy}</p>
+        <div class="find-page-tags">${h.tags.map(t=>`<span class="find-page-tag">${txTag(t)}</span>`).join("")}</div>
+        <a class="find-page-hotel-link" href="hotel-detail.html?hotel=${encodeURIComponent(h.id)}">${lang==='vi'?'Đặt phòng →':'Book this hotel →'}</a>
+      </div>
+    </article>
+  `).join("");
+}
+const validStayKeys = new Set(["family", "slow", "business", "long"]);
+function readStayKey(){
+  const requested = new URLSearchParams(window.location.search).get("stay");
+  return validStayKeys.has(requested) ? requested : "family";
+}
+document.querySelectorAll(".find-page-choice").forEach(b=>b.addEventListener("click",()=>{
+  const key = b.dataset.filter;
+  if (!validStayKeys.has(key)) return;
+  const params = new URLSearchParams(window.location.search);
+  params.set("stay", key);
+  history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+  render(key);
+}));
+render(readStayKey());
+/* Use the same Admin-managed KAS Collection image as Homepage cards.
+   Slug-to-branch mapping follows the shared eight-property data order. */
+var findCollectionKeys = {
+  passion:'hotel-01', elegance:'hotel-02', ancient:'hotel-03', milestone:'hotel-04',
+  zody:'hotel-05', sonata:'hotel-06', eliana:'hotel-07', dilly:'hotel-08'
+};
+if (window.KAS_LIVE && typeof window.KAS_LIVE.load === 'function') {
+  window.KAS_LIVE.load().then(function(catalog){
+    var images = catalog && catalog.collectionImages || {};
+    var changed = false;
+    hotels.forEach(function(h){
+      var key = findCollectionKeys[h.id];
+      var liveUrl = key && images[key];
+      if (typeof liveUrl === 'string' && liveUrl.trim()) {
+        h.image = liveUrl;
+        changed = true;
+      }
+    });
+    if (changed) render(document.querySelector('.find-page-choice.active')?.dataset.filter || readStayKey());
+  }).catch(function(){ /* Keep bundled fallback images when API is unavailable. */ });
+}
+applyFindLanguage();
+document.addEventListener("kas:language", function(){ applyFindLanguage(); render(document.querySelector(".find-page-choice.active")?.dataset.filter || readStayKey()); });
+</script>
+</body>
+</html>
+
+<style>
+/* V26 — align Find Your KAS content to one shared page grid, matching the site navigation container. */
+.kas-find-page {
+  --find-content-width: 1320px;
+  --find-content-gutter: 56px;
+}
+.kas-find-page .find-page-hero,
+.kas-find-page .find-page-choices,
+.kas-find-page .find-page-note,
+.kas-find-page .find-page-results {
+  width: min(var(--find-content-width), calc(100% - var(--find-content-gutter)));
+  max-width: none;
+  margin-inline: auto;
+}
+.kas-find-page .find-page-results-head,
+.kas-find-page .find-page-hotels {
+  width: 100%;
+}
+@media (max-width: 700px) {
+  .kas-find-page { --find-content-gutter: 32px; }
+}
+</style>

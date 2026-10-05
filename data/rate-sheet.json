@@ -1,0 +1,907 @@
+{
+  "generatedAt": "2026-09-13",
+  "source": "https://docs.google.com/spreadsheets/d/1iH02b35yUusTKkWpbUI81YKm-qpMtLcTxZASQxQuuIg/",
+  "policy": {
+    "breakfastIncluded": false,
+    "breakfastNote": "Giá KHÔNG bao gồm ăn sáng — rates exclude breakfast.",
+    "extraAdult": 300000,
+    "extraChild": 150000,
+    "extraChildAges": "3–12",
+    "currency": "VND"
+  },
+  "seasons": [
+    {
+      "key": "jul_sep",
+      "label": "Jul – Sep",
+      "from": "2026-07-01",
+      "to": "2026-09-30"
+    },
+    {
+      "key": "oct",
+      "label": "October",
+      "from": "2026-10-01",
+      "to": "2026-10-31"
+    },
+    {
+      "key": "nov_jan",
+      "label": "Nov – Dec – Jan 2027",
+      "from": "2026-11-01",
+      "to": "2027-01-31"
+    }
+  ],
+  "branches": {
+    "hotel-01": {
+      "address": "05 Trương Định",
+      "gid": null,
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            800000,
+            1000000
+          ],
+          "oct": [
+            1000000,
+            1200000
+          ],
+          "nov_jan": [
+            1200000,
+            1500000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Queen Room with Window",
+          "jul_sep": [
+            1100000,
+            1300000
+          ],
+          "oct": [
+            1200000,
+            1400000
+          ],
+          "nov_jan": [
+            1500000,
+            1800000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "FamilyTwin",
+          "name": "Family Room with City View",
+          "jul_sep": [
+            1500000,
+            1700000
+          ],
+          "oct": [
+            1700000,
+            1900000
+          ],
+          "nov_jan": [
+            2500000,
+            3000000
+          ],
+          "note": "Transcribed from screenshot: weekday Jul–Sep is 1,500,000."
+        }
+      ]
+    },
+    "hotel-02": {
+      "address": "260 Lý Tự Trọng",
+      "gid": "1262125428",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            900000,
+            1100000
+          ],
+          "oct": [
+            1200000,
+            1400000
+          ],
+          "nov_jan": [
+            1400000,
+            1600000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Double Room",
+          "jul_sep": [
+            950000,
+            1150000
+          ],
+          "oct": [
+            1250000,
+            1450000
+          ],
+          "nov_jan": [
+            1450000,
+            1650000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe",
+          "name": "Deluxe King Room with Window",
+          "jul_sep": [
+            1150000,
+            1350000
+          ],
+          "oct": [
+            1450000,
+            1650000
+          ],
+          "nov_jan": [
+            1650000,
+            1850000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "Premium",
+          "name": "Premium King Room with City View",
+          "jul_sep": [
+            1200000,
+            1400000
+          ],
+          "oct": [
+            1500000,
+            1700000
+          ],
+          "nov_jan": [
+            1700000,
+            1900000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "D-D Room",
+          "name": "Deluxe Twin Room with Window",
+          "jul_sep": [
+            1400000,
+            1600000
+          ],
+          "oct": [
+            1700000,
+            1900000
+          ],
+          "nov_jan": [
+            1900000,
+            2100000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "Premium D-D",
+          "name": "Premium Twin Room with City View",
+          "jul_sep": [
+            1450000,
+            1650000
+          ],
+          "oct": [
+            1750000,
+            1950000
+          ],
+          "nov_jan": [
+            1950000,
+            2150000
+          ]
+        },
+        {
+          "stt": 7,
+          "ez": "Family",
+          "name": "Family Room with City View",
+          "jul_sep": [
+            1750000,
+            1950000
+          ],
+          "oct": [
+            2050000,
+            2250000
+          ],
+          "nov_jan": [
+            2250000,
+            2450000
+          ]
+        },
+        {
+          "stt": 8,
+          "ez": "De-Family",
+          "name": "Deluxe Family Room with City View",
+          "jul_sep": [
+            2000000,
+            2200000
+          ],
+          "oct": [
+            2300000,
+            2500000
+          ],
+          "nov_jan": [
+            2500000,
+            2700000
+          ]
+        }
+      ]
+    },
+    "hotel-03": {
+      "address": "47A Nguyễn Trãi",
+      "gid": "1278273343",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            900000,
+            1100000
+          ],
+          "oct": [
+            1200000,
+            1400000
+          ],
+          "nov_jan": [
+            1400000,
+            1600000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Queen Room",
+          "jul_sep": [
+            1100000,
+            1300000
+          ],
+          "oct": [
+            1400000,
+            1600000
+          ],
+          "nov_jan": [
+            1600000,
+            1800000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe",
+          "name": "Deluxe Queen Room with City View",
+          "jul_sep": [
+            1300000,
+            1500000
+          ],
+          "oct": [
+            1600000,
+            1800000
+          ],
+          "nov_jan": [
+            1800000,
+            2000000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "Deluxe Family",
+          "name": "Deluxe Family Room with City View",
+          "jul_sep": [
+            2000000,
+            2300000
+          ],
+          "oct": [
+            2300000,
+            2600000
+          ],
+          "nov_jan": [
+            2500000,
+            2800000
+          ]
+        }
+      ]
+    },
+    "hotel-04": {
+      "address": "170-172-174 Nguyễn Thái Bình",
+      "gid": "700037775",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Superior",
+          "name": "Superior Queen Room",
+          "jul_sep": [
+            1500000,
+            1700000
+          ],
+          "oct": [
+            1600000,
+            1800000
+          ],
+          "nov_jan": [
+            2000000,
+            2300000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Deluxe 1-2",
+          "name": "Deluxe Queen Room with Window",
+          "jul_sep": [
+            1700000,
+            1900000
+          ],
+          "oct": [
+            1800000,
+            2000000
+          ],
+          "nov_jan": [
+            2200000,
+            2500000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe 3-4",
+          "name": "Deluxe Queen Room with City View",
+          "jul_sep": [
+            1900000,
+            2100000
+          ],
+          "oct": [
+            2000000,
+            2200000
+          ],
+          "nov_jan": [
+            2400000,
+            2700000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "D-D",
+          "name": "Premium Twin Room with Window",
+          "jul_sep": [
+            2100000,
+            2300000
+          ],
+          "oct": [
+            2200000,
+            2400000
+          ],
+          "nov_jan": [
+            2600000,
+            2900000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "Deluxe - Bal",
+          "name": "Premium Queen Room with Balcony & City View",
+          "jul_sep": [
+            2300000,
+            2500000
+          ],
+          "oct": [
+            2400000,
+            2600000
+          ],
+          "nov_jan": [
+            2800000,
+            3100000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "Suite - Bal",
+          "name": "Junior Suite with Balcony & City View",
+          "jul_sep": [
+            3500000,
+            3800000
+          ],
+          "oct": [
+            3600000,
+            3900000
+          ],
+          "nov_jan": [
+            4000000,
+            4300000
+          ]
+        }
+      ]
+    },
+    "hotel-05": {
+      "address": "278 Lê Thánh Tôn",
+      "gid": "77934086",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            800000,
+            1000000
+          ],
+          "oct": [
+            1000000,
+            1200000
+          ],
+          "nov_jan": [
+            1100000,
+            1300000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Double Room with Window",
+          "jul_sep": [
+            1000000,
+            1200000
+          ],
+          "oct": [
+            1200000,
+            1400000
+          ],
+          "nov_jan": [
+            1300000,
+            1500000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Twin",
+          "name": "Superior Twin Room with Window",
+          "jul_sep": [
+            1050000,
+            1250000
+          ],
+          "oct": [
+            1250000,
+            1450000
+          ],
+          "nov_jan": [
+            1350000,
+            1550000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "Deluxe",
+          "name": "Deluxe Double Room with City View",
+          "jul_sep": [
+            1250000,
+            1450000
+          ],
+          "oct": [
+            1450000,
+            1650000
+          ],
+          "nov_jan": [
+            1550000,
+            1750000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "Studio",
+          "name": "Studio Apartment",
+          "jul_sep": [
+            1400000,
+            1600000
+          ],
+          "oct": [
+            1600000,
+            1800000
+          ],
+          "nov_jan": [
+            1700000,
+            1900000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "Suite",
+          "name": "Premium Suite Apartment",
+          "jul_sep": [
+            1600000,
+            1800000
+          ],
+          "oct": [
+            1800000,
+            2000000
+          ],
+          "nov_jan": [
+            1900000,
+            2100000
+          ]
+        }
+      ]
+    },
+    "hotel-06": {
+      "address": "40-42 Bùi Thị Xuân",
+      "gid": "77934086",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            800000,
+            1000000
+          ],
+          "oct": [
+            1400000,
+            1600000
+          ],
+          "nov_jan": [
+            1600000,
+            1800000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Double Room with Window",
+          "jul_sep": [
+            850000,
+            1050000
+          ],
+          "oct": [
+            1450000,
+            1650000
+          ],
+          "nov_jan": [
+            1650000,
+            1850000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe",
+          "name": "Deluxe Double Room with Window",
+          "jul_sep": [
+            1050000,
+            1250000
+          ],
+          "oct": [
+            1650000,
+            1850000
+          ],
+          "nov_jan": [
+            1850000,
+            2050000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "Deluxe-Queen",
+          "name": "Deluxe Queen Room with City View",
+          "jul_sep": [
+            1100000,
+            1300000
+          ],
+          "oct": [
+            1700000,
+            1900000
+          ],
+          "nov_jan": [
+            1900000,
+            2100000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "Deluxe-Bal",
+          "name": "Deluxe Queen Room with Balcony & City View",
+          "jul_sep": [
+            1300000,
+            1500000
+          ],
+          "oct": [
+            1900000,
+            2100000
+          ],
+          "nov_jan": [
+            2100000,
+            2300000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "D-D",
+          "name": "Superior Twin Room with Window",
+          "jul_sep": [
+            1400000,
+            1600000
+          ],
+          "oct": [
+            2000000,
+            2200000
+          ],
+          "nov_jan": [
+            2200000,
+            2400000
+          ]
+        },
+        {
+          "stt": 7,
+          "ez": "King",
+          "name": "Premium King Room with City View",
+          "jul_sep": [
+            1500000,
+            1700000
+          ],
+          "oct": [
+            2100000,
+            2300000
+          ],
+          "nov_jan": [
+            2300000,
+            2500000
+          ]
+        },
+        {
+          "stt": 8,
+          "ez": "Premium D-D",
+          "name": "Premium Twin Room with City View",
+          "jul_sep": [
+            1700000,
+            1900000
+          ],
+          "oct": [
+            2300000,
+            2500000
+          ],
+          "nov_jan": [
+            2500000,
+            2700000
+          ]
+        },
+        {
+          "stt": 9,
+          "ez": "De-Family",
+          "name": "Deluxe Family Room with City View",
+          "jul_sep": [
+            2000000,
+            2200000
+          ],
+          "oct": [
+            2600000,
+            2800000
+          ],
+          "nov_jan": [
+            2800000,
+            3000000
+          ]
+        }
+      ]
+    },
+    "hotel-07": {
+      "address": "13 Bùi Thị Xuân",
+      "gid": "2062059205",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            900000,
+            1100000
+          ],
+          "oct": [
+            1400000,
+            1600000
+          ],
+          "nov_jan": [
+            1600000,
+            1800000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Queen Room",
+          "jul_sep": [
+            1100000,
+            1300000
+          ],
+          "oct": [
+            1600000,
+            1800000
+          ],
+          "nov_jan": [
+            1800000,
+            2000000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe",
+          "name": "Deluxe Queen Room with City View",
+          "jul_sep": [
+            1300000,
+            1500000
+          ],
+          "oct": [
+            1800000,
+            2000000
+          ],
+          "nov_jan": [
+            2000000,
+            2200000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "Deluxe Bal",
+          "name": "Deluxe King Room with Balcony",
+          "jul_sep": [
+            1500000,
+            1700000
+          ],
+          "oct": [
+            2000000,
+            2200000
+          ],
+          "nov_jan": [
+            2200000,
+            2400000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "King",
+          "name": "Premium King Room with City View",
+          "jul_sep": [
+            1700000,
+            1900000
+          ],
+          "oct": [
+            2200000,
+            2400000
+          ],
+          "nov_jan": [
+            2400000,
+            2600000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "Suite",
+          "name": "Premium Suite Room",
+          "jul_sep": [
+            1900000,
+            2100000
+          ],
+          "oct": [
+            2400000,
+            2600000
+          ],
+          "nov_jan": [
+            2600000,
+            2800000
+          ]
+        }
+      ]
+    },
+    "hotel-08": {
+      "address": "191 Lê Thánh Tôn",
+      "gid": "1905093863",
+      "retrieved": "2026-09-13",
+      "sheetRooms": [
+        {
+          "stt": 1,
+          "ez": "Standard",
+          "name": "Standard Double Room",
+          "jul_sep": [
+            900000,
+            1200000
+          ],
+          "oct": [
+            1400000,
+            1600000
+          ],
+          "nov_jan": [
+            1600000,
+            1800000
+          ]
+        },
+        {
+          "stt": 2,
+          "ez": "Superior",
+          "name": "Superior Queen Room",
+          "jul_sep": [
+            1100000,
+            1400000
+          ],
+          "oct": [
+            1600000,
+            1800000
+          ],
+          "nov_jan": [
+            1800000,
+            2000000
+          ]
+        },
+        {
+          "stt": 3,
+          "ez": "Deluxe",
+          "name": "Deluxe Queen Room with City View",
+          "jul_sep": [
+            1300000,
+            1600000
+          ],
+          "oct": [
+            1800000,
+            2000000
+          ],
+          "nov_jan": [
+            2000000,
+            2200000
+          ]
+        },
+        {
+          "stt": 4,
+          "ez": "King",
+          "name": "Deluxe King Room with Window",
+          "jul_sep": [
+            1500000,
+            1800000
+          ],
+          "oct": [
+            2000000,
+            2200000
+          ],
+          "nov_jan": [
+            2200000,
+            2400000
+          ]
+        },
+        {
+          "stt": 5,
+          "ez": "Deluxe Bal",
+          "name": "Deluxe Queen Room with Balcony",
+          "jul_sep": [
+            1700000,
+            2000000
+          ],
+          "oct": [
+            2200000,
+            2400000
+          ],
+          "nov_jan": [
+            2400000,
+            2600000
+          ]
+        },
+        {
+          "stt": 6,
+          "ez": "King Bal",
+          "name": "Premium King Room with Balcony",
+          "jul_sep": [
+            1900000,
+            2200000
+          ],
+          "oct": [
+            2400000,
+            2600000
+          ],
+          "nov_jan": [
+            2600000,
+            2800000
+          ]
+        }
+      ]
+    }
+  }
+}

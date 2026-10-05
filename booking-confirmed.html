@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Booking Confirmed — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div class="container"><nav class="crumb" id="crumb"></nav></div>
+<div id="steps"></div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <div class="split__main" id="main"></div>
+      <aside class="split__side"><div class="sticky stack" style="gap:16px" id="side"></div></aside>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
+  App.boot({ active: 'my kas' });
+
+  /* Resolve the booking from ?ref= (survives refresh) or the draft. */
+  var ref = U.qs().ref || (S.getCurrent() || {}).bookingNumber;
+  var bk = ref ? S.getByNumber(ref) : null;
+
+  if (!bk) {
+    U.$('#main').innerHTML = '<div class="empty">' + U.icon('help', 46) +
+      '<h3 style="margin-bottom:8px">We couldn\'t find that booking</h3>' +
+      '<p class="muted" style="font-size:.92rem;max-width:400px;margin:0 auto 20px">' +
+      'The booking reference is missing or no longer stored in this browser.</p>' +
+      '<a class="btn btn--gold" href="manage-booking.html">Manage a booking</a> ' +
+      '<a class="btn btn--ghost" href="hotels.html">Find a stay</a></div>';
+    U.$('#steps').remove();
+    U.$('#trustStrip').outerHTML = B.trustStripHTML();
+    return;
+  }
+
+  var hotel = D.getHotel(bk.hotelId), room = D.getRoom(bk.hotelId, bk.roomId);
+  var cancelled = bk.status === 'CANCELLED';
+
+  App.renderSteps(U.$('#steps'), 4, [
+    U.fmtDate(bk.checkIn) + ' – ' + U.fmtDate(bk.checkOut), bk.roomName,
+    B.guestLabel(bk), 'Secured'
+  ]);
+  U.$('#crumb').innerHTML =
+    '<a href="index.html">Home</a><span class="sep">›</span>' +
+    '<a href="hotel-detail.html?hotel=' + bk.hotelId + '">' + U.esc(bk.hotelName) + '</a>' +
+    '<span class="sep">›</span><span class="cur">Booking confirmed</span>';
+
+  var created = new Date(bk.createdAt);
+  var createdStr = U.fmtDate(U.toISO(created)) + ', ' +
+    String(created.getHours()).padStart(2, '0') + ':' + String(created.getMinutes()).padStart(2, '0') + ' (GMT+7)';
+
+  var PAY_LABEL = { 'pay-later': 'Pay later — at the hotel', card: 'Credit / debit card',
+                    zalopay: 'ZaloPay', bank: 'Bank transfer' };
+
+  /* ============ MAIN ============ */
+  U.$('#main').innerHTML =
+    '<div style="display:flex;gap:18px;align-items:flex-start;margin-bottom:26px">' +
+      '<span style="width:52px;height:52px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;' +
+        'background:' + (cancelled ? 'var(--err-bg)' : 'var(--ok-bg)') + ';color:' + (cancelled ? 'var(--err)' : 'var(--ok)') + '">' +
+        U.icon(cancelled ? 'x' : 'check', 26) + '</span>' +
+      '<div><h1 style="font-size:clamp(1.7rem,2.9vw,2.4rem);line-height:1.15">' +
+        (cancelled ? 'This booking has been cancelled' : 'Thank you, your booking is confirmed!') + '</h1>' +
+        (cancelled ? '<p class="muted" style="margin-top:.6rem;font-size:.93rem">Cancelled on ' +
+            U.fmtDate(U.toISO(new Date(bk.cancelledAt || bk.createdAt))) + '. No charge has been made.</p>'
+          : '<p class="muted" style="margin-top:.6rem;font-size:.93rem">We\'ve sent the booking confirmation to <b style="color:var(--tx)">' +
+            U.esc(bk.guest.email) + '</b><br>A confirmation SMS has also been sent to ' + U.esc(bk.guest.phoneFull) + '.</p>') +
+      '</div></div>' +
+
+    /* booking number */
+    '<div style="background:' + (cancelled ? 'var(--err-bg)' : 'var(--ok-bg)') + ';border:1px solid ' +
+      (cancelled ? '#EFCEC6' : '#CFE0D0') + ';border-radius:var(--r);padding:22px 24px;margin-bottom:26px;' +
+      'display:flex;gap:16px;align-items:center;flex-wrap:wrap">' +
+      '<span style="color:' + (cancelled ? 'var(--err)' : 'var(--ok)') + '">' + U.icon('cal', 24) + '</span>' +
+      '<div style="flex:1;min-width:220px">' +
+        '<div class="tiny" style="color:' + (cancelled ? 'var(--err)' : 'var(--ok)') + ';font-weight:600;letter-spacing:.1em">Your booking number</div>' +
+        '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:4px">' +
+          '<span style="font-family:var(--serif);font-size:1.9rem;letter-spacing:.05em;line-height:1' +
+            (cancelled ? ';text-decoration:line-through;opacity:.7' : '') + '" id="bkNum">' + U.esc(bk.bookingNumber) + '</span>' +
+          '<button class="btn btn--ghost btn--sm noprint" id="copyBtn" type="button">Copy</button>' +
+        '</div>' +
+        '<div class="tiny muted" style="margin-top:5px">Booked on ' + createdStr + ' · Branch code ' + U.esc(bk.branchCode) + '</div>' +
+      '</div></div>' +
+
+    (cancelled ? '' :
+    '<h4 style="font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:14px">What\'s next?</h4>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px" id="nextGrid">' +
+      [['mail','Check your email','We\'ve sent all the details to your inbox.'],
+       ['key','We\'re preparing your stay','The team will have everything ready.'],
+       ['bell','See you soon!','We look forward to welcoming you to ' + hotel.name + '.']
+      ].map(function (n) {
+        return '<div class="card" style="padding:18px 20px"><span style="color:var(--gold-dk);display:block;margin-bottom:10px">' +
+          U.icon(n[0], 20) + '</span><b style="font-size:.87rem;display:block;margin-bottom:3px">' + n[1] + '</b>' +
+          '<span class="tiny muted">' + U.esc(n[2]) + '</span></div>';
+      }).join('') + '</div>') +
+
+    /* booking details */
+    '<div class="card" style="margin-bottom:18px">' +
+      '<div class="card__hd">' + U.icon('bed', 18) + '<h4>Booking details</h4></div>' +
+      '<div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap">' +
+        '<div style="width:200px;aspect-ratio:4/3;border-radius:var(--r-sm);overflow:hidden;background:var(--beige);flex-shrink:0">' +
+          U.img(bk.roomImage, bk.roomName) + '</div>' +
+        '<div style="flex:1;min-width:240px">' +
+          '<h4 style="font-family:var(--serif);font-size:1.35rem;margin-bottom:9px">' + U.esc(bk.roomName) + '</h4>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:7px 16px;margin-bottom:14px">' +
+            sp('size', bk.roomSize || 'Size not published') + sp('bed', bk.roomBed) +
+            sp('view', bk.roomView || 'View not published') + sp('users', 'Max ' + bk.roomMaxGuests + ' guests') +
+          '</div>' +
+          '<div style="display:flex;flex-direction:column;gap:6px">' +
+            pk(bk.breakfast ? 'Breakfast included' : 'Breakfast not included', bk.breakfast) +
+            pk('Free Wi-Fi', true) +
+            pk('Free cancellation until ' + bk.cancellationDeadline, true) +
+          '</div></div></div>' +
+      '<div class="divider"></div>' +
+      '<div class="dl">' +
+        f('Check-in', U.fmtDateFull(bk.checkIn), 'From ' + bk.checkInTime) +
+        f('Check-out', U.fmtDateFull(bk.checkOut), 'Until ' + bk.checkOutTime) +
+        f('Duration', bk.nights + ' Night' + (bk.nights === 1 ? '' : 's'), '') +
+        f('Guests & rooms', B.guestLabel(bk), bk.infants ? bk.infants + ' infant(s)' : '') +
+        f('Lead guest', bk.guest.title + ' ' + bk.guest.firstName + ' ' + bk.guest.lastName, bk.guest.email) +
+        f('Payment method', PAY_LABEL[bk.paymentMethod] || bk.paymentMethod, 'No payment taken (demo)') +
+      '</div>' +
+      (bk.specialRequests ? '<div class="divider"></div><div class="dt">Special requests</div>' +
+        '<p style="font-size:.88rem;color:var(--tx-2);margin:4px 0 0">' + U.esc(bk.specialRequests) + '</p>' : '') +
+    '</div>' +
+
+    /* price */
+    '<div class="card" style="margin-bottom:18px">' +
+      '<div class="card__hd">' + U.icon('tag', 18) + '<h4>Price summary</h4></div>' +
+      B.priceBreakdownHTML({
+        nightly: bk.nightlyRate, nights: bk.nights, rooms: bk.rooms,
+        subtotal: bk.roomRate, serviceCharge: bk.serviceCharge, vat: bk.vat,
+        total: bk.total, serviceChargeRate: bk.serviceChargeRate, vatRate: bk.vatRate,
+        nightlyRates: bk.nightlyRates || null
+      }, {
+        nights: (bk.nightlyRates && window.KAS_RATES && window.KAS_RATES.hasSheetRate(bk.roomId))
+          ? window.KAS_RATES.quote(bk.roomId, bk.checkIn, bk.checkOut).nights : null,
+        rateSource: bk.rateSource || 'DEMO'
+      }) +
+    '</div>' +
+
+    /* policy */
+    '<div class="card">' +
+      '<div class="card__hd">' + U.icon('shield', 18) + '<h4>Cancellation &amp; important information</h4></div>' +
+      (cancelled
+        ? '<div class="alert alert--err">' + U.icon('alert', 18) + '<div><b>Booking cancelled</b>This reservation is no longer active.</div></div>'
+        : '<div class="alert alert--ok">' + U.icon('checkC', 18) + '<div><b>Free cancellation</b>Cancel for free until ' +
+          U.esc(bk.cancellationDeadline) + ' (local time). After that, 1 night is charged.</div></div>') +
+      '<ul style="margin:16px 0 0;padding-left:20px;font-size:.86rem;color:var(--tx-2);line-height:1.9">' +
+        ['Check-in from ' + bk.checkInTime + ', check-out until ' + bk.checkOutTime + '.',
+         'A valid ID or passport is required at check-in.',
+         'Special requests are subject to availability and cannot be guaranteed.',
+         'Taxes and fees are included in the total price.',
+         'Demonstration booking — stored only in this browser, no real reservation exists.'
+        ].map(function (t) { return '<li>' + U.esc(t) + '</li>'; }).join('') + '</ul>' +
+    '</div>' +
+
+    /* reservation support — official contact channels */
+    '<div class="card" style="margin-top:18px">' +
+      '<div class="card__hd">' + U.icon('help', 18) + '<h4>Need help with your reservation?</h4></div>' +
+      window.Contact.supportBlock({
+        title: 'Talk to the KAS team',
+        sub: 'Quote booking number ' + bk.bookingNumber + ' and we will take care of it.'
+      }) +
+    '</div>' +
+
+    /* actions */
+    '<div class="noprint" style="display:flex;gap:11px;flex-wrap:wrap;margin-top:24px" id="actions"></div>';
+
+  function sp(ic, t) { return '<span class="spec">' + U.icon(ic, 14) + U.esc(t) + '</span>'; }
+  function pk(t, ok) { return '<span class="perk' + (ok ? '' : ' perk--gold') + '">' + U.icon(ok ? 'check' : 'x', 13) + U.esc(t) + '</span>'; }
+  function f(a, b, c2) {
+    return '<div><div class="dt">' + a + '</div><div class="dd">' + U.esc(b) +
+      (c2 ? '<small>' + U.esc(c2) + '</small>' : '') + '</div></div>';
+  }
+
+  /* ============ SIDEBAR ============ */
+  U.$('#side').innerHTML =
+    '<div class="panel">' +
+      '<div style="position:relative;aspect-ratio:16/11;background:var(--beige);overflow:hidden">' +
+        /* label:false — this tile already overlays the hotel name, stars and
+           address, so the placeholder must not print its own caption too. */
+        U.img(bk.hotelImage, bk.hotelName, '', true, false) +
+        '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(14,13,11,.9),transparent 60%);' +
+          'display:flex;align-items:flex-end;padding:18px">' +
+          '<div><h4 style="color:var(--ivory);font-family:var(--serif);font-size:1.25rem">' + U.esc(bk.hotelName) + '</h4>' +
+          '<span style="color:var(--gold)">' + U.stars(hotel ? hotel.rating / 2 : 5, 12) + '</span>' +
+          '<p class="tiny" style="color:var(--tx-inv-2);margin:4px 0 0">' + U.esc(bk.hotelAddress) + '</p></div>' +
+        '</div></div>' +
+      '<div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">' +
+        '<h4 style="color:var(--tx)">Your booking</h4>' +
+        '<span class="chip ' + (cancelled ? '' : 'chip--ok') + '" style="font-size:.62rem">' + bk.status + '</span></div>' +
+      '<div class="panel__b">' +
+        '<div class="dl dl--2" style="gap:14px">' +
+          f('Booking no.', bk.bookingNumber, '') +
+          f('Room type', bk.roomName, '') +
+          f('Check-in', U.fmtDate(bk.checkIn), U.dayName(bk.checkIn) + ' · from ' + bk.checkInTime) +
+          f('Check-out', U.fmtDate(bk.checkOut), U.dayName(bk.checkOut) + ' · until ' + bk.checkOutTime) +
+          f('Duration', bk.nights + ' Night' + (bk.nights === 1 ? '' : 's'), '') +
+          f('Guests', B.guestLabel(bk), '') +
+        '</div>' +
+        '<div class="divider"></div>' +
+        '<div class="prow prow--total" style="border:none;margin:0;padding:0"><span>Total</span><span>' +
+          U.vnd(bk.total) + '<sup>VND</sup></span></div>' +
+      '</div></div>' +
+
+    '<div class="panel noprint"><div class="panel__b">' +
+      '<div style="display:flex;gap:10px;align-items:flex-start;margin-bottom:14px">' +
+        '<span style="color:var(--gold-dk)">' + U.icon('edit', 18) + '</span>' +
+        '<div><b style="font-size:.87rem">Manage your booking</b>' +
+        '<p class="tiny muted" style="margin:3px 0 0">View, modify or cancel your booking at any time.</p></div></div>' +
+      '<a class="btn btn--ghost btn--block" href="manage-booking.html?ref=' + encodeURIComponent(bk.bookingNumber) +
+        '&email=' + encodeURIComponent(bk.guest.email) + '">Manage booking</a>' +
+    '</div></div>' +
+
+    (cancelled ? '' :
+    '<div class="panel noprint"><div class="panel__b">' +
+      '<b style="font-size:.87rem;display:block;margin-bottom:4px">Add to calendar</b>' +
+      '<p class="tiny muted" style="margin:0 0 13px">Save your stay dates to your calendar.</p>' +
+      '<div class="stack" style="gap:9px">' +
+        '<button class="btn btn--ghost btn--block" id="gcal" type="button">Google Calendar</button>' +
+        '<button class="btn btn--ghost btn--block" id="ical" type="button">Apple Calendar (.ics)</button>' +
+      '</div></div></div>') +
+
+    '<div class="panel" id="assist"></div>';
+
+  U.$('#assist').innerHTML = B.assistHTML();
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* ---- actions ---- */
+  U.$('#actions').innerHTML =
+    '<button class="btn btn--ghost" id="printBtn" type="button">' + U.icon('print', 14) + ' Print booking</button>' +
+    '<button class="btn btn--ghost" id="dlBtn" type="button">' + U.icon('dl', 14) + ' Download confirmation</button>' +
+    '<a class="btn btn--ghost" href="manage-booking.html?ref=' + encodeURIComponent(bk.bookingNumber) +
+      '&email=' + encodeURIComponent(bk.guest.email) + '">' + U.icon('edit', 14) + ' Manage booking</a>' +
+    '<a class="btn btn--gold" href="hotels.html">Explore more stays</a>';
+
+  U.$('#copyBtn').addEventListener('click', function () {
+    var t = bk.bookingNumber;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(function () { U.toast('Booking number copied.'); },
+        function () { fallbackCopy(t); });
+    } else fallbackCopy(t);
+  });
+  function fallbackCopy(t) {
+    var ta = document.createElement('textarea');
+    ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); U.toast('Booking number copied.'); }
+    catch (e) { U.toast('Booking number: ' + t); }
+    ta.remove();
+  }
+
+  U.$('#printBtn').addEventListener('click', function () { window.print(); });
+
+  U.$('#dlBtn').addEventListener('click', function () {
+    var lines = [
+      'KAS HOTEL COLLECTION — BOOKING CONFIRMATION',
+      '===========================================', '',
+      'Booking number : ' + bk.bookingNumber,
+      'Status         : ' + bk.status,
+      'Booked on      : ' + createdStr, '',
+      'HOTEL', '-----',
+      bk.hotelName, bk.hotelAddress,
+      'Branch code    : ' + bk.branchCode, '',
+      'ROOM', '----',
+      bk.roomName,
+      'Size           : ' + (bk.roomSize || 'Not published'),
+      'Bed            : ' + bk.roomBed,
+      'View           : ' + (bk.roomView || 'Not published'),
+      'Breakfast      : ' + (bk.breakfast ? 'Included' : 'Not included'), '',
+      'STAY', '----',
+      'Check-in       : ' + U.fmtDateFull(bk.checkIn) + ' from ' + bk.checkInTime,
+      'Check-out      : ' + U.fmtDateFull(bk.checkOut) + ' until ' + bk.checkOutTime,
+      'Duration       : ' + bk.nights + ' night(s)',
+      'Guests & rooms : ' + B.guestLabel(bk), '',
+      'GUEST', '-----',
+      'Name           : ' + bk.guest.title + ' ' + bk.guest.firstName + ' ' + bk.guest.lastName,
+      'Email          : ' + bk.guest.email,
+      'Phone          : ' + bk.guest.phoneFull,
+      'Nationality    : ' + bk.guest.nationality,
+      'Arrival        : ' + (bk.arrivalTime || '-'),
+      'Requests       : ' + (bk.specialRequests || 'None'), '',
+      'PRICE (VND)', '-----------',
+      'Room rate      : ' + U.vnd(bk.nightlyRate) + ' x ' + bk.nights + ' night(s)' + (bk.rooms > 1 ? ' x ' + bk.rooms + ' rooms' : '') + ' = ' + U.vnd(bk.roomRate),
+      'Service charge : ' + U.vnd(bk.serviceCharge) + '  (' + Math.round(bk.serviceChargeRate * 100) + '%)',
+      'VAT            : ' + U.vnd(bk.vat) + '  (' + Math.round(bk.vatRate * 100) + '%)',
+      'TOTAL          : ' + U.vnd(bk.total) + ' VND (incl. taxes & fees)',
+      'Payment method : ' + (PAY_LABEL[bk.paymentMethod] || bk.paymentMethod), '',
+      'CANCELLATION', '------------',
+      'Free cancellation until ' + bk.cancellationDeadline + ' (local time).',
+      'After that, 1 night is charged.', '',
+      'CONTACT', '-------',
+      D.config.phone + ' · ' + D.config.email, '',
+      'NOTE: Demonstration booking. Rates are KAS reference rates derived from the',
+      'property\'s published price range, not live Agoda rates. No payment',
+      'has been processed and no real reservation has been created.'
+    ].join('\n');
+    var blob = new Blob([lines], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'KAS-Booking-' + bk.bookingNumber + '.txt';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+    U.toast('Confirmation downloaded.');
+  });
+
+  /* ---- calendar ---- */
+  function calDates() {
+    return { s: bk.checkIn.replace(/-/g, ''), e: bk.checkOut.replace(/-/g, '') };
+  }
+  var gc = U.$('#gcal');
+  if (gc) gc.addEventListener('click', function () {
+    var d = calDates();
+    var url = 'https://calendar.google.com/calendar/render?action=TEMPLATE' +
+      '&text=' + encodeURIComponent(bk.hotelName + ' — ' + bk.roomName) +
+      '&dates=' + d.s + '/' + d.e +
+      '&details=' + encodeURIComponent('KAS booking ' + bk.bookingNumber + '\n' + bk.roomName +
+        '\nCheck-in from ' + bk.checkInTime + ', check-out until ' + bk.checkOutTime) +
+      '&location=' + encodeURIComponent(bk.hotelAddress);
+    window.open(url, '_blank', 'noopener');
+  });
+  var ic = U.$('#ical');
+  if (ic) ic.addEventListener('click', function () {
+    var d = calDates();
+    var ics = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//KAS Hotel Collection//Booking//EN',
+      'BEGIN:VEVENT','UID:' + bk.bookingNumber + '@kas-hotels.demo',
+      'DTSTAMP:' + d.s + 'T000000Z','DTSTART;VALUE=DATE:' + d.s,'DTEND;VALUE=DATE:' + d.e,
+      'SUMMARY:' + bk.hotelName + ' — ' + bk.roomName,
+      'DESCRIPTION:KAS booking ' + bk.bookingNumber + '. Check-in from ' + bk.checkInTime +
+        '\\, check-out until ' + bk.checkOutTime + '.',
+      'LOCATION:' + bk.hotelAddress.replace(/,/g, '\\,'),
+      'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    var blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'KAS-' + bk.bookingNumber + '.ics';
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1200);
+    U.toast('Calendar file downloaded.');
+  });
+
+  /* the draft has served its purpose */
+  S.clearCurrent();
+
+  function collapse() {
+    var g = U.$('#nextGrid');
+    if (g) g.style.gridTemplateColumns = window.innerWidth < 780 ? '1fr' : 'repeat(3,1fr)';
+  }
+  collapse(); window.addEventListener('resize', U.debounce(collapse, 120));
+})();
+</script>
+</body>
+</html>

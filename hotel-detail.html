@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hotel — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div id="steps"></div>
+
+<section class="hero hero--sm" style="min-height:300px">
+  <div class="hero__bg" id="heroBg"></div>
+  <div class="container hero__in">
+    <div class="hero__ct">
+      <a href="hotels.html" class="tiny" style="color:var(--tx-inv-2);display:inline-flex;align-items:center;gap:6px;margin-bottom:12px" id="backLink"></a>
+      <h1 id="hName"></h1>
+      <p style="margin-top:.7rem" id="hTag"></p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ PROPERTY BAR ============ -->
+<section style="background:var(--black);color:var(--tx-inv);padding-block:26px">
+  <div class="container" id="propBar"></div>
+</section>
+
+<!-- ============ GALLERY + ABOUT ============ -->
+<section class="section section--tight">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1.25fr 1fr;gap:34px;align-items:start" id="aboutGrid">
+      <div class="hotel-gallery"><div id="gal" class="hotel-gallery__preview"></div></div>
+      <div>
+        <span class="eyebrow">About the property</span>
+        <h2 style="font-size:1.7rem;margin:.7rem 0 1rem" id="aboutH"></h2>
+        <p style="font-size:.93rem;color:var(--tx-2)" id="aboutP"></p>
+        <div class="divider"></div>
+        <div class="dl dl--2" id="aboutFacts"></div>
+        <div class="divider"></div>
+        <h5 style="font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px">Hotel facilities</h5>
+        <div class="amgrid" id="aboutAm" style="grid-template-columns:repeat(2,1fr)"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery categories are intentionally opened on demand, not shown in the page flow. -->
+<div class="hotel-gallery-modal" id="hotelGalleryModal" hidden aria-hidden="true">
+  <div class="hotel-gallery-modal__backdrop" data-gallery-close></div>
+  <section class="hotel-gallery-modal__panel" role="dialog" aria-modal="true" aria-label="Thư viện ảnh khách sạn">
+    <header class="hotel-gallery-modal__head hotel-gallery-modal__head--compact">
+      <span class="sr-only" id="hotelGalleryTitle">Thư viện ảnh khách sạn</span>
+      <button type="button" class="hotel-gallery-modal__close" data-gallery-close aria-label="Đóng thư viện ảnh">×</button>
+    </header>
+    <div id="hotelGalleryFilters" class="hotel-gallery__filters" role="group" aria-label="Lọc ảnh khách sạn"></div>
+    <div id="hotelGalleryModalContent" class="gal"></div>
+  </section>
+</div>
+
+<!-- ============ ROOMS ============ -->
+<section class="section section--tight section--alt" id="rooms">
+  <div class="container">
+    <div class="between" style="margin-bottom:22px;flex-wrap:wrap">
+      <div>
+        <h2 style="font-size:1.6rem" id="roomCount"></h2>
+        <p class="tiny muted" style="margin:3px 0 0" id="roomSub"></p>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="tiny muted nowrap">Sort by</span>
+        <select class="select" id="sortBy" aria-label="Sort by" style="width:auto;min-width:180px">
+          <option value="recommended">Recommended</option>
+          <option value="price-asc">Price: low to high</option>
+          <option value="price-desc">Price: high to low</option>
+          <option value="size">Room size</option>
+        </select>
+      </div>
+    </div>
+    <div id="roomList" class="stack" style="gap:18px"></div>
+
+    <div class="card" style="margin-top:26px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;justify-content:space-between">
+      <div style="display:flex;gap:14px;align-items:center">
+        <span style="color:var(--gold-dk)" id="helpIcon"></span>
+        <div><b style="font-size:.92rem;display:block">Not sure which room is right for you?</b>
+          <span class="tiny muted">Our KAS team is here to help you find the perfect stay.</span></div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn btn--ghost btn--sm" id="btnCall" type="button">Call us</button>
+        <button class="btn btn--dark btn--sm" id="btnChat" type="button">Chat on Zalo</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="section section--tight" id="reviewsSec">
+  <div class="container"><div id="reviews"></div></div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script src="js/live.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App,
+      B = window.Booking, H = window.HotelUI, R = window.RoomUI;
+
+  App.boot({ active: 'hotels' });
+
+  var search = B.readSearch();
+  var hotel = D.getHotel(search.hotelId || U.qs().hotel || 'hotel-04');
+  if (!hotel) { location.replace('hotels.html'); return; }
+  var liveReady = window.KAS_LIVE.load().then(function(catalog){ window.KAS_LIVE.applyToHotel(hotel, catalog); paintPropertyMedia(); return catalog; }).catch(function(){ return null; });
+  search.hotelId = hotel.id;
+  B.saveSearch(search);
+
+  document.title = hotel.name + ' — KAS Hotel Collection';
+  App.renderSteps(U.$('#steps'), 1, [U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut)]);
+
+  U.$('#backLink').innerHTML = U.icon('arrL', 13) + ' All properties';
+  U.$('#heroBg').innerHTML = U.img(hotel.images[0], hotel.name, '', false, false);
+  U.$('#hName').textContent = hotel.name;
+  U.$('#hTag').textContent = hotel.tagline;
+  U.$('#helpIcon').innerHTML = U.icon('bell', 24);
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* Search bar intentionally omitted on hotel detail. Search state is still read from booking storage. */
+  /* ---- property bar ---- */
+  U.$('#propBar').innerHTML =
+    '<div class="propbar">' +
+      '<div class="propbar__media">' +
+        U.img(hotel.images[1] || hotel.images[0], hotel.name, '', true, false) +
+      '</div>' +
+      '<div class="propbar__info">' +
+        '<div class="propbar__title">' +
+          '<h3>' + U.esc(hotel.name) + '</h3>' +
+          (hotel.starRating >= 4 ? '<span class="badge badge--gold badge--sig">Signature Property</span>' : '') +
+        '</div>' +
+        '<div class="propbar__loc">' + U.icon('pin', 13) + U.esc(hotel.address) + '</div>' +
+        '<div class="propbar__amenities">' +
+          hotel.amenities.slice(0, 5).map(function (a) {
+            return '<span class="chip">' + U.icon(App.amenityIcon(a), 12) + U.esc(a) + '</span>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+      '<div class="propbar__rating">' +
+        '<div class="propbar__score">' +
+          '<span class="propbar__score-num">' + hotel.rating.toFixed(1) + '<small>/10</small></span>' +
+          '<span class="propbar__stars">' + U.stars(hotel.rating / 2, 15) + '</span>' +
+        '</div>' +
+        '<div class="propbar__reviews">' + hotel.reviews + ' reviews · ' + U.esc(hotel.ratingSource) + '</div>' +
+        '<button class="btn btn--ghost-lt btn--sm" id="saveHotel" type="button">' +
+          U.icon('heart', 13) + ' Save hotel</button>' +
+      '</div>' +
+    '</div>';
+
+  U.$('#saveHotel').addEventListener('click', function () { U.toast(hotel.name + ' saved to your list.'); });
+
+  var GALLERY_CATEGORIES = [
+    {id:'all', label:'Tất cả'}, {id:'rooms',label:'Phòng nghỉ'},
+    {id:'lobby',label:'Sảnh & Lễ tân'}, {id:'dining',label:'Nhà hàng & Ăn uống'},
+    {id:'exterior',label:'Ngoại thất'}, {id:'amenities',label:'Tiện ích'}, {id:'other',label:'Khác'}
+  ];
+  function categorizedPropertyImages(){
+    var groups = {rooms:[],lobby:[],dining:[],exterior:[],amenities:[],other:[]};
+    var catalog = window.KAS_IMAGES && window.KAS_IMAGES.CATALOGUE && window.KAS_IMAGES.CATALOGUE[hotel.id];
+    function addIds(ids, category){(ids||[]).forEach(function(id){groups[category].push(window.KAS_IMAGES.url(id,960,660));});}
+    if(catalog && catalog.verified){
+      addIds(catalog.rooms,'rooms'); addIds(catalog.publicAreas,'lobby');
+      addIds(catalog.dining,'dining'); addIds(catalog.exterior,'exterior');
+      addIds(catalog.leisure,'amenities');
+    } else if(catalog){(catalog.raw||catalog.uncategorised||[]).forEach(function(url){groups.other.push(url);});}
+    (hotel.propertyGalleryItems||[]).forEach(function(item){
+      var cat=item.category;
+      if(!Object.prototype.hasOwnProperty.call(groups,cat)) cat='other';
+      groups[cat].push(item.url);
+    });
+    if(hotel.hasCustomPropertyGallery){groups={rooms:[],lobby:[],dining:[],exterior:[],amenities:[],other:[]};
+      (hotel.propertyGalleryItems||[]).forEach(function(item){var cat=groups[item.category]?item.category:'other';groups[cat].push(item.url);});
+    }
+    return groups;
+  }
+  function paintPropertyMedia(){
+    var imgs = hotel.images && hotel.images.length ? hotel.images : [];
+    if (!imgs.length) return;
+    U.$('#heroBg').innerHTML = U.img(imgs[0], hotel.name, '', false, false);
+    var groups=categorizedPropertyImages(), host=U.$('#hotelGalleryFilters');
+    var buttons=GALLERY_CATEGORIES.filter(function(c){return c.id==='all'||groups[c.id].length;});
+    host.innerHTML=buttons.map(function(c,i){return '<button type="button" class="hotel-gallery__filter'+(i===0?' is-active':'')+'" data-gallery-category="'+c.id+'" aria-pressed="'+(i===0?'true':'false')+'">'+c.label+' <span>'+ (c.id==='all'?imgs.length:groups[c.id].length)+'</span></button>';}).join('');
+    var preview=U.$('#gal');
+    var previewThumbs=imgs.slice(1,5);
+    preview.innerHTML='<button type="button" class="hotel-gallery-launch" aria-haspopup="dialog" aria-controls="hotelGalleryModal">'+U.img(imgs[0],hotel.name,'',false,false)+'<span class="hotel-gallery-launch__shade"></span><span class="hotel-gallery-launch__label">'+U.icon('image',17)+' Xem thư viện ảnh <b>'+imgs.length+'</b></span></button>'+
+      (previewThumbs.length?'<div class="hotel-gallery-preview-thumbs" aria-label="Một số ảnh khách sạn">'+previewThumbs.map(function(src,i){var imageIndex=i+1;return '<button type="button" class="hotel-gallery-preview-thumb" data-preview-image="'+imageIndex+'" aria-label="Xem ảnh '+(imageIndex+1)+'">'+U.img(src,hotel.name+' · '+(imageIndex+1),'',true,false)+'</button>';}).join('')+'</div>':'');
+    var modal=U.$('#hotelGalleryModal'), content=U.$('#hotelGalleryModalContent');
+    var lastFocus=null;
+    function openGallery(){
+      lastFocus=document.activeElement;
+      modal.hidden=false; modal.setAttribute('aria-hidden','false');
+      document.body.classList.add('hotel-gallery-modal-open');
+      modal.querySelector('.hotel-gallery-modal__panel').setAttribute('aria-label','Ảnh khách sạn '+hotel.name);
+      renderGalleryGrid(imgs);
+      var close=U.$('[data-gallery-close]',modal); if(close) close.focus();
+    }
+    function closeGallery(){
+      if(modal.hidden)return;
+      modal.hidden=true; modal.setAttribute('aria-hidden','true');
+      document.body.classList.remove('hotel-gallery-modal-open');
+      if(lastFocus&&lastFocus.focus)lastFocus.focus();
+    }
+    function renderGalleryGrid(list){
+      content.innerHTML='<div class="hotel-gallery-grid" role="list">'+list.map(function(src,index){
+        return '<button type="button" class="hotel-gallery-grid__item" role="listitem" data-gallery-image="'+index+'" aria-label="Xem ảnh '+(index+1)+' / '+list.length+'">'+U.img(src,hotel.name+' · '+(index+1),'',true,false)+'</button>';
+      }).join('')+'</div>';
+      content.querySelectorAll('[data-gallery-image]').forEach(function(button){
+        button.addEventListener('click',function(){App.openLightbox(list,Number(button.dataset.galleryImage),hotel.name);});
+      });
+    }
+    preview.querySelector('.hotel-gallery-launch').addEventListener('click',openGallery);
+    preview.querySelectorAll('[data-preview-image]').forEach(function(button){
+      button.addEventListener('click',function(){App.openLightbox(imgs,Number(button.dataset.previewImage),hotel.name);});
+    });
+    modal.querySelectorAll('[data-gallery-close]').forEach(function(el){el.addEventListener('click',closeGallery);});
+    document.addEventListener('keydown',function(e){if(!modal.hidden&&e.key==='Escape')closeGallery();});
+    host.querySelectorAll('[data-gallery-category]').forEach(function(btn){btn.addEventListener('click',function(){
+      var id=btn.dataset.galleryCategory, list=id==='all'?imgs:groups[id];
+      if(!list.length)return;
+      host.querySelectorAll('.hotel-gallery__filter').forEach(function(b){var active=b===btn;b.classList.toggle('is-active',active);b.setAttribute('aria-pressed',active?'true':'false');});
+      renderGalleryGrid(list);
+    });});
+    var mini = imgs[1] || imgs[0];
+    var miniHost = document.querySelector('#propBar .propbar__media');
+    if (miniHost) miniHost.innerHTML = U.img(mini, hotel.name, '', true, false);
+  }
+
+  /* ---- gallery ---- */
+  paintPropertyMedia();
+
+  /* ---- about ---- */
+  U.$('#aboutH').textContent = hotel.tagline;
+  U.$('#aboutP').textContent = hotel.description;
+  var facts = [
+    ['Check-in', hotel.checkIn], ['Check-out', hotel.checkOut],
+    ['Property rating', hotel.starRating + '-star'],
+    ['Guest rating', hotel.rating + '/10 (' + hotel.reviews + ' reviews)'],
+    ['Rooms in property', hotel.totalRooms ? hotel.totalRooms + ' rooms' : 'Not published by source'],
+    ['Room types', hotel.roomCount + ' types'],
+    ['Neighbourhood', hotel.area + ', ' + hotel.district],
+    ['Published rate range', hotel.priceRangeUSD]
+  ];
+  U.$('#aboutFacts').innerHTML = facts.map(function (f) {
+    return '<div><div class="dt">' + f[0] + '</div><div class="dd">' + U.esc(f[1]) + '</div></div>';
+  }).join('');
+  U.$('#aboutAm').innerHTML = hotel.amenities.map(function (a) {
+    return '<span class="am">' + U.icon(App.amenityIcon(a), 15) + U.esc(a) + '</span>';
+  }).join('');
+
+  /* ---- room list ---- */
+  var BADGES = { 0: 'Most popular', 1: 'Great for couples' };
+  function paintRooms() {
+    /* The selected check-in date is the source of truth for the nightly rate. */
+    hotel.rooms.forEach(function(r){
+      r.currentRate = (window.KAS_RATES && window.KAS_RATES.rateForDate(r.id, search.checkIn));
+    });
+    var list = H.sortRooms(hotel.rooms.slice(), U.$('#sortBy').value);
+
+    var n = U.nights(search.checkIn, search.checkOut);
+    U.$('#roomCount').textContent = list.length + ' room type' + (list.length === 1 ? '' : 's') + ' available';
+    U.$('#roomSub').textContent = U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut) +
+      '  ·  ' + n + ' night' + (n === 1 ? '' : 's') + '  ·  ' + window.Search.guestText(search);
+
+    var host = U.$('#roomList');
+    if (!list.length) {
+      host.innerHTML = '<div class="empty">' + U.icon('bed', 44) +
+        '<h3 style="margin-bottom:8px">No rooms available</h3>' +
+        '<p class="muted" style="font-size:.9rem">No room types are currently available for this stay.</p></div>';
+      return;
+    }
+    host.innerHTML = list.map(function (r, i) {
+      var big = r.maxGuests >= 4 ? 'Best for families' : null;
+      return H.roomCard(hotel, r, search, big || BADGES[i] || null);
+    }).join('');
+    U.$$('.rcard__media').forEach(App.miniCarousel);
+    App.reveal();
+    if (window.KAS_I18N) window.KAS_I18N.apply();
+  }
+  /* Uploaded room photos are authoritative when available. Wait for the
+     server catalog before drawing room cards so the cards show the same photos
+     the admin uploaded, not the old static gallery. */
+  liveReady.then(function(){ paintRooms(); });
+
+  /* ---- reviews ---- */
+  U.$('#reviews').innerHTML = R.reviewsHTML(hotel);
+  if (window.KAS_I18N) window.KAS_I18N.apply();
+
+  U.$('#btnCall').addEventListener('click', function () { U.toast('Call us on ' + D.config.phone); });
+  U.$('#btnChat').addEventListener('click', function () { U.toast('Our team replies on Zalo · ' + D.config.phone); });
+
+  function collapse() {
+    var g = U.$('#aboutGrid');
+    if (g) g.style.gridTemplateColumns = window.innerWidth < 980 ? '1fr' : '1.25fr 1fr';
+    var am = U.$('#aboutAm');
+    if (am) am.style.gridTemplateColumns = window.innerWidth < 520 ? '1fr' : 'repeat(2,1fr)';
+  }
+  collapse(); window.addEventListener('resize', U.debounce(collapse, 120));
+})();
+</script>
+</body>
+</html>

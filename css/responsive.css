@@ -1,0 +1,1306 @@
+/* ==========================================================================
+   KAS — RESPONSIVE
+   Breakpoint scale (max-width, desktop-first). Use these for new rules:
+     1200px  small desktop / tablet landscape  (container goes fluid)
+     1024px  tablet landscape                  (navigation collapses)
+      900px  tablet portrait                   (two-column layouts stack)
+      767px  large phone / small tablet
+      560px  phone
+      360px  small phone
+   Large screens (min-width): 1441px, 1800px, 2400px.
+   A few component-specific values (max 1400, 1279, 1180, 1100, 980, 800,
+   720, 700, 600, 520, 400; min 1201, 1920, 2300) remain where a component
+   needs its own switch point;
+   they are kept to avoid visual changes and are candidates to fold into
+   the scale above during the redesign.
+   Load order on every page: style.css → components.css → responsive.css.
+   ========================================================================== */
+
+/* ---------------- large desktop down ---------------- */
+@media (max-width:1400px){
+  .rail{grid-template-columns:repeat(4,1fr);gap:16px}
+}
+
+/* ---------------- tablet landscape ---------------- */
+@media (max-width:1200px){
+  :root{--container:100%}
+  .nav{gap:17px}
+  .nav a{font-size:.66rem}
+  .split{grid-template-columns:1fr 320px;gap:22px}
+  .split--filters{grid-template-columns:236px 1fr}
+  .step__t span{max-width:170px}  /* long room-name caption gives way first */
+  .step__line{margin-inline:10px;min-width:12px}  /* connectors give up space before captions truncate */
+  .rcard{grid-template-columns:250px 1fr 208px}
+  .hcard{grid-template-columns:280px 1fr}
+  .ftr__main{grid-template-columns:1.35fr repeat(3,minmax(0,1fr));row-gap:34px}
+  .ftr__main .ftr__col:nth-child(5){grid-column:2}
+  .ftr__main .ftr__contact{grid-column:3}
+  .ftr__news{grid-column:1/-1}
+  .amgrid{grid-template-columns:repeat(4,1fr)}
+}
+
+/* ---------------- tablet ---------------- */
+@media (max-width:1024px){
+  .propbar{grid-template-columns:88px minmax(0,1fr);gap:16px}
+  .propbar__rating{grid-column:2;text-align:left;min-width:0}
+  .propbar__score{justify-content:flex-start}
+  .propbar__rating .btn{margin-top:10px}
+
+  .container{padding-inline:22px}
+  .nav,.lang{display:none}
+  .burger{display:grid;place-items:center}
+  .hdr__right{gap:10px}
+
+  .searchbar{grid-template-columns:1fr 1fr;transform:none;overflow:visible}
+  .sf{border-right:none;border-bottom:1px solid rgba(194,162,92,.2)}
+  .searchbar--solid .sf{border-bottom-color:var(--line)}
+  .sf:nth-child(odd){border-right:1px solid rgba(194,162,92,.2)}
+  .searchbar--solid .sf:nth-child(odd){border-right-color:var(--line)}
+  .searchbar .btn{grid-column:1/-1;border-radius:0 0 var(--r) var(--r);padding-block:15px}
+  .searchbar__submit{min-height:52px}
+  .searchbar__hotel-pop{left:12px;right:12px}
+  .kas-quick-search{margin-top:8px}
+  .hotel-search-wrap.is-search-open .kas-quick-search{max-height:520px}
+  .kas-quick-search__tags{gap:7px}
+  .kas-quick-tag{padding:7px 10px;font-size:.74rem}
+
+  .split,.split--filters{grid-template-columns:1fr}
+  .sticky{position:static}
+  .split__side{order:2}
+  .split__main{order:1}
+  /* on room-detail the booking panel should come first on tablet */
+  .split--sidefirst .split__side{order:1}
+  .split--sidefirst .split__main{order:2}
+
+  .rcard{grid-template-columns:240px 1fr}
+  .rcard__side{grid-column:1/-1;border-left:none;border-top:1px solid var(--line);
+    flex-direction:row;align-items:flex-end;justify-content:space-between;flex-wrap:wrap}
+  .rcard__perks{flex-direction:row;gap:16px}
+  .rcard__side .btn{min-width:186px}
+
+  .gal__thumbs{grid-template-columns:repeat(5,1fr)}
+  .gal__t:nth-child(6){display:none}
+  .dl{grid-template-columns:repeat(2,1fr)}
+  .amgrid{grid-template-columns:repeat(3,1fr)}
+  .trust__in{justify-content:flex-start;gap:14px 26px}
+  .hero{min-height:560px}
+}
+
+/* ---------------- mobile ---------------- */
+@media (max-width:767px){
+  .propbar{grid-template-columns:76px minmax(0,1fr);gap:14px}
+  .propbar__media{width:76px;height:76px}
+  .propbar__title h3{font-size:1.35rem}
+  .propbar__loc{font-size:.78rem}
+  .propbar__amenities{gap:6px;margin-top:9px}
+  .propbar__amenities .chip{font-size:.68rem;padding:4px 8px}
+  .propbar__rating{grid-column:2}
+  .propbar__score-num{font-size:1.65rem}
+  .propbar__reviews{font-size:.66rem}
+
+  body{font-size:14.5px}
+  .container{padding-inline:16px}
+  :root{--nav-h:62px}
+
+  .hero{min-height:520px}
+  .hero__ct p{font-size:.92rem}
+  .searchbar{grid-template-columns:1fr;transform:none;margin-top:0;overflow:visible}
+  .sf{border-right:none!important;padding:13px 17px}
+  .sf:last-of-type{border-bottom:none}
+  .gpop{width:calc(100vw - 46px);right:auto;left:0}
+  .searchbar__hotel-pop{left:0;right:0;max-height:280px}
+  .kas-quick-search{margin-top:8px}
+  .kas-quick-search__group + .kas-quick-search__group{margin-top:13px}
+  .hotel-search-wrap.is-search-open .kas-quick-search{max-height:620px}
+  .kas-quick-search__tags{gap:6px}
+  .kas-quick-tag{padding:7px 9px;font-size:.72rem}
+
+  .section{padding-block:2.6rem}
+
+  .rail{grid-template-columns:repeat(2,1fr);gap:11px}
+
+  /* vertical cards on mobile */
+  .hcard,.rcard{grid-template-columns:1fr}
+  .hcard__media,.rcard__media{min-height:0;aspect-ratio:16/10;position:relative}
+  .hcard__b,.rcard__b{padding:18px}
+  .rcard__side{padding:18px;flex-direction:column;align-items:stretch}
+  .rcard__side .btn{width:100%}
+  .rcard__perks{flex-direction:column;gap:6px}
+  .rcard__specs{grid-template-columns:1fr 1fr;gap:6px 12px}
+  .hcard__ft{flex-direction:column;align-items:stretch;gap:14px}
+  .hcard__ft .btn{width:100%}
+  .price{text-align:left}
+
+  .gal__thumbs{grid-template-columns:repeat(4,1fr);gap:7px}
+  .gal__t:nth-child(5),.gal__t:nth-child(6){display:none}
+  .gal__main{aspect-ratio:4/3}
+  .gal__nav{width:36px;height:36px}
+
+
+  .card{padding:20px 18px}
+  .dl,.dl--2{grid-template-columns:1fr;gap:14px}
+  .amgrid{grid-template-columns:repeat(2,1fr)}
+  .pays{grid-template-columns:1fr}
+  .trust--pad .trust__in{flex-direction:column;gap:18px}
+  .trust--pad .trust__i{min-width:0}
+
+  .ftr__main{gap:26px}
+  .ftr__brand,.ftr__news{grid-column:1/-1}
+  .ftr__contact{min-width:0}
+  .ftr__btm{flex-direction:column;gap:10px}
+
+  .modal__b{padding:24px 22px}
+  .modal__ft{padding:0 22px 24px;flex-direction:column-reverse}
+  .toasts{left:14px;right:14px;bottom:88px}
+  .toast{max-width:none}
+  .chat{right:14px;bottom:14px;padding:11px 17px;font-size:.75rem}
+  .totop{right:14px;bottom:68px}
+
+  /* sticky bottom booking CTA */
+  .mobile-cta{
+    display:flex;position:fixed;left:0;right:0;bottom:0;z-index:850;
+    background:var(--surface);border-top:1px solid var(--line);
+    padding:11px 16px;gap:14px;align-items:center;
+    box-shadow:0 -4px 22px rgba(34,31,26,.1);
+  }
+  .mobile-cta .price__v{font-size:1.32rem}
+  .mobile-cta .btn{flex:1;padding-block:13px}
+  body.has-mcta{padding-bottom:74px}
+  body.has-mcta .chat{bottom:80px}
+  body.has-mcta .totop{bottom:134px}
+  body.has-mcta .toasts{bottom:152px}
+}
+
+@media (max-width:400px){
+  .rail{grid-template-columns:1fr}
+  .rcard__specs{grid-template-columns:1fr}
+  .gal__thumbs{grid-template-columns:repeat(3,1fr)}
+  .gal__t:nth-child(4){display:none}
+}
+
+/* ---------------- mobile drawer ---------------- */
+.drawer{
+  position:fixed;inset:0;z-index:1100;background:var(--black);
+  transform:translateX(100%);transition:transform .38s var(--ease),visibility 0s linear .38s;
+  display:flex;flex-direction:column;overflow-y:auto;
+  visibility:hidden;   /* closed drawer must not be reachable with Tab */
+}
+.drawer.open{transform:none;visibility:visible;transition:transform .38s var(--ease)}
+.drawer__hd{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(194,162,92,.16);flex-shrink:0}
+.drawer__hd button{color:var(--ivory);padding:8px}
+.drawer nav{display:flex;flex-direction:column;padding:14px 20px}
+.drawer nav a{
+  padding:15px 0;border-bottom:1px solid rgba(255,255,255,.06);color:var(--tx-inv-2);
+  font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;font-weight:500;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.drawer nav a:hover,.drawer nav a.is-active{color:var(--gold-lt)}
+.drawer__ft{padding:22px 20px 30px;margin-top:auto;display:flex;flex-direction:column;gap:11px}
+
+/* ---------------- print (booking confirmation) ---------------- */
+@media print{
+  .hdr,.ftr,.chat,.totop,.steps,.mobile-cta,.toasts,.noprint{display:none!important}
+  body{background:#fff;font-size:11pt;padding:0}
+  .section{padding-block:0}
+  .card,.panel{border:1px solid #ccc;box-shadow:none;break-inside:avoid;page-break-inside:avoid}
+  .split{grid-template-columns:1fr 300px}
+  a{text-decoration:none;color:#000}
+  .btn{display:none!important}
+  .panel__hd{background:#eee!important;color:#000!important}
+  .panel__hd h4{color:#000!important}
+}
+
+/* ---- stepper ----
+   Five labelled steps stop fitting well below 1024px, so compact from 900px
+   and let the row scroll instead of pushing the page wider. */
+@media (max-width:900px){
+  .steps__in{padding-block:14px;overflow-x:auto;scrollbar-width:none}
+  .steps__in::-webkit-scrollbar{display:none}
+  .step__t{display:none}
+  .step.is-on .step__t{display:block}
+  .step__line{margin-inline:9px;min-width:14px}
+}
+
+@media (max-width:767px){
+  body{max-width:100%}
+  .searchbar .btn{white-space:normal}
+}
+
+
+@media (max-width:767px){
+  .hero.hero--sm{min-height:0;height:auto}
+  .hero.hero--sm .hero__in{padding-bottom:24px}
+  .hero.hero--sm #hotelSearch{margin-top:1.5rem}
+}
+
+/* ---- contact ---- */
+/* Room-detail support channels are always horizontal rows stacked vertically.
+   Keep the layout here as the single canonical rule; mobile only tunes spacing. */
+.split--sidefirst .split__side #assist .ct-channels{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:var(--support-gap,9px);
+  width:100%;
+  min-width:0;
+}
+.split--sidefirst .split__side #assist .ct-ch{
+  box-sizing:border-box;
+  width:100%;
+  min-width:0;
+  min-height:0;
+  padding:11px 12px;
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:flex-start;
+  gap:10px;
+  overflow:hidden;
+}
+.split--sidefirst .split__side #assist .ct-ch svg{
+  width:16px;
+  height:16px;
+  flex:0 0 16px;
+}
+.split--sidefirst .split__side #assist .ct-ch span{
+  display:block;
+  flex:1 1 auto;
+  width:auto;
+  min-width:0;
+}
+.split--sidefirst .split__side #assist .ct-ch b{
+  display:block;
+  width:100%;
+  max-width:100%;
+  font-size:.76rem;
+  line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.split--sidefirst .split__side #assist .ct-ch small{
+  display:block;
+  width:100%;
+  max-width:100%;
+  margin-top:2px;
+  font-size:.68rem;
+  line-height:1.3;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+
+@media (max-width:1180px){ .hdr__tel span{display:none} .hdr__tel{padding:7px 9px} }
+@media (max-width:1024px){ .hdr__tel{display:inline-flex} }
+@media (max-width:767px){
+  .ct-fab{right:14px;bottom:14px}
+  .ct-fab__btn{padding:11px 17px;font-size:.75rem}
+  .ct-fab__label{display:none}
+  .ct-fab__menu{min-width:min(248px,calc(100vw - 44px))}
+  /* never cover the sticky booking CTA / price */
+  body.has-mcta .ct-fab{bottom:80px}
+
+  
+  /* Room-detail support card: mobile spacing only. */
+  .split__side #assist{
+    --support-panel-pad:16px;
+    --support-gap:8px;
+  }
+  .split__side #assist .panel__b{
+    padding:var(--support-panel-pad);
+  }
+  .split__side #assist .ct-support__hd{
+    gap:9px;
+    margin-bottom:12px;
+  }
+  .split__side #assist .ct-support__hd b{
+    font-size:.86rem;
+    line-height:1.3;
+  }
+  .split__side #assist .ct-support__hd span{
+    font-size:.74rem;
+    line-height:1.4;
+  }
+  .split__side #assist > .panel__b > .divider{
+    margin-block:12px!important;
+  }
+  .split__side #assist .ct-link{
+    padding:5px 0;
+    font-size:.8rem;
+  }
+
+}
+
+
+
+/* ---- header crowding ----
+   The header now carries the official phone. Below 520px the Sign in / Join
+   button is dropped (the drawer still offers it) so the phone and the burger
+   both stay inside the viewport. */
+@media (max-width:520px){
+  .hdr__right > .btn--gold{display:none}
+  .hdr__in{gap:12px}
+  .hdr__right{gap:8px}
+}
+@media (max-width:360px){
+  .hdr__tel{display:none}
+}
+/* The header sign-in button overflowed the bar (horizontal scroll, burger
+   pushed off-screen) at 521–560px in EN and up to ~620px in VI, where the
+   label is longer. Hide it a little earlier; sign-in stays in the page flow. */
+@media (max-width:560px){ .hdr__right > .btn--gold{display:none} }
+@media (max-width:640px){ html[lang="vi"] .hdr__right > .btn--gold{display:none} }
+/* Sticky booking bar: on phones narrower than 375px the "Book this room"
+   button ran ~11px past the right edge. Tighten its padding there only. */
+@media (max-width:374px){ .mobile-cta{gap:10px} .mobile-cta .btn{padding-inline:16px} }
+/* Home "Rooms & Suites" image: aspect-ratio + min-height made it wider than
+   the phone viewport (cropped on the right edge). Keep it inside the column. */
+@media (max-width:767px){ .home-rooms__image{max-width:100%} }
+
+
+/* V11.2 footer spacious two-row layout */
+@media (min-width:1201px){
+  .ftr__main{
+    grid-template-columns:1.45fr repeat(5,minmax(0,1fr));
+    column-gap:34px;
+    row-gap:46px;
+    align-items:start;
+  }
+  .ftr__brand{grid-column:1}
+  .ftr__main > .ftr__col:nth-child(2){grid-column:2}
+  .ftr__main > .ftr__col:nth-child(3){grid-column:3}
+  .ftr__main > .ftr__col:nth-child(4){grid-column:4}
+  .ftr__main > .ftr__col:nth-child(5){grid-column:5}
+  .ftr__main > .ftr__col:nth-child(6){grid-column:6}
+  .ftr__contact{grid-column:1 / span 2 !important;padding-top:4px}
+  .ftr__news{grid-column:5 / span 2 !important;padding-top:4px}
+  .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
+  .ftr__contact .ct-link{gap:16px;padding:8px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
+}
+
+@media (min-width:768px) and (max-width:1200px){
+  .ftr__main{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    column-gap:28px;
+    row-gap:38px;
+  }
+  .ftr__brand{grid-column:1/-1}
+  .ftr__main > .ftr__col:nth-child(2){grid-column:1}
+  .ftr__main > .ftr__col:nth-child(3){grid-column:2}
+  .ftr__main > .ftr__col:nth-child(4){grid-column:3}
+  .ftr__main > .ftr__col:nth-child(5){grid-column:1}
+  .ftr__main > .ftr__col:nth-child(6){grid-column:2}
+  .ftr__contact{grid-column:1 !important}
+  .ftr__news{grid-column:3 !important}
+  .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
+  .ftr__contact .ct-link{gap:15px;padding:8px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
+}
+
+@media (max-width:767px){
+  .ftr__main{grid-template-columns:1fr;row-gap:28px}
+  .ftr__brand,
+  .ftr__main > .ftr__col,
+  .ftr__contact,
+  .ftr__news{grid-column:1 !important}
+  .ftr__contact .ct-stack--footer{gap:8px;margin-top:10px}
+  .ftr__contact .ct-link{gap:15px;padding:7px 0;min-height:34px}
+  .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
+  .ftr__contact .tiny{margin-top:14px !important;line-height:1.7}
+}
+
+/* Homepage discovery rail */
+@media (max-width:600px){
+  .hero{min-height:680px}
+  .hero__ct h1{font-size:clamp(2.8rem,14vw,4rem)}
+}
+
+
+/* Keep the homepage hero full-screen across desktop, tablet and mobile. */
+.hero{min-height:100svh}
+
+/* Keep the EN homepage in the same vertical frame as the Vietnamese version. */
+@media (max-width:900px){
+  .hero__in{padding-top:clamp(7.2rem,14vh,8.5rem)}
+  .hero__ct{min-height:360px;max-width:560px}
+}
+@media (max-width:560px){
+  .lang-button{min-width:68px;height:36px}
+  .lang-menu{right:-2px}
+  .hero__in{padding-top:clamp(6.5rem,15vh,8rem);padding-inline:18px}
+  .hero__ct{min-height:430px;max-width:100%}
+  .hero__ct p{font-size:.9rem}
+}
+
+
+/* Mobile/tablet keep the content flow while preserving the Vietnamese reference frame. */
+@media (max-width:900px){
+  .hero__in{position:relative}
+  .hero__ct{position:relative;top:auto;left:auto}
+}
+
+/* V19 homepage hero search placement: overlap just below hero */
+@media (max-width:767px){
+  .home-usp__in{padding-block:8px}
+  .home-usp{padding-top:40px}
+}
+
+/* V20.3 — responsive scale stabilization
+   Keep typography and major spacing visually stable across viewport/zoom changes.
+   No global transform/zoom is used; layout changes are handled by breakpoints. */
+
+/* Global type: use rem-based steps instead of viewport-driven type. */
+h1{font-size:4.25rem}
+h2{font-size:2.65rem}
+h3{font-size:1.65rem}
+
+/* Major homepage spacing stays stable while columns still reflow naturally. */
+.home-stay,.home-collection,.home-experience,.home-rooms{padding-block:6rem}
+.home-rooms__grid{gap:4.5rem}
+.home-cta{padding-block:7rem}
+
+@media (max-width:1200px){
+  .home-stay__copy h2,
+  .home-city__copy h2,
+  .home-rooms__copy h2{font-size:4rem}
+  .home-section-head h2{font-size:3.25rem}
+  .home-experience h2{font-size:3.7rem}
+  .home-cta h2{font-size:4.25rem}
+  .home-city__copy{padding:4rem 4.25rem}
+  .home-rooms__grid{gap:3.5rem}
+}
+
+@media (max-width:900px){
+  h1{font-size:3.5rem}
+  h2{font-size:2.35rem}
+  h3{font-size:1.5rem}
+  .home-stay__copy h2,
+  .home-city__copy h2,
+  .home-rooms__copy h2{font-size:3.5rem}
+  .home-section-head h2{font-size:2.9rem}
+  .home-experience h2{font-size:3.3rem}
+  .home-cta h2{font-size:3.8rem}
+  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:5rem}
+  .home-city__copy{padding:4rem 3rem}
+}
+
+@media (max-width:560px){
+  h1{font-size:3rem}
+  h2{font-size:2.15rem}
+  h3{font-size:1.4rem}
+  .home-section-head h2{font-size:2.55rem}
+  .home-experience h2{font-size:3rem}
+  .home-stay,.home-collection,.home-experience,.home-rooms{padding-block:4rem}
+  .home-city__copy{padding:4rem 24px}
+  .home-rooms__grid{gap:2.5rem}
+  .home-card{flex-basis:min(320px,calc(100% - 32px))}
+}
+
+/* Avoid viewport-width typography/spacing in the legacy hero. */
+@media (max-width:767px){
+  .hero__ct h1{font-size:3.5rem}
+}
+@media (max-width:560px){
+  .hero__ct h1{font-size:3rem}
+}
+
+
+/* ==========================================================================
+   V20.8 — INDEX GRID / RESIZE STABILIZATION
+   --------------------------------------------------------------------------
+   No global transform(), zoom, or JavaScript scaling.
+   The homepage uses bounded grid tracks and discrete responsive breakpoints.
+   ========================================================================== */
+
+.home-redesign {
+  overflow-x: clip;
+}
+
+.home-grid {
+  width: 100%;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.home-grid > section {
+  min-width: 0;
+}
+
+/* Shared editorial container: bounded on normal desktop widths. */
+.home-grid .container {
+  width: min(100% - 48px, 1440px);
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+
+
+/* Booking bar: its own grid row, never scaled with the hero. */
+
+/* USP remains a five-column grid until tablet. */
+.home-grid__usp .container {
+  width: min(100% - 48px, 1440px);
+}
+
+.home-usp__in {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+}
+
+/* Two-column editorial sections use bounded 12-column grids. */
+.home-stay__grid,
+.home-rooms__grid {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 64px;
+  align-items: center;
+}
+
+.home-stay__copy {
+  grid-column: 1 / span 5;
+  min-width: 0;
+}
+
+.home-stay__visual {
+  grid-column: 7 / -1;
+  min-width: 0;
+  min-height: 560px;
+}
+
+.home-stay__copy h2,
+.home-city__copy h2,
+.home-rooms__copy h2 {
+  font-size: 4rem;
+  line-height: .94;
+}
+
+.home-stay__copy p,
+.home-city__copy p,
+.home-rooms__copy p {
+  max-width: 560px;
+}
+
+.home-collection .container,
+.home-experience .container {
+  max-width: 1440px;
+}
+
+.home-section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
+  gap: 48px;
+}
+
+.home-section-head h2 {
+  font-size: 3.4rem;
+  line-height: .96;
+}
+
+.home-cards {
+  display: grid;
+  /* one row of 4 visible cards; the rest sit off to the right so the ‹ › arrows
+     (scrollBy) have somewhere to go instead of wrapping to an orphan row */
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 54px) / 4);
+  gap: 18px;
+  overflow: hidden;
+}
+
+.home-card {
+  min-width: 0;
+  width: 100%;
+}
+
+.home-card__img {
+  aspect-ratio: 1.08 / 1;
+}
+
+.home-cards__arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-city {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 620px;
+}
+
+.home-city__copy {
+  min-width: 0;
+  padding: 80px clamp(40px, 5vw, 88px);
+}
+
+.home-city__image {
+  min-width: 0;
+  min-height: 620px;
+}
+
+.home-feature-grid article {
+  min-width: 0;
+}
+
+.home-rooms__image {
+  grid-column: 1 / span 7;
+  min-width: 0;
+  min-height: 520px;
+}
+
+.home-rooms__copy {
+  grid-column: 9 / -1;
+  min-width: 0;
+}
+
+.home-cta__in {
+  max-width: 900px;
+  margin-inline: auto;
+  text-align: center;
+}
+
+.home-cta h2 {
+  font-size: 4.3rem;
+  line-height: .95;
+}
+
+/* Wide CSS viewports (often produced by browser zoom-out):
+   expand the editorial frame by breakpoint rather than by continuous vw scaling. */
+@media (min-width:1800px){
+  .home-grid .container,
+  .home-stay__grid,
+  .home-rooms__grid,
+  .home-collection .container,
+  .home-experience .container,
+  .home-grid__usp .container {
+    width: min(100% - 72px, 1800px);
+    max-width: 1800px;
+  }
+
+  .home-stay__copy h2,
+  .home-city__copy h2,
+  .home-rooms__copy h2 {
+    font-size: 4.4rem;
+  }
+
+  .home-section-head h2 {
+    font-size: 3.7rem;
+  }
+
+  .home-cta h2 {
+    font-size: 4.7rem;
+  }
+}
+
+@media (min-width:2400px){
+  .home-grid .container,
+  .home-stay__grid,
+  .home-rooms__grid,
+  .home-collection .container,
+  .home-experience .container,
+  .home-grid__usp .container {
+    width: min(100% - 96px, 2160px);
+    max-width: 2160px;
+  }
+
+}
+
+/* Tablet: reduce tracks, not the entire page. */
+@media (max-width:1100px){
+  .home-grid .container {
+    width: min(100% - 40px, 1100px);
+  }
+
+  .home-stay__grid,
+  .home-rooms__grid {
+    gap: 40px;
+  }
+
+  .home-cards {
+    grid-auto-columns: calc((100% - 36px) / 3);
+  }
+
+  }
+
+/* Mobile/tablet portrait: stack the editorial grids naturally. */
+@media (max-width:800px){
+  .home-grid .container {
+    width: calc(100% - 32px);
+    max-width: none;
+  }
+
+  .home-usp__in {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .home-stay__grid,
+  .home-rooms__grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .home-stay__copy,
+  .home-stay__visual,
+  .home-rooms__image,
+  .home-rooms__copy {
+    grid-column: 1;
+  }
+
+  .home-stay__visual,
+  .home-rooms__image {
+    min-height: 420px;
+  }
+
+  .home-stay__copy h2,
+  .home-city__copy h2,
+  .home-rooms__copy h2 {
+    font-size: 3.3rem;
+  }
+
+  .home-section-head {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .home-section-head h2 {
+    font-size: 3rem;
+  }
+
+  .home-cards {
+    display: flex;
+    overflow-x: auto;
+    gap: 14px;
+  }
+
+  .home-card {
+    flex: 0 0 min(360px, calc(100% - 32px));
+  }
+
+  .home-city {
+    grid-template-columns: 1fr;
+  }
+
+  .home-city__copy,
+  .home-city__image {
+    min-height: 460px;
+  }
+
+  .home-city__copy {
+    padding: 56px 32px;
+  }
+
+  .home-cta h2 {
+    font-size: 3.6rem;
+  }
+}
+
+@media (max-width:560px){
+
+  .home-usp__in {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .home-stay__copy h2,
+  .home-city__copy h2,
+  .home-rooms__copy h2 {
+    font-size: 2.9rem;
+  }
+
+  .home-cta h2 {
+    font-size: 3rem;
+  }
+}
+
+
+/* ==========================================================================
+   HOMEPAGE FRAME — SINGLE SOURCE OF TRUTH
+   One centered rail for the page; hero is full-bleed inside the rail.
+   ========================================================================== */
+html{overflow-x:hidden}
+body.home-redesign{overflow-x:hidden}
+
+/* Homepage header uses the same centered rail as the page content. */
+.hdr.hdr--float .hdr__in {
+  padding-inline: 0;
+  margin-inline: auto;
+  gap: 14px;
+}
+
+.hdr.hdr--float .logo img {
+  width: 96px !important;
+  max-width: none !important;
+}
+
+.hdr.hdr--float .nav {
+  gap: 17px;
+}
+
+.hdr.hdr--float .nav a {
+  font-size: .62rem;
+  letter-spacing: .12em;
+}
+
+.hdr.hdr--float .hdr__right {
+  gap: 8px;
+}
+
+.hdr.hdr--float .hdr__right .btn {
+  font-size: .58rem;
+  padding-inline: 16px;
+}
+
+.hdr.hdr--float .lang-button,
+.hdr.hdr--float .lang-select {
+  font-size: .62rem;
+}
+
+/* Keep hero background itself visually clean: no blur at the top state. */
+.hdr--float.header--transparent,
+.hdr--float.header--transparent * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Search bar, when present, aligns to the same centered rail. */
+
+@media (max-width:1100px){
+
+  .hdr.hdr--float .nav {
+    gap: 12px;
+  }
+
+  .hdr.hdr--float .nav a {
+    font-size: .58rem;
+  }
+}
+
+@media (max-width:700px){
+
+  .hdr.hdr--float .logo img {
+    width: 92px !important;
+  }
+}
+
+
+/* Header itself stays full width; its controls follow a bounded central rail. */
+.hdr.hdr--float .hdr__in {
+  width: min(1120px, calc(100vw - 64px));
+  max-width: 1120px;
+}
+
+@media (min-width:1800px){
+  .hdr.hdr--float .hdr__in {
+    width: min(1440px, calc(100vw - 96px));
+    max-width: 1440px;
+  }
+}
+
+
+
+
+/* V21.5 — INDEX HERO / NAV / FOOTER FINAL LAYOUT FIX
+   Homepage-only visual corrections. No JS/function behavior is changed. */
+
+/* Header: use the same full KAS wordmark scale as the non-floating header. */
+.home-redesign #hdr.hdr--float .hdr__in {
+  width: min(1320px, calc(100vw - 64px));
+  max-width: 1320px;
+  gap: 24px;
+}
+.home-redesign #hdr.hdr--float .logo img {
+  width: 180px !important;
+  max-width: 42vw !important;
+  height: auto !important;
+}
+.home-redesign #hdr.hdr--float .nav {
+  gap: 26px;
+}
+.home-redesign #hdr.hdr--float .nav a {
+  font-size: .71rem;
+  letter-spacing: .15em;
+}
+.home-redesign #hdr.hdr--float .hdr__right {
+  gap: 16px;
+}
+
+/* Search is intentionally removed from the homepage composition. */
+
+/* Footer: keep the editorial grid centered to the same viewport frame. */
+.home-redesign #ftr {
+  width: 100%;
+  overflow: hidden;
+}
+.home-redesign #ftr .container {
+  width: min(1320px, calc(100% - 64px));
+  max-width: 1320px;
+  margin-inline: auto;
+  padding-inline: 0;
+}
+.home-redesign #ftr .ftr__main {
+  grid-template-columns: minmax(240px,1.45fr) repeat(4,minmax(135px,1fr));
+  grid-template-rows: auto auto;
+  gap: 28px 32px;
+}
+.home-redesign #ftr .ftr__brand { grid-column: 1; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; grid-row: 1; }
+.home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 5; grid-row: 1; }
+.home-redesign #ftr .ftr__contact { grid-column: 1 / span 2; grid-row: 2; }
+.home-redesign #ftr .ftr__news { grid-column: 4 / span 2; grid-row: 2; }
+
+@media (max-width:1100px){
+  .home-redesign #hdr.hdr--float .hdr__in {
+    width: calc(100vw - 48px);
+    max-width: 1120px;
+  }
+  .home-redesign #hdr.hdr--float .logo img { width: 160px !important; }
+  .home-redesign #ftr .container { width: calc(100% - 48px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: minmax(220px,1.35fr) repeat(3,minmax(130px,1fr));
+  }
+  .home-redesign #ftr .ftr__brand { grid-column: 1; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2) { grid-column: 2; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3) { grid-column: 3; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4) { grid-column: 4; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) { grid-column: 1; grid-row: 2; }
+  .home-redesign #ftr .ftr__contact { grid-column: 2 / span 2; grid-row: 2; }
+  .home-redesign #ftr .ftr__news { grid-column: 4; grid-row: 2; }
+}
+
+@media (max-width:700px){
+  .home-redesign #hdr.hdr--float .hdr__in {
+    width: calc(100vw - 32px);
+    max-width: none;
+  }
+  .home-redesign #hdr.hdr--float .logo img { width: 140px !important; }
+  .home-redesign #ftr .container { width: calc(100% - 32px); }
+  .home-redesign #ftr .ftr__main {
+    grid-template-columns: repeat(2,minmax(0,1fr));
+    gap: 26px 18px;
+  }
+  .home-redesign #ftr .ftr__brand,
+  .home-redesign #ftr .ftr__contact,
+  .home-redesign #ftr .ftr__news { grid-column: 1 / -1; grid-row: auto; }
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(2),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(3),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(4),
+  .home-redesign #ftr .ftr__main > .ftr__col:nth-child(5) {
+    grid-column: auto;
+    grid-row: auto;
+  }
+}
+
+/* ================================================================
+   KAS HOMEPAGE — CLEAN RESPONSIVE SYSTEM
+   One layout model only. Keep the desktop 3-column frame, keep the
+   homepage editorial content in the middle rail, and give the HERO a
+   wider middle rail than the inner content used by the other sections.
+   ================================================================ */
+
+:root{--nav-h:76px;--home-rail:1728px;--home-content:1200px;--home-gutter:24px}
+
+/* ---------- Desktop frame ---------- */
+.home-redesign .home-page-grid{
+  display:grid !important;
+  grid-template-columns:minmax(var(--home-gutter),1fr) minmax(0,var(--home-rail)) minmax(var(--home-gutter),1fr) !important;
+  width:100% !important;
+  max-width:none !important;
+  margin:0 !important;
+  overflow:visible !important;
+}
+.home-redesign .home-page-grid__side{min-width:0}
+.home-redesign .home-page-grid__content{
+  grid-column:2 !important;
+  width:100% !important;
+  max-width:var(--home-rail) !important;
+  min-width:0 !important;
+  margin:0 !important;
+  overflow:visible !important;
+}
+
+/* All non-hero sections use the narrower editorial measure. Their section
+   backgrounds can still span the viewport; only their inner content is
+   constrained to the common 1200px measure. */
+.home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+.home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+.home-redesign .home-page-grid__content > .home-usp > .container,
+.home-redesign .home-page-grid__content .home-stay__grid,
+.home-redesign .home-page-grid__content .home-rooms__grid,
+.home-redesign .home-page-grid__content .home-collection .container,
+.home-redesign .home-page-grid__content .home-experience .container,
+.home-redesign .home-page-grid__content .home-cta__in{
+  width:min(calc(100% - 48px),var(--home-content));
+  max-width:var(--home-content);
+  margin-inline:auto;
+  padding-inline:0;
+  box-sizing:border-box;
+}
+
+/* Full-width section backgrounds — never apply this to the hero. */
+.home-redesign .home-page-grid__content > section:not(.home-hero),
+.home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+.home-redesign .home-page-grid__content > .home-usp{
+  width:100vw;
+  max-width:none;
+  margin-left:calc(50% - 50vw);
+  margin-right:0;
+}
+
+/* ---------- HERO: wider middle rail than other section content ---------- */
+/* ---------- Tablet ---------- */
+@media (max-width:1100px){
+  :root{--nav-h:76px;--home-gutter:20px;--home-rail:100%;--home-content:calc(100% - 40px)}
+  .home-redesign .home-page-grid{grid-template-columns:20px minmax(0,1fr) 20px !important}
+  .home-redesign .home-page-grid__content{max-width:none !important}
+  .home-redesign .home-page-grid__content > section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-usp{
+    width:100% !important;
+    margin-left:0 !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-usp > .container,
+  .home-redesign .home-page-grid__content .home-stay__grid,
+  .home-redesign .home-page-grid__content .home-rooms__grid,
+  .home-redesign .home-page-grid__content .home-collection .container,
+  .home-redesign .home-page-grid__content .home-experience .container,
+  .home-redesign .home-page-grid__content .home-cta__in{
+    width:100%;max-width:none;padding-inline:0;
+  }
+}
+
+/* ---------- Mobile: one clean column ---------- */
+@media (max-width:700px){
+  :root{--nav-h:62px}
+  html,body{width:100%;max-width:100%;overflow-x:hidden}
+  .home-redesign .home-page-grid{
+    grid-template-columns:0 minmax(0,1fr) 0 !important;
+    width:100% !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content{
+    grid-column:2 !important;
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    overflow:visible !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero),
+  .home-redesign .home-page-grid__content > .home-usp,
+  .home-redesign .home-page-grid__content .home-day,
+  .home-redesign .home-page-grid__content .home-neighborhoods{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    box-sizing:border-box !important;
+  }
+  .home-redesign .home-page-grid__content > section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-grid__section:not(.home-hero) > .container,
+  .home-redesign .home-page-grid__content > .home-usp > .container,
+  .home-redesign .home-page-grid__content .home-stay__grid,
+  .home-redesign .home-page-grid__content .home-rooms__grid,
+  .home-redesign .home-page-grid__content .home-collection .container,
+  .home-redesign .home-page-grid__content .home-experience .container,
+  .home-redesign .home-page-grid__content .home-cta__in{
+    width:100% !important;
+    max-width:none !important;
+    padding-inline:16px !important;
+    box-sizing:border-box !important;
+  }
+
+
+  /* A Day in Saigon: one predictable mobile stack. */
+  .home-redesign .home-page-grid__content .home-day{
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__grid{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) !important;
+    width:100% !important;
+    min-height:0 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:none !important;
+    box-sizing:border-box !important;
+    padding:34px 20px 30px !important;
+    overflow:visible !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy h2{
+    font-size:clamp(2.2rem,10vw,2.8rem) !important;
+    line-height:.96 !important;
+    max-width:100% !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy > p{
+    max-width:none !important;
+    font-size:.84rem !important;
+    line-height:1.6 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline,
+  .home-redesign .home-page-grid__content .home-day__timeline > div{
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline > div{
+    grid-template-columns:50px minmax(0,1fr) !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__timeline p{
+    min-width:0 !important;
+    overflow-wrap:break-word !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    width:100% !important;
+    height:300px !important;
+    min-height:300px !important;
+    overflow:hidden !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image img{
+    width:100% !important;height:100% !important;object-fit:cover !important;
+  }
+  .home-redesign .home-page-grid__content .home-neighborhoods .container{
+    width:100% !important;
+    max-width:none !important;
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+}
+
+@media (max-width:560px){
+  :root{--nav-h:58px}
+  .home-redesign .home-page-grid__content .home-day__copy{
+    padding-left:20px !important;
+    padding-right:20px !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__image{
+    height:280px !important;
+    min-height:280px !important;
+  }
+}
+
+/* ---------- Wide screens: retain the 3-column strip ---------- */
+@media (min-width:1441px){
+  :root{--home-gutter:48px}
+}
+@media (min-width:1920px){
+  :root{--home-gutter:80px}
+}
+@media (min-width:2400px){
+  :root{--home-gutter:120px}
+}
+
+
+/* ========================================================================
+   HOTELS SEARCH — MOBILE / SMALL TABLET SINGLE SOURCE OF TRUTH
+   The desktop search selector is intentionally specific, so mobile overrides
+   target the same selector instead of stacking competing patches.
+   ======================================================================== */
+@media (max-width:767px){
+  .hero.hero--sm{
+    min-height:auto;
+    height:auto;
+    overflow:visible;
+  }
+  .hero.hero--sm .hero__in{
+    padding-bottom:24px;
+  }
+  .hero.hero--sm .hero__ct{
+    margin-top:28px;
+    max-width:100%;
+  }
+  .hero.hero--sm #hotelSearch{
+    width:100%;
+    margin-top:20px;
+  }
+  .hero.hero--sm .hero__in .searchbar{
+    grid-template-columns:1fr;
+    width:100%;
+    min-width:0;
+    min-height:0;
+    border-radius:14px;
+    overflow:visible;
+  }
+  .hero.hero--sm .hero__in .searchbar .sf{
+    width:100%;
+    min-width:0;
+    border-right:0!important;
+    border-bottom:1px solid var(--line);
+    padding:13px 16px;
+  }
+  .hero.hero--sm .hero__in .searchbar .sf:last-of-type{
+    border-bottom:0;
+  }
+  .hero.hero--sm .hero__in .searchbar .searchbar__submit{
+    width:100%;
+    min-height:58px;
+    border-radius:0 0 13px 13px!important;
+  }
+  .hero.hero--sm .hero__in .searchbar__field-btn,
+  .hero.hero--sm .hero__in .searchbar .sf input{
+    max-width:100%;
+  }
+  .hotel-search-wrap.is-search-open .kas-quick-search{
+    max-height:min(78vh,680px);
+    overflow:auto;
+  }
+  .kas-quick-search__inner{
+    grid-template-columns:1fr;
+    min-height:0;
+  }
+  .kas-quick-search__hotels{
+    border-right:0;
+    border-bottom:1px solid rgba(120,96,55,.12);
+  }
+  .kas-quick-hotel-list{
+    max-height:220px;
+  }
+  .kas-quick-search__content{
+    padding:18px 16px 20px;
+  }
+}
+
+@media (max-width:420px){
+  .hero.hero--sm .hero__in{padding-inline:12px;padding-bottom:18px}
+  .hero.hero--sm .hero__ct{margin-top:22px}
+  .hero.hero--sm .hero__ct h1{font-size:2.15rem}
+  .hero.hero--sm .hero__ct p{font-size:.9rem}
+  .hero.hero--sm .hero__in .searchbar .sf{padding:12px 14px}
+  .hero.hero--sm .hero__in .searchbar .sf__lb{font-size:.55rem}
+  .hero.hero--sm .hero__in .searchbar .sf input,
+  .hero.hero--sm .hero__in .searchbar .searchbar__field-btn{font-size:.9rem}
+  .hero.hero--sm .hero__in .searchbar .searchbar__submit{min-height:54px}
+}
+
+
+/* Hotels mobile filter hierarchy: area and nearby location stay distinct. */
+@media (max-width:767px){
+  .filters .fgrp{padding-block:14px}
+  .filters .fgrp h5{margin-bottom:9px}
+  .filters .fgrp .opt{padding:4px 0;font-size:.8rem}
+  .filters #fArea,
+  .filters #fPriority{display:grid;grid-template-columns:1fr;row-gap:0}
+}
+
+@media (max-width:380px){
+  .split__side #assist{
+    --support-panel-pad:13px;
+    --support-gap:6px;
+  }
+  .split__side #assist .ct-ch{
+    padding:10px;
+  }
+  .split__side #assist .ct-ch b{font-size:.74rem}
+  .split__side #assist .ct-ch small{font-size:.66rem}
+}

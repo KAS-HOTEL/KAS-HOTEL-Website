@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Stay — KAS Hotel Collection</title>
+<meta name="description" content="Discover rooms and rates across the KAS hotels in Ho Chi Minh City.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+<header id="hdr"></header>
+
+<section class="hero hero--sm">
+  <div class="hero__bg" id="heroBg"></div>
+  <div class="container hero__in">
+    <div class="hero__ct">
+      <a href="index.html" class="tiny hotel-hero__back" id="backHome"></a>
+      <h1>Find Your Stay</h1>
+      <p class="hotel-hero__description">Signature hotels in the heart of Ho Chi Minh City.</p>
+    </div>
+    <div class="hotel-search-wrap" id="hotelSearchWrap">
+      <div id="hotelSearch"></div>
+      <div id="kasQuickSearch" class="kas-quick-search" aria-label="Quick search"></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split split--filters">
+
+      <!-- ============ FILTERS ============ -->
+      <aside class="split__side">
+        <div class="filters sticky">
+          <div class="between" style="margin-bottom:6px">
+            <h4 style="font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase">Filter your stay</h4>
+            <button class="btn btn--link" id="clearF" type="button">Clear all</button>
+          </div>
+
+          <div class="fgrp">
+            <h5>Price per night (VND)</h5>
+            <div class="range"><input type="range" id="fPrice" aria-label="Maximum price per night (VND)" min="600000" max="2800000" step="50000" value="2800000"></div>
+            <div class="range__v"><span>600,000</span><span id="fPriceV">2,800,000+</span></div>
+          </div>
+
+          <div class="fgrp"><h5>Khu vực</h5><div id="fArea"></div></div>
+          <div class="fgrp"><h5>Vị trí lân cận</h5><div id="fPriority"></div></div>
+          <div class="fgrp"><h5>Phong cách lưu trú</h5><div id="fStyle"></div></div>
+          <div class="fgrp"><h5>Amenities</h5><div id="fAmen"></div></div>
+          <div class="fgrp"><h5>Property rating</h5><div id="fStar"></div></div>
+
+          <button class="btn btn--ghost btn--block" id="applyF" type="button" style="margin-top:16px">Apply filters</button>
+        </div>
+      </aside>
+
+      <!-- ============ RESULTS ============ -->
+      <div class="split__main">
+        <div class="between" style="margin-bottom:22px;flex-wrap:wrap">
+          <div>
+            <h2 style="font-size:1.5rem" id="resCount"></h2>
+            <p class="tiny muted" style="margin:3px 0 0" id="resSub"></p>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span class="tiny muted nowrap">Sort by</span>
+            <select class="select" id="sortBy" aria-label="Sort by" style="width:auto;min-width:190px">
+              <option value="recommended">Recommended</option>
+              <option value="price-asc">Price: low to high</option>
+              <option value="price-desc">Price: high to low</option>
+              <option value="rating">Guest rating</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="results" class="stack" style="gap:20px"></div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/live.js"></script>
+<script>
+(function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App,
+      B = window.Booking, H = window.HotelUI;
+
+  App.boot({ active: 'hotels' });
+  U.$('#backHome').innerHTML = U.icon('arrL', 13) + ' Back to home';
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  /* Live property gallery: use the exact photos uploaded for each hotel
+     on the outer hotel listing too. Static images remain the fallback. */
+  var liveReady = window.KAS_LIVE.load().then(function(catalog) {
+    D.hotels.forEach(function(h) { window.KAS_LIVE.applyToHotel(h, catalog); });
+    /* Explicitly repaint the card media from the admin property gallery.
+       This is intentionally separate from the dataset mutation above so the
+       Hotels listing can never fall back to the old static photo set when the
+       server catalog has uploaded gallery images. */
+    function syncPropertyGalleries() {
+      U.$$('.hcard[data-hotel-id]').forEach(function(card) {
+        var h = D.getHotel(card.getAttribute('data-hotel-id'));
+        if (!h || !h.propertyGalleryImages || !h.propertyGalleryImages.length) return;
+        var media = U.$('.hcard__media', card);
+        if (!media) return;
+        var badge = h.starRating >= 4 ? '<span class="badge badge--gold">Signature Property</span>' : '';
+        media.innerHTML = badge + App.miniHTML(h.propertyGalleryImages, h.name);
+        var mini = U.$('.mini', media);
+        if (mini) App.miniCarousel(mini);
+      });
+    }
+    window.__KAS_SYNC_PROPERTY_GALLERIES__ = syncPropertyGalleries;
+    var heroHotel = D.getHotel('hotel-02');
+    if (heroHotel && heroHotel.images && heroHotel.images.length) {
+      U.$('#heroBg').innerHTML = U.img(heroHotel.images[0], heroHotel.name, '', false, false);
+    }
+    return catalog;
+  }).catch(function() {
+    var fallbackHero = D.getHotel('hotel-02');
+    if (fallbackHero && fallbackHero.images && fallbackHero.images.length) {
+      U.$('#heroBg').innerHTML = U.img(fallbackHero.images[0], fallbackHero.name, '', false, false);
+    }
+    return null;
+  });
+
+  /* Static dataset is rendered immediately; once the live catalog arrives,
+     repaint so hotel cards use the same uploaded property gallery as the
+     hotel-detail page. */
+  var search = B.readSearch();
+  /* Hotels listing is intentionally collection-wide. Normalize any stale
+     hotel query/localStorage value so this page can never become a
+     single-property result page through the shared search bar. */
+  search.hotelId = '';
+  /* Default Hotels search window: today → tomorrow. Dates remain editable. */
+  search.checkIn = U.today();
+  search.checkOut = U.addDays(search.checkIn, 1);
+  B.saveSearch(search);
+
+  /* ---- single search bar ----
+     The Hotels page uses one editable search bar only. Searching updates
+     this same host in place; no second summary/edit bar is created. */
+  var searchHost = U.$('#hotelSearch');
+  var quickSearchOpen = false;
+  var activeQuickTags = [];
+
+  function setQuickSearchOpen(open) {
+    quickSearchOpen = !!open;
+    var wrap = U.$('#hotelSearchWrap');
+    if (wrap) wrap.classList.toggle('is-search-open', quickSearchOpen);
+    if (searchHost) searchHost.setAttribute('aria-expanded', quickSearchOpen ? 'true' : 'false');
+    var btn = U.$('#sbHotel', searchHost);
+    if (btn) btn.setAttribute('aria-expanded', quickSearchOpen ? 'true' : 'false');
+  }
+
+  function getActiveQuickTagLabels() {
+    return activeQuickTags.map(function(tagId){
+      for (var g = 0; g < QUICK_TAGS.length; g++) {
+        for (var t = 0; t < QUICK_TAGS[g].items.length; t++) {
+          if (QUICK_TAGS[g].items[t].id === tagId) return QUICK_TAGS[g].items[t].label;
+        }
+      }
+      return tagId;
+    });
+  }
+
+  function getQuickDestinationLabel() {
+    var labels = getActiveQuickTagLabels();
+    return labels.length ? labels.join(' + ') : '';
+  }
+
+  function paintSearch() {
+    window.Search.render(searchHost, {
+      solid: true, cta: 'Search', values: search, externalHotelPicker: true, lockHotel: true,
+      destinationLabel: getQuickDestinationLabel(),
+      onPopupOpen: function (type) { if (type === 'date') setQuickSearchOpen(false); },
+      onSearch: function (s) {
+        s.hotelId = '';
+        B.saveSearch(s);
+        search = s;
+        paintSearch();
+        setQuickSearchOpen(false);
+        paint();
+        U.toast('Search updated.');
+      }
+    });
+    searchHost.setAttribute('aria-expanded', quickSearchOpen ? 'true' : 'false');
+  }
+  paintSearch();
+
+  /* ------------------------------------------------------------------------
+     KAS quick search
+     One disclosure panel, opened only by the accommodation chevron.
+     The panel contains the hotel search/list and the KAS tag shortcuts.
+     ------------------------------------------------------------------------ */
+
+  function hasQuickTag(id) {
+    return activeQuickTags.indexOf(id) > -1;
+  }
+  var QUICK_TAGS = [
+    { group: 'Điểm đến', items: [
+      { id: 'district1', label: 'Quận 1' },
+      { id: 'ben-thanh', label: 'Bến Thành' },
+      { id: 'bui-thi-xuan', label: 'Bùi Thị Xuân' },
+      { id: 'nguyen-trai', label: 'Nguyễn Trãi' },
+      { id: 'le-thanh-ton', label: 'Lê Thánh Tôn' },
+      { id: 'nguyen-thai-binh', label: 'Nguyễn Thái Bình' }
+    ]},
+    { group: 'Phong cách lưu trú', items: [
+      { id: 'boutique', label: 'Boutique' },
+      { id: 'rooftop', label: 'Rooftop' },
+      { id: 'spa', label: 'Spa' },
+      { id: 'balcony', label: 'Có ban công' },
+      { id: 'breakfast', label: 'Bữa sáng' },
+      { id: 'staycation', label: 'Staycation' }
+    ]},
+    { group: 'Ưu tiên khu vực', items: [
+      { id: 'ben-thanh-market', label: 'Gần Chợ Bến Thành' },
+      { id: 'central', label: 'Trung tâm Quận 1' },
+      { id: 'walkable', label: 'Dễ đi bộ khám phá' },
+      { id: 'food', label: 'Gần phố ẩm thực' },
+      { id: 'park', label: 'Gần công viên' }
+    ]}
+  ];
+
+
+  function hotelThumb(h) {
+    var src = (h.propertyGalleryImages && h.propertyGalleryImages[0]) || (h.images && h.images[0]) || '';
+    return src ? '<img class="kas-quick-hotel__thumb" src="' + U.esc(src) + '" alt="">' : '<span class="kas-quick-hotel__thumb kas-quick-hotel__thumb--empty"></span>';
+  }
+
+  function renderQuickHotelList(filter) {
+    var listHost = U.$('#kasQuickHotelList');
+    if (!listHost) return;
+    var q = (filter || '').trim().toLowerCase();
+    var items = D.hotels.filter(function(h){
+      return !q || (h.name + ' ' + (h.district || '') + ' ' + (h.address || '')).toLowerCase().indexOf(q) > -1;
+    });
+    listHost.innerHTML =
+      '<button type="button" class="kas-quick-hotel kas-quick-hotel--all' + (!search.hotelId ? ' is-active' : '') + '" data-quick-hotel-id="">' +
+        '<span class="kas-quick-hotel__all-icon">⌘</span><span><strong>Tất cả khách sạn KAS</strong><small>Toàn bộ bộ sưu tập tại TP. Hồ Chí Minh</small></span>' +
+      '</button>' +
+      items.map(function(h){
+        return '<button type="button" class="kas-quick-hotel' + (search.hotelId === h.id ? ' is-active' : '') + '" data-quick-hotel-id="' + U.esc(h.id) + '">' +
+          hotelThumb(h) + '<span><strong>' + U.esc(h.name) + '</strong><small>' + U.esc(h.district || h.address || 'Ho Chi Minh City') + '</small></span>' +
+        '</button>';
+      }).join('');
+
+    U.$$('.kas-quick-hotel', listHost).forEach(function(btn){
+      btn.addEventListener('click', function(){
+        search.hotelId = btn.dataset.quickHotelId || '';
+        activeQuickTags = [];
+        B.saveSearch(search);
+        paintSearch();
+        renderQuickSearch();
+        paint();
+        setQuickSearchOpen(false);
+      });
+    });
+  }
+
+  function renderQuickSearch() {
+    var host = U.$('#kasQuickSearch');
+    if (!host) return;
+    host.innerHTML =
+      '<div class="kas-quick-search__inner">' +
+        '<aside class="kas-quick-search__hotels">' +
+          '<div class="kas-quick-search__search"><span aria-hidden="true">⌕</span><input id="kasQuickHotelInput" type="search" autocomplete="off" placeholder="Tìm kiếm khách sạn..." aria-label="Tìm kiếm khách sạn"></div>' +
+          '<div class="kas-quick-hotel-list" id="kasQuickHotelList"></div>' +
+        '</aside>' +
+        '<section class="kas-quick-search__content">' +
+          '<div class="kas-quick-search__head"><div><div class="kas-quick-search__title">KAS QUICK SEARCH</div><p>Khám phá những lựa chọn phù hợp tại Thành phố Hồ Chí Minh.</p></div><button type="button" class="kas-quick-search__close" id="kasQuickClose" aria-label="Đóng">×</button></div>' +
+          QUICK_TAGS.map(function(group){
+            return '<div class="kas-quick-search__group"><h4>' + U.esc(group.group) + '</h4><div class="kas-quick-search__tags">' +
+              group.items.map(function(tag){
+                return '<button type="button" class="kas-quick-tag' + (hasQuickTag(tag.id) ? ' is-active' : '') + '" data-quick-tag="' + U.esc(tag.id) + '">' + U.esc(tag.label) + '</button>';
+              }).join('') +
+            '</div></div>';
+          }).join('') +
+        '</section>' +
+      '</div>';
+
+    var input = U.$('#kasQuickHotelInput');
+    if (input) input.addEventListener('input', function(){ renderQuickHotelList(input.value); });
+    var close = U.$('#kasQuickClose');
+    if (close) close.addEventListener('click', function(){ setQuickSearchOpen(false); });
+
+    U.$$('.kas-quick-tag', host).forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = btn.dataset.quickTag || '';
+        var index = activeQuickTags.indexOf(id);
+        if (index > -1) {
+          activeQuickTags.splice(index, 1);
+        } else {
+          activeQuickTags.push(id);
+          search.hotelId = '';
+          B.saveSearch(search);
+        }
+        var selectedLabels = getActiveQuickTagLabels();
+        U.toast(selectedLabels.length ? 'Đang lọc: ' + selectedLabels.join(' + ') : 'Đã bỏ bộ lọc nhanh.');
+        paintSearch();
+        renderQuickSearch();
+        paint();
+        setQuickSearchOpen(true);
+      });
+    });
+    renderQuickHotelList('');
+  }
+
+  function quickTagMatch(h) {
+    if (!activeQuickTags.length) return true;
+    if (!Array.isArray(h.quickSearchTags)) return false;
+    return activeQuickTags.every(function(tagId){
+      return h.quickSearchTags.indexOf(tagId) > -1;
+    });
+  }
+
+
+  renderQuickSearch();
+
+  /* The quick panel is intentionally opened ONLY by the accommodation arrow. */
+  (function setupQuickSearchDisclosure(){
+    var searchWrap = U.$('#hotelSearchWrap');
+    if (!searchWrap || !searchHost) return;
+    function bindTrigger(){
+      var btn = U.$('#sbHotel', searchHost);
+      if (!btn) return;
+      if (searchHost.__kasWhereTrigger) btn.removeEventListener('click', searchHost.__kasWhereTrigger);
+      searchHost.__kasWhereTrigger = function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        setQuickSearchOpen(!quickSearchOpen);
+      };
+      btn.addEventListener('click', searchHost.__kasWhereTrigger);
+    }
+    bindTrigger();
+    var originalPaintSearch = paintSearch;
+    searchHost.__kasQuickBindTrigger = bindTrigger;
+    /* Re-bind after each search-bar repaint without adding another disclosure layer. */
+    var observer = new MutationObserver(function(){ bindTrigger(); });
+    observer.observe(searchHost, { childList:true });
+    searchHost.__kasQuickObserver = observer;
+    document.addEventListener('click', function(e){
+      if (!searchWrap.contains(e.target)) setQuickSearchOpen(false);
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape') setQuickSearchOpen(false);
+    });
+    searchHost.setAttribute('role', 'group');
+    searchHost.setAttribute('aria-expanded', 'false');
+    searchHost.__kasQuickSetOpen = setQuickSearchOpen;
+  })();
+
+  /* ---- filter definitions ---- */
+  /* Hotel-list filters describe the property, not individual room types.
+     Room-level filters remain intentionally isolated on hotel-detail.html. */
+  var AREAS = [
+    ['district1','Quận 1'],
+    ['ben-thanh','Bến Thành'],
+    ['bui-thi-xuan','Bùi Thị Xuân'],
+    ['nguyen-trai','Nguyễn Trãi'],
+    ['le-thanh-ton','Lê Thánh Tôn'],
+    ['nguyen-thai-binh','Nguyễn Thái Bình']
+  ];
+  var STYLES = [['boutique','Boutique'],['rooftop','Rooftop'],['spa','Spa'],['staycation','Staycation'],['breakfast','Bữa sáng']];
+  var PRIORITIES = [['ben-thanh-market','Gần Chợ Bến Thành'],['walkable','Dễ đi bộ khám phá'],['food','Gần phố ẩm thực'],['central','Trung tâm Quận 1']];
+  var AMEN  = [['wifi','Wi-Fi miễn phí'],['restaurant','Nhà hàng'],['gym','Phòng gym'],['airport','Đưa đón sân bay'],['parking','Bãi đỗ xe'],['spa','Spa']];
+  var STARS = [['4','Khách sạn 4 sao'],['3','Khách sạn 3 sao']];
+
+  function chk(host, list, name) {
+    U.$(host).innerHTML = list.map(function (x) {
+      return '<label class="opt"><input type="checkbox" value="' + x[0] + '" data-f="' + name + '"><span>' + x[1] + '</span></label>';
+    }).join('');
+  }
+  chk('#fArea', AREAS, 'area'); chk('#fStyle', STYLES, 'style');
+  chk('#fPriority', PRIORITIES, 'priority'); chk('#fAmen', AMEN, 'amen'); chk('#fStar', STARS, 'star');
+
+  var priceEl = U.$('#fPrice'), priceV = U.$('#fPriceV');
+  priceEl.addEventListener('input', function () {
+    var v = +priceEl.value;
+    priceV.textContent = v >= 2800000 ? '2,800,000+' : U.vnd(v);
+    paint();
+  });
+
+  function readFilters() {
+    function vals(n) {
+      return U.$$('[data-f="' + n + '"]:checked').map(function (i) { return i.value; });
+    }
+    return {
+      priceMax: +priceEl.value >= 2800000 ? null : +priceEl.value,
+      areas: vals('area'),
+      styles: vals('style'),
+      priorities: vals('priority'),
+      amenities: vals('amen'),
+      stars: vals('star').map(Number)
+    };
+  }
+
+  document.addEventListener('change', function (e) {
+    if (e.target.dataset && e.target.dataset.f) paint();
+  });
+  U.$('#applyF').addEventListener('click', function () { paint(); U.toast('Filters applied.'); });
+  U.$('#clearF').addEventListener('click', function () {
+    U.$$('[data-f]').forEach(function (i) { i.checked = false; });
+    priceEl.value = 2800000; priceV.textContent = '2,800,000+';
+    paint(); U.toast('Filters cleared.');
+  });
+  U.$('#sortBy').addEventListener('change', paint);
+
+  /* ---- paint ---- */
+  function paint() {
+    var f = readFilters();
+    var list = D.hotels.filter(function (h) {
+      /* Destination is a real search constraint on the Hotels listing.
+         Empty hotelId means all properties; a selected hotel means that
+         property only. This keeps the result list consistent with the
+         search bar without creating another search UI. */
+      if (search.hotelId && h.id !== search.hotelId) return false;
+      if (!quickTagMatch(h)) return false;
+      if (f.stars.length && f.stars.indexOf(h.starRating) < 0) return false;
+      if (f.areas.length && !f.areas.some(function(tag) { return (h.quickSearchTags || []).indexOf(tag) > -1; })) return false;
+      if (f.styles.length && !f.styles.some(function(tag) { return (h.quickSearchTags || []).indexOf(tag) > -1; })) return false;
+      if (f.priorities.length && !f.priorities.some(function(tag) { return (h.quickSearchTags || []).indexOf(tag) > -1; })) return false;
+      if (f.amenities.length && !f.amenities.every(function(key) {
+        var tags = (h.quickSearchTags || []).map(String);
+        var amen = (h.amenities || []).map(function(a) { return String(a).toLowerCase(); });
+        var map = { wifi: 'wifi', restaurant: 'restaurant', gym: 'gym', airport: 'airport', parking: 'parking', spa: 'spa' };
+        var token = map[key];
+        return tags.some(function(t) { return t.indexOf(token) > -1; }) || amen.some(function(a) { return a.indexOf(token) > -1 || (key === 'airport' && a.indexOf('airport') > -1) || (key === 'gym' && a.indexOf('fitness') > -1) || (key === 'wifi' && a.indexOf('wi-fi') > -1); });
+      })) return false;
+      var ok = h.rooms.filter(function (r) {
+        return f.priceMax == null || r.pricePerNight <= f.priceMax;
+      });
+      h._matching = ok;
+      h._from = ok.length ? Math.min.apply(null, ok.map(function (r) { return r.pricePerNight; })) : h.startingPrice;
+      return ok.length > 0;
+    });
+
+    list = H.sortHotels(list, U.$('#sortBy').value, search);
+
+    var n = U.nights(search.checkIn, search.checkOut);
+    U.$('#resCount').textContent = list.length + (list.length === 1 ? ' property available' : ' properties available');
+    U.$('#resSub').textContent = U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut) +
+      '  ·  ' + n + ' night' + (n === 1 ? '' : 's') + '  ·  ' + window.Search.guestText(search);
+
+    var host = U.$('#results');
+    if (!list.length) {
+      host.innerHTML = '<div class="empty">' + U.icon('door', 46) +
+        '<h3 style="margin-bottom:8px">No rooms match these filters</h3>' +
+        '<p class="muted" style="font-size:.9rem">Try widening your price range or clearing a filter.</p>' +
+        '<button class="btn btn--ghost" style="margin-top:18px" onclick="document.getElementById(\'clearF\').click()">Clear all filters</button></div>';
+      return;
+    }
+    host.innerHTML = list.map(function (h) {
+      var card = H.hotelCard(h, search);
+      // reflect the filtered "from" price
+      return card.replace(/(<span class="price__lb">From<\/span>)[\s\S]*?(<div class="price__u">)/,
+        '$1' + U.priceHTML(h._from) + '$2');
+    }).join('');
+    U.$$('.hcard__media').forEach(App.miniCarousel);
+    App.reveal();
+  }
+  paint();
+  liveReady.then(function() {
+    paint();
+    if (window.__KAS_SYNC_PROPERTY_GALLERIES__) window.__KAS_SYNC_PROPERTY_GALLERIES__();
+  });
+
+})();
+</script>
+</body>
+</html>

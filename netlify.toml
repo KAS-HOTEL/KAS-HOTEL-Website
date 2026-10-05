@@ -1,0 +1,35 @@
+# Fallback host if Vercel is unavailable. Same static output, same clean URLs.
+[build]
+  # The build check runs first, then internal files are removed from the
+  # published tree so they cannot be downloaded from the static host.
+  command = "npm run build && rm -rf .claude data tools uploads server.js Dockerfile render.yaml KEEP_UPLOADS.txt *.md .env .env.*"
+  publish = "."
+
+[[redirects]]
+  from = "/hotels"
+  to = "/hotels.html"
+  status = 200
+[[redirects]]
+  from = "/hotel-detail"
+  to = "/hotel-detail.html"
+  status = 200
+[[redirects]]
+  from = "/room-detail"
+  to = "/room-detail.html"
+  status = 200
+[[redirects]]
+  from = "/guest-details"
+  to = "/guest-details.html"
+  status = 200
+[[redirects]]
+  from = "/review-confirm"
+  to = "/review-confirm.html"
+  status = 200
+[[redirects]]
+  from = "/booking-confirmed"
+  to = "/booking-confirmed.html"
+  status = 200
+[[redirects]]
+  from = "/manage-booking"
+  to = "/manage-booking.html"
+  status = 200
