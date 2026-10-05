@@ -27,7 +27,11 @@ kas-hotels/
 
 ### Cách upload ảnh
 
+<<<<<<< HEAD
 1. Chạy server: `npm install` rồi `npm start`.
+=======
+1. Chạy server: `npm install` rồi `npm start`. Local không cần ADMIN_KEY; production/Render bắt buộc đặt ADMIN_KEY.
+>>>>>>> origin/thu
 2. Mở `http://localhost:3000/admin`.
 3. Nhập `ADMIN_KEY`.
 4. Chọn đúng **chi nhánh** và **hạng phòng**.
@@ -87,7 +91,11 @@ npm install
 Windows PowerShell:
 
 ```powershell
+<<<<<<< HEAD
 $env:ADMIN_KEY="doi-key-nay"
+=======
+$env:ADMIN_KEY="<key-dai-ngau-nhien-cua-ban>"
+>>>>>>> origin/thu
 npm start
 ```
 

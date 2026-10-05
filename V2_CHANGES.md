@@ -34,3 +34,12 @@ Guest:
 
 Admin:
 - http://localhost:3000/admin
+<<<<<<< HEAD
+=======
+
+
+## Search date default fix
+- Hotels listing initializes check-in to today and check-out to tomorrow on page entry.
+- Dates remain editable after initialization.
+- Destination remains locked to All KAS Hotels.
+>>>>>>> origin/thu

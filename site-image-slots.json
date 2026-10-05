@@ -1,0 +1,388 @@
+{
+  "home": [
+    {
+      "key": "home.dayInSaigon",
+      "label": "Trang chủ · A Day in Saigon — ảnh hành trình",
+      "selector": "img[alt=\"A day in Saigon\"]",
+      "default": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "key": "home.neighborhood.city",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 01 · Bắt đầu từ thành phố",
+      "selector": "a[href=\"city-guide.html#city\"] img",
+      "default": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1500&q=85"
+    },
+    {
+      "key": "home.neighborhood.taste",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 02 · Thưởng thức thành phố qua ẩm thực",
+      "selector": "a[href=\"city-guide.html#taste\"] img",
+      "default": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1100&q=85"
+    },
+    {
+      "key": "home.neighborhood.slow",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 03 · Để dành chỗ cho những bước lang thang",
+      "selector": "a[href=\"city-guide.html#slow\"] img",
+      "default": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1100&q=85"
+    },
+    {
+      "key": "home.neighborhood.night",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 04 · Ở ngoài lâu hơn một chút",
+      "selector": "a[href=\"city-guide.html#night\"] img",
+      "default": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=85"
+    }
+  ],
+  "guidebook": [
+    {
+      "key": "guidebook.hero",
+      "label": "Guidebook · Hero",
+      "selector": ".hero-visual",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ben-thanh-market",
+      "label": "Guidebook · ben-thanh-market",
+      "selector": ".entry#ben-thanh-market .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.tao-dan-park",
+      "label": "Guidebook · tao-dan-park",
+      "selector": ".entry#tao-dan-park .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.independence-palace",
+      "label": "Guidebook · independence-palace",
+      "selector": ".entry#independence-palace .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.war-remnants-museum",
+      "label": "Guidebook · war-remnants-museum",
+      "selector": ".entry#war-remnants-museum .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.central-post-office",
+      "label": "Guidebook · central-post-office",
+      "selector": ".entry#central-post-office .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.notre-dame-cathedral",
+      "label": "Guidebook · notre-dame-cathedral",
+      "selector": ".entry#notre-dame-cathedral .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-opera-house",
+      "label": "Guidebook · saigon-opera-house",
+      "selector": ".entry#saigon-opera-house .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.nguyen-hue",
+      "label": "Guidebook · nguyen-hue",
+      "selector": ".entry#nguyen-hue .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bitexco",
+      "label": "Guidebook · bitexco",
+      "selector": ".entry#bitexco .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-square",
+      "label": "Guidebook · saigon-square",
+      "selector": ".entry#saigon-square .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ben-thanh-street-food",
+      "label": "Guidebook · ben-thanh-street-food",
+      "selector": ".entry#ben-thanh-street-food .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.pham-ngu-lao",
+      "label": "Guidebook · pham-ngu-lao",
+      "selector": ".entry#pham-ngu-lao .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bui-vien",
+      "label": "Guidebook · bui-vien",
+      "selector": ".entry#bui-vien .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.fine-arts-museum",
+      "label": "Guidebook · fine-arts-museum",
+      "selector": ".entry#fine-arts-museum .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.nguyen-trai-street",
+      "label": "Guidebook · nguyen-trai-street",
+      "selector": ".entry#nguyen-trai-street .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-centre",
+      "label": "Guidebook · saigon-centre",
+      "selector": ".entry#saigon-centre .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-eco-craft",
+      "label": "Guidebook · saigon-eco-craft",
+      "selector": ".entry#saigon-eco-craft .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.vietnamese-coffee",
+      "label": "Guidebook · vietnamese-coffee",
+      "selector": ".entry#vietnamese-coffee .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ben-thanh-market-food",
+      "label": "Guidebook · ben-thanh-market-food",
+      "selector": ".entry#ben-thanh-market-food .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-street-food",
+      "label": "Guidebook · saigon-street-food",
+      "selector": ".entry#saigon-street-food .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ben-thanh-market-walk",
+      "label": "Guidebook · ben-thanh-market-walk",
+      "selector": ".entry#ben-thanh-market-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.gia-long-palace",
+      "label": "Guidebook · gia-long-palace",
+      "selector": ".entry#gia-long-palace .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.le-thanh-ton",
+      "label": "Guidebook · le-thanh-ton",
+      "selector": ".entry#le-thanh-ton .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-opera-house-walk",
+      "label": "Guidebook · saigon-opera-house-walk",
+      "selector": ".entry#saigon-opera-house-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.central-post-office-walk",
+      "label": "Guidebook · central-post-office-walk",
+      "selector": ".entry#central-post-office-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.notre-dame-cathedral-walk",
+      "label": "Guidebook · notre-dame-cathedral-walk",
+      "selector": ".entry#notre-dame-cathedral-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-square-walk",
+      "label": "Guidebook · saigon-square-walk",
+      "selector": ".entry#saigon-square-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.nguyen-hue-walk",
+      "label": "Guidebook · nguyen-hue-walk",
+      "selector": ".entry#nguyen-hue-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bitexco-walk",
+      "label": "Guidebook · bitexco-walk",
+      "selector": ".entry#bitexco-walk .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-zoo",
+      "label": "Guidebook · saigon-zoo",
+      "selector": ".entry#saigon-zoo .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bui-thi-xuan",
+      "label": "Guidebook · bui-thi-xuan",
+      "selector": ".entry#bui-thi-xuan .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.pham-ngu-lao-night",
+      "label": "Guidebook · pham-ngu-lao-night",
+      "selector": ".entry#pham-ngu-lao-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bui-vien-night",
+      "label": "Guidebook · bui-vien-night",
+      "selector": ".entry#bui-vien-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ben-thanh-night",
+      "label": "Guidebook · ben-thanh-night",
+      "selector": ".entry#ben-thanh-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.september-23-park",
+      "label": "Guidebook · september-23-park",
+      "selector": ".entry#september-23-park .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.saigon-opera-house-night",
+      "label": "Guidebook · saigon-opera-house-night",
+      "selector": ".entry#saigon-opera-house-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.ao-show",
+      "label": "Guidebook · ao-show",
+      "selector": ".entry#ao-show .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.nguyen-hue-night",
+      "label": "Guidebook · nguyen-hue-night",
+      "selector": ".entry#nguyen-hue-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.bitexco-night",
+      "label": "Guidebook · bitexco-night",
+      "selector": ".entry#bitexco-night .photo",
+      "default": ""
+    },
+    {
+      "key": "guidebook.entry.late-night-food",
+      "label": "Guidebook · late-night-food",
+      "selector": ".entry#late-night-food .photo",
+      "default": ""
+    }
+  ],
+  "homeHero": [
+    {
+      "key": "home.hero.01",
+      "label": "Home Hero · 01 · KAS Passion Boutique",
+      "selector": ".home-hero__slide[data-index=\"0\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.02",
+      "label": "Home Hero · 02 · KAS Premium Boutique",
+      "selector": ".home-hero__slide[data-index=\"1\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.03",
+      "label": "Home Hero · 03 · KAS Ancient Luxury",
+      "selector": ".home-hero__slide[data-index=\"2\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.04",
+      "label": "Home Hero · 04 · KAS Milestone Premium",
+      "selector": ".home-hero__slide[data-index=\"3\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.05",
+      "label": "Home Hero · 05 · KAS Zody Boutique",
+      "selector": ".home-hero__slide[data-index=\"4\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.06",
+      "label": "Home Hero · 06 · KAS Sonata Luxury",
+      "selector": ".home-hero__slide[data-index=\"5\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.07",
+      "label": "Home Hero · 07 · KAS Eliana Luxury",
+      "selector": ".home-hero__slide[data-index=\"6\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.hero.08",
+      "label": "Home Hero · 08 · KAS Dilly Luxury",
+      "selector": ".home-hero__slide[data-index=\"7\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.heroExtra1",
+      "label": "Home Hero · 09 · Ha Long Bay, Vietnam",
+      "selector": ".home-hero__slide[data-index=\"8\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.heroExtra2",
+      "label": "Home Hero · 10 · Hoi An, Vietnam",
+      "selector": ".home-hero__slide[data-index=\"9\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.heroExtra3",
+      "label": "Home Hero · 11 · Vietnam coast",
+      "selector": ".home-hero__slide[data-index=\"10\"] img",
+      "default": ""
+    },
+    {
+      "key": "home.heroExtra4",
+      "label": "Home Hero · 12 · Vietnam landscape",
+      "selector": ".home-hero__slide[data-index=\"11\"] img",
+      "default": ""
+    }
+  ],
+  "pageHero": [
+    {
+      "key": "page.hero.experiences",
+      "label": "Trải nghiệm · Ảnh Hero",
+      "selector": ".content-page-hero",
+      "default": ""
+    },
+    {
+      "key": "page.hero.offers",
+      "label": "Ưu đãi · Ảnh Hero",
+      "selector": ".content-page-hero",
+      "default": ""
+    },
+    {
+      "key": "page.hero.my-kas",
+      "label": "My KAS · Ảnh Hero",
+      "selector": ".hero--mykas-intro",
+      "default": ""
+    },
+    {
+      "key": "page.hero.about",
+      "label": "Về KAS · Ảnh Hero",
+      "selector": ".content-page-hero",
+      "default": ""
+    },
+    {
+      "key": "page.hero.support",
+      "label": "Hỗ trợ · Ảnh Hero",
+      "selector": ".content-page-hero",
+      "default": ""
+    }
+  ]
+}

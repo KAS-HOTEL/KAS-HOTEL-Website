@@ -47,12 +47,29 @@
     if (!d) return '';
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
+<<<<<<< HEAD
   function fmtDate(s) {
     var d = parseDate(s); if (!d) return '—';
+=======
+  function isVietnamese() {
+    try { return global.KAS_I18N && global.KAS_I18N.getLanguage && global.KAS_I18N.getLanguage() === 'vi'; } catch (e) { return false; }
+  }
+  function fmtDate(s) {
+    var d = parseDate(s); if (!d) return '—';
+    /* Always the English source format; i18n.js renders it as dd/mm/yyyy in VI.
+       Formatting by language here left VI dates on screen after switching to EN. */
+>>>>>>> origin/thu
     return d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
   }
   function fmtDateFull(s) {
     var d = parseDate(s); if (!d) return '—';
+<<<<<<< HEAD
+=======
+    if (isVietnamese()) {
+      var VI_DAY = ['Chủ nhật','Thứ 2','Thứ 3','Thứ 4','Thứ 5','Thứ 6','Thứ 7'];
+      return VI_DAY[d.getDay()] + ', ' + String(d.getDate()).padStart(2,'0') + '/' + String(d.getMonth() + 1).padStart(2,'0') + '/' + d.getFullYear();
+    }
+>>>>>>> origin/thu
     return DAY[d.getDay()] + ', ' + d.getDate() + ' ' + MON[d.getMonth()] + ' ' + d.getFullYear();
   }
   function dayName(s) {
@@ -113,18 +130,30 @@
     if (!input) return;
     input.classList.add('is-err');
     input.setAttribute('aria-invalid', 'true');
+<<<<<<< HEAD
     var m = input.parentNode.querySelector('.err-msg');
+=======
+    var m = (input.closest('.field') || input.parentNode).querySelector('.err-msg');
+>>>>>>> origin/thu
     if (m) { m.textContent = msg; m.classList.add('show'); }
   }
   function clearErr(input) {
     if (!input) return;
     input.classList.remove('is-err');
     input.removeAttribute('aria-invalid');
+<<<<<<< HEAD
     var m = input.parentNode.querySelector('.err-msg');
     if (m) m.classList.remove('show');
   }
   function clearAllErrs(scope) {
     $$('.is-err', scope).forEach(function (i) { i.classList.remove('is-err'); });
+=======
+    var m = (input.closest('.field') || input.parentNode).querySelector('.err-msg');
+    if (m) m.classList.remove('show');
+  }
+  function clearAllErrs(scope) {
+    $$('.is-err', scope).forEach(function (i) { i.classList.remove('is-err'); i.removeAttribute('aria-invalid'); });
+>>>>>>> origin/thu
     $$('.err-msg.show', scope).forEach(function (m) { m.classList.remove('show'); });
   }
 
@@ -134,7 +163,12 @@
     if (!s) return o;
     s.split('&').forEach(function (p) {
       var kv = p.split('=');
+<<<<<<< HEAD
       if (kv[0]) o[decodeURIComponent(kv[0])] = decodeURIComponent((kv[1] || '').replace(/\+/g, ' '));
+=======
+      /* a malformed %-escape must not throw and stop the whole page script */
+      try { if (kv[0]) o[decodeURIComponent(kv[0])] = decodeURIComponent((kv[1] || '').replace(/\+/g, ' ')); } catch (e) {}
+>>>>>>> origin/thu
     });
     return o;
   }
@@ -206,6 +240,11 @@
     sparkle2:'<path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/>',
     map:'<path d="M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z"/><path d="M8 2v16M16 6v16"/>',
     door:'<path d="M3 21h18M5 21V4a1 1 0 011-1h12a1 1 0 011 1v17"/><circle cx="15" cy="12" r="1" fill="currentColor"/>',
+<<<<<<< HEAD
+=======
+    home:'<path d="M3 10.5L12 3l9 7.5V21H3z"/><path d="M9 21v-6h6v6"/>',
+    send:'<path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>',
+>>>>>>> origin/thu
     bell:'<path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>',
     fb:'<path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>',
     ig:'<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/>',
@@ -268,6 +307,11 @@
       (cls ? ' class="' + cls + '"' : '') +
       (lazy === false ? '' : ' loading="lazy"') +
       ' decoding="async"' +
+<<<<<<< HEAD
+=======
+      /* Hotlinked OTA/CDN photos: send no referrer, which some CDNs require for cross-site images. */
+      (/^https?:\/\//i.test(chain[0]) ? ' referrerpolicy="no-referrer"' : '') +
+>>>>>>> origin/thu
       ' data-fb="' + esc(chain.slice(1).join('|')) + '"' +
       ' data-fblabel="' + esc(lbl) + '"' +
       ' onerror="window.U&&U.imgError(this)">';

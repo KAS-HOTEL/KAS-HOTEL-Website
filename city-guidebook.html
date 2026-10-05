@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>KAS — Saigon City Guidebook</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+:root{--paper:#f5f2ec;--ink:#25221f;--muted:#746d64;--line:#d8d1c7;--accent:#8b7658}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-serif}a{color:inherit}
+.wrap{max-width:1180px;margin:auto;padding:55px 30px 100px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:18px}.brand{font-family:"Playfair Display",Georgia,serif;font-size:19px}.back{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hero{padding:72px 0 48px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;letter-spacing:.23em;text-transform:uppercase;color:#81796d;font-weight:600}.hero h1{font:400 clamp(48px,7vw,86px)/.96 "Playfair Display",Georgia,serif;letter-spacing:-.035em;margin:14px 0 20px}.hero p{max-width:720px;color:var(--muted);font-size:13px;line-height:1.75}
+.toc{display:flex;gap:18px;flex-wrap:wrap;padding:20px 0 0}.toc a{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:5px}
+.entry{padding:74px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}.entry-grid{display:grid;grid-template-columns:42% 1fr;gap:46px}.photo{min-height:430px;background-size:cover;background-position:center}.meta{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}.entry h2{font:400 38px/1.05 "Playfair Display",Georgia,serif;margin:0 0 18px}.desc{font-size:13px;line-height:1.7;color:#514c46;margin:0 0 24px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px;border-top:1px solid var(--line);padding-top:20px}.fact label{display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8a8278;margin-bottom:7px}.fact div{font-size:12px;line-height:1.55}.distances{margin-top:28px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.dist-title{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8a8278;margin-bottom:12px}.distance{display:flex;justify-content:space-between;gap:20px;font-size:11px;line-height:1.6;padding:5px 0}.distance strong{font-weight:600}.tip{margin-top:24px;background:#eee9e1;padding:17px 18px;font-size:11px;line-height:1.6}.source{margin-top:22px;font-size:10px;color:var(--muted)}.source a{text-decoration:underline;text-underline-offset:3px}.footer{padding-top:45px;color:var(--muted);font-size:10px;line-height:1.7}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:0}.hero-main{min-height:540px;padding:55px 0 76px}.hero-visual{min-height:360px}.hero-badge{left:0;bottom:24px}.hero .toc{width:100%}}
+@media(max-width:760px){.wrap{padding:32px 18px 70px}.hero{padding:50px 0 35px}.entry{padding:52px 0}.entry-grid{grid-template-columns:1fr;gap:26px}.photo{min-height:260px}.facts{grid-template-columns:1fr}.entry h2{font-size:32px}}
+
+/* KAS V18 — guidebook immersive editorial treatment */
+:root{--paper:#f3f0e9;--ink:#24211d;--muted:#746c62;--line:#d3ccc1;--accent:#9a7651;--gold:#c4a173}
+body{background:radial-gradient(circle at 88% 5%,rgba(199,163,116,.12),transparent 23%),linear-gradient(180deg,#f7f4ee 0%,#eeebe4 100%)}
+.wrap{max-width:1240px;padding:28px 32px 110px}.top{position:sticky;top:0;z-index:30;margin:0 -32px;padding:15px 32px;background:rgba(247,244,238,.9);backdrop-filter:blur(15px);border-bottom:1px solid rgba(211,204,193,.8)}
+.brand{letter-spacing:.08em;text-transform:uppercase}.back{padding:8px 12px;border:1px solid var(--line);transition:.25s}.back:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hero{padding:72px 0 54px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:60px;align-items:end}.hero:after{content:'KAS HOTEL COLLECTION';display:block;position:absolute;right:32px;top:154px;font-size:9px;letter-spacing:.2em;color:#9b8f80;writing-mode:vertical-rl}.hero h1{font-size:clamp(60px,8vw,110px);line-height:.88;margin:13px 0 22px}.hero p{font-size:14px;line-height:1.8}.hero-side{border-left:1px solid var(--line);padding-left:20px}.hero-side strong{display:block;font:400 30px/1 'Playfair Display',serif;margin-bottom:6px}.hero-side span{display:block;font-size:10px;line-height:1.7;color:var(--muted);margin-bottom:18px}
+.toc{position:sticky;top:63px;z-index:15;padding:14px 0;background:rgba(243,240,233,.94);border-bottom:1px solid var(--line);gap:8px}.toc a{border:1px solid var(--line);padding:8px 11px;background:rgba(255,255,255,.28);transition:.25s}.toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.entry{padding:82px 0;position:relative}.entry:before{content:'';position:absolute;top:0;left:0;width:58px;height:2px;background:linear-gradient(90deg,var(--accent),var(--gold))}.entry-grid{grid-template-columns:46% 1fr;gap:58px;align-items:start}.entry:nth-of-type(even) .entry-grid{grid-template-columns:1fr 46%}.entry:nth-of-type(even) .photo{order:2}.photo{min-height:500px;position:relative;box-shadow:0 22px 55px rgba(40,32,24,.12);transition:transform .5s ease,box-shadow .5s ease}.entry:hover .photo{transform:translateY(-4px);box-shadow:0 28px 65px rgba(40,32,24,.17)}.photo:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.12));pointer-events:none}.meta{display:inline-block;padding:7px 10px;border:1px solid var(--line);background:#faf8f3;font-size:9px;letter-spacing:.15em}.entry h2{font-size:clamp(38px,4vw,58px);margin:16px 0 16px}.desc{font-size:14px;line-height:1.8;max-width:620px}.facts{gap:10px 12px;border-top:0;padding-top:4px}.fact{background:rgba(255,255,255,.42);border:1px solid var(--line);padding:15px 15px 16px;min-height:115px}.fact label{font-size:8px;color:#8c7d6d}.fact div{font-size:11px;line-height:1.6}.distances{margin-top:18px;padding:18px;border:1px solid var(--line);background:#f8f5ef}.dist-title{display:flex;align-items:center;gap:8px;font-size:8px}.dist-title:before{content:'↗';display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:10px}.distance{padding:8px 0;border-bottom:1px dashed #d8d0c5}.distance:last-child{border-bottom:0}.distance strong{font-size:10px}.distance span{font-size:10px;color:#5f5952;background:#fff;padding:4px 7px;border:1px solid #e2dbd0}.tip{background:#25211d;color:#f5efe6;padding:18px 20px;font-size:11px;border-left:3px solid var(--gold);box-shadow:0 10px 25px rgba(20,18,15,.08)}.source{font-size:10px}.source a{color:#7e5f3f}.footer{padding:45px 0;border-top:1px solid var(--line)}
+
+/* KAS HOTEL COLLECTION — refined guidebook hero */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);gap:0;min-height:570px;padding:0;border-bottom:1px solid var(--line);overflow:hidden;background:#eee9e0}
+.hero-main{position:relative;min-height:570px;padding:70px 64px 54px 0;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-copy{position:relative;z-index:2;max-width:650px}
+.hero h1{font-size:clamp(64px,7.4vw,112px);line-height:.86;letter-spacing:-.045em;margin:16px 0 26px;max-width:720px}
+.hero p{font-size:13px;line-height:1.85;max-width:610px;margin:0;color:#625b53}
+.hero-visual{position:relative;min-height:570px;background-image:linear-gradient(180deg,rgba(28,24,20,.02),rgba(28,24,20,.18)),url('assets/home/a-day-in-saigon.jpg');background-size:cover;background-position:center}
+.hero-visual:before{content:'SAIGON / KAS CITY GUIDE';position:absolute;top:24px;right:24px;color:#f7f2e9;font-size:8px;letter-spacing:.2em;writing-mode:vertical-rl;opacity:.9}
+.hero-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,24,20,.18),transparent 28%,transparent 72%,rgba(28,24,20,.08))}
+.hero-badge{position:absolute;left:0;bottom:38px;z-index:3;background:#f7f3ec;border:1px solid rgba(211,204,193,.9);padding:15px 18px;min-width:220px;box-shadow:0 14px 35px rgba(35,28,22,.12)}
+.hero-badge strong{display:block;font:400 31px/1 'Playfair Display',serif;margin-bottom:5px}
+.hero-badge span{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#81796d}
+.hero-side{border-left:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px;max-width:620px}
+.hero-side strong{font-size:27px;margin:0 0 5px}.hero-side span{font-size:9px;line-height:1.6;margin:0}
+.hero-side > *{padding:14px 16px;border:1px solid var(--line);background:rgba(255,255,255,.42)}
+.hero .toc{position:absolute;left:0;bottom:0;z-index:5;width:calc(100% - 40px);padding:11px 0;border:0;background:linear-gradient(90deg,rgba(243,240,233,.98),rgba(243,240,233,.78),transparent);gap:7px}
+.hero .toc a{background:#f7f3ec;border:1px solid var(--line);padding:8px 10px;color:#665e55}
+.hero .toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+@media(max-width:760px){.wrap{padding:20px 18px 70px}.top{margin:0 -18px;padding:14px 18px}.hero{grid-template-columns:1fr;padding:54px 0 38px;gap:25px}.hero:after{display:none}.hero h1{font-size:58px}.hero-side{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.toc{top:53px;overflow:auto;flex-wrap:nowrap}.toc a{white-space:nowrap}.entry,.entry:nth-of-type(even){padding:58px 0}.entry-grid,.entry:nth-of-type(even) .entry-grid{grid-template-columns:1fr;gap:28px}.entry:nth-of-type(even) .photo{order:0}.photo{min-height:320px}.entry h2{font-size:40px}.facts{grid-template-columns:1fr 1fr}.fact{min-height:0}}
+@media(max-width:480px){.facts{grid-template-columns:1fr}.distance{display:block}.distance span{display:inline-block;margin-top:5px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* ===== KAS GUIDEBOOK — HERO REFINEMENT v2 ===== */
+body{background:#f4f0e8;color:#24211d;}
+.wrap{max-width:1280px;padding:24px 34px 110px;}
+.top{position:sticky;top:0;z-index:50;margin:0 -34px;padding:15px 34px;background:rgba(244,240,232,.94);backdrop-filter:blur(14px);border-bottom:1px solid #d8d0c4;box-shadow:0 6px 22px rgba(45,37,29,.04);}
+.brand{font-size:15px;letter-spacing:.12em;}
+.back{font-size:8px;letter-spacing:.16em;border-color:#cfc5b7;background:#f8f5ef;}
+.lang-switch{font-size:9px;letter-spacing:.16em;color:#82796e;}
+.lang-switch a{opacity:.55;text-decoration:none}.lang-switch a.active{opacity:1;color:#24211d;font-weight:600}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);min-height:650px;padding:0;margin-top:28px;border:1px solid #d6cec2;background:#ebe5da;overflow:hidden;}
+.hero-visual{grid-column:1;grid-row:1;min-height:650px;background-image:linear-gradient(180deg,rgba(25,21,17,.04),rgba(25,21,17,.20)),url('assets/home/a-day-in-saigon.jpg');background-size:cover;background-position:center;position:relative;}
+.hero-visual:before{content:'SAIGON / 40 PLACES';position:absolute;left:22px;top:22px;color:#f8f2e8;font-size:8px;letter-spacing:.22em;writing-mode:vertical-rl;transform:rotate(180deg);z-index:2;}
+.hero-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,17,14,.03),rgba(20,17,14,.18));}
+.hero-main{grid-column:2;grid-row:1;min-height:650px;padding:62px 62px 44px;display:flex;flex-direction:column;justify-content:space-between;background:#f4f0e8;}
+.hero-main:before{content:'KAS HOTEL COLLECTION';font-size:8px;letter-spacing:.22em;color:#918577;align-self:flex-end;}
+.hero-copy{max-width:610px;margin:auto 0;}
+.eyebrow{font-size:8px;letter-spacing:.22em;color:#887b6d;}
+.hero h1{font-size:clamp(64px,7.1vw,106px);line-height:.82;letter-spacing:-.055em;margin:18px 0 28px;color:#24211d;}
+.hero h1 br{display:block;}
+.hero p{font-size:13px;line-height:1.85;max-width:520px;color:#645d54;margin-bottom:28px;}
+.hero-side{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:430px;margin:0;}
+.hero-side>*{padding:15px 16px;border:1px solid #d6cec2;background:#eee9df;}
+.hero-side strong{font-size:31px;line-height:1;margin:0 0 7px;font-family:'Playfair Display',Georgia,serif;font-weight:400;}
+.hero-side span{font-size:8px;line-height:1.55;letter-spacing:.08em;text-transform:uppercase;color:#81776b;margin:0;}
+.hero-badge{position:absolute;left:22px;bottom:22px;z-index:4;background:#f6f1e8;border:1px solid #d3c9bb;padding:14px 16px;min-width:215px;box-shadow:0 14px 32px rgba(35,28,22,.16);}
+.hero-badge strong{font-size:23px;line-height:1;display:block;margin-bottom:6px;}
+.hero-badge span{font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#7c7267;}
+.hero .toc{position:static;display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;padding:0;margin-top:34px;background:none;border:0;}
+.hero .toc a{font-size:8px;letter-spacing:.12em;padding:10px 11px;background:transparent;border:1px solid #cfc5b7;color:#655d54;text-decoration:none;transition:.25s;}
+.hero .toc a:hover{background:#24211d;color:#fff;border-color:#24211d;transform:translateY(-2px);}
+.hero:after{content:'CITY GUIDEBOOK';position:absolute;right:17px;top:28px;font-size:7px;letter-spacing:.25em;color:#9b8f80;writing-mode:vertical-rl;}
+.entry{padding:92px 0;}
+.entry-grid{grid-template-columns:47% 1fr;gap:64px;}
+.photo{min-height:510px;box-shadow:0 20px 50px rgba(40,32,24,.11);}
+.entry h2{font-size:clamp(38px,4vw,58px);}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-visual{grid-column:1;grid-row:1;min-height:460px}.hero-main{grid-column:1;grid-row:2;min-height:auto;padding:42px 34px 38px}.hero-main:before{display:none}.hero:after{display:none}.hero .toc{margin-top:25px}.hero-badge{bottom:18px;left:18px}}
+@media(max-width:600px){.wrap{padding:16px 16px 70px}.top{margin:0 -16px;padding:13px 16px}.brand{font-size:12px}.back{display:none}.hero{margin-top:18px}.hero-visual{min-height:360px}.hero-main{padding:35px 24px 28px}.hero h1{font-size:57px;margin:15px 0 22px}.hero p{font-size:12px}.hero-side{grid-template-columns:1fr 1fr}.hero .toc{grid-template-columns:1fr 1fr}.hero-badge{min-width:190px}.entry{padding:60px 0}.entry-grid{grid-template-columns:1fr;gap:28px}.photo{min-height:330px}}
+
+/* ===== HERO v2.1 — clean badge placement ===== */
+.hero-main{position:relative;}
+.hero-badge{position:static;min-width:0;width:max-content;max-width:100%;margin-top:26px;box-shadow:none;padding:13px 16px;}
+.hero .toc{margin-top:12px;}
+@media(max-width:900px){.hero-badge{margin-top:24px}.hero .toc{margin-top:12px}}
+
+/* KAS Guidebook — streamlined opening: no hero */
+.guide-nav-wrap{position:sticky;top:0;z-index:25;margin:0 -32px;padding:10px 32px;background:rgba(247,244,238,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(211,204,193,.9)}
+.guide-nav-wrap .toc{position:static;display:flex;justify-content:flex-start;align-items:center;gap:8px;padding:0;border:0;background:transparent}
+.guide-nav-wrap .toc a{display:inline-flex;align-items:center;min-height:34px;padding:8px 12px;border:1px solid var(--line);background:rgba(255,255,255,.35);color:var(--ink);font-size:9px;letter-spacing:.14em;text-decoration:none;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+.guide-nav-wrap .toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-1px)}
+.entry:first-of-type{padding-top:58px}
+@media(max-width:760px){.guide-nav-wrap{margin:0 -18px;padding:8px 18px;overflow-x:auto}.guide-nav-wrap .toc{width:max-content;flex-wrap:nowrap}.guide-nav-wrap .toc a{white-space:nowrap}.entry:first-of-type{padding-top:42px}}
+</style><style>
+/* KAS Guidebook — refined compact header */
+.top{height:68px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 18px;border:1px solid rgba(211,204,193,.9);border-bottom:1px solid var(--line);background:rgba(250,247,241,.92);box-shadow:0 8px 26px rgba(45,36,27,.045)}
+.brand{font-size:16px;letter-spacing:.12em;white-space:nowrap}
+.guide-mark{justify-self:center;display:flex;align-items:center;gap:10px;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#85796c;white-space:nowrap}
+.guide-mark:before,.guide-mark:after{content:'';width:28px;height:1px;background:var(--line)}
+.top-actions{justify-self:end;display:flex;align-items:center;gap:18px}
+.back{font-size:8px;letter-spacing:.13em;padding:9px 12px;border:1px solid var(--line);background:#f7f3ec;color:var(--muted);text-decoration:none;transition:.2s}
+.back:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lang-switch{display:flex;align-items:center;gap:0;font-size:8px;letter-spacing:.16em;border:1px solid var(--line);background:#f7f3ec;padding:3px}
+.lang-switch a{display:grid;place-items:center;min-width:31px;height:25px;text-decoration:none;color:#81776c;transition:.2s}
+.lang-switch a.active{background:var(--ink);color:#fff}
+.lang-switch span{display:none}
+@media(max-width:760px){.top{height:auto;min-height:62px;grid-template-columns:1fr auto;padding:8px 12px;gap:12px}.guide-mark{display:none}.brand{font-size:12px}.top-actions{gap:8px}.back{font-size:7px;padding:8px 9px}.lang-switch a{min-width:27px;height:23px}}
+@media(max-width:430px){.back{font-size:0;padding:8px 10px}.back:before{content:'←';font-size:12px}.brand{letter-spacing:.08em}}
+</style><script>
+(function () {
+  /* KAS site-wide language bridge: keep the language selected on index.html
+     when moving into the standalone City Guidebook pages. */
+  var KEY = 'kas-language';
+  function normalize(v) { return String(v || '').toLowerCase() === 'vi' ? 'vi' : 'en'; }
+  function readLanguage() {
+    var fromUrl = '';
+    try { fromUrl = new URLSearchParams(window.location.search).get('lang') || ''; } catch (e) {}
+    if (fromUrl === 'vi' || fromUrl === 'en') return normalize(fromUrl);
+    try {
+      var saved = localStorage.getItem(KEY);
+      if (saved === 'vi' || saved === 'en') return normalize(saved);
+    } catch (e) {}
+    try {
+      var match = document.cookie.match(/(?:^|; )kas-language=([^;]+)/);
+      if (match) {
+        var cookieLang = decodeURIComponent(match[1]);
+        if (cookieLang === 'vi' || cookieLang === 'en') return normalize(cookieLang);
+      }
+    } catch (e) {}
+    return 'en';
+  }
+  function saveLanguage(lang) {
+    lang = normalize(lang);
+    try { localStorage.setItem(KEY, lang); } catch (e) {}
+    try { document.cookie = 'kas-language=' + encodeURIComponent(lang) + '; path=/; max-age=31536000; SameSite=Lax'; } catch (e) {}
+  }
+  function currentPageIsVi() {
+    return /city-guidebook-vi\.html$/i.test(window.location.pathname);
+  }
+  var explicit = '';
+  try { explicit = new URLSearchParams(window.location.search).get('lang') || ''; } catch (e) {}
+  var lang = readLanguage();
+
+  /* An explicit language in the URL always wins for this navigation. */
+  if (explicit === 'vi' || explicit === 'en') saveLanguage(lang);
+
+  /* Keep the two standalone files in sync with the site's current language. */
+  var targetIsVi = lang === 'vi';
+  if (targetIsVi !== currentPageIsVi()) {
+    var target = targetIsVi ? 'city-guidebook-vi.html' : 'city-guidebook.html';
+    try {
+      var u = new URL(target, window.location.href);
+      if (window.location.hash) u.hash = window.location.hash;
+      window.location.replace(u.href);
+    } catch (e) {
+      window.location.replace(target + (window.location.hash || ''));
+    }
+    return;
+  }
+
+  /* Switching EN / VI from the guidebook updates the same persistent value. */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.lang a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var href = a.getAttribute('href') || '';
+        var next = /city-guidebook-vi\.html/i.test(href) ? 'vi' : 'en';
+        saveLanguage(next);
+        try {
+          var u = new URL(href, window.location.href);
+          u.searchParams.set('lang', next);
+          a.href = u.pathname.split('/').pop() + u.search + (u.hash || '');
+        } catch (e) {}
+      });
+    });
+  });
+})();
+</script>
+<script src="js/site-images.js" defer></script><script src="js/kas-guide-language.js" defer></script></head><body><main class="wrap">
+<div class="top"><div class="brand">KAS HOTEL COLLECTION</div><div class="guide-mark">CITY GUIDEBOOK · SAIGON</div><div class="top-actions"><a class="back" href="city-guide.html">← CITY GUIDE</a><div class="lang-switch"><a class="active" data-kas-lang="en" href="city-guidebook.html">EN</a><a data-kas-lang="vi" href="city-guidebook-vi.html">VI</a></div></div></div>
+<div class="guide-nav-wrap"><nav class="toc"><a href="#city">Central Saigon</a><a href="#taste">Food &amp; Local Life</a><a href="#slow">Walk &amp; Discover</a><a href="#night">After Dark</a></nav></div>
+<div id="city" style="scroll-margin-top:90px"></div>
+<div id="city" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-market">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 01</div><h2>Bến Thành Market</h2><p class="desc">Central market for local food, souvenirs, clothing and everyday city life.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>A natural first stop for getting oriented in central Saigon. Walk the main aisles, look for Vietnamese coffee, dried goods and small crafts, then continue along Lê Lợi.</div></div><div class="fact"><label>Best time</label><div>Morning is calmer for shopping; late afternoon is good if you want to continue toward Nguyễn Huệ as the city cools.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 0.9 km · 11 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/kham-pha-cho-ben-thanh-diem-den-khong-the-bo-qua-o-tp-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="tao-dan-park">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 02</div><h2>Tao Đàn Park</h2><p class="desc">Leafy central park with gardens, exercise areas and a distinctly local morning rhythm.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Come for shade, old trees and a glimpse of everyday city life rather than a checklist attraction. The park is especially pleasant as a slow start before museums and historic sites.</div></div><div class="fact"><label>Best time</label><div>Early morning or late afternoon, when the heat is lower.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 0.4 km · 5 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 0.9 km · 11 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="independence-palace">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 03</div><h2>Independence Palace</h2><p class="desc">One of the city's major historic landmarks, with preserved rooms, offices and modernist architecture.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Take time for the main building, ceremonial rooms and the historical displays. The palace is one of the clearest places to understand the political history of modern Saigon.</div></div><div class="fact"><label>Best time</label><div>Morning or mid-afternoon; allow around 1–1.5 hours.</div></div><div class="fact"><label>Suggested time</label><div>1–2 hours</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 0.9 km · 11 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 0.5 km · 6 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="war-remnants-museum">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 04</div><h2>War Remnants Museum</h2><p class="desc">A major history museum focused on the Vietnam and Indochina wars through photographs, objects and exhibitions.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>This is a serious museum rather than a quick photo stop. Give yourself enough time to read the exhibitions and consider the historical context from multiple perspectives.</div></div><div class="fact"><label>Best time</label><div>Morning is often more comfortable; allow 1–2 hours.</div></div><div class="fact"><label>Suggested time</label><div>1–2 hours</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 0.8 km · 10 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="central-post-office">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 05</div><h2>Saigon Central Post Office</h2><p class="desc">Late-19th-century landmark known for its grand vaulted interior and French-colonial architecture.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Look up at the iron structure, old maps and long interior hall. Pair it with Notre-Dame Cathedral for a compact heritage walk.</div></div><div class="fact"><label>Best time</label><div>Morning or late afternoon for softer light.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 1.6 km · 20 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.1 km · 14 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="notre-dame-cathedral">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 06</div><h2>Notre-Dame Cathedral Basilica</h2><p class="desc">Historic red-brick cathedral in the central civic quarter, next to the Central Post Office.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>See the exterior and surrounding square, then continue directly to the Central Post Office. Access inside can vary with restoration or services, so treat the exterior as the dependable visit.</div></div><div class="fact"><label>Best time</label><div>Late afternoon is comfortable for the surrounding civic quarter.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 1.5 km · 19 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 07</div><h2>Saigon Opera House</h2><p class="desc">Ornate 19th-century theatre and a key stop for architecture and performing arts.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Even without a show, the Lam Son Square setting makes a good evening walk. If attending a performance, check the current programme and arrival instructions in advance.</div></div><div class="fact"><label>Best time</label><div>Early evening; performance times vary.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 1.9 km · 24 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.5 km · 19 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="nguyen-hue">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 08</div><h2>Nguyễn Huệ Walking Street</h2><p class="desc">Broad pedestrian boulevard for evening walks, city lights and major civic events.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk from the People's Committee Hall toward the river, then continue to Bạch Đằng if you want a longer riverside finish. The space becomes particularly lively after sunset.</div></div><div class="fact"><label>Best time</label><div>After sunset, especially on weekends or event nights.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 1.7 km · 21 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.3 km · 16 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/du-lich-quan-1" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="bitexco">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 09</div><h2>Bitexco Financial Tower</h2><p class="desc">Iconic modern skyline landmark with retail, dining and city views.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Use the tower as a visual counterpoint to the city's colonial architecture. If the observation deck is operating, check current admission and hours before heading over.</div></div><div class="fact"><label>Best time</label><div>Late afternoon into sunset for the skyline.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 2.0 km · 25 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.6 km · 20 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-square">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Central Saigon · 10</div><h2>Saigon Square</h2><p class="desc">Central shopping stop for fashion, accessories and local browsing.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Expect a dense indoor market-style shopping experience rather than a department store. Browse first, compare prices and keep valuables close in busy aisles.</div></div><div class="fact"><label>Best time</label><div>Late morning to afternoon.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Approx. 1.5 km · 19 min walk</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Approx. 1.2 km · 15 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<div id="taste" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-street-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 01</div><h2>Bến Thành Street Food Market</h2><p class="desc">Compact food-focused stop for Vietnamese dishes and casual local eating.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Use it as a low-commitment introduction to Vietnamese street-food classics: order one or two small dishes, then keep walking rather than turning the stop into a full meal.</div></div><div class="fact"><label>Best time</label><div>Late afternoon into evening.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.1 km · 14 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="pham-ngu-lao">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 02</div><h2>Phạm Ngũ Lão</h2><p class="desc">Backpacker quarter with budget dining, cafés, travel services and busy street life.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk the grid around Phạm Ngũ Lão and Đề Thám rather than staying on one strip. It is useful for casual meals, people-watching and finding late transport or tours.</div></div><div class="fact"><label>Best time</label><div>Late afternoon and evening.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="bui-vien">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 03</div><h2>Bùi Viện Walking Street</h2><p class="desc">Nightlife and street-food corridor known for its late hours and energetic atmosphere.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Go for the spectacle and street energy. Walk through once before choosing where to stop; the atmosphere changes quickly from one block to the next.</div></div><div class="fact"><label>Best time</label><div>After sunset; busiest later in the evening.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.3 km · 16 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 1.1 km · 14 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="fine-arts-museum">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 04</div><h2>Ho Chi Minh City Museum of Fine Arts</h2><p class="desc">Historic building and art museum in the Nguyễn Thái Bình area.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Explore the building as much as the collection: colonial-era architecture, decorative details and Vietnamese art make this a slower cultural stop in the middle of the city.</div></div><div class="fact"><label>Best time</label><div>Morning or early afternoon; allow 1–1.5 hours.</div></div><div class="fact"><label>Suggested time</label><div>1–2 hours</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.4 km · 18 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.5 km · 6 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="nguyen-trai-street">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 05</div><h2>Nguyễn Trãi Street</h2><p class="desc">Long-running central shopping and local-life street right by KAS Ancient.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk rather than simply shopping. The street is useful for seeing how fashion stores, food businesses, small cafés and residential life sit together in the central grid.</div></div><div class="fact"><label>Best time</label><div>Late afternoon into early evening.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 0.2 km · 3 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 1.3 km · 16 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-centre">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 06</div><h2>Saigon Centre / Takashimaya</h2><p class="desc">Contemporary shopping, dining and a polished contrast to the surrounding street markets.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>A comfortable reset from the heat: browse local and international brands, then use the dining floors as a break before returning to the older streets.</div></div><div class="fact"><label>Best time</label><div>Midday for air-conditioning or early evening for dinner.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.3 km · 16 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.9 km · 11 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-eco-craft">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 07</div><h2>Saigon Eco Craft</h2><p class="desc">Local craft and gift browsing around the Lê Lợi / Lê Thánh Tôn area.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Look for small Vietnamese-made objects and gifts rather than rushing through a souvenir list. Combine the stop with Saigon Centre and Nguyễn Huệ.</div></div><div class="fact"><label>Best time</label><div>Late morning to early evening.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.2 km · 15 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="vietnamese-coffee">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 08</div><h2>Vietnamese Coffee Stops</h2><p class="desc">Use the central streets around Nguyễn Trãi, Nguyễn Thái Bình and Bến Thành as a base for a phin-coffee crawl.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Try one traditional phin coffee, then compare it with a modern specialty café. The point is the rhythm of stopping, watching the street and moving on.</div></div><div class="fact"><label>Best time</label><div>Morning for coffee culture; late afternoon for a slower pause.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 0.3 km · 4 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="ben-thanh-market-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 09</div><h2>Ben Thanh Market</h2><p class="desc">One of the city's signature places for local ingredients, snacks, souvenirs and people-watching.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Give yourself a simple mission: browse the dry-goods aisles, try a snack, and finish with a slow loop around the four main entrances.</div></div><div class="fact"><label>Best time</label><div>Morning for the full market; evening for the surrounding food scene.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.7 km · 9 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-street-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Food &amp; Local Life · 10</div><h2>Saigon Street Food Walk</h2><p class="desc">Turn the central grid into an informal food route: market → snack → coffee → late dinner.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Keep the route flexible. Choose small portions at several stops so you can taste more than one dish and follow whatever street looks busiest with locals.</div></div><div class="fact"><label>Best time</label><div>From 16:30 onward, when the heat begins to drop.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Approx. 0.8 km · 10 min walk</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Approx. 0.7 km · 9 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<div id="slow" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-market-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 01</div><h2>Bến Thành Market</h2><p class="desc">At the centre of the neighbourhood and a natural starting point for a walking day.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Start at the north or east side, browse the market, then leave through Lê Thánh Tôn and continue toward the civic centre.</div></div><div class="fact"><label>Best time</label><div>Morning for market life; late afternoon for a gentler walk.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 0.8 km · 10 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 0.3 km · 4 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/kham-pha-cho-ben-thanh-diem-den-khong-the-bo-qua-o-tp-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="gia-long-palace">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 02</div><h2>Gia Long Palace / City Museum</h2><p class="desc">Historic civic building and museum stop within easy reach of the central hotel cluster.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>The architecture is the reason to come: a French-influenced civic building with a quieter atmosphere than the city's biggest landmarks. Check the current museum programme before visiting.</div></div><div class="fact"><label>Best time</label><div>Morning or early afternoon.</div></div><div class="fact"><label>Suggested time</label><div>1–2 hours</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 0.8 km · 10 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="le-thanh-ton">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 03</div><h2>Lê Thánh Tôn Walk</h2><p class="desc">Walk the street itself: shops, cafés, Japanese-influenced dining and small local businesses.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>This is the kind of stop that works without an itinerary. Start near the KAS hotels, walk south toward Bến Thành, and turn whenever a café, shop or side street catches your attention.</div></div><div class="fact"><label>Best time</label><div>Late afternoon into dinner.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 0.1 km · 2 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 0.1 km · 2 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 04</div><h2>Saigon Opera House</h2><p class="desc">Historic theatre and one of the most recognisable architectural stops in central Saigon.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Continue from Lê Thánh Tôn toward Đồng Khởi and Lam Son Square. The route is as much about the surrounding architecture as the theatre itself.</div></div><div class="fact"><label>Best time</label><div>Late afternoon or evening.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.2 km · 15 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="central-post-office-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 05</div><h2>Central Post Office</h2><p class="desc">Pair with Notre-Dame for a compact architecture walk through the old civic centre.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Spend a few minutes inside the post office, then cross the square for the cathedral. It is one of the easiest heritage combinations in the centre.</div></div><div class="fact"><label>Best time</label><div>Morning or late afternoon.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.4 km · 18 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 1.2 km · 15 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="notre-dame-cathedral-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 06</div><h2>Notre-Dame Cathedral Basilica</h2><p class="desc">Landmark church and a natural continuation of the Central Post Office walk.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Focus on the exterior, square and surrounding civic architecture; access inside may vary. From here, continue toward the Post Office or Independence Palace.</div></div><div class="fact"><label>Best time</label><div>Late afternoon for the surrounding streets.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.4 km · 18 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 1.2 km · 15 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="saigon-square-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 07</div><h2>Saigon Square</h2><p class="desc">Casual shopping stop for browsing fashion and accessories in the centre.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>A useful short stop between architecture walks. Browse, compare and keep the visit relaxed rather than treating it as a destination that needs hours.</div></div><div class="fact"><label>Best time</label><div>Late morning to afternoon.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 0.9 km · 11 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 0.6 km · 8 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="nguyen-hue-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 08</div><h2>Nguyễn Huệ Pedestrian Boulevard</h2><p class="desc">Pedestrian boulevard that works especially well as an early-evening walk.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk the full central stretch from the People's Committee Hall toward the river. Pause for architecture, people-watching and the changing light on the surrounding buildings.</div></div><div class="fact"><label>Best time</label><div>After sunset.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 0.9 km · 11 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="bitexco-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 09</div><h2>Bitexco Financial Tower</h2><p class="desc">Modern skyline counterpoint to the city's historic architecture.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Use the tower as your end point for a central walk, especially if you want a more contemporary side of Saigon after museums and old buildings.</div></div><div class="fact"><label>Best time</label><div>Late afternoon to sunset.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 1.2 km · 15 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-zoo">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Walk &amp; Discover · 10</div><h2>Saigon Zoo &amp; Botanical Gardens</h2><p class="desc">A greener, slower detour when you want to step away from the central streets.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Allow more time here than at a city landmark. The historic garden setting and mature trees make it a useful change of pace from dense District 1 streets.</div></div><div class="fact"><label>Best time</label><div>Morning or late afternoon; check current opening hours.</div></div><div class="fact"><label>Suggested time</label><div>1–2 hours</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Approx. 2.0 km · 25 min walk</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Approx. 1.8 km · 23 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/page/ke-hoach-chuyen-di" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<div id="night" style="scroll-margin-top:20px"></div>
+<article class="entry" id="bui-thi-xuan">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 01</div><h2>Bùi Thị Xuân</h2><p class="desc">Start close to the hotels and let the evening unfold through cafés, restaurants and small local businesses.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Use the street as your first chapter rather than a single attraction. Walk south toward Tân Định or east toward the central grid depending on your dinner plan.</div></div><div class="fact"><label>Best time</label><div>From 17:30 onward.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 0.1 km · 2 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 0.1 km · 2 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="pham-ngu-lao-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 02</div><h2>Phạm Ngũ Lão</h2><p class="desc">A lively central district for casual food, people-watching and a later night.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk through the side streets around Phạm Ngũ Lão and Đề Thám before deciding where to stop. It is more interesting as a moving street scene than as one venue.</div></div><div class="fact"><label>Best time</label><div>After sunset.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="bui-vien-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 03</div><h2>Bùi Viện Walking Street</h2><p class="desc">The high-energy option: lights, music, street food and a very public version of Saigon nightlife.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Take a first pass down the street before choosing a table. Keep belongings secure in dense crowds and remember that noise levels rise as the night goes on.</div></div><div class="fact"><label>Best time</label><div>After 20:00 for the full atmosphere.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.3 km · 16 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.2 km · 15 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="ben-thanh-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 04</div><h2>Bến Thành Market at Night</h2><p class="desc">See one of the city's signature landmarks after the daytime rush has eased.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>The evening experience is more about the surrounding streets, food stalls and illuminated market frontage than daytime shopping inside the market hall.</div></div><div class="fact"><label>Best time</label><div>Early evening.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 0.9 km · 11 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="september-23-park">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 05</div><h2>September 23rd Park</h2><p class="desc">A useful green pause between the market district and the livelier Phạm Ngũ Lão area.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Walk through the park to connect the central market area with the backpacker quarter. It also works as a meeting point before continuing into the night.</div></div><div class="fact"><label>Best time</label><div>Early evening.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.0 km · 13 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 06</div><h2>Saigon Opera House</h2><p class="desc">A more polished evening: historic architecture, performance and a walk around Lam Son Square.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>If you have tickets, arrive with time to take in the square and surrounding architecture. For an evening without a show, use the theatre as a landmark on a longer central walk.</div></div><div class="fact"><label>Best time</label><div>Performance nights or 18:00–20:00 for the square.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="ao-show">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 07</div><h2>A O Show / Lune Production</h2><p class="desc">A Vietnamese bamboo-circus performance built around the contrast between village life and the modern city.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>This is the structured cultural night in the guide. Book through the current official Lune Production channels and check the latest schedule, venue instructions and ticket conditions before leaving the hotel.</div></div><div class="fact"><label>Best time</label><div>Performance schedule varies; check official programme.</div></div><div class="fact"><label>Suggested time</label><div>About 2 hours including arrival</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://www.luneproduction.com/ao-show" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="nguyen-hue-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 08</div><h2>Nguyễn Huệ Walking Street</h2><p class="desc">A broad pedestrian boulevard for an easy evening walk through the centre.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Start around the People’s Committee Hall, follow the boulevard toward the river and continue to Bạch Đằng if you want more open space and river views.</div></div><div class="fact"><label>Best time</label><div>After sunset.</div></div><div class="fact"><label>Suggested time</label><div>45–90 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.5 km · 19 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+<div class="source">Tourism / official reference: <a href="https://visithcmc.net/en/news/du-lich-quan-1" rel="noopener" target="_blank">Open reference ↗</a></div>
+</div></div></article>
+<article class="entry" id="bitexco-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 09</div><h2>Bitexco Financial Tower</h2><p class="desc">A modern skyline counterpoint to the historic centre.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Use the tower as a visual anchor for an evening route between Bến Thành, Nguyễn Huệ and the riverfront. Check current observation-deck operations separately if that is your main reason for visiting.</div></div><div class="fact"><label>Best time</label><div>Late afternoon into evening.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 1.7 km · 21 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 1.6 km · 20 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<article class="entry" id="late-night-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / After Dark · 10</div><h2>Late-night Vietnamese Food</h2><p class="desc">Finish the night with something simple, local and close to the streets you have just walked.</p>
+<div class="facts"><div class="fact"><label>What to do</label><div>Look for a busy local noodle, cơm tấm, bánh mì or chè stop rather than chasing a single famous address. A short, well-populated stop is usually easier after a long evening on foot.</div></div><div class="fact"><label>Best time</label><div>From 21:00 onward, depending on the venue.</div></div><div class="fact"><label>Suggested time</label><div>45–60 min</div></div><div class="fact"><label>Traveller note</label><div>Distances are approximate and intended for trip planning, not turn-by-turn navigation.</div></div></div>
+<div class="distances"><div class="dist-title">From your KAS hotel</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Approx. 0.2–1.5 km · 3–20 min walk</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Approx. 0.2–1.5 km · 3–20 min walk</span></div></div>
+<div class="tip"><strong>Easy pairing:</strong> Combine this stop with the next nearby landmark in the same section, then return to the KAS hotel when you are ready for a break.</div>
+</div></div></article>
+<footer class="footer">KAS City Guidebook · Distances shown on this page are approximate walking estimates from the listed KAS hotel addresses and can vary with route, road crossings, traffic and entrance point. Opening hours, performances and access conditions can change; check the venue’s current official information before travelling.</footer></main></body></html>

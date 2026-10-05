@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1" name="viewport"/><title>KAS — Cẩm nang thành phố Sài Gòn</title><style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap');
+:root{--paper:#f5f2ec;--ink:#25221f;--muted:#746d64;--line:#d8d1c7;--accent:#8b7658}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:"DM Sans",Arial,sans-serif}a{color:inherit}
+.wrap{max-width:1180px;margin:auto;padding:55px 30px 100px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:18px}.brand{font-family:"Playfair Display",Georgia,serif;font-size:19px}.back{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.hero{padding:72px 0 48px;border-bottom:1px solid var(--line)}.eyebrow{font-size:10px;letter-spacing:.23em;text-transform:uppercase;color:#81796d;font-weight:600}.hero h1{font:400 clamp(48px,7vw,86px)/.96 "Playfair Display",Georgia,serif;letter-spacing:-.035em;margin:14px 0 20px}.hero p{max-width:720px;color:var(--muted);font-size:13px;line-height:1.75}
+.toc{display:flex;gap:18px;flex-wrap:wrap;padding:20px 0 0}.toc a{font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);border-bottom:1px solid var(--line);padding-bottom:5px}
+.entry{padding:74px 0;border-bottom:1px solid var(--line);scroll-margin-top:20px}.entry-grid{display:grid;grid-template-columns:42% 1fr;gap:46px}.photo{min-height:430px;background-size:cover;background-position:center}.meta{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}.entry h2{font:400 38px/1.05 "Playfair Display",Georgia,serif;margin:0 0 18px}.desc{font-size:13px;line-height:1.7;color:#514c46;margin:0 0 24px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:20px 28px;border-top:1px solid var(--line);padding-top:20px}.fact label{display:block;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8a8278;margin-bottom:7px}.fact div{font-size:12px;line-height:1.55}.distances{margin-top:28px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.dist-title{font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:#8a8278;margin-bottom:12px}.distance{display:flex;justify-content:space-between;gap:20px;font-size:11px;line-height:1.6;padding:5px 0}.distance strong{font-weight:600}.tip{margin-top:24px;background:#eee9e1;padding:17px 18px;font-size:11px;line-height:1.6}.source{margin-top:22px;font-size:10px;color:var(--muted)}.source a{text-decoration:underline;text-underline-offset:3px}.footer{padding-top:45px;color:var(--muted);font-size:10px;line-height:1.7}
+
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:0}.hero-main{min-height:540px;padding:55px 0 76px}.hero-visual{min-height:360px}.hero-badge{left:0;bottom:24px}.hero .toc{width:100%}}
+@media(max-width:760px){.wrap{padding:32px 18px 70px}.hero{padding:50px 0 35px}.entry{padding:52px 0}.entry-grid{grid-template-columns:1fr;gap:26px}.photo{min-height:260px}.facts{grid-template-columns:1fr}.entry h2{font-size:32px}}
+
+/* KAS V18 — guidebook immersive editorial treatment */
+:root{--paper:#f3f0e9;--ink:#24211d;--muted:#746c62;--line:#d3ccc1;--accent:#9a7651;--gold:#c4a173}
+body{background:radial-gradient(circle at 88% 5%,rgba(199,163,116,.12),transparent 23%),linear-gradient(180deg,#f7f4ee 0%,#eeebe4 100%)}
+.wrap{max-width:1240px;padding:28px 32px 110px}.top{position:sticky;top:0;z-index:30;margin:0 -32px;padding:15px 32px;background:rgba(247,244,238,.9);backdrop-filter:blur(15px);border-bottom:1px solid rgba(211,204,193,.8)}
+.brand{letter-spacing:.08em;text-transform:uppercase}.back{padding:8px 12px;border:1px solid var(--line);transition:.25s}.back:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.hero{padding:72px 0 54px;display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:60px;align-items:end}.hero:after{content:'KAS HOTEL COLLECTION';display:block;position:absolute;right:32px;top:154px;font-size:9px;letter-spacing:.2em;color:#9b8f80;writing-mode:vertical-rl}.hero h1{font-size:clamp(60px,8vw,110px);line-height:.88;margin:13px 0 22px}.hero p{font-size:14px;line-height:1.8}.hero-side{border-left:1px solid var(--line);padding-left:20px}.hero-side strong{display:block;font:400 30px/1 'Playfair Display',serif;margin-bottom:6px}.hero-side span{display:block;font-size:10px;line-height:1.7;color:var(--muted);margin-bottom:18px}
+.toc{position:sticky;top:63px;z-index:15;padding:14px 0;background:rgba(243,240,233,.94);border-bottom:1px solid var(--line);gap:8px}.toc a{border:1px solid var(--line);padding:8px 11px;background:rgba(255,255,255,.28);transition:.25s}.toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.entry{padding:82px 0;position:relative}.entry:before{content:'';position:absolute;top:0;left:0;width:58px;height:2px;background:linear-gradient(90deg,var(--accent),var(--gold))}.entry-grid{grid-template-columns:46% 1fr;gap:58px;align-items:start}.entry:nth-of-type(even) .entry-grid{grid-template-columns:1fr 46%}.entry:nth-of-type(even) .photo{order:2}.photo{min-height:500px;position:relative;box-shadow:0 22px 55px rgba(40,32,24,.12);transition:transform .5s ease,box-shadow .5s ease}.entry:hover .photo{transform:translateY(-4px);box-shadow:0 28px 65px rgba(40,32,24,.17)}.photo:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.12));pointer-events:none}.meta{display:inline-block;padding:7px 10px;border:1px solid var(--line);background:#faf8f3;font-size:9px;letter-spacing:.15em}.entry h2{font-size:clamp(38px,4vw,58px);margin:16px 0 16px}.desc{font-size:14px;line-height:1.8;max-width:620px}.facts{gap:10px 12px;border-top:0;padding-top:4px}.fact{background:rgba(255,255,255,.42);border:1px solid var(--line);padding:15px 15px 16px;min-height:115px}.fact label{font-size:8px;color:#8c7d6d}.fact div{font-size:11px;line-height:1.6}.distances{margin-top:18px;padding:18px;border:1px solid var(--line);background:#f8f5ef}.dist-title{display:flex;align-items:center;gap:8px;font-size:8px}.dist-title:before{content:'↗';display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--ink);color:#fff;font-size:10px}.distance{padding:8px 0;border-bottom:1px dashed #d8d0c5}.distance:last-child{border-bottom:0}.distance strong{font-size:10px}.distance span{font-size:10px;color:#5f5952;background:#fff;padding:4px 7px;border:1px solid #e2dbd0}.tip{background:#25211d;color:#f5efe6;padding:18px 20px;font-size:11px;border-left:3px solid var(--gold);box-shadow:0 10px 25px rgba(20,18,15,.08)}.source{font-size:10px}.source a{color:#7e5f3f}.footer{padding:45px 0;border-top:1px solid var(--line)}
+
+/* KAS HOTEL COLLECTION — refined guidebook hero */
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,1.12fr) minmax(360px,.88fr);gap:0;min-height:570px;padding:0;border-bottom:1px solid var(--line);overflow:hidden;background:#eee9e0}
+.hero-main{position:relative;min-height:570px;padding:70px 64px 54px 0;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-copy{position:relative;z-index:2;max-width:650px}
+.hero h1{font-size:clamp(64px,7.4vw,112px);line-height:.86;letter-spacing:-.045em;margin:16px 0 26px;max-width:720px}
+.hero p{font-size:13px;line-height:1.85;max-width:610px;margin:0;color:#625b53}
+.hero-visual{position:relative;min-height:570px;background-image:linear-gradient(180deg,rgba(28,24,20,.02),rgba(28,24,20,.18)),url('assets/home/a-day-in-saigon.jpg');background-size:cover;background-position:center}
+.hero-visual:before{content:'SAIGON / KAS CITY GUIDE';position:absolute;top:24px;right:24px;color:#f7f2e9;font-size:8px;letter-spacing:.2em;writing-mode:vertical-rl;opacity:.9}
+.hero-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,24,20,.18),transparent 28%,transparent 72%,rgba(28,24,20,.08))}
+.hero-badge{position:absolute;left:0;bottom:38px;z-index:3;background:#f7f3ec;border:1px solid rgba(211,204,193,.9);padding:15px 18px;min-width:220px;box-shadow:0 14px 35px rgba(35,28,22,.12)}
+.hero-badge strong{display:block;font:400 31px/1 'Playfair Display',serif;margin-bottom:5px}
+.hero-badge span{font-size:8px;letter-spacing:.15em;text-transform:uppercase;color:#81796d}
+.hero-side{border-left:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:32px;max-width:620px}
+.hero-side strong{font-size:27px;margin:0 0 5px}.hero-side span{font-size:9px;line-height:1.6;margin:0}
+.hero-side > *{padding:14px 16px;border:1px solid var(--line);background:rgba(255,255,255,.42)}
+.hero .toc{position:absolute;left:0;bottom:0;z-index:5;width:calc(100% - 40px);padding:11px 0;border:0;background:linear-gradient(90deg,rgba(243,240,233,.98),rgba(243,240,233,.78),transparent);gap:7px}
+.hero .toc a{background:#f7f3ec;border:1px solid var(--line);padding:8px 10px;color:#665e55}
+.hero .toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+@media(max-width:760px){.wrap{padding:20px 18px 70px}.top{margin:0 -18px;padding:14px 18px}.hero{grid-template-columns:1fr;padding:54px 0 38px;gap:25px}.hero:after{display:none}.hero h1{font-size:58px}.hero-side{border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.toc{top:53px;overflow:auto;flex-wrap:nowrap}.toc a{white-space:nowrap}.entry,.entry:nth-of-type(even){padding:58px 0}.entry-grid,.entry:nth-of-type(even) .entry-grid{grid-template-columns:1fr;gap:28px}.entry:nth-of-type(even) .photo{order:0}.photo{min-height:320px}.entry h2{font-size:40px}.facts{grid-template-columns:1fr 1fr}.fact{min-height:0}}
+@media(max-width:480px){.facts{grid-template-columns:1fr}.distance{display:block}.distance span{display:inline-block;margin-top:5px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+
+/* KAS bilingual parity */
+.lang-switch{display:flex;align-items:center;gap:7px;margin-left:18px}.lang-switch a{font-size:10px;letter-spacing:.16em;text-decoration:none;color:var(--muted);opacity:.55}.lang-switch a.active{opacity:1;color:var(--ink);font-weight:600}.lang-switch span{color:var(--line)}
+@media(max-width:760px){.top{gap:10px}.back{white-space:nowrap}.lang-switch{margin-left:auto}.hero:after{display:none}.hero{grid-template-columns:1fr}.hero-side{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;border-left:0;border-top:1px solid var(--line);padding:18px 0 0}.hero-side strong{font-size:26px}.hero-side span{margin-bottom:6px}}
+/* ===== KAS GUIDEBOOK — HERO REFINEMENT v2 ===== */
+body{background:#f4f0e8;color:#24211d;}
+.wrap{max-width:1280px;padding:24px 34px 110px;}
+.top{position:sticky;top:0;z-index:50;margin:0 -34px;padding:15px 34px;background:rgba(244,240,232,.94);backdrop-filter:blur(14px);border-bottom:1px solid #d8d0c4;box-shadow:0 6px 22px rgba(45,37,29,.04);}
+.brand{font-size:15px;letter-spacing:.12em;}
+.back{font-size:8px;letter-spacing:.16em;border-color:#cfc5b7;background:#f8f5ef;}
+.lang-switch{font-size:9px;letter-spacing:.16em;color:#82796e;}
+.lang-switch a{opacity:.55;text-decoration:none}.lang-switch a.active{opacity:1;color:#24211d;font-weight:600}
+.hero{position:relative;display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);min-height:650px;padding:0;margin-top:28px;border:1px solid #d6cec2;background:#ebe5da;overflow:hidden;}
+.hero-visual{grid-column:1;grid-row:1;min-height:650px;background-image:linear-gradient(180deg,rgba(25,21,17,.04),rgba(25,21,17,.20)),url('assets/home/a-day-in-saigon.jpg');background-size:cover;background-position:center;position:relative;}
+.hero-visual:before{content:'SAIGON / 40 PLACES';position:absolute;left:22px;top:22px;color:#f8f2e8;font-size:8px;letter-spacing:.22em;writing-mode:vertical-rl;transform:rotate(180deg);z-index:2;}
+.hero-visual:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,17,14,.03),rgba(20,17,14,.18));}
+.hero-main{grid-column:2;grid-row:1;min-height:650px;padding:62px 62px 44px;display:flex;flex-direction:column;justify-content:space-between;background:#f4f0e8;}
+.hero-main:before{content:'KAS HOTEL COLLECTION';font-size:8px;letter-spacing:.22em;color:#918577;align-self:flex-end;}
+.hero-copy{max-width:610px;margin:auto 0;}
+.eyebrow{font-size:8px;letter-spacing:.22em;color:#887b6d;}
+.hero h1{font-size:clamp(64px,7.1vw,106px);line-height:.82;letter-spacing:-.055em;margin:18px 0 28px;color:#24211d;}
+.hero h1 br{display:block;}
+.hero p{font-size:13px;line-height:1.85;max-width:520px;color:#645d54;margin-bottom:28px;}
+.hero-side{display:grid;grid-template-columns:1fr 1fr;gap:9px;max-width:430px;margin:0;}
+.hero-side>*{padding:15px 16px;border:1px solid #d6cec2;background:#eee9df;}
+.hero-side strong{font-size:31px;line-height:1;margin:0 0 7px;font-family:'Playfair Display',Georgia,serif;font-weight:400;}
+.hero-side span{font-size:8px;line-height:1.55;letter-spacing:.08em;text-transform:uppercase;color:#81776b;margin:0;}
+.hero-badge{position:absolute;left:22px;bottom:22px;z-index:4;background:#f6f1e8;border:1px solid #d3c9bb;padding:14px 16px;min-width:215px;box-shadow:0 14px 32px rgba(35,28,22,.16);}
+.hero-badge strong{font-size:23px;line-height:1;display:block;margin-bottom:6px;}
+.hero-badge span{font-size:8px;letter-spacing:.13em;text-transform:uppercase;color:#7c7267;}
+.hero .toc{position:static;display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%;padding:0;margin-top:34px;background:none;border:0;}
+.hero .toc a{font-size:8px;letter-spacing:.12em;padding:10px 11px;background:transparent;border:1px solid #cfc5b7;color:#655d54;text-decoration:none;transition:.25s;}
+.hero .toc a:hover{background:#24211d;color:#fff;border-color:#24211d;transform:translateY(-2px);}
+.hero:after{content:'CITY GUIDEBOOK';position:absolute;right:17px;top:28px;font-size:7px;letter-spacing:.25em;color:#9b8f80;writing-mode:vertical-rl;}
+.entry{padding:92px 0;}
+.entry-grid{grid-template-columns:47% 1fr;gap:64px;}
+.photo{min-height:510px;box-shadow:0 20px 50px rgba(40,32,24,.11);}
+.entry h2{font-size:clamp(38px,4vw,58px);}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:auto}.hero-visual{grid-column:1;grid-row:1;min-height:460px}.hero-main{grid-column:1;grid-row:2;min-height:auto;padding:42px 34px 38px}.hero-main:before{display:none}.hero:after{display:none}.hero .toc{margin-top:25px}.hero-badge{bottom:18px;left:18px}}
+@media(max-width:600px){.wrap{padding:16px 16px 70px}.top{margin:0 -16px;padding:13px 16px}.brand{font-size:12px}.back{display:none}.hero{margin-top:18px}.hero-visual{min-height:360px}.hero-main{padding:35px 24px 28px}.hero h1{font-size:57px;margin:15px 0 22px}.hero p{font-size:12px}.hero-side{grid-template-columns:1fr 1fr}.hero .toc{grid-template-columns:1fr 1fr}.hero-badge{min-width:190px}.entry{padding:60px 0}.entry-grid{grid-template-columns:1fr;gap:28px}.photo{min-height:330px}}
+
+/* ===== HERO v2.1 — clean badge placement ===== */
+.hero-main{position:relative;}
+.hero-badge{position:static;min-width:0;width:max-content;max-width:100%;margin-top:26px;box-shadow:none;padding:13px 16px;}
+.hero .toc{margin-top:12px;}
+@media(max-width:900px){.hero-badge{margin-top:24px}.hero .toc{margin-top:12px}}
+
+/* KAS Guidebook — streamlined opening: no hero */
+.guide-nav-wrap{position:sticky;top:0;z-index:25;margin:0 -32px;padding:10px 32px;background:rgba(247,244,238,.94);backdrop-filter:blur(14px);border-bottom:1px solid rgba(211,204,193,.9)}
+.guide-nav-wrap .toc{position:static;display:flex;justify-content:flex-start;align-items:center;gap:8px;padding:0;border:0;background:transparent}
+.guide-nav-wrap .toc a{display:inline-flex;align-items:center;min-height:34px;padding:8px 12px;border:1px solid var(--line);background:rgba(255,255,255,.35);color:var(--ink);font-size:9px;letter-spacing:.14em;text-decoration:none;transition:background .2s ease,color .2s ease,border-color .2s ease,transform .2s ease}
+.guide-nav-wrap .toc a:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-1px)}
+.entry:first-of-type{padding-top:58px}
+@media(max-width:760px){.guide-nav-wrap{margin:0 -18px;padding:8px 18px;overflow-x:auto}.guide-nav-wrap .toc{width:max-content;flex-wrap:nowrap}.guide-nav-wrap .toc a{white-space:nowrap}.entry:first-of-type{padding-top:42px}}
+</style><style>
+/* KAS Guidebook — refined compact header */
+.top{height:68px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 18px;border:1px solid rgba(211,204,193,.9);border-bottom:1px solid var(--line);background:rgba(250,247,241,.92);box-shadow:0 8px 26px rgba(45,36,27,.045)}
+.brand{font-size:16px;letter-spacing:.12em;white-space:nowrap}
+.guide-mark{justify-self:center;display:flex;align-items:center;gap:10px;font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:#85796c;white-space:nowrap}
+.guide-mark:before,.guide-mark:after{content:'';width:28px;height:1px;background:var(--line)}
+.top-actions{justify-self:end;display:flex;align-items:center;gap:18px}
+.back{font-size:8px;letter-spacing:.13em;padding:9px 12px;border:1px solid var(--line);background:#f7f3ec;color:var(--muted);text-decoration:none;transition:.2s}
+.back:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
+.lang-switch{display:flex;align-items:center;gap:0;font-size:8px;letter-spacing:.16em;border:1px solid var(--line);background:#f7f3ec;padding:3px}
+.lang-switch a{display:grid;place-items:center;min-width:31px;height:25px;text-decoration:none;color:#81776c;transition:.2s}
+.lang-switch a.active{background:var(--ink);color:#fff}
+.lang-switch span{display:none}
+@media(max-width:760px){.top{height:auto;min-height:62px;grid-template-columns:1fr auto;padding:8px 12px;gap:12px}.guide-mark{display:none}.brand{font-size:12px}.top-actions{gap:8px}.back{font-size:7px;padding:8px 9px}.lang-switch a{min-width:27px;height:23px}}
+@media(max-width:430px){.back{font-size:0;padding:8px 10px}.back:before{content:'←';font-size:12px}.brand{letter-spacing:.08em}}
+</style><script>
+(function () {
+  /* KAS site-wide language bridge: keep the language selected on index.html
+     when moving into the standalone City Guidebook pages. */
+  var KEY = 'kas-language';
+  function normalize(v) { return String(v || '').toLowerCase() === 'vi' ? 'vi' : 'en'; }
+  function readLanguage() {
+    var fromUrl = '';
+    try { fromUrl = new URLSearchParams(window.location.search).get('lang') || ''; } catch (e) {}
+    if (fromUrl === 'vi' || fromUrl === 'en') return normalize(fromUrl);
+    try {
+      var saved = localStorage.getItem(KEY);
+      if (saved === 'vi' || saved === 'en') return normalize(saved);
+    } catch (e) {}
+    try {
+      var match = document.cookie.match(/(?:^|; )kas-language=([^;]+)/);
+      if (match) {
+        var cookieLang = decodeURIComponent(match[1]);
+        if (cookieLang === 'vi' || cookieLang === 'en') return normalize(cookieLang);
+      }
+    } catch (e) {}
+    return 'en';
+  }
+  function saveLanguage(lang) {
+    lang = normalize(lang);
+    try { localStorage.setItem(KEY, lang); } catch (e) {}
+    try { document.cookie = 'kas-language=' + encodeURIComponent(lang) + '; path=/; max-age=31536000; SameSite=Lax'; } catch (e) {}
+  }
+  function currentPageIsVi() {
+    return /city-guidebook-vi\.html$/i.test(window.location.pathname);
+  }
+  var explicit = '';
+  try { explicit = new URLSearchParams(window.location.search).get('lang') || ''; } catch (e) {}
+  var lang = readLanguage();
+
+  /* An explicit language in the URL always wins for this navigation. */
+  if (explicit === 'vi' || explicit === 'en') saveLanguage(lang);
+
+  /* Keep the two standalone files in sync with the site's current language. */
+  var targetIsVi = lang === 'vi';
+  if (targetIsVi !== currentPageIsVi()) {
+    var target = targetIsVi ? 'city-guidebook-vi.html' : 'city-guidebook.html';
+    try {
+      var u = new URL(target, window.location.href);
+      if (window.location.hash) u.hash = window.location.hash;
+      window.location.replace(u.href);
+    } catch (e) {
+      window.location.replace(target + (window.location.hash || ''));
+    }
+    return;
+  }
+
+  /* Switching EN / VI from the guidebook updates the same persistent value. */
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.lang a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        var href = a.getAttribute('href') || '';
+        var next = /city-guidebook-vi\.html/i.test(href) ? 'vi' : 'en';
+        saveLanguage(next);
+        try {
+          var u = new URL(href, window.location.href);
+          u.searchParams.set('lang', next);
+          a.href = u.pathname.split('/').pop() + u.search + (u.hash || '');
+        } catch (e) {}
+      });
+    });
+  });
+})();
+</script>
+<script src="js/site-images.js" defer></script><script src="js/kas-guide-language.js" defer></script></head><body><main class="wrap">
+<div class="top"><div class="brand">KAS HOTEL COLLECTION</div><div class="guide-mark">CẨM NANG · SÀI GÒN</div><div class="top-actions"><a class="back" href="city-guide-vi.html">← CẨM NANG</a><div class="lang-switch"><a data-kas-lang="en" href="city-guidebook.html">EN</a><a class="active" data-kas-lang="vi" href="city-guidebook-vi.html">VI</a></div></div></div>
+<div class="guide-nav-wrap"><nav class="toc"><a href="#city">Trung tâm Sài Gòn</a><a href="#taste">Ẩm thực &amp; đời sống</a><a href="#slow">Dạo bộ &amp; khám phá</a><a href="#night">Khi thành phố lên đèn</a></nav></div>
+<div id="city" style="scroll-margin-top:90px"></div>
+<div id="city" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-market">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 01</div><h2>Chợ Bến Thành</h2><p class="desc">Khu chợ trung tâm với ẩm thực địa phương, quà lưu niệm, quần áo và nhịp sống thường ngày của thành phố.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Khu chợ trung tâm với ẩm thực địa phương, quà lưu niệm, quần áo và nhịp sống thường ngày của thành phố.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/kham-pha-cho-ben-thanh-diem-den-khong-the-bo-qua-o-tp-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="tao-dan-park">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 02</div><h2>Công viên Tao Đàn</h2><p class="desc">Công viên xanh giữa trung tâm với khu vườn, không gian tập thể dục và nhịp sống địa phương rõ nét vào buổi sáng.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Công viên xanh giữa trung tâm với khu vườn, không gian tập thể dục và nhịp sống địa phương rõ nét vào buổi sáng.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 0.4 km · 5 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="independence-palace">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 03</div><h2>Dinh Độc Lập</h2><p class="desc">Một trong những công trình lịch sử tiêu biểu của thành phố, với các phòng, văn phòng được bảo tồn và kiến trúc hiện đại.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Một trong những công trình lịch sử tiêu biểu của thành phố, với các phòng, văn phòng được bảo tồn và kiến trúc hiện đại.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>1–2 hours</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 0.5 km · 6 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="war-remnants-museum">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 04</div><h2>Bảo tàng Chứng tích Chiến tranh</h2><p class="desc">Bảo tàng lịch sử lớn với các hình ảnh, hiện vật và triển lãm về chiến tranh Việt Nam và Đông Dương.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Bảo tàng lịch sử lớn với các hình ảnh, hiện vật và triển lãm về chiến tranh Việt Nam và Đông Dương.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>1–2 hours</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="central-post-office">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 05</div><h2>Bưu điện Trung tâm Sài Gòn</h2><p class="desc">Công trình cuối thế kỷ 19 nổi bật với không gian mái vòm lớn và kiến trúc thuộc địa Pháp.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Công trình cuối thế kỷ 19 nổi bật với không gian mái vòm lớn và kiến trúc thuộc địa Pháp.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 1.6 km · 20 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.1 km · 14 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="notre-dame-cathedral">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 06</div><h2>Nhà thờ Đức Bà Sài Gòn</h2><p class="desc">Nhà thờ gạch đỏ lịch sử tại khu trung tâm hành chính, nằm cạnh Bưu điện Trung tâm Sài Gòn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Nhà thờ gạch đỏ lịch sử tại khu trung tâm hành chính, nằm cạnh Bưu điện Trung tâm Sài Gòn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 07</div><h2>Nhà hát Thành phố</h2><p class="desc">Nhà hát thế kỷ 19 với kiến trúc trang trí cầu kỳ, nổi bật cho kiến trúc và nghệ thuật biểu diễn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Nhà hát thế kỷ 19 với kiến trúc trang trí cầu kỳ, nổi bật cho kiến trúc và nghệ thuật biểu diễn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 1.9 km · 24 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="nguyen-hue">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 08</div><h2>Phố đi bộ Nguyễn Huệ</h2><p class="desc">Đại lộ dành cho người đi bộ, thích hợp dạo buổi tối, ngắm ánh đèn và các sự kiện lớn của thành phố.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Đại lộ dành cho người đi bộ, thích hợp dạo buổi tối, ngắm ánh đèn và các sự kiện lớn của thành phố.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 1.7 km · 21 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.3 km · 16 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/du-lich-quan-1" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="bitexco">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 09</div><h2>Tòa nhà Bitexco Financial Tower</h2><p class="desc">Biểu tượng đường chân trời hiện đại với mua sắm, ẩm thực và góc nhìn toàn thành phố.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Biểu tượng đường chân trời hiện đại với mua sắm, ẩm thực và góc nhìn toàn thành phố.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 2.0 km · 25 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.6 km · 20 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-square">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">01 / Trung tâm Sài Gòn · 10</div><h2>Saigon Square</h2><p class="desc">Điểm mua sắm trung tâm với thời trang, phụ kiện và trải nghiệm mua sắm địa phương.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm mua sắm trung tâm với thời trang, phụ kiện và trải nghiệm mua sắm địa phương.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; khoảng thời gian này thường dễ chịu hơn để khám phá trung tâm.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Passion Boutique</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Elegance</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<div id="taste" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-street-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 01</div><h2>Chợ Ẩm thực Bến Thành</h2><p class="desc">Điểm dừng chuyên về món Việt và những bữa ăn địa phương thoải mái.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm dừng chuyên về món Việt và những bữa ăn địa phương thoải mái.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.1 km · 14 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="pham-ngu-lao">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 02</div><h2>Phạm Ngũ Lão</h2><p class="desc">Khu phố du lịch với ẩm thực bình dân, quán cà phê, dịch vụ du lịch và nhịp sống đường phố sôi động.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Khu phố du lịch với ẩm thực bình dân, quán cà phê, dịch vụ du lịch và nhịp sống đường phố sôi động.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="bui-vien">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 03</div><h2>Phố đi bộ Bùi Viện</h2><p class="desc">Tuyến phố ẩm thực đường phố và nightlife nổi tiếng với hoạt động về đêm và bầu không khí náo nhiệt.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Tuyến phố ẩm thực đường phố và nightlife nổi tiếng với hoạt động về đêm và bầu không khí náo nhiệt.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.3 km · 16 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 1.1 km · 14 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="fine-arts-museum">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 04</div><h2>Bảo tàng Mỹ thuật TP. Hồ Chí Minh</h2><p class="desc">Công trình lịch sử và bảo tàng nghệ thuật tại khu Nguyễn Thái Bình.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Công trình lịch sử và bảo tàng nghệ thuật tại khu Nguyễn Thái Bình.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>1–2 hours</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.4 km · 18 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.5 km · 6 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="nguyen-trai-street">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 05</div><h2>Đường Nguyễn Trãi</h2><p class="desc">Tuyến phố mua sắm lâu đời và giàu nhịp sống địa phương ngay gần KAS Ancient.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Tuyến phố mua sắm lâu đời và giàu nhịp sống địa phương ngay gần KAS Ancient.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 0.2 km · 3 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 1.3 km · 16 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-centre">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 06</div><h2>Saigon Centre / Takashimaya</h2><p class="desc">Không gian mua sắm, ẩm thực hiện đại, tạo sự tương phản tinh tế với các khu chợ đường phố xung quanh.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Không gian mua sắm, ẩm thực hiện đại, tạo sự tương phản tinh tế với các khu chợ đường phố xung quanh.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.3 km · 16 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-eco-craft">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 07</div><h2>Saigon Eco Craft</h2><p class="desc">Điểm xem đồ thủ công và quà tặng địa phương quanh khu Lê Lợi / Lê Thánh Tôn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm xem đồ thủ công và quà tặng địa phương quanh khu Lê Lợi / Lê Thánh Tôn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="vietnamese-coffee">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 08</div><h2>Những điểm uống cà phê Việt</h2><p class="desc">Dùng các tuyến Nguyễn Trãi, Nguyễn Thái Bình và Bến Thành làm điểm bắt đầu cho một vòng khám phá cà phê phin.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Dùng các tuyến Nguyễn Trãi, Nguyễn Thái Bình và Bến Thành làm điểm bắt đầu cho một vòng khám phá cà phê phin.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 0.3 km · 4 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="ben-thanh-market-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 09</div><h2>Chợ Bến Thành</h2><p class="desc">Một trong những địa điểm tiêu biểu để tìm nguyên liệu địa phương, món ăn vặt, quà lưu niệm và ngắm nhịp sống.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Một trong những địa điểm tiêu biểu để tìm nguyên liệu địa phương, món ăn vặt, quà lưu niệm và ngắm nhịp sống.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.7 km · 9 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-street-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">02 / Ẩm thực &amp; Đời sống · 10</div><h2>Dạo ẩm thực đường phố Sài Gòn</h2><p class="desc">Biến khu trung tâm thành một tuyến ẩm thực tự do: chợ → món ăn vặt → cà phê → bữa tối muộn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Biến khu trung tâm thành một tuyến ẩm thực tự do: chợ → món ăn vặt → cà phê → bữa tối muộn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều; đây là lúc dễ kết hợp ăn uống với một vòng dạo phố.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Ancient Boutique</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Milestone Premium</strong><span>Khoảng 0.7 km · 9 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<div id="slow" style="scroll-margin-top:20px"></div>
+<article class="entry" id="ben-thanh-market-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 01</div><h2>Chợ Bến Thành</h2><p class="desc">At the centre of the neighbourhood and a natural starting point for a walking day.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>At the centre of the neighbourhood and a natural starting point for a walking day.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 0.3 km · 4 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/kham-pha-cho-ben-thanh-diem-den-khong-the-bo-qua-o-tp-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="gia-long-palace">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 02</div><h2>Dinh Gia Long / Bảo tàng Thành phố</h2><p class="desc">Công trình hành chính lịch sử và điểm tham quan bảo tàng gần cụm khách sạn trung tâm.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Công trình hành chính lịch sử và điểm tham quan bảo tàng gần cụm khách sạn trung tâm.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>1–2 hours</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 0.8 km · 10 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="le-thanh-ton">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 03</div><h2>Dạo phố Lê Thánh Tôn</h2><p class="desc">Đi bộ dọc tuyến phố với cửa hàng, quán cà phê, ẩm thực ảnh hưởng Nhật Bản và các cơ sở kinh doanh địa phương nhỏ.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Đi bộ dọc tuyến phố với cửa hàng, quán cà phê, ẩm thực ảnh hưởng Nhật Bản và các cơ sở kinh doanh địa phương nhỏ.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 0.1 km · 2 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 0.1 km · 2 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 04</div><h2>Nhà hát Thành phố</h2><p class="desc">Nhà hát lịch sử và một trong những công trình kiến trúc dễ nhận biết nhất ở trung tâm Sài Gòn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Nhà hát lịch sử và một trong những công trình kiến trúc dễ nhận biết nhất ở trung tâm Sài Gòn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="central-post-office-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 05</div><h2>Bưu điện Trung tâm</h2><p class="desc">Kết hợp với Nhà thờ Đức Bà để tạo một tuyến dạo bộ kiến trúc ngắn qua khu trung tâm cũ.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Kết hợp với Nhà thờ Đức Bà để tạo một tuyến dạo bộ kiến trúc ngắn qua khu trung tâm cũ.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.4 km · 18 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="notre-dame-cathedral-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 06</div><h2>Nhà thờ Đức Bà Sài Gòn</h2><p class="desc">Công trình nhà thờ biểu tượng và điểm nối tự nhiên sau tuyến dạo Bưu điện Trung tâm.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Công trình nhà thờ biểu tượng và điểm nối tự nhiên sau tuyến dạo Bưu điện Trung tâm.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.4 km · 18 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/10-dia-diem-tham-quan-hap-dan-khong-the-bo-qua-o-thanh-pho-ho-chi-minh" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="saigon-square-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 07</div><h2>Saigon Square</h2><p class="desc">Điểm mua sắm thoải mái để xem thời trang và phụ kiện ngay trung tâm.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm mua sắm thoải mái để xem thời trang và phụ kiện ngay trung tâm.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 0.6 km · 8 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="nguyen-hue-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 08</div><h2>Đại lộ đi bộ Nguyễn Huệ</h2><p class="desc">Đại lộ đi bộ đặc biệt phù hợp cho một buổi dạo đầu tối.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Đại lộ đi bộ đặc biệt phù hợp cho một buổi dạo đầu tối.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="bitexco-walk">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 09</div><h2>Tòa nhà Bitexco Financial Tower</h2><p class="desc">Điểm nhấn đường chân trời hiện đại đối lập với kiến trúc lịch sử của thành phố.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm nhấn đường chân trời hiện đại đối lập với kiến trúc lịch sử của thành phố.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-zoo">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">03 / Dạo bộ &amp; Khám phá · 10</div><h2>Thảo Cầm Viên Sài Gòn</h2><p class="desc">Một điểm dừng xanh và chậm rãi khi bạn muốn tạm rời những con phố trung tâm đông đúc.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Một điểm dừng xanh và chậm rãi khi bạn muốn tạm rời những con phố trung tâm đông đúc.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Buổi sáng hoặc cuối chiều, khi nhiệt độ dễ chịu hơn cho việc đi bộ.</div></div><div class="fact"><label>Thời lượng</label><div>1–2 hours</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Zody Boutique</strong><span>Khoảng 2.0 km · 25 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Dilly Luxury</strong><span>Khoảng 1.8 km · 23 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/page/ke-hoach-chuyen-di" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<div id="night" style="scroll-margin-top:20px"></div>
+<article class="entry" id="bui-thi-xuan">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 01</div><h2>Bùi Thị Xuân</h2><p class="desc">Bắt đầu gần khách sạn rồi thong thả khám phá các quán cà phê, nhà hàng và cơ sở kinh doanh địa phương.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Bắt đầu gần khách sạn rồi thong thả khám phá các quán cà phê, nhà hàng và cơ sở kinh doanh địa phương.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 0.1 km · 2 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 0.1 km · 2 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="pham-ngu-lao-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 02</div><h2>Phạm Ngũ Lão</h2><p class="desc">Khu trung tâm sôi động với món ăn bình dân, ngắm phố và những buổi tối kéo dài hơn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Khu trung tâm sôi động với món ăn bình dân, ngắm phố và những buổi tối kéo dài hơn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="bui-vien-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 03</div><h2>Phố đi bộ Bùi Viện</h2><p class="desc">Lựa chọn giàu năng lượng với ánh đèn, âm nhạc, đồ ăn đường phố và nhịp nightlife rất đặc trưng của Sài Gòn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Lựa chọn giàu năng lượng với ánh đèn, âm nhạc, đồ ăn đường phố và nhịp nightlife rất đặc trưng của Sài Gòn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.3 km · 16 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.2 km · 15 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="ben-thanh-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 04</div><h2>Chợ Bến Thành về đêm</h2><p class="desc">Ngắm một trong những biểu tượng của thành phố khi nhịp đông ban ngày đã dịu xuống.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Ngắm một trong những biểu tượng của thành phố khi nhịp đông ban ngày đã dịu xuống.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 0.9 km · 11 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="september-23-park">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 05</div><h2>Công viên 23 Tháng 9</h2><p class="desc">Một khoảng xanh thuận tiện nằm giữa khu chợ và khu Phạm Ngũ Lão sôi động.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Một khoảng xanh thuận tiện nằm giữa khu chợ và khu Phạm Ngũ Lão sôi động.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.0 km · 13 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="saigon-opera-house-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 06</div><h2>Nhà hát Thành phố</h2><p class="desc">Một buổi tối chỉn chu hơn với kiến trúc lịch sử, biểu diễn và dạo quanh Công trường Lam Sơn.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Một buổi tối chỉn chu hơn với kiến trúc lịch sử, biểu diễn và dạo quanh Công trường Lam Sơn.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="ao-show">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 07</div><h2>A O Show / Lune Production</h2><p class="desc">Màn trình diễn xiếc tre Việt Nam khai thác sự tương phản giữa đời sống làng quê và thành phố hiện đại.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Màn trình diễn xiếc tre Việt Nam khai thác sự tương phản giữa đời sống làng quê và thành phố hiện đại.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>About 2 hours including arrival</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://www.luneproduction.com/ao-show" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="nguyen-hue-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 08</div><h2>Phố đi bộ Nguyễn Huệ</h2><p class="desc">Đại lộ rộng dành cho người đi bộ, phù hợp cho một buổi dạo nhẹ nhàng qua trung tâm.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Đại lộ rộng dành cho người đi bộ, phù hợp cho một buổi dạo nhẹ nhàng qua trung tâm.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–90 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.5 km · 19 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+<div class="source">Nguồn tham khảo chính thức: <a href="https://visithcmc.net/en/news/du-lich-quan-1" rel="noopener" target="_blank">Mở nguồn tham khảo ↗</a></div>
+</div></div></article>
+<article class="entry" id="bitexco-night">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 09</div><h2>Tòa nhà Bitexco Financial Tower</h2><p class="desc">Điểm nhấn đường chân trời hiện đại bên cạnh khu trung tâm lịch sử.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Điểm nhấn đường chân trời hiện đại bên cạnh khu trung tâm lịch sử.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 1.7 km · 21 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 1.6 km · 20 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<article class="entry" id="late-night-food">
+<div class="entry-grid"><div class="photo"></div>
+<div><div class="meta">04 / Khi thành phố lên đèn · 10</div><h2>Ẩm thực Việt về đêm</h2><p class="desc">Khép lại buổi tối bằng một món ăn đơn giản, địa phương và gần những con phố vừa khám phá.</p>
+<div class="facts"><div class="fact"><label>Gợi ý trải nghiệm</label><div>Khép lại buổi tối bằng một món ăn đơn giản, địa phương và gần những con phố vừa khám phá.</div></div><div class="fact"><label>Thời điểm phù hợp</label><div>Từ đầu buổi tối đến khoảng 21:00, khi các tuyến phố và điểm vui chơi bắt đầu lên đèn.</div></div><div class="fact"><label>Thời lượng</label><div>45–60 min</div></div><div class="fact"><label>Lưu ý cho khách</label><div>Khoảng cách và thời gian đi bộ là ước tính, dùng để lên kế hoạch chuyến đi chứ không thay thế chỉ đường theo thời gian thực.</div></div></div>
+<div class="distances"><div class="dist-title">Từ khách sạn KAS của bạn</div>
+<div class="distance"><strong>KAS Sonata Luxury</strong><span>Khoảng 0.2–1.5 km · 3–20 phút đi bộ</span></div>
+<div class="distance"><strong>KAS Eliana Luxury</strong><span>Khoảng 0.2–1.5 km · 3–20 phút đi bộ</span></div></div>
+<div class="tip"><strong>Gợi ý kết hợp: </strong>Kết hợp điểm dừng này với địa điểm lân cận tiếp theo trong cùng nhóm, rồi quay về khách sạn KAS khi bạn muốn nghỉ ngơi.</div>
+</div></div></article>
+<footer class="footer">KAS City Guidebook · Khoảng cách chỉ mang tính tham khảo · Cập nhật cùng hệ thống KAS Hotel Collection.</footer></main></body>
+<style id="kas-guidebook-hero-compact-v22-17">
+.hero{min-height:560px!important;height:560px!important}
+.hero-visual,.hero-main{min-height:560px!important;height:560px!important}
+.hero h1{font-size:clamp(54px,6.1vw,88px)!important;line-height:.88!important;margin:14px 0 20px!important}
+.hero p{font-size:12px!important;line-height:1.7!important}
+@media(max-width:900px){.hero{height:auto!important;min-height:0!important}.hero-visual{height:390px!important;min-height:390px!important}.hero-main{height:auto!important;min-height:0!important}}
+@media(max-width:600px){.hero-visual{height:320px!important;min-height:320px!important}.hero-main{padding:30px 22px 26px!important}.hero h1{font-size:50px!important}}
+</style>
+</html>

@@ -12,7 +12,13 @@ npm install
 ```
 
 ## 3. Chạy server
+<<<<<<< HEAD
 ```powershell
+=======
+Local không bắt buộc `ADMIN_KEY`; production/Render bắt buộc có `ADMIN_KEY` (không còn key mặc định; key mẫu/placeholder sẽ bị từ chối):
+```powershell
+$env:ADMIN_KEY="<key-dai-ngau-nhien-cua-ban>"
+>>>>>>> origin/thu
 npm start
 ```
 

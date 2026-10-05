@@ -32,6 +32,14 @@
       children: +(q.children != null ? q.children : s.children) || 0,
       rooms:    +(q.rooms    != null ? q.rooms    : s.rooms)    || D.config.defaultRooms
     };
+<<<<<<< HEAD
+=======
+    /* A saved search or old link can carry dates that have already passed. */
+    if (out.checkIn < U.today()) {
+      out.checkIn = D.config.defaultCheckIn;
+      out.checkOut = D.config.defaultCheckOut;
+    }
+>>>>>>> origin/thu
     if (U.nights(out.checkIn, out.checkOut) < 1) {
       out.checkOut = U.addDays(out.checkIn, 1);
     }
@@ -46,6 +54,10 @@
   function validateSearch(s) {
     var e = {};
     if (!U.notEmpty(s.checkIn))  e.checkIn  = 'Please select a check-in date.';
+<<<<<<< HEAD
+=======
+    else if (s.checkIn < U.today()) e.checkIn = 'Check-in date cannot be in the past.';
+>>>>>>> origin/thu
     if (!U.notEmpty(s.checkOut)) e.checkOut = 'Please select a check-out date.';
     if (s.checkIn && s.checkOut) {
       if (U.nights(s.checkIn, s.checkOut) < 1) e.checkOut = 'Check-out must be after check-in.';

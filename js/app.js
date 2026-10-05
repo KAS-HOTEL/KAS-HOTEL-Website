@@ -15,12 +15,19 @@
   }
   function logo(dark, href) {
     return '<a class="logo" href="' + (href || 'index.html') + '" aria-label="KAS Hotel Collection — home">' +
+<<<<<<< HEAD
       '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:150px;max-width:40vw;height:auto;display:block">' +
+=======
+      '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:180px;max-width:42vw;height:auto;display:block">' +
+>>>>>>> origin/thu
       '</a>';
   }
 
   var NAV = [
+<<<<<<< HEAD
     { t: 'Destinations', h: 'hotels.html' },
+=======
+>>>>>>> origin/thu
     { t: 'Hotels',       h: 'hotels.html' },
     { t: 'Experiences',  h: 'experiences.html' },
     { t: 'Offers',       h: 'offers.html' },
@@ -30,11 +37,30 @@
   ];
 
   /* ---------------- header ---------------- */
+<<<<<<< HEAD
+=======
+  function flagIcon(lang) {
+    if (lang === 'vi') {
+      return '<svg class="lang-flag-svg" viewBox="0 0 28 18" aria-hidden="true"><rect width="28" height="18" rx="2" fill="#da251d"/><path d="M14 3.1l1.35 4.05h4.28l-3.46 2.5 1.32 4.08L14 11.25l-3.49 2.48 1.32-4.08-3.46-2.5h4.28L14 3.1z" fill="#ffdf00"/></svg>';
+    }
+    return '<svg class="lang-flag-svg" viewBox="0 0 28 18" aria-hidden="true"><rect width="28" height="18" rx="2" fill="#012169"/><path d="M0 0l28 18M28 0L0 18" stroke="#fff" stroke-width="4"/><path d="M0 0l28 18M28 0L0 18" stroke="#c8102e" stroke-width="1.7"/><path d="M14 0v18M0 9h28" stroke="#fff" stroke-width="6"/><path d="M14 0v18M0 9h28" stroke="#c8102e" stroke-width="3"/></svg>';
+  }
+
+>>>>>>> origin/thu
   function renderHeader(opts) {
     opts = opts || {};
     var host = U.$('#hdr'); if (!host) return;
     var active = opts.active || '';
+<<<<<<< HEAD
     host.className = 'hdr' + (opts.floating ? ' hdr--float' : '');
+=======
+    /* Remove any previous scroll binding before re-rendering the header. */
+    if (host.__kasScrollHandler) {
+      window.removeEventListener('scroll', host.__kasScrollHandler);
+      host.__kasScrollHandler = null;
+    }
+    host.className = 'hdr' + (opts.floating ? ' hdr--float header--transparent' : '');
+>>>>>>> origin/thu
     host.innerHTML =
       '<div class="container hdr__in">' +
         logo(true) +
@@ -45,13 +71,27 @@
         '</nav>' +
         '<div class="hdr__right">' +
           global.Contact.headerBlock() +
+<<<<<<< HEAD
           '<button class="lang" type="button">' + U.icon('globe', 15) + ' EN ' + U.icon('chevD', 12) + '</button>' +
           '<a class="btn btn--gold btn--sm" href="manage-booking.html">Sign in / Join</a>' +
+=======
+          '<div class="lang-wrap lang-wrap--custom" title="Language">' +
+            '<span class="sr">Language</span>' +
+            '<select class="lang-select" aria-label="Language"><option value="en">EN</option><option value="vi">VI</option></select>' +
+            '<button class="lang-button" type="button" aria-haspopup="listbox" aria-expanded="false"><span class="lang-current-flag" aria-hidden="true">' + flagIcon('en') + '</span><span class="lang-current-code">EN</span><span class="lang-chevron" aria-hidden="true">⌄</span></button>' +
+            '<div class="lang-menu" role="listbox" aria-label="Language">' +
+              '<button type="button" class="lang-option" data-lang="vi" role="option"><span class="lang-option-flag" aria-hidden="true">' + flagIcon('vi') + '</span><span>VI</span></button>' +
+              '<button type="button" class="lang-option" data-lang="en" role="option"><span class="lang-option-flag" aria-hidden="true">' + flagIcon('en') + '</span><span>ENG</span></button>' +
+            '</div>' +
+          '</div>' +
+          '<button class="btn btn--gold btn--sm js-kas-auth" type="button">Sign in / Join</button>' +
+>>>>>>> origin/thu
           '<button class="burger" type="button" aria-label="Open menu">' + U.icon('menu', 22) + '</button>' +
         '</div>' +
       '</div>';
 
     U.$('.burger', host).addEventListener('click', openDrawer);
+<<<<<<< HEAD
     U.$('.lang', host).addEventListener('click', function () {
       U.toast('Language switching is not part of this demo.');
     });
@@ -60,6 +100,43 @@
       var onScroll = function () {
         host.classList.toggle('hdr--solid', window.scrollY > 40);
       };
+=======
+
+    /* Custom language picker: keeps the EN/VI control visually consistent and
+       adds country flags while the native select remains the i18n bridge. */
+    (function bindLangPicker(){
+      var wrap = U.$('.lang-wrap--custom', host), btn = U.$('.lang-button', wrap), menu = U.$('.lang-menu', wrap);
+      if (!wrap || !btn || !menu) return;
+      function close(){ wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }
+      btn.addEventListener('click', function(e){ e.stopPropagation(); var open = wrap.classList.toggle('is-open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      U.$$('.lang-option', menu).forEach(function(opt){
+        opt.addEventListener('click', function(){
+          var select = U.$('.lang-select', wrap), lang = opt.getAttribute('data-lang');
+          if (!select) return;
+          select.value = lang;
+          select.dispatchEvent(new Event('change', {bubbles:true}));
+          close();
+        });
+      });
+      if (host.__kasLangClose) document.removeEventListener('click', host.__kasLangClose);
+      host.__kasLangClose = close;
+      document.addEventListener('click', close);
+    }());
+
+    if (opts.floating) {
+      var onScroll = function () {
+        /* Homepage: transparent only at the very top.
+           As soon as the page moves away from scroll=0, switch smoothly
+           to the solid black navigation. */
+        var scrolled = window.scrollY > 8;
+        host.classList.toggle('header--transparent', !scrolled);
+        host.classList.toggle('header--scrolled', scrolled);
+        /* Backward-compatible state class for existing styles. */
+        host.classList.toggle('hdr--solid', scrolled);
+      };
+      if (host.__kasScrollHandler) window.removeEventListener('scroll', host.__kasScrollHandler);
+      host.__kasScrollHandler = onScroll;
+>>>>>>> origin/thu
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     }
@@ -94,7 +171,10 @@
 
   /* ---------------- footer ---------------- */
   var FOOT_COLS = [
+<<<<<<< HEAD
     { h: 'Destinations', l: [['All properties','hotels.html'],['District 1','hotels.html'],['Ben Thanh','hotels.html'],['Nguyen Thai Binh','hotels.html'],['Le Thanh Ton','hotels.html']] },
+=======
+>>>>>>> origin/thu
     { h: 'Hotels',       l: [['KAS Passion Boutique','hotel-detail.html?hotel=hotel-01'],['KAS Elegance','hotel-detail.html?hotel=hotel-02'],['KAS Ancient Boutique','hotel-detail.html?hotel=hotel-03'],['KAS Milestone Premium','hotel-detail.html?hotel=hotel-04'],['KAS Zody Boutique','hotel-detail.html?hotel=hotel-05'],['KAS Sonata Luxury','hotel-detail.html?hotel=hotel-06'],['KAS Eliana Luxury','hotel-detail.html?hotel=hotel-07'],['KAS Dilly Luxury','hotel-detail.html?hotel=hotel-08']] },
     { h: 'Experiences',  l: [['Dining','experiences.html#dining'],['Rooftop bars','experiences.html#rooftops'],['Wellness & spa','experiences.html#wellness'],['Local experiences','experiences.html#local'],['Airport transfer','experiences.html#transfer']] },
     { h: 'Support',      l: [['FAQ','support.html#faq'],['Booking information','support.html#booking'],['Cancellation policy','support.html#cancellation'],['Payment methods','support.html#payment'],['Contact us','support.html#contact']] },
@@ -105,12 +185,31 @@
 
   function renderFooter() {
     var host = U.$('#ftr'); if (!host) return;
+<<<<<<< HEAD
     var CT = D.config.contact;
     host.className = 'ftr';
+=======
+    var CT = D.config.contact || {};
+    /* Names follow KAS_DATA; each of the 8 properties appears exactly once. */
+    var footerLinks = [
+      ['KAS Milestone','hotel-detail.html?hotel=hotel-04'],
+      ['KAS Ancient','hotel-detail.html?hotel=hotel-03'],
+      ['KAS Premium','hotel-detail.html?hotel=hotel-02'],
+      ['KAS Sonata','hotel-detail.html?hotel=hotel-06']
+    ];
+    var moreLinks = [
+      ['KAS Eliana','hotel-detail.html?hotel=hotel-07'],
+      ['KAS Passion','hotel-detail.html?hotel=hotel-01'],
+      ['KAS Dilly','hotel-detail.html?hotel=hotel-08'],
+      ['KAS Zody','hotel-detail.html?hotel=hotel-05']
+    ];
+    host.className = 'ftr ftr--dark';
+>>>>>>> origin/thu
     host.innerHTML =
       '<div class="container">' +
         '<div class="ftr__main">' +
           '<div class="ftr__brand">' + logo(false) +
+<<<<<<< HEAD
             '<p>A legacy of Vietnamese hospitality. Distinctive stays in the heart of District 1. One heartfelt promise.</p>' +
             '<div class="social">' +
               ['fb','ig','yt','tiktok'].map(function (s) {
@@ -155,6 +254,40 @@
       f.reset();
     });
 
+=======
+            '<p>Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.</p>' +
+            '<div class="social">' +
+              ['ig','fb','phone'].map(function (s) {
+                var label = { ig: 'Instagram', fb: 'Facebook', phone: 'Call KAS' }[s];
+                if (s === 'phone') return '<a href="' + CT.tel + '" aria-label="' + label + '">' + U.icon(s, 15) + '</a>';
+                return '<a href="#" aria-label="' + label + '" onclick="return false">' + U.icon(s, 15) + '</a>';
+              }).join('') +
+            '</div>' +
+          '</div>' +
+          '<div class="ftr__col"><h5>KAS Hotels</h5>' +
+            footerLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
+          '</div>' +
+          '<div class="ftr__col"><h5>More KAS Hotels</h5>' +
+            moreLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
+          '</div>' +
+          '<div class="ftr__col"><h5>Discover</h5>' +
+            '<a href="about.html">About KAS</a><a href="city-guide.html">City Guide</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
+          '</div>' +
+          '<div class="ftr__col"><h5>Guest Services</h5>' +
+            '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
+          '</div>' +
+          '<div class="ftr__col ftr__contact"><h5>Contact</h5>' +
+            '<a href="' + CT.tel + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(CT.displayPhone) + '</span></a>' +
+            '<a href="mailto:' + CT.email + '" class="ftr-contact-row">' + U.icon('mail', 15) + '<span>' + U.esc(CT.email) + '</span></a>' +
+          '</div>' +
+          '<div class="ftr__col ftr__news"><h5>Stay in the know</h5>' +
+            '<p>Seasonal offers, new openings, and stories from the KAS collection.</p>' +
+            '<form class="news" onsubmit="return false"><input type="email" aria-label="Email address" placeholder="Email của bạn"><button type="submit" aria-label="Subscribe">' + U.icon('send', 15) + '</button></form>' +
+          '</div>' +
+        '</div>' +
+        '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="reference.html">Privacy Policy</a><a href="reference.html">Terms of Service</a><a href="support.html#contact">Contact</a></div></div>' +
+      '</div>';
+>>>>>>> origin/thu
   }
 
   /* ---------------- chat + back to top ---------------- */
@@ -306,12 +439,25 @@
         x0 = null;
       }, { passive: true });
     }
+<<<<<<< HEAD
     // keyboard
     document.addEventListener('keydown', function (e) {
       if (U.$('.lb.open')) return;
       if (e.key === 'ArrowLeft') show(i - 1);
       if (e.key === 'ArrowRight') show(i + 1);
     });
+=======
+    // keyboard — one handler per gallery host; re-rendering replaces it instead of stacking listeners
+    if (host.__kasGalKey) document.removeEventListener('keydown', host.__kasGalKey);
+    host.__kasGalKey = function (e) {
+      if (!host.isConnected || !U.$('.gal__main', host)) return;
+      if (U.$('.lb.open')) return;
+      if (e.target && /^(INPUT|SELECT|TEXTAREA)$/.test(e.target.tagName)) return;  // arrows move the caret / change a date there
+      if (e.key === 'ArrowLeft') show(i - 1);
+      if (e.key === 'ArrowRight') show(i + 1);
+    };
+    document.addEventListener('keydown', host.__kasGalKey);
+>>>>>>> origin/thu
     return { show: show };
   }
 
@@ -428,10 +574,92 @@
     return 'checkC';
   }
 
+<<<<<<< HEAD
+=======
+
+  /* ---------------- member sign-in / join ---------------- */
+  function authSession() {
+    try { return JSON.parse(localStorage.getItem('kas-member-session') || 'null'); } catch (e) { return null; }
+  }
+  function authAccounts() {
+    try { return JSON.parse(localStorage.getItem('kas-member-accounts') || '[]'); } catch (e) { return []; }
+  }
+  function saveAccounts(a) { try { localStorage.setItem('kas-member-accounts', JSON.stringify(a)); } catch (e) {} }
+
+  function openAuth(mode) {
+    var existing = U.$('.kas-auth');
+    if (existing) existing.remove();
+    var isJoin = mode === 'join';
+    var m = U.el('div', { class: 'kas-auth is-open' });
+    m.innerHTML =
+      '<div class="kas-auth__box" role="dialog" aria-modal="true" aria-label="KAS member">' +
+        '<button class="kas-auth__close" type="button" aria-label="Close">×</button>' +
+        '<div class="kas-auth__brand"><img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection"></div>' +
+        '<div class="kas-auth__eyebrow">KAS Rewards</div>' +
+        '<h2>' + (isJoin ? 'Create your KAS account' : 'Welcome back') + '</h2>' +
+        '<p class="kas-auth__sub">' + (isJoin ? 'Join KAS for member benefits and a smoother booking experience.' : 'Sign in to manage your KAS membership and bookings.') + '</p>' +
+        (isJoin ? '<div class="kas-auth__field"><label for="kasAuthName">Full name</label><input id="kasAuthName" type="text" autocomplete="name" placeholder="Your name"></div>' : '') +
+        '<div class="kas-auth__field"><label for="kasAuthEmail">Email *</label><input id="kasAuthEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>' +
+        '<div class="kas-auth__field"><label for="kasAuthPassword">Password *</label><input id="kasAuthPassword" type="password" autocomplete="' + (isJoin?'new-password':'current-password') + '" placeholder="At least 8 characters"></div>' +
+        (isJoin ? '' : '<label class="kas-auth__remember"><input id="kasAuthRemember" type="checkbox"> Remember me on this device</label>') +
+        '<button class="kas-auth__submit" id="kasAuthSubmit" type="button">' + (isJoin ? 'CREATE ACCOUNT' : 'SIGN IN') + '</button>' +
+        '<div class="kas-auth__message" id="kasAuthMessage"></div>' +
+        '<div class="kas-auth__switch">' + (isJoin ? 'Already a member?' : 'New to KAS?') + ' <button type="button" id="kasAuthSwitch">' + (isJoin ? 'Sign in' : 'Create an account') + '</button></div>' +
+      '</div>';
+    document.body.appendChild(m);
+
+    function close(){m.classList.remove('is-open');setTimeout(function(){m.remove()},180);document.body.style.overflow='';}
+    m.querySelector('.kas-auth__close').onclick=close;
+    m.addEventListener('click',function(e){if(e.target===m)close()});
+    document.body.style.overflow='hidden';
+
+    m.querySelector('#kasAuthSwitch').onclick=function(){close();setTimeout(function(){openAuth(isJoin?'login':'join')},40)};
+    m.querySelector('#kasAuthSubmit').onclick=function(){
+      var email=String(m.querySelector('#kasAuthEmail').value||'').trim().toLowerCase();
+      var pw=String(m.querySelector('#kasAuthPassword').value||'');
+      var msg=m.querySelector('#kasAuthMessage');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';return}
+      if(pw.length<8){msg.textContent='Password must be at least 8 characters.';return}
+      if(isJoin){
+        var name=String(m.querySelector('#kasAuthName').value||'').trim();
+        if(!name){msg.textContent='Please enter your full name.';return}
+        var accounts=authAccounts();
+        if(accounts.some(function(a){return a.email===email})){msg.textContent='This email is already registered. Please sign in.';return}
+        accounts.push({name:name,email:email,password:pw});
+        saveAccounts(accounts);
+        try{localStorage.setItem('kas-member-session',JSON.stringify({name:name,email:email}))}catch(e){}
+        msg.textContent='Account created. Welcome to KAS.';
+        setTimeout(close,700);
+      }else{
+        var accounts=authAccounts();
+        var found=accounts.find(function(a){return a.email===email && a.password===pw});
+        if(!found){msg.textContent='Email or password is incorrect.';return}
+        try{localStorage.setItem('kas-member-session',JSON.stringify({name:found.name,email:found.email}))}catch(e){}
+        msg.textContent='Signed in successfully.';
+        setTimeout(close,650);
+      }
+    };
+  }
+
+  function bindAuthButtons(){
+    U.$$('.js-kas-auth').forEach(function(b){
+      if(b.__kasAuthBound)return;b.__kasAuthBound=true;
+      b.addEventListener('click',function(){
+        var s=authSession();
+        if(s){
+          openAuth('login');
+          var title=U.$('.kas-auth h2'); if(title) title.textContent='Welcome back, '+s.name;
+        }else openAuth('login');
+      });
+    });
+  }
+
+>>>>>>> origin/thu
   /* ---------------- boot ---------------- */
   function boot(opts) {
     opts = opts || {};
     renderHeader(opts);
+<<<<<<< HEAD
     renderFooter();
     renderFloat();
     reveal();
@@ -439,6 +667,19 @@
 
   global.App = {
     boot: boot, logo: logo, logoMark: logoMark,
+=======
+    bindAuthButtons();
+    renderFooter();
+    renderFloat();
+    reveal();
+    if (global.KAS_I18N) global.KAS_I18N.init();
+  }
+
+  global.flagIcon = flagIcon;
+
+  global.App = {
+    boot: boot, logo: logo, logoMark: logoMark, flagIcon: flagIcon,
+>>>>>>> origin/thu
     renderSteps: renderSteps, gallery: gallery, openLightbox: openLightbox,
     miniHTML: miniHTML, miniCarousel: miniCarousel,
     modal: modal, amenityIcon: amenityIcon, reveal: reveal,
