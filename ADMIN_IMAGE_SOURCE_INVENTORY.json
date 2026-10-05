@@ -1,0 +1,4139 @@
+{
+  "version": 1,
+  "generatedFrom": "KAS-HOTEL-V22-2-ADMIN-COLLECTION-ORDER-CLEAN.zip",
+  "scope": "Source inventory only; does not change site data or image mappings.",
+  "managedSiteSlots": [
+    {
+      "group": "home",
+      "key": "home.dayInSaigon",
+      "label": "Trang chủ · A Day in Saigon — ảnh hành trình",
+      "selector": "img[alt=\"A day in Saigon\"]",
+      "default": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "group": "home",
+      "key": "home.neighborhood.city",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 01 · Bắt đầu từ thành phố",
+      "selector": "a[href=\"city-guide.html#city\"] img",
+      "default": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1500&q=85"
+    },
+    {
+      "group": "home",
+      "key": "home.neighborhood.taste",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 02 · Thưởng thức thành phố qua ẩm thực",
+      "selector": "a[href=\"city-guide.html#taste\"] img",
+      "default": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1100&q=85"
+    },
+    {
+      "group": "home",
+      "key": "home.neighborhood.slow",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 03 · Để dành chỗ cho những bước lang thang",
+      "selector": "a[href=\"city-guide.html#slow\"] img",
+      "default": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1100&q=85"
+    },
+    {
+      "group": "home",
+      "key": "home.neighborhood.night",
+      "label": "Trang chủ · Bốn câu chuyện khu phố / 04 · Ở ngoài lâu hơn một chút",
+      "selector": "a[href=\"city-guide.html#night\"] img",
+      "default": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=85"
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.hero",
+      "label": "Guidebook · Hero",
+      "selector": ".hero-visual",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ben-thanh-market",
+      "label": "Guidebook · ben-thanh-market",
+      "selector": ".entry#ben-thanh-market .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.tao-dan-park",
+      "label": "Guidebook · tao-dan-park",
+      "selector": ".entry#tao-dan-park .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.independence-palace",
+      "label": "Guidebook · independence-palace",
+      "selector": ".entry#independence-palace .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.war-remnants-museum",
+      "label": "Guidebook · war-remnants-museum",
+      "selector": ".entry#war-remnants-museum .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.central-post-office",
+      "label": "Guidebook · central-post-office",
+      "selector": ".entry#central-post-office .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.notre-dame-cathedral",
+      "label": "Guidebook · notre-dame-cathedral",
+      "selector": ".entry#notre-dame-cathedral .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-opera-house",
+      "label": "Guidebook · saigon-opera-house",
+      "selector": ".entry#saigon-opera-house .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.nguyen-hue",
+      "label": "Guidebook · nguyen-hue",
+      "selector": ".entry#nguyen-hue .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bitexco",
+      "label": "Guidebook · bitexco",
+      "selector": ".entry#bitexco .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-square",
+      "label": "Guidebook · saigon-square",
+      "selector": ".entry#saigon-square .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ben-thanh-street-food",
+      "label": "Guidebook · ben-thanh-street-food",
+      "selector": ".entry#ben-thanh-street-food .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.pham-ngu-lao",
+      "label": "Guidebook · pham-ngu-lao",
+      "selector": ".entry#pham-ngu-lao .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bui-vien",
+      "label": "Guidebook · bui-vien",
+      "selector": ".entry#bui-vien .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.fine-arts-museum",
+      "label": "Guidebook · fine-arts-museum",
+      "selector": ".entry#fine-arts-museum .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.nguyen-trai-street",
+      "label": "Guidebook · nguyen-trai-street",
+      "selector": ".entry#nguyen-trai-street .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-centre",
+      "label": "Guidebook · saigon-centre",
+      "selector": ".entry#saigon-centre .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-eco-craft",
+      "label": "Guidebook · saigon-eco-craft",
+      "selector": ".entry#saigon-eco-craft .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.vietnamese-coffee",
+      "label": "Guidebook · vietnamese-coffee",
+      "selector": ".entry#vietnamese-coffee .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ben-thanh-market-food",
+      "label": "Guidebook · ben-thanh-market-food",
+      "selector": ".entry#ben-thanh-market-food .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-street-food",
+      "label": "Guidebook · saigon-street-food",
+      "selector": ".entry#saigon-street-food .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ben-thanh-market-walk",
+      "label": "Guidebook · ben-thanh-market-walk",
+      "selector": ".entry#ben-thanh-market-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.gia-long-palace",
+      "label": "Guidebook · gia-long-palace",
+      "selector": ".entry#gia-long-palace .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.le-thanh-ton",
+      "label": "Guidebook · le-thanh-ton",
+      "selector": ".entry#le-thanh-ton .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-opera-house-walk",
+      "label": "Guidebook · saigon-opera-house-walk",
+      "selector": ".entry#saigon-opera-house-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.central-post-office-walk",
+      "label": "Guidebook · central-post-office-walk",
+      "selector": ".entry#central-post-office-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.notre-dame-cathedral-walk",
+      "label": "Guidebook · notre-dame-cathedral-walk",
+      "selector": ".entry#notre-dame-cathedral-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-square-walk",
+      "label": "Guidebook · saigon-square-walk",
+      "selector": ".entry#saigon-square-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.nguyen-hue-walk",
+      "label": "Guidebook · nguyen-hue-walk",
+      "selector": ".entry#nguyen-hue-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bitexco-walk",
+      "label": "Guidebook · bitexco-walk",
+      "selector": ".entry#bitexco-walk .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-zoo",
+      "label": "Guidebook · saigon-zoo",
+      "selector": ".entry#saigon-zoo .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bui-thi-xuan",
+      "label": "Guidebook · bui-thi-xuan",
+      "selector": ".entry#bui-thi-xuan .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.pham-ngu-lao-night",
+      "label": "Guidebook · pham-ngu-lao-night",
+      "selector": ".entry#pham-ngu-lao-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bui-vien-night",
+      "label": "Guidebook · bui-vien-night",
+      "selector": ".entry#bui-vien-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ben-thanh-night",
+      "label": "Guidebook · ben-thanh-night",
+      "selector": ".entry#ben-thanh-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.september-23-park",
+      "label": "Guidebook · september-23-park",
+      "selector": ".entry#september-23-park .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.saigon-opera-house-night",
+      "label": "Guidebook · saigon-opera-house-night",
+      "selector": ".entry#saigon-opera-house-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.ao-show",
+      "label": "Guidebook · ao-show",
+      "selector": ".entry#ao-show .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.nguyen-hue-night",
+      "label": "Guidebook · nguyen-hue-night",
+      "selector": ".entry#nguyen-hue-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.bitexco-night",
+      "label": "Guidebook · bitexco-night",
+      "selector": ".entry#bitexco-night .photo",
+      "default": ""
+    },
+    {
+      "group": "guidebook",
+      "key": "guidebook.entry.late-night-food",
+      "label": "Guidebook · late-night-food",
+      "selector": ".entry#late-night-food .photo",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.01",
+      "label": "Home Hero · 01 · KAS Passion Boutique",
+      "selector": ".home-hero__slide[data-index=\"0\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.02",
+      "label": "Home Hero · 02 · KAS Premium Boutique",
+      "selector": ".home-hero__slide[data-index=\"1\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.03",
+      "label": "Home Hero · 03 · KAS Ancient Luxury",
+      "selector": ".home-hero__slide[data-index=\"2\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.04",
+      "label": "Home Hero · 04 · KAS Milestone Premium",
+      "selector": ".home-hero__slide[data-index=\"3\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.05",
+      "label": "Home Hero · 05 · KAS Zody Boutique",
+      "selector": ".home-hero__slide[data-index=\"4\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.06",
+      "label": "Home Hero · 06 · KAS Sonata Luxury",
+      "selector": ".home-hero__slide[data-index=\"5\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.07",
+      "label": "Home Hero · 07 · KAS Eliana Luxury",
+      "selector": ".home-hero__slide[data-index=\"6\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.hero.08",
+      "label": "Home Hero · 08 · KAS Dilly Luxury",
+      "selector": ".home-hero__slide[data-index=\"7\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.heroExtra1",
+      "label": "Home Hero · 09 · Ha Long Bay, Vietnam",
+      "selector": ".home-hero__slide[data-index=\"8\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.heroExtra2",
+      "label": "Home Hero · 10 · Hoi An, Vietnam",
+      "selector": ".home-hero__slide[data-index=\"9\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.heroExtra3",
+      "label": "Home Hero · 11 · Vietnam coast",
+      "selector": ".home-hero__slide[data-index=\"10\"] img",
+      "default": ""
+    },
+    {
+      "group": "homeHero",
+      "key": "home.heroExtra4",
+      "label": "Home Hero · 12 · Vietnam landscape",
+      "selector": ".home-hero__slide[data-index=\"11\"] img",
+      "default": ""
+    }
+  ],
+  "hotelGalleryStaticImages": [
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 1,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/cb/76/36/agoda-2061539-1666984414-438475.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 2,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/e1/00/01/agoda-2061539-1661698576-479341.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 3,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/0a/f6/17/agoda-2061539-1665476105-494952.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 4,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/b7/3e/bb/agoda-2061539-1665476108-459189.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 5,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/b0/d8/7a/agoda-2061539-1665476109-484360.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 6,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/9f/b7/39/agoda-2061539-1661698574-514918.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 7,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/05/89/2c/agoda-2061539-ce73e3-665064.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-01",
+      "category": "other",
+      "index": 8,
+      "sourceIdOrUrl": "https://www.kayak.com/rimg/himg/40/f8/78/agoda-2061539-500f17-678679.jpg",
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "verified": false
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1mc4912000t68eny9FCE6",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc4m12000t68lxd80732",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc5o12000t68l6mcE445",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc0912000t68m08e98AF",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc6312000t68ljr91EB6",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1mc6z12000t68ee0sC249",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1mc1h12000t68ucdhD405",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "02307824x9a7p0ci3789F",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "0232s224x9al0078q0E39",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1mc1112000t6ceewp451A",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1mc5c12000t6ceixj5700",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "1mc4i12000t6ceikd50F8",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "1mc1h12000t6cekk4A80E",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0236u224x9al05tlpB733",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "lobby",
+      "index": 6,
+      "sourceIdOrUrl": "02331824x9a49e92uD9D6",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "1mc6f12000t6cekbf149A",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "0582q12000tc2oitaF7BD",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "dining",
+      "index": 3,
+      "sourceIdOrUrl": "0235w824x9a46rjocCB25",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1mc1d12000t6cebx1648E",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc4412000t6cdfx22E7B",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1mc6w12000t6cdia74811",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1z62v12000t63qfel3E1C",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 5,
+      "sourceIdOrUrl": "0232j224x9aab10i442B4",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-02",
+      "category": "exterior",
+      "index": 6,
+      "sourceIdOrUrl": "0231l824x9a46r1nn9265",
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1z66b12000t66vpu52D50",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1z61p12000t66vii54CA0",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1z66112000t66vd7mAE59",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1z64k12000t66v3cl5973",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1z63412000t66w0x8D810",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1z65012000t66utkrB46F",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1mc4w12000t6cusq15C71",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "0235z824x9a49otq4C18A",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "02347824x9a86uqhn13DC",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1mc1r12000t6cwa6bF945",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1mc1412000t6cw6h64965",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "0222e12000t1ccz6p1F67",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "0585812000syt5wzo9F2E",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0233j824x9a49ojgp1792",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "lobby",
+      "index": 6,
+      "sourceIdOrUrl": "0235i924x9amvnllbA311",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "1mc3n12000t6cvaw73122",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "1mc1712000t6cvdtm9E2B",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "dining",
+      "index": 3,
+      "sourceIdOrUrl": "0580712000sva0vl2E339",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "dining",
+      "index": 4,
+      "sourceIdOrUrl": "02373924x9amuvvda7B03",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1mc6e12000t6cwnvd6281",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc5g12000t6cw9tj71A5",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1z64312000t66vkdp761E",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1mc2i12000t6cxqt9A559",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 5,
+      "sourceIdOrUrl": "0236h224x9a9z3izc3BCA",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-03",
+      "category": "exterior",
+      "index": 6,
+      "sourceIdOrUrl": "0230k12000tdfbmt44A66",
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1mc4j12000t6i0auh2F94",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc0j12000t6i00kiDEC2",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc3t12000t6hxgw7E27A",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc1b12000t6hxfri1B6A",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc2r12000t6hwy3w68C0",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1mc5c12000t6hxg35C238",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "02303224x9agdw1ml8447",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "02305224x9aeabhd9A6E7",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1mc3w12000t6j5anhF25F",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1mc4r12000t6j5bx4175E",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "1mc6j12000t6j2o1b6DA4",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "1mc4f12000t6j22ek6365",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0231y224x9age3kii8666",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "lobby",
+      "index": 6,
+      "sourceIdOrUrl": "0236z924x9acql4m7BA1E",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "1mc1d12000t6j1kpn5840",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "1mc5412000t6kmbye217A",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 3,
+      "sourceIdOrUrl": "1mc6212000t6kmvbb198B",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 4,
+      "sourceIdOrUrl": "1mc2h12000t6kmbyj5917",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 5,
+      "sourceIdOrUrl": "0231o224x9ahsv4hl317D",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "dining",
+      "index": 6,
+      "sourceIdOrUrl": "0231i824x9acx94au6425",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1mc2g12000t6j36tjD38D",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc1712000t6j3ilt6090",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1mc4i12000t6j3djzF4CE",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1mc4u12000t6j3d5i15A7",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 5,
+      "sourceIdOrUrl": "1mc2l12000t6j3tz9F968",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "exterior",
+      "index": 6,
+      "sourceIdOrUrl": "1mc3b12000t6izzit5B5F",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 1,
+      "sourceIdOrUrl": "1mc1o12000t6kmljh4767",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 2,
+      "sourceIdOrUrl": "1mc0a12000t6jmnz8AEC9",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 3,
+      "sourceIdOrUrl": "1mc3112000t6jmkl9F121",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 4,
+      "sourceIdOrUrl": "1mc1j12000t6jmk6u5BE6",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 5,
+      "sourceIdOrUrl": "1mc3h12000t6jm9z4D0D0",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-04",
+      "category": "amenities",
+      "index": 6,
+      "sourceIdOrUrl": "1mc3r12000t6jmov4FA89",
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "0223y12000t6ehaxoACB6",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc6512000t6jzbnu4F9B",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc5k12000t6jznvp06F4",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc5s12000t6jz5hlF773",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc0d12000t6jyrjt654A",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1mc4p12000t6k22xx83E5",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1mc5h12000t6k2hz30509",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "0234q924x9amwtbl0EDDB",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "0236p224x9agp4v4mDC9F",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1mc3n12000t8mzcwmBA1B",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1mc0n12000t8mzn3u8FDE",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "0580p12000tbf93x5F689",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "02373824x9a48apof4632",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0231p224x9ale7txp18F5",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1mc6012000t6kbhhaA3F6",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc0r12000t6kc21o38FC",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1mc7412000t6kc7aqA68C",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1mc3i12000t6kbz366235",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 5,
+      "sourceIdOrUrl": "1mc1n12000t6kcjd6EE83",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-05",
+      "category": "exterior",
+      "index": 6,
+      "sourceIdOrUrl": "1z64512000t87t42jF003",
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1mc3d12000t6mwxfzDD26",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc2v12000t6mxuekE125",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc3y12000t6mxoiwCA1E",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc1q12000t6mrhn8F083",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc4p12000t6mqqx5BA82",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1mc6d12000t6mqvfl6376",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1mc3o12000t6mrf1w7A7F",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "02332224x9anpf19q9BE5",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "0233s924x9amvnlkk49EC",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "0583t12000tbrx5bbC277",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "0584v12000taz9dt8E034",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "1mc3p12000t6n1kykC5B0",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "1mc3m12000t6n0wi15388",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0234o924x9amvb6im595F",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "lobby",
+      "index": 6,
+      "sourceIdOrUrl": "0230p824x9a5z3n8g5EBD",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "0581t12000tbpi22320FD",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "0586h12000tce8vie88EF",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "dining",
+      "index": 3,
+      "sourceIdOrUrl": "0581812000tbgp9pxD28A",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "dining",
+      "index": 4,
+      "sourceIdOrUrl": "0580z12000tbj9jyl7444",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1z65e12000t678d22F5D2",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-06",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc3812000t6n6ch5B96E",
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1mc5212000t6nlp3582F7",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc2612000t6nmfggF003",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc6a12000t6nma7lA76B",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc2p12000t6nkzzt1101",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc3n12000t6nlxniE219",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1z61z12000t67iwei98C7",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1z63u12000t67ia1u97F4",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "0230w924x9akqn7ggD050",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "0233v824x9a487vr91684",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1mc0y12000t6npkc1B9AA",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1mc2512000t6npqep2A95",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "1mc2c12000t6npltwDD6E",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "lobby",
+      "index": 4,
+      "sourceIdOrUrl": "0230g12000thpfink6734",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "lobby",
+      "index": 5,
+      "sourceIdOrUrl": "0232c12000thpc0d2A632",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "0585f12000tcdpdzp61E6",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "0582212000tazfk8gE16F",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1z62n12000t67ia7a1DD2",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc6b12000t6np0c5DA9F",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1mc0y12000t6nosdt4C7C",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-07",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1mc1712000t6np93e96D9",
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 1,
+      "sourceIdOrUrl": "1mc5r12000t6oxyerBE48",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 2,
+      "sourceIdOrUrl": "1mc2412000t6ox4onF760",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 3,
+      "sourceIdOrUrl": "1mc5312000t6oydhwD2D0",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 4,
+      "sourceIdOrUrl": "1mc0o12000t6oxlmiD73B",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 5,
+      "sourceIdOrUrl": "1mc6y12000t6oy84rF834",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 6,
+      "sourceIdOrUrl": "1mc2912000t6oy8wp83F3",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 7,
+      "sourceIdOrUrl": "1mc1612000t6oygsc732A",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 8,
+      "sourceIdOrUrl": "0233a824x9a8xzwesABF4",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "rooms",
+      "index": 9,
+      "sourceIdOrUrl": "0233m224x9ab8v092D7ED",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "lobby",
+      "index": 1,
+      "sourceIdOrUrl": "1z62b12000t67tt9j9177",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "lobby",
+      "index": 2,
+      "sourceIdOrUrl": "1z63e12000t67up5i082D",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "lobby",
+      "index": 3,
+      "sourceIdOrUrl": "1z63d12000t67ujizF8E1",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "dining",
+      "index": 1,
+      "sourceIdOrUrl": "1mc6c12000t6s5h3dD47F",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "dining",
+      "index": 2,
+      "sourceIdOrUrl": "0585w12000tbpj6kd3A3E",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "dining",
+      "index": 3,
+      "sourceIdOrUrl": "1mc6612000t6s5nap592B",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "dining",
+      "index": 4,
+      "sourceIdOrUrl": "02327224x9ak5rxbi7188",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "dining",
+      "index": 5,
+      "sourceIdOrUrl": "0233y224x9ak5pewg2E44",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "exterior",
+      "index": 1,
+      "sourceIdOrUrl": "1mc6f12000t6ooqceEC83",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "exterior",
+      "index": 2,
+      "sourceIdOrUrl": "1mc2612000t6opawpEAC9",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "exterior",
+      "index": 3,
+      "sourceIdOrUrl": "1mc1t12000t6ood3cE4FC",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    },
+    {
+      "hotelId": "hotel-08",
+      "category": "exterior",
+      "index": 4,
+      "sourceIdOrUrl": "1z66912000t67u1nx88A5",
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "verified": true
+    }
+  ],
+  "sourceReferences": [
+    {
+      "file": "server.js",
+      "line": 139,
+      "kind": "css_url",
+      "reference": "url"
+    },
+    {
+      "file": "server.js",
+      "line": 357,
+      "kind": "css_url",
+      "reference": "value"
+    },
+    {
+      "file": "server.js",
+      "line": 359,
+      "kind": "css_url",
+      "reference": "String(value || "
+    },
+    {
+      "file": "server.js",
+      "line": 372,
+      "kind": "css_url",
+      "reference": "url"
+    },
+    {
+      "file": "server.js",
+      "line": 450,
+      "kind": "css_url",
+      "reference": "found.item.url"
+    },
+    {
+      "file": "server.js",
+      "line": 464,
+      "kind": "css_url",
+      "reference": "old.url"
+    },
+    {
+      "file": "server.js",
+      "line": 477,
+      "kind": "css_url",
+      "reference": "item.url"
+    },
+    {
+      "file": "server.js",
+      "line": 510,
+      "kind": "css_url",
+      "reference": "/uploads/collection/' + hotelId + '/' + old.filename"
+    },
+    {
+      "file": "server.js",
+      "line": 567,
+      "kind": "css_url",
+      "reference": "found.item.url"
+    },
+    {
+      "file": "server.js",
+      "line": 578,
+      "kind": "css_url",
+      "reference": "/uploads/collection/' + hotelId + '/' + old.filename"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 1,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 1,
+      "kind": "js_image_path",
+      "reference": "js/site-images.js"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 7,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 9,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 11,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 13,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 15,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 17,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 19,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 21,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 23,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 25,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 34,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 36,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 38,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 40,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 42,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 44,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 46,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 48,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 50,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 52,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 61,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 63,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 65,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 67,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 69,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 71,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 73,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 75,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 77,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 79,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 88,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 90,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 92,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 94,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 96,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 98,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 100,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 102,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 104,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide.html",
+      "line": 106,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 88,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 89,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 90,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 91,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 92,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 93,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 94,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 94,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 95,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 96,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 97,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 98,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "room-detail.html",
+      "line": 99,
+      "kind": "js_image_path",
+      "reference": "js/live.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "support.html",
+      "line": 23,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "offers.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 1,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 3,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 5,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 7,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 9,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 11,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 13,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 15,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 17,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 19,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide.html",
+      "line": 21,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 3,
+      "kind": "css_url",
+      "reference": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 29,
+      "kind": "css_url",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 29,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 55,
+      "kind": "css_url",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 55,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 154,
+      "kind": "css_url",
+      "reference": "target, window.location.href"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 171,
+      "kind": "css_url",
+      "reference": "href, window.location.href"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 180,
+      "kind": "js_image_path",
+      "reference": "js/site-images.js"
+    },
+    {
+      "file": "city-guidebook.html",
+      "line": 180,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 9,
+      "kind": "css_url",
+      "reference": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 149,
+      "kind": "html_img",
+      "reference": "<img alt=\"Ho Chi Minh City\" src=\"https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&amp;fit=crop&amp;w=1500&amp;q=85\"/>"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 149,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&amp;fit=crop&amp;w=1500&amp;q=85"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 158,
+      "kind": "html_img",
+      "reference": "<img alt=\"Dining\" src=\"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1100&amp;q=85\"/>"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 158,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 166,
+      "kind": "html_img",
+      "reference": "<img alt=\"Saigon streets\" src=\"https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&amp;fit=crop&amp;w=1100&amp;q=85\"/>"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 166,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 174,
+      "kind": "html_img",
+      "reference": "<img alt=\"Evening\" src=\"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&amp;fit=crop&amp;w=1600&amp;q=85\"/>"
+    },
+    {
+      "file": "city-guide-home.html",
+      "line": 174,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&amp;fit=crop&amp;w=1600&amp;q=85"
+    },
+    {
+      "file": "admin.html",
+      "line": 101,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "admin.html",
+      "line": 101,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "admin.html",
+      "line": 101,
+      "kind": "js_image_path",
+      "reference": "js/admin.js"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 1,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 7,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 9,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 11,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 13,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 15,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 17,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 19,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 21,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 23,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 25,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 34,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 36,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 38,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 40,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 42,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 44,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 46,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 48,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 50,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 52,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 61,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 63,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 65,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 67,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 69,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 71,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 73,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 75,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 77,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 79,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 88,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 90,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 92,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 94,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 96,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 98,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 100,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 102,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 104,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "city-guide-vi.html",
+      "line": 106,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "about.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 4,
+      "kind": "css_url",
+      "reference": "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@400;500&display=swap"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 30,
+      "kind": "css_url",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 30,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 59,
+      "kind": "css_url",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 59,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 158,
+      "kind": "css_url",
+      "reference": "target, window.location.href"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 175,
+      "kind": "css_url",
+      "reference": "href, window.location.href"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 184,
+      "kind": "js_image_path",
+      "reference": "js/site-images.js"
+    },
+    {
+      "file": "city-guidebook-vi.html",
+      "line": 184,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 1,
+      "kind": "js_image_path",
+      "reference": "js/kas-guide-language.js"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 3,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 5,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 7,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 9,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 11,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 13,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 15,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 17,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 19,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "after-dark-guide-vi.html",
+      "line": 21,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "experiences.html",
+      "line": 7,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "reference.html",
+      "line": 21,
+      "kind": "js_image_path",
+      "reference": "js/reference.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 60,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 61,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 62,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 63,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 64,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 65,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 66,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 66,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 67,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 68,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 69,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "review-confirm.html",
+      "line": 70,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 170,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 171,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 172,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 173,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 174,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 175,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 176,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 176,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 177,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 178,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 179,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "guest-details.html",
+      "line": 180,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "site-image-slots.json",
+      "line": 7,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 32,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 33,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 34,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 35,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 36,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 37,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 38,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 38,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 39,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 40,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 41,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 42,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 328,
+      "kind": "css_url",
+      "reference": "blob"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 331,
+      "kind": "css_url",
+      "reference": "a.href"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 363,
+      "kind": "css_url",
+      "reference": "blob"
+    },
+    {
+      "file": "booking-confirmed.html",
+      "line": 366,
+      "kind": "css_url",
+      "reference": "a.href"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 126,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=88"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 127,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=88"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 172,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 173,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 174,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 175,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 176,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 177,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 178,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 179,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 180,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 181,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 182,
+      "kind": "js_image_path",
+      "reference": "js/live.js"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 190,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1524230572899-a752b3835840?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 198,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 206,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 214,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 222,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 230,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 238,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 246,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?auto=format&fit=crop&w=1400&q=85"
+    },
+    {
+      "file": "find-your-kas.html",
+      "line": 314,
+      "kind": "css_url",
+      "reference": "${h.image}"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 110,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 111,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 112,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 113,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 114,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 115,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 116,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 116,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 117,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 118,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 119,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 120,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 121,
+      "kind": "js_image_path",
+      "reference": "js/live.js"
+    },
+    {
+      "file": "hotel-detail.html",
+      "line": 186,
+      "kind": "css_url",
+      "reference": "id,960,660"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 61,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 62,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 63,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 64,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 65,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 66,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 67,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 67,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 68,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 69,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 70,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "manage-booking.html",
+      "line": 71,
+      "kind": "js_image_path",
+      "reference": "js/room.js"
+    },
+    {
+      "file": "index.html",
+      "line": 94,
+      "kind": "html_img",
+      "reference": "<img src=\"assets/home/a-day-in-saigon.jpg\" alt=\"A day in Saigon\" loading=\"lazy\">"
+    },
+    {
+      "file": "index.html",
+      "line": 94,
+      "kind": "js_image_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "index.html",
+      "line": 94,
+      "kind": "asset_path",
+      "reference": "assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "index.html",
+      "line": 110,
+      "kind": "html_img",
+      "reference": "<img src=\"https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&amp;fit=crop&amp;w=1500&amp;q=85\" alt=\"Ho Chi Minh City\" loading=\"lazy\">"
+    },
+    {
+      "file": "index.html",
+      "line": 110,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&amp;fit=crop&amp;w=1500&amp;q=85"
+    },
+    {
+      "file": "index.html",
+      "line": 120,
+      "kind": "html_img",
+      "reference": "<img src=\"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1100&amp;q=85\" alt=\"Dining in Saigon\" loading=\"lazy\">"
+    },
+    {
+      "file": "index.html",
+      "line": 120,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"
+    },
+    {
+      "file": "index.html",
+      "line": 130,
+      "kind": "html_img",
+      "reference": "<img src=\"https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&amp;fit=crop&amp;w=1100&amp;q=85\" alt=\"Saigon streets\" loading=\"lazy\">"
+    },
+    {
+      "file": "index.html",
+      "line": 130,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&amp;fit=crop&amp;w=1100&amp;q=85"
+    },
+    {
+      "file": "index.html",
+      "line": 140,
+      "kind": "html_img",
+      "reference": "<img src=\"https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&amp;fit=crop&amp;w=1600&amp;q=85\" alt=\"Saigon after dark\" loading=\"lazy\">"
+    },
+    {
+      "file": "index.html",
+      "line": 140,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&amp;fit=crop&amp;w=1600&amp;q=85"
+    },
+    {
+      "file": "index.html",
+      "line": 168,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "index.html",
+      "line": 169,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "index.html",
+      "line": 170,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "index.html",
+      "line": 171,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "index.html",
+      "line": 172,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "index.html",
+      "line": 173,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "index.html",
+      "line": 174,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "index.html",
+      "line": 175,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "index.html",
+      "line": 176,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "index.html",
+      "line": 177,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "index.html",
+      "line": 178,
+      "kind": "js_image_path",
+      "reference": "js/live.js"
+    },
+    {
+      "file": "index.html",
+      "line": 179,
+      "kind": "js_image_path",
+      "reference": "js/site-images.js"
+    },
+    {
+      "file": "index.html",
+      "line": 189,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "index.html",
+      "line": 190,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1559592413-7cec4d0cae?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "index.html",
+      "line": 191,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1509030450996-dd1a26dda07a?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "index.html",
+      "line": 192,
+      "kind": "js_image_path",
+      "reference": "https://images.unsplash.com/photo-1513415756790-2ac1db1297d0?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "index.html",
+      "line": 196,
+      "kind": "html_img",
+      "reference": "<img src=\"'+U.esc(slide.src)+'\" alt=\"'+U.esc(slide.alt)+'\" '+(i===0?'fetchpriority=\"high\"':'loading=\"lazy\"')+'>"
+    },
+    {
+      "file": "hotels.html",
+      "line": 90,
+      "kind": "js_image_path",
+      "reference": "js/images.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 91,
+      "kind": "js_image_path",
+      "reference": "js/rates.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 92,
+      "kind": "js_image_path",
+      "reference": "js/data.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 93,
+      "kind": "js_image_path",
+      "reference": "js/utils.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 94,
+      "kind": "js_image_path",
+      "reference": "js/storage.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 95,
+      "kind": "js_image_path",
+      "reference": "js/contact.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 96,
+      "kind": "js_image_path",
+      "reference": "js/i18n.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 96,
+      "kind": "js_image_path",
+      "reference": "js/app.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 97,
+      "kind": "js_image_path",
+      "reference": "js/booking.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 98,
+      "kind": "js_image_path",
+      "reference": "js/search.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 99,
+      "kind": "js_image_path",
+      "reference": "js/hotel.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 100,
+      "kind": "js_image_path",
+      "reference": "js/live.js"
+    },
+    {
+      "file": "hotels.html",
+      "line": 246,
+      "kind": "html_img",
+      "reference": "<img class=\"kas-quick-hotel__thumb\" src=\"' + U.esc(src) + '\" alt=\"\">"
+    },
+    {
+      "file": "tools/fetch-images.js",
+      "line": 37,
+      "kind": "css_url",
+      "reference": "res.headers.location, url"
+    },
+    {
+      "file": "css/city-guide.css",
+      "line": 20,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "css/city-guide.css",
+      "line": 47,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "css/city-guide.css",
+      "line": 78,
+      "kind": "css_url",
+      "reference": "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=2200&q=88"
+    },
+    {
+      "file": "css/components.css",
+      "line": 1994,
+      "kind": "css_url",
+      "reference": "../assets/home/a-day-in-saigon.jpg"
+    },
+    {
+      "file": "js/kas-guide-language.js",
+      "line": 61,
+      "kind": "css_url",
+      "reference": "href"
+    },
+    {
+      "file": "js/kas-guide-language.js",
+      "line": 64,
+      "kind": "css_url",
+      "reference": "href, location.href"
+    },
+    {
+      "file": "js/kas-guide-language.js",
+      "line": 82,
+      "kind": "css_url",
+      "reference": "href"
+    },
+    {
+      "file": "js/site-images.js",
+      "line": 28,
+      "kind": "css_url",
+      "reference": "+String(hero.url"
+    },
+    {
+      "file": "js/site-images.js",
+      "line": 28,
+      "kind": "js_image_path",
+      "reference": "url("
+    },
+    {
+      "file": "js/site-images.js",
+      "line": 32,
+      "kind": "css_url",
+      "reference": "+String(item.url"
+    },
+    {
+      "file": "js/site-images.js",
+      "line": 32,
+      "kind": "js_image_path",
+      "reference": "url("
+    },
+    {
+      "file": "js/site-images.js",
+      "line": 41,
+      "kind": "css_url",
+      "reference": "+String(item.url"
+    },
+    {
+      "file": "js/i18n.js",
+      "line": 1002,
+      "kind": "css_url",
+      "reference": "base, window.location.href"
+    },
+    {
+      "file": "js/i18n.js",
+      "line": 1153,
+      "kind": "css_url",
+      "reference": "window.location.href"
+    },
+    {
+      "file": "js/i18n.js",
+      "line": 1176,
+      "kind": "css_url",
+      "reference": "base, window.location.href"
+    },
+    {
+      "file": "js/i18n.js",
+      "line": 1204,
+      "kind": "css_url",
+      "reference": "url, window.location.href"
+    },
+    {
+      "file": "js/reference.js",
+      "line": 25,
+      "kind": "html_img",
+      "reference": "<img loading=\"lazy\" src=\"'+esc(first.url)+'\" alt=\"'+esc(room.name)+'\">"
+    },
+    {
+      "file": "js/app.js",
+      "line": 18,
+      "kind": "html_img",
+      "reference": "<img src=\"assets/logo/kas-hotel-collection.svg\" alt=\"KAS Hotel Collection\" style=\"width:180px;max-width:42vw;height:auto;display:block\">"
+    },
+    {
+      "file": "js/app.js",
+      "line": 18,
+      "kind": "js_image_path",
+      "reference": "assets/logo/kas-hotel-collection.svg"
+    },
+    {
+      "file": "js/app.js",
+      "line": 18,
+      "kind": "asset_path",
+      "reference": "assets/logo/kas-hotel-collection.svg"
+    },
+    {
+      "file": "js/app.js",
+      "line": 375,
+      "kind": "html_img",
+      "reference": "<img alt=\"\">"
+    },
+    {
+      "file": "js/app.js",
+      "line": 499,
+      "kind": "html_img",
+      "reference": "<img src=\"assets/logo/kas-hotel-collection.svg\" alt=\"KAS Hotel Collection\">"
+    },
+    {
+      "file": "js/app.js",
+      "line": 499,
+      "kind": "js_image_path",
+      "reference": "assets/logo/kas-hotel-collection.svg"
+    },
+    {
+      "file": "js/app.js",
+      "line": 499,
+      "kind": "asset_path",
+      "reference": "assets/logo/kas-hotel-collection.svg"
+    },
+    {
+      "file": "js/admin.js",
+      "line": 15,
+      "kind": "css_url",
+      "reference": "x,960,660"
+    },
+    {
+      "file": "js/admin.js",
+      "line": 20,
+      "kind": "html_img",
+      "reference": "<img src=\"'+esc(url)+'\" alt=\"\">"
+    },
+    {
+      "file": "js/admin.js",
+      "line": 36,
+      "kind": "html_img",
+      "reference": "<img src=\"'+esc(current)+'\" alt=\"'+esc(slot.label)+'\" loading=\"lazy\">"
+    },
+    {
+      "file": "js/admin.js",
+      "line": 43,
+      "kind": "html_img",
+      "reference": "<img src=\"'+esc(imgs[0].url||imgs[0])+'\" alt=\"\">"
+    },
+    {
+      "file": "js/admin.js",
+      "line": 50,
+      "kind": "html_img",
+      "reference": "<img src=\"'+esc(imgs[0].url||imgs[0])+'\" alt=\"\">"
+    },
+    {
+      "file": "data/runtime/collection-images.json",
+      "line": 8,
+      "kind": "asset_path",
+      "reference": "/uploads/collection/hotel-01/collection-hotel-01-1790846613796-8ecfd477.jpg"
+    },
+    {
+      "file": "data/runtime/image-overrides.json",
+      "line": 102,
+      "kind": "asset_path",
+      "reference": "/uploads/site/site-guidebook_entry_ben-thanh-market-1790846455977-0250db0d.jpg"
+    }
+  ],
+  "summary": {
+    "siteSlotGroups": {
+      "home": 5,
+      "guidebook": 41,
+      "homeHero": 12
+    },
+    "siteSlotsTotal": 58,
+    "hotelStaticImagesTotal": 171,
+    "sourceReferenceMatches": 361,
+    "hotelCount": 8
+  },
+  "notes": [
+    "Hotel image IDs can be expanded into CDN URLs by js/images.js at runtime.",
+    "Runtime overrides are stored in data/runtime/image-overrides.json.",
+    "Uploaded collection/gallery file metadata is stored in data/runtime/collection-images.json and associated runtime data.",
+    "Some shared page hero imagery is declared in css/components.css rather than per-page HTML."
+  ]
+}

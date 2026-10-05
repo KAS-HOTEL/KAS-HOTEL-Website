@@ -1,0 +1,337 @@
+{
+  "version": 1,
+  "purpose": "Stable inventory for hotel detail gallery and Admin image management. Static source IDs remain traceable; uploaded file metadata is stored with each gallery record.",
+  "categories": {
+    "rooms": "Phòng nghỉ",
+    "lobby": "Sảnh & Lễ tân",
+    "dining": "Nhà hàng & Ăn uống",
+    "exterior": "Ngoại thất",
+    "amenities": "Tiện ích",
+    "other": "Khác"
+  },
+  "hotelIds": [
+    "hotel-01",
+    "hotel-02",
+    "hotel-03",
+    "hotel-04",
+    "hotel-05",
+    "hotel-06",
+    "hotel-07",
+    "hotel-08"
+  ],
+  "legacyUncategorized": "other",
+  "uploadedRecordFields": [
+    "id",
+    "filename",
+    "originalName",
+    "url",
+    "category",
+    "uploadedAt"
+  ],
+  "staticImages": {
+    "hotel-01": {
+      "verified": false,
+      "source": "Agoda property 2061539 (mirrored via Kayak)",
+      "sourceUrl": "https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html",
+      "photoIds": {
+        "rooms": [],
+        "lobby": [],
+        "dining": [],
+        "exterior": [],
+        "amenities": [],
+        "other": [
+          "https://www.kayak.com/rimg/himg/cb/76/36/agoda-2061539-1666984414-438475.jpg",
+          "https://www.kayak.com/rimg/himg/e1/00/01/agoda-2061539-1661698576-479341.jpg",
+          "https://www.kayak.com/rimg/himg/0a/f6/17/agoda-2061539-1665476105-494952.jpg",
+          "https://www.kayak.com/rimg/himg/b7/3e/bb/agoda-2061539-1665476108-459189.jpg",
+          "https://www.kayak.com/rimg/himg/b0/d8/7a/agoda-2061539-1665476109-484360.jpg",
+          "https://www.kayak.com/rimg/himg/9f/b7/39/agoda-2061539-1661698574-514918.jpg",
+          "https://www.kayak.com/rimg/himg/05/89/2c/agoda-2061539-ce73e3-665064.jpg",
+          "https://www.kayak.com/rimg/himg/40/f8/78/agoda-2061539-500f17-678679.jpg"
+        ]
+      }
+    },
+    "hotel-02": {
+      "verified": true,
+      "source": "Trip.com property 135266253 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1mc4912000t68eny9FCE6",
+          "1mc4m12000t68lxd80732",
+          "1mc5o12000t68l6mcE445",
+          "1mc0912000t68m08e98AF",
+          "1mc6312000t68ljr91EB6",
+          "1mc6z12000t68ee0sC249",
+          "1mc1h12000t68ucdhD405",
+          "02307824x9a7p0ci3789F",
+          "0232s224x9al0078q0E39"
+        ],
+        "lobby": [
+          "1mc1112000t6ceewp451A",
+          "1mc5c12000t6ceixj5700",
+          "1mc4i12000t6ceikd50F8",
+          "1mc1h12000t6cekk4A80E",
+          "0236u224x9al05tlpB733",
+          "02331824x9a49e92uD9D6"
+        ],
+        "dining": [
+          "1mc6f12000t6cekbf149A",
+          "0582q12000tc2oitaF7BD",
+          "0235w824x9a46rjocCB25"
+        ],
+        "exterior": [
+          "1mc1d12000t6cebx1648E",
+          "1mc4412000t6cdfx22E7B",
+          "1mc6w12000t6cdia74811",
+          "1z62v12000t63qfel3E1C",
+          "0232j224x9aab10i442B4",
+          "0231l824x9a46r1nn9265"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    },
+    "hotel-03": {
+      "verified": true,
+      "source": "Trip.com property 100937358 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-boutique-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1z66b12000t66vpu52D50",
+          "1z61p12000t66vii54CA0",
+          "1z66112000t66vd7mAE59",
+          "1z64k12000t66v3cl5973",
+          "1z63412000t66w0x8D810",
+          "1z65012000t66utkrB46F",
+          "1mc4w12000t6cusq15C71",
+          "0235z824x9a49otq4C18A",
+          "02347824x9a86uqhn13DC"
+        ],
+        "lobby": [
+          "1mc1r12000t6cwa6bF945",
+          "1mc1412000t6cw6h64965",
+          "0222e12000t1ccz6p1F67",
+          "0585812000syt5wzo9F2E",
+          "0233j824x9a49ojgp1792",
+          "0235i924x9amvnllbA311"
+        ],
+        "dining": [
+          "1mc3n12000t6cvaw73122",
+          "1mc1712000t6cvdtm9E2B",
+          "0580712000sva0vl2E339",
+          "02373924x9amuvvda7B03"
+        ],
+        "exterior": [
+          "1mc6e12000t6cwnvd6281",
+          "1mc5g12000t6cw9tj71A5",
+          "1z64312000t66vkdp761E",
+          "1mc2i12000t6cxqt9A559",
+          "0236h224x9a9z3izc3BCA",
+          "0230k12000tdfbmt44A66"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    },
+    "hotel-04": {
+      "verified": true,
+      "source": "Trip.com property 135266341 - gallery categories",
+      "sourceUrl": "https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1mc4j12000t6i0auh2F94",
+          "1mc0j12000t6i00kiDEC2",
+          "1mc3t12000t6hxgw7E27A",
+          "1mc1b12000t6hxfri1B6A",
+          "1mc2r12000t6hwy3w68C0",
+          "1mc5c12000t6hxg35C238",
+          "02303224x9agdw1ml8447",
+          "02305224x9aeabhd9A6E7"
+        ],
+        "lobby": [
+          "1mc3w12000t6j5anhF25F",
+          "1mc4r12000t6j5bx4175E",
+          "1mc6j12000t6j2o1b6DA4",
+          "1mc4f12000t6j22ek6365",
+          "0231y224x9age3kii8666",
+          "0236z924x9acql4m7BA1E"
+        ],
+        "dining": [
+          "1mc1d12000t6j1kpn5840",
+          "1mc5412000t6kmbye217A",
+          "1mc6212000t6kmvbb198B",
+          "1mc2h12000t6kmbyj5917",
+          "0231o224x9ahsv4hl317D",
+          "0231i824x9acx94au6425"
+        ],
+        "exterior": [
+          "1mc2g12000t6j36tjD38D",
+          "1mc1712000t6j3ilt6090",
+          "1mc4i12000t6j3djzF4CE",
+          "1mc4u12000t6j3d5i15A7",
+          "1mc2l12000t6j3tz9F968",
+          "1mc3b12000t6izzit5B5F"
+        ],
+        "amenities": [
+          "1mc1o12000t6kmljh4767",
+          "1mc0a12000t6jmnz8AEC9",
+          "1mc3112000t6jmkl9F121",
+          "1mc1j12000t6jmk6u5BE6",
+          "1mc3h12000t6jm9z4D0D0",
+          "1mc3r12000t6jmov4FA89"
+        ],
+        "other": []
+      }
+    },
+    "hotel-05": {
+      "verified": true,
+      "source": "Trip.com property 119255177 - gallery categories",
+      "sourceUrl": "https://vn.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "0223y12000t6ehaxoACB6",
+          "1mc6512000t6jzbnu4F9B",
+          "1mc5k12000t6jznvp06F4",
+          "1mc5s12000t6jz5hlF773",
+          "1mc0d12000t6jyrjt654A",
+          "1mc4p12000t6k22xx83E5",
+          "1mc5h12000t6k2hz30509",
+          "0234q924x9amwtbl0EDDB",
+          "0236p224x9agp4v4mDC9F"
+        ],
+        "lobby": [
+          "1mc3n12000t8mzcwmBA1B",
+          "1mc0n12000t8mzn3u8FDE",
+          "0580p12000tbf93x5F689",
+          "02373824x9a48apof4632",
+          "0231p224x9ale7txp18F5"
+        ],
+        "dining": [],
+        "exterior": [
+          "1mc6012000t6kbhhaA3F6",
+          "1mc0r12000t6kc21o38FC",
+          "1mc7412000t6kc7aqA68C",
+          "1mc3i12000t6kbz366235",
+          "1mc1n12000t6kcjd6EE83",
+          "1z64512000t87t42jF003"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    },
+    "hotel-06": {
+      "verified": true,
+      "source": "Trip.com property 135266420 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1mc3d12000t6mwxfzDD26",
+          "1mc2v12000t6mxuekE125",
+          "1mc3y12000t6mxoiwCA1E",
+          "1mc1q12000t6mrhn8F083",
+          "1mc4p12000t6mqqx5BA82",
+          "1mc6d12000t6mqvfl6376",
+          "1mc3o12000t6mrf1w7A7F",
+          "02332224x9anpf19q9BE5",
+          "0233s924x9amvnlkk49EC"
+        ],
+        "lobby": [
+          "0583t12000tbrx5bbC277",
+          "0584v12000taz9dt8E034",
+          "1mc3p12000t6n1kykC5B0",
+          "1mc3m12000t6n0wi15388",
+          "0234o924x9amvb6im595F",
+          "0230p824x9a5z3n8g5EBD"
+        ],
+        "dining": [
+          "0581t12000tbpi22320FD",
+          "0586h12000tce8vie88EF",
+          "0581812000tbgp9pxD28A",
+          "0580z12000tbj9jyl7444"
+        ],
+        "exterior": [
+          "1z65e12000t678d22F5D2",
+          "1mc3812000t6n6ch5B96E"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    },
+    "hotel-07": {
+      "verified": true,
+      "source": "Trip.com property 135266582 - gallery categories",
+      "sourceUrl": "https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1mc5212000t6nlp3582F7",
+          "1mc2612000t6nmfggF003",
+          "1mc6a12000t6nma7lA76B",
+          "1mc2p12000t6nkzzt1101",
+          "1mc3n12000t6nlxniE219",
+          "1z61z12000t67iwei98C7",
+          "1z63u12000t67ia1u97F4",
+          "0230w924x9akqn7ggD050",
+          "0233v824x9a487vr91684"
+        ],
+        "lobby": [
+          "1mc0y12000t6npkc1B9AA",
+          "1mc2512000t6npqep2A95",
+          "1mc2c12000t6npltwDD6E",
+          "0230g12000thpfink6734",
+          "0232c12000thpc0d2A632"
+        ],
+        "dining": [
+          "0585f12000tcdpdzp61E6",
+          "0582212000tazfk8gE16F"
+        ],
+        "exterior": [
+          "1z62n12000t67ia7a1DD2",
+          "1mc6b12000t6np0c5DA9F",
+          "1mc0y12000t6nosdt4C7C",
+          "1mc1712000t6np93e96D9"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    },
+    "hotel-08": {
+      "verified": true,
+      "source": "Trip.com property 135266918 - gallery categories",
+      "sourceUrl": "https://ph.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/photo.html",
+      "photoIds": {
+        "rooms": [
+          "1mc5r12000t6oxyerBE48",
+          "1mc2412000t6ox4onF760",
+          "1mc5312000t6oydhwD2D0",
+          "1mc0o12000t6oxlmiD73B",
+          "1mc6y12000t6oy84rF834",
+          "1mc2912000t6oy8wp83F3",
+          "1mc1612000t6oygsc732A",
+          "0233a824x9a8xzwesABF4",
+          "0233m224x9ab8v092D7ED"
+        ],
+        "lobby": [
+          "1z62b12000t67tt9j9177",
+          "1z63e12000t67up5i082D",
+          "1z63d12000t67ujizF8E1"
+        ],
+        "dining": [
+          "1mc6c12000t6s5h3dD47F",
+          "0585w12000tbpj6kd3A3E",
+          "1mc6612000t6s5nap592B",
+          "02327224x9ak5rxbi7188",
+          "0233y224x9ak5pewg2E44"
+        ],
+        "exterior": [
+          "1mc6f12000t6ooqceEC83",
+          "1mc2612000t6opawpEAC9",
+          "1mc1t12000t6ood3cE4FC",
+          "1z66912000t67u1nx88A5"
+        ],
+        "amenities": [],
+        "other": []
+      }
+    }
+  }
+}

@@ -172,8 +172,7 @@
   /* ---- description ---- */
   U.$('#rDesc').innerHTML =
     '<p>' + U.esc(H.roomBlurb(hotel, room)) + '</p>' +
-    '<p>' + U.esc(hotel.description) + '</p>' +
-    (room.notes ? '<p class="srcnote">' + U.esc(room.notes) + '</p>' : '');
+    '<p>' + U.esc(hotel.description) + '</p>';
 
   var love = (hotel.subRatings ? Object.keys(hotel.subRatings)
       .sort(function (a, b) { return hotel.subRatings[b] - hotel.subRatings[a]; })

@@ -16,6 +16,7 @@ const RATE_FILE = path.join(DATA_DIR, 'rate-sheet.json');
 const UPLOAD_FILE = path.join(UPLOAD_DIR, 'manifest.json');
 const RATE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'rate-overrides.json');
 const COLLECTION_FILE = path.join(CONFIG_DIR, 'collection-images.json');
+const IMAGE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'image-overrides.json');
 const PORT = Number(process.env.PORT || 3000);
 const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 /* Production always requires ADMIN_KEY. Local development may run without one;
@@ -61,6 +62,8 @@ function normalizePair(pair) {
 const rateData = readJson(RATE_FILE, { branches: {}, seasons: [], policy: {} });
 let uploads = readJson(UPLOAD_FILE, { version: 1, rooms: {} });
 let rateOverrides = readJson(RATE_OVERRIDE_FILE, { version: 1, rooms: {} });
+let imageOverrides = readJson(IMAGE_OVERRIDE_FILE, { version: 2, collection: {}, property: {}, rooms: {}, site: {} });
+if (!imageOverrides.site || typeof imageOverrides.site !== 'object') imageOverrides.site = {};
 let collectionImages = readJson(COLLECTION_FILE, { version: 1, hotels: {} });
 
 function allRooms() {
@@ -126,6 +129,7 @@ function auth(req, res, next) {
 
 /* ---------- upload safety helpers ---------- */
 const IMAGE_EXT = ['.jpg', '.jpeg', '.png', '.webp'];
+const PROPERTY_IMAGE_CATEGORIES = new Set(['rooms', 'lobby', 'dining', 'exterior', 'amenities', 'other']);
 function safeExtension(originalname) {
   const ext = path.extname(originalname || '').toLowerCase();
   return IMAGE_EXT.includes(ext) ? ext : '.jpg';
@@ -241,6 +245,28 @@ const propertyUpload = multer({
   }
 });
 
+const siteStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    const key = String(req.body.key || '');
+    if (!validSiteKey(key)) return cb(new Error('Vị trí ảnh không hợp lệ.'));
+    const dir = path.join(UPLOAD_DIR, 'site');
+    fs.mkdirSync(dir, { recursive: true });
+    cb(null, dir);
+  },
+  filename(req, file, cb) {
+    const key = String(req.body.key || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+    cb(null, 'site-' + key + '-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExtension(file.originalname));
+  }
+});
+const siteUpload = multer({
+  storage: siteStorage,
+  limits: { fileSize: 10 * 1024 * 1024, files: 1 },
+  fileFilter(req, file, cb) {
+    if (/^image\/(jpeg|png|webp)$/.test(file.mimetype)) cb(null, true);
+    else cb(new Error('Chỉ nhận JPG, PNG hoặc WEBP.'));
+  }
+});
+
 const app = express();
 app.disable('x-powered-by');
 app.set('trust proxy', 1);
@@ -261,6 +287,7 @@ const PUBLIC_PAGES = new Set(fs.readdirSync(ROOT).filter(f => /^[a-z0-9-]+\.html
 const staticOpts = { dotfiles: 'deny', index: false, redirect: false };
 app.use('/css', express.static(path.join(ROOT, 'css'), staticOpts));
 app.use('/js', express.static(path.join(ROOT, 'js'), staticOpts));
+app.get('/site-image-slots.json', (req, res) => res.sendFile(path.join(ROOT, 'site-image-slots.json')));
 app.use('/assets', express.static(path.join(ROOT, 'assets'), staticOpts));
 /* Uploaded photos only; manifest.json and any non-image file stay private. */
 app.use('/uploads', function(req, res, next) {
@@ -282,26 +309,38 @@ function publicCatalog() {
     hotelId,
     address: b.address,
     gid: b.gid || null,
-    collectionImage: collectionImages.hotels && collectionImages.hotels[hotelId] ? collectionImages.hotels[hotelId].url : null,
-    propertyImages: collectionImages.hotels && collectionImages.hotels[hotelId] && Array.isArray(collectionImages.hotels[hotelId].gallery)
-      ? collectionImages.hotels[hotelId].gallery.map(x => ({ id: x.id, url: x.url, name: x.originalName }))
-      : [],
+    collectionImage: (imageOverrides.collection && imageOverrides.collection[hotelId] && imageOverrides.collection[hotelId].url)
+      || (collectionImages.hotels && collectionImages.hotels[hotelId] ? collectionImages.hotels[hotelId].url : null),
+    propertyImages: Array.isArray(imageOverrides.property && imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length
+      ? imageOverrides.property[hotelId].map(x => Object.assign({ category: 'other' }, x, { category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other' }))
+      : (collectionImages.hotels && collectionImages.hotels[hotelId] && Array.isArray(collectionImages.hotels[hotelId].gallery)
+        ? collectionImages.hotels[hotelId].gallery.map(x => ({ id: x.id, url: x.url, name: x.originalName, originalName: x.originalName, filename: x.filename, category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other', source: 'upload' }))
+        : []),
     rooms: (b.sheetRooms || []).map(r => {
       const key = hotelId + ':' + r.stt;
       const rates = effectiveRates(key, r);
+      const overrideImages = imageOverrides.rooms && Array.isArray(imageOverrides.rooms[key]) ? imageOverrides.rooms[key] : [];
       return {
         key,
         stt: r.stt,
         ez: r.ez,
         name: r.name,
         rates,
-        images: (uploads.rooms[key] || []).map(x => ({ id: x.id, url: x.url, name: x.originalName }))
+        images: overrideImages.length
+          ? overrideImages
+          : (uploads.rooms[key] || []).map(x => ({ id: x.id, url: x.url, name: x.originalName }))
       };
     })
   }));
   const collection = {};
-  Object.entries(collectionImages.hotels || {}).forEach(([hotelId, item]) => { collection[hotelId] = item.url; });
+  Object.entries(rateData.branches || {}).forEach(([hotelId]) => {
+    const override = imageOverrides.collection && imageOverrides.collection[hotelId];
+    const stored = collectionImages.hotels && collectionImages.hotels[hotelId];
+    if (override && override.url) collection[hotelId] = override.url;
+    else if (stored && stored.url) collection[hotelId] = stored.url;
+  });
   return {
+    siteImages: imageOverrides.site || {},
     generatedAt: new Date().toISOString(),
     source: rateData.source,
     policy: rateData.policy,
@@ -313,6 +352,65 @@ function publicCatalog() {
 
 app.get('/api/catalog', (req, res) => res.json(publicCatalog()));
 app.get('/api/admin/status', auth, (req, res) => res.json({ ok: true, admin: true, publicPath: '/reference.html' }));
+app.get('/api/admin/image-overrides', auth, (req, res) => res.json(imageOverrides));
+
+function validImageUrl(value) {
+  try {
+    const u = new URL(String(value || '').trim());
+    return u.protocol === 'https:' && !!u.hostname;
+  } catch (_) { return false; }
+}
+function validImageScope(scope) { return scope === 'collection' || scope === 'property' || scope === 'rooms' || scope === 'site'; }
+function validSiteKey(key) { return /^[a-z0-9][a-z0-9._:-]{1,120}$/i.test(String(key || '')); }
+function validImageKey(scope, key) {
+  if (scope === 'collection' || scope === 'property') return isBranch(key);
+  if (scope === 'site') return validSiteKey(key);
+  return roomIndex.has(key);
+}
+function saveImageOverride(scope, key, url, name, replaceId, category) {
+  if (!validImageScope(scope) || !validImageKey(scope, key)) throw new Error('Đối tượng ảnh không hợp lệ.');
+  if (!validImageUrl(url)) throw new Error('URL ảnh phải là HTTPS hợp lệ.');
+  if (!imageOverrides[scope] || typeof imageOverrides[scope] !== 'object') imageOverrides[scope] = {};
+  const item = { id: crypto.randomUUID(), url: String(url).trim(), name: String(name || 'URL image').slice(0, 180), updatedAt: new Date().toISOString(), source: 'admin-url' };
+  if (scope === 'property') item.category = PROPERTY_IMAGE_CATEGORIES.has(String(category || '')) ? String(category) : 'other';
+  if (scope === 'collection' || scope === 'site') imageOverrides[scope][key] = item;
+  else {
+    if (!Array.isArray(imageOverrides[scope][key])) imageOverrides[scope][key] = [];
+    const arr = imageOverrides[scope][key];
+    if (replaceId) {
+      const idx = arr.findIndex(x => x.id === replaceId);
+      if (idx < 0) throw new Error('Không tìm thấy URL ảnh cần thay.');
+      arr[idx] = item;
+    } else arr.push(item);
+  }
+  writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
+  return item;
+}
+app.post('/api/admin/image-url', auth, (req, res) => {
+  try {
+    const scope = String(req.body.scope || '');
+    const key = String(req.body.key || '');
+    const item = saveImageOverride(scope, key, req.body.url, req.body.name, req.body.replaceId || '', req.body.category);
+    res.json({ ok: true, scope, key, item });
+  } catch (e) { res.status(400).json({ error: e.message }); }
+});
+app.delete('/api/admin/image-url/:scope/:key/:id', auth, (req, res) => {
+  const scope = String(req.params.scope || ''), key = String(req.params.key || ''), id = String(req.params.id || '');
+  if (!validImageScope(scope) || !validImageKey(scope, key)) return res.status(400).json({ error: 'Đối tượng ảnh không hợp lệ.' });
+  if (scope === 'collection' || scope === 'site') {
+    if (!imageOverrides[scope] || !imageOverrides[scope][key] || imageOverrides[scope][key].id !== id) return res.status(404).json({ error: 'Không tìm thấy URL ảnh.' });
+    delete imageOverrides[scope][key];
+  } else {
+    const arr = imageOverrides[scope] && imageOverrides[scope][key];
+    if (!Array.isArray(arr)) return res.status(404).json({ error: 'Không tìm thấy URL ảnh.' });
+    const idx = arr.findIndex(x => x.id === id);
+    if (idx < 0) return res.status(404).json({ error: 'Không tìm thấy URL ảnh.' });
+    arr.splice(idx, 1);
+    if (!arr.length) delete imageOverrides[scope][key];
+  }
+  writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
+  res.json({ ok: true });
+});
 
 app.post('/api/admin/upload', auth, (req, res) => {
   upload.array('images', 10)(req, res, err => {
@@ -352,6 +450,33 @@ app.delete('/api/admin/upload/:id', auth, (req, res) => {
   removeUploadedFile(uploadPathFromUrl(found.item.url));
   uploads.rooms[found.key].splice(found.idx, 1);
   writeJsonAtomic(UPLOAD_FILE, uploads);
+  res.json({ ok: true });
+});
+
+app.post('/api/admin/site-image', auth, (req, res) => {
+  siteUpload.single('image')(req, res, err => {
+    if (err) return res.status(400).json({ error: err.message });
+    const key = String(req.body.key || '');
+    if (!validSiteKey(key)) { if (req.file) removeUploadedFile(req.file.path); return res.status(400).json({ error: 'Vị trí ảnh không hợp lệ.' }); }
+    if (!req.file) return res.status(400).json({ error: 'Hãy chọn ảnh.' });
+    if (!verifyImages([req.file])) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
+    const old = imageOverrides.site && imageOverrides.site[key];
+    if (old && old.source === 'admin-upload' && old.url) removeUploadedFile(uploadPathFromUrl(old.url));
+    const item = { id: crypto.randomUUID(), filename: req.file.filename, originalName: req.file.originalname, url: '/uploads/site/' + req.file.filename, name: req.file.originalname, updatedAt: new Date().toISOString(), source: 'admin-upload' };
+    imageOverrides.site[key] = item;
+    writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
+    res.json({ ok: true, key, item });
+  });
+});
+
+app.delete('/api/admin/site-image/:key', auth, (req, res) => {
+  const key = String(req.params.key || '');
+  if (!validSiteKey(key)) return res.status(400).json({ error: 'Vị trí ảnh không hợp lệ.' });
+  const item = imageOverrides.site && imageOverrides.site[key];
+  if (!item) return res.status(404).json({ error: 'Chưa có ảnh tùy chỉnh.' });
+  if (item.source === 'admin-upload' && item.url) removeUploadedFile(uploadPathFromUrl(item.url));
+  delete imageOverrides.site[key];
+  writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
   res.json({ ok: true });
 });
 
@@ -411,11 +536,14 @@ app.post('/api/admin/property-images', auth, (req, res) => {
     if (!collectionImages.hotels) collectionImages.hotels = {};
     if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
     if (!Array.isArray(collectionImages.hotels[hotelId].gallery)) collectionImages.hotels[hotelId].gallery = [];
+    const category = PROPERTY_IMAGE_CATEGORIES.has(String(req.body.category || '')) ? String(req.body.category) : 'other';
     req.files.forEach(file => {
       collectionImages.hotels[hotelId].gallery.push({
         id: crypto.randomUUID(),
         filename: file.filename,
         originalName: file.originalname,
+        filename: file.filename,
+        category,
         url: '/uploads/property/' + hotelId + '/' + file.filename,
         uploadedAt: new Date().toISOString()
       });

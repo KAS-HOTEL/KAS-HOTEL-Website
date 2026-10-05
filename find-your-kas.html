@@ -53,11 +53,8 @@
 .kas-find-page .find-page-results-head h2{font-size:52px;line-height:.9;letter-spacing:-.035em;margin:8px 0 10px}
 .kas-find-page .find-page-results-head p{max-width:620px;margin:0;color:var(--fy-muted);font-size:11px;line-height:1.7}
 .kas-find-page .find-page-count{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--fy-gold-dark,#8d6b35);white-space:nowrap;padding-bottom:7px}
-.kas-find-page .find-page-hotels{display:grid;grid-template-columns:1.35fr .65fr;grid-auto-rows:300px;gap:12px}
+.kas-find-page .find-page-hotels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(300px,28vw,420px);gap:12px}
 .kas-find-page .find-page-hotel{min-width:0;min-height:0;position:relative;overflow:hidden;color:#fff;background:#333;display:flex;flex-direction:column;justify-content:flex-end;box-shadow:0 12px 30px rgba(38,31,23,.08)}
-.kas-find-page .find-page-hotel:nth-child(2n){grid-column:auto}
-.kas-find-page .find-page-hotel:nth-child(3){grid-column:1;}
-.kas-find-page .find-page-hotel:nth-child(4){grid-column:2;}
 .kas-find-page .find-page-hotel-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform .7s ease}
 .kas-find-page .find-page-hotel:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 20%,rgba(0,0,0,.78) 100%)}
 .kas-find-page .find-page-hotel:hover .find-page-hotel-bg{transform:scale(1.05)}
@@ -93,7 +90,7 @@
 .kas-find-page .find-page-note{width:min(2200px,calc(100vw - 128px));}
 .kas-find-page .find-page-choice-intro{padding-top:clamp(44px,5vw,72px)}
 .kas-find-page .find-page-results{padding-top:clamp(54px,6vw,90px)}
-.kas-find-page .find-page-hotels{grid-auto-rows:clamp(300px,24vw,430px)}
+.kas-find-page .find-page-hotels{grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:clamp(300px,28vw,420px)}
 @media(max-width:1400px){
   .kas-find-page .find-page-hero{width:calc(100% - 56px);grid-template-columns:43% 57%;min-height:620px}
   .kas-find-page .find-page-choices,.kas-find-page .find-page-note{width:calc(100% - 112px)}
@@ -326,10 +323,66 @@ function render(filter){
     </article>
   `).join("");
 }
-document.querySelectorAll(".find-page-choice").forEach(b=>b.addEventListener("click",()=>render(b.dataset.filter)));
-render("family");
+const validStayKeys = new Set(["family", "slow", "business", "long"]);
+function readStayKey(){
+  const requested = new URLSearchParams(window.location.search).get("stay");
+  return validStayKeys.has(requested) ? requested : "family";
+}
+document.querySelectorAll(".find-page-choice").forEach(b=>b.addEventListener("click",()=>{
+  const key = b.dataset.filter;
+  if (!validStayKeys.has(key)) return;
+  const params = new URLSearchParams(window.location.search);
+  params.set("stay", key);
+  history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+  render(key);
+}));
+render(readStayKey());
+/* Use the same Admin-managed KAS Collection image as Homepage cards.
+   Slug-to-branch mapping follows the shared eight-property data order. */
+var findCollectionKeys = {
+  passion:'hotel-01', elegance:'hotel-02', ancient:'hotel-03', milestone:'hotel-04',
+  zody:'hotel-05', sonata:'hotel-06', eliana:'hotel-07', dilly:'hotel-08'
+};
+if (window.KAS_LIVE && typeof window.KAS_LIVE.load === 'function') {
+  window.KAS_LIVE.load().then(function(catalog){
+    var images = catalog && catalog.collectionImages || {};
+    var changed = false;
+    hotels.forEach(function(h){
+      var key = findCollectionKeys[h.id];
+      var liveUrl = key && images[key];
+      if (typeof liveUrl === 'string' && liveUrl.trim()) {
+        h.image = liveUrl;
+        changed = true;
+      }
+    });
+    if (changed) render(document.querySelector('.find-page-choice.active')?.dataset.filter || readStayKey());
+  }).catch(function(){ /* Keep bundled fallback images when API is unavailable. */ });
+}
 applyFindLanguage();
-document.addEventListener("kas:language", function(){ applyFindLanguage(); render(document.querySelector(".find-page-choice.active")?.dataset.filter || "family"); });
+document.addEventListener("kas:language", function(){ applyFindLanguage(); render(document.querySelector(".find-page-choice.active")?.dataset.filter || readStayKey()); });
 </script>
 </body>
 </html>
+
+<style>
+/* V26 — align Find Your KAS content to one shared page grid, matching the site navigation container. */
+.kas-find-page {
+  --find-content-width: 1320px;
+  --find-content-gutter: 56px;
+}
+.kas-find-page .find-page-hero,
+.kas-find-page .find-page-choices,
+.kas-find-page .find-page-note,
+.kas-find-page .find-page-results {
+  width: min(var(--find-content-width), calc(100% - var(--find-content-gutter)));
+  max-width: none;
+  margin-inline: auto;
+}
+.kas-find-page .find-page-results-head,
+.kas-find-page .find-page-hotels {
+  width: 100%;
+}
+@media (max-width: 700px) {
+  .kas-find-page { --find-content-gutter: 32px; }
+}
+</style>

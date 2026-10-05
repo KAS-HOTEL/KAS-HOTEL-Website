@@ -1,0 +1,1250 @@
+{
+  "version": 1,
+  "hotels": {
+    "hotel-01": {
+      "id": "1ad0977c-be1f-4810-b557-ec5cb6f1f8ee",
+      "filename": "collection-hotel-01-1790846613796-8ecfd477.jpg",
+      "originalName": "02-ba-na-hills.jpg",
+      "url": "/uploads/collection/hotel-01/collection-hotel-01-1790846613796-8ecfd477.jpg",
+      "uploadedAt": "2026-10-01T09:23:33.800Z",
+      "gallery": [
+        {
+          "id": "21b09bce-8901-4245-8cea-cfc35883caa9",
+          "filename": "property-hotel-01-1791112144791-12820e79.jpg",
+          "originalName": "2aobor3avjsadeyuivshcg6aoibuu7exatsrymke12.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112144791-12820e79.jpg",
+          "uploadedAt": "2026-10-04T11:09:04.797Z"
+        },
+        {
+          "id": "a2418151-e160-4e8e-be79-d7b1bfd8ebd4",
+          "filename": "property-hotel-01-1791112320160-383c63dc.jpg",
+          "originalName": "2aobor3avlx9tptqtiddnlilcx7iw17pxmqeypoi14.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320160-383c63dc.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "ccb1a5a5-56f1-48e2-a62b-8b99a261af34",
+          "filename": "property-hotel-01-1791112320165-524f48d4.jpg",
+          "originalName": "2aobor3avmn6fgzkudszs28bmja9vuszfvaag6sk15.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320165-524f48d4.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "c70de996-8fae-4dce-9ffb-6d2c9debc25c",
+          "filename": "property-hotel-01-1791112320170-20a7783d.jpg",
+          "originalName": "2aobor3avnbrhqe7hdhfuujxuoylcme5oy1kvgqm16.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320170-20a7783d.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "b982b2e0-b594-4418-bef7-1d9911e05605",
+          "filename": "property-hotel-01-1791112320175-7de998ca.jpg",
+          "originalName": "2aobor3avnw85b9egjp01ayxrijnr3fuo0ih3d9c17.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320175-7de998ca.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "5d7f42d9-efde-4da2-9e25-2ed74e6d985d",
+          "filename": "property-hotel-01-1791112320179-eaba2fa3.jpg",
+          "originalName": "2aobor3avocf1pqajos54xnzr9ir7p4jizvhkd4418.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320179-eaba2fa3.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "cd00ef7f-4ea5-473e-917d-8cffbe5d7b71",
+          "filename": "property-hotel-01-1791112320182-ff51f2ad.jpg",
+          "originalName": "2aobor3avpounpegtwkx5qh8zpu4vmh1xjq2euz619.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320182-ff51f2ad.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "b088e422-7616-4423-a335-b9b6d6556247",
+          "filename": "property-hotel-01-1791112320193-b8ad33c3.jpg",
+          "originalName": "2aobor3avrbe0p7o4aohwvhub5laprfinwfsskl222.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320193-b8ad33c3.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "80921c8e-ec43-4675-b5e9-c629f1829d5d",
+          "filename": "property-hotel-01-1791112709612-2825e4c4.jpg",
+          "originalName": "2aobor3avfsl8si1wubhey4koneyd7cxyg8kxopy23.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112709612-2825e4c4.jpg",
+          "uploadedAt": "2026-10-04T11:18:29.632Z"
+        },
+        {
+          "id": "85ea552d-13ac-4376-ad3f-04a1b688db58",
+          "filename": "property-hotel-01-1791112709616-280045f0.jpg",
+          "originalName": "2aobor3avgg03cpme57s3ynoz47jk3vhhjpg1eg424.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112709616-280045f0.jpg",
+          "uploadedAt": "2026-10-04T11:18:29.632Z"
+        },
+        {
+          "id": "30a92b24-3999-4ab4-b382-a0c4c123fb8f",
+          "filename": "property-hotel-01-1791112709619-f1733ef7.jpg",
+          "originalName": "2aobor3avgzr14mlwxgfzsy7xtsdfgsdqsv7kg8w25.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112709619-f1733ef7.jpg",
+          "uploadedAt": "2026-10-04T11:18:29.632Z"
+        },
+        {
+          "id": "003f94b1-3f06-4040-932b-ef5935a7a84f",
+          "filename": "property-hotel-01-1791112709622-d09dded1.jpg",
+          "originalName": "2aobor3avhfc4l0hcks22dleqspt0itjbhyfhs5226.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112709622-d09dded1.jpg",
+          "uploadedAt": "2026-10-04T11:18:29.632Z"
+        },
+        {
+          "id": "40e2a3f0-52ef-452a-bfe6-b02fdd74a817",
+          "filename": "property-hotel-01-1791112709624-f98fb0cd.jpg",
+          "originalName": "2aobor3avjcd5jcgcoccgsjtcpebxfxsllexxy6c28.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112709624-f98fb0cd.jpg",
+          "uploadedAt": "2026-10-04T11:18:29.632Z"
+        },
+        {
+          "id": "c2984b01-11bb-4ff4-b205-ac82e5544513",
+          "filename": "property-hotel-01-1791113027747-f684ddf4.jpg",
+          "originalName": "2aobor3avisqeslrn4bg9x0349qnrxkgmwsbkga827.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113027747-f684ddf4.jpg",
+          "uploadedAt": "2026-10-04T11:23:47.753Z"
+        },
+        {
+          "id": "ff92ba87-1c8f-4af3-963a-61bc4f21ad1d",
+          "filename": "property-hotel-01-1791113233569-14f9d977.jpg",
+          "originalName": "2aobor3avyuskfk18mdxb1auahqwmfnczu4kxgey29.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233569-14f9d977.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "d85b654c-af70-4d4b-82cb-79d1d45afcae",
+          "filename": "property-hotel-01-1791113233573-4e473d01.jpg",
+          "originalName": "2aobor3avzewyjxebpxuurpm7seqilwqke9my3sg30.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233573-4e473d01.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "188fa6e6-d521-4a27-9d20-5c6abcd8efb0",
+          "filename": "property-hotel-01-1791113233576-452a3d0c.jpg",
+          "originalName": "2aobor3aw0mzzgzeo9dznzwdlmbwxrowgwkoiuei32.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233576-452a3d0c.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "9b14af05-4390-41cb-bbcd-2d260a6094cb",
+          "filename": "property-hotel-01-1791113233579-0c0e9824.jpg",
+          "originalName": "2aobor3aw1ud3lcmx3a04nxysmk1kd8c3iz9x9sw33.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233579-0c0e9824.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "9f9b92c5-bf38-4280-8cda-2ba15af9e4dc",
+          "filename": "property-hotel-01-1791113233582-1481503d.jpg",
+          "originalName": "2aobor3aw2hyvvnvczwdihc8xqc7tbwkjqin8fpu34.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233582-1481503d.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "ccc22e3e-6c2f-44b4-8c5f-82e40b40ad8e",
+          "filename": "property-hotel-01-1791113233584-121e8e4a.jpg",
+          "originalName": "2aobor3aw0026hs8d0p9sv2endgyon23gscatx5c31.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233584-121e8e4a.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "7d86a662-5793-4ac5-9374-56d4f283327a",
+          "filename": "property-hotel-01-1791113233588-f6649697.jpg",
+          "originalName": "2aobor3aw3239zaig3gb27tdyzlbuqcgiwntfplg35.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113233588-f6649697.jpg",
+          "uploadedAt": "2026-10-04T11:27:13.600Z"
+        },
+        {
+          "id": "2366197a-08a4-4bbf-b47c-390ef50218d1",
+          "filename": "property-hotel-01-1791113346520-db76eaf3.jpg",
+          "originalName": "2aobor3awavrouveuittm1lpndjdxjx8k5formro39.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346520-db76eaf3.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "bc106cbe-49eb-4b46-a29e-6f86e74048ec",
+          "filename": "property-hotel-01-1791113346524-f1ad5969.jpg",
+          "originalName": "2aobor3awbtem38n3tkvxzppfee5znmcjdjctqgy40.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346524-f1ad5969.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "e189a899-9cb2-4bda-90f9-6530ce21a71f",
+          "filename": "property-hotel-01-1791113346529-8681671c.jpg",
+          "originalName": "2aobor3awcs24ql2webxiyh8espaagofvxmcrwcu41.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346529-8681671c.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "e18b6026-e4bc-4e16-b405-75fa0a671fa4",
+          "filename": "property-hotel-01-1791113346532-c5ca418e.jpg",
+          "originalName": "2aobor3awcznnehgn9ykptlax68aa5fydcloh9de42.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346532-c5ca418e.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "db6f831c-e15d-43b6-ad6e-8c4a58be9b0b",
+          "filename": "property-hotel-01-1791113346534-ab5a0d12.jpg",
+          "originalName": "2aobor3awdzwdxuoxoyhhukxfhtfnmnhi3zmxqpu43.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346534-ab5a0d12.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "c8e99b5a-505f-4002-9509-f65edc50bb64",
+          "filename": "property-hotel-01-1791113346537-675d78c2.jpg",
+          "originalName": "2aobor3awe8ayvhix1x3xf8ubfid2ibx1tgwpxxk44.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346537-675d78c2.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "69f3ebb9-55ef-4d92-bca8-3e5317dc7f7e",
+          "filename": "property-hotel-01-1791113346540-bd74c5ec.jpg",
+          "originalName": "2aobor3awejw3fk1bqqpiq25mzzgddmph43qsbpm45.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346540-bd74c5ec.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "4cd5a87a-0c93-4227-9c28-bba4495520a8",
+          "filename": "property-hotel-01-1791113346543-29ae1d28.jpg",
+          "originalName": "2aobor3awfswg5kpwaxwx1ohtep1z8fzuzhklhwk46.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113346543-29ae1d28.jpg",
+          "uploadedAt": "2026-10-04T11:29:06.555Z"
+        },
+        {
+          "id": "8bbdab88-8dc7-46d9-be48-b894b52c9bad",
+          "filename": "property-hotel-01-1791113389721-bd9dc472.jpg",
+          "originalName": "2aobor3aw8y4bnvdn6lqsjl5p35kmfywhuzyww7s36.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113389721-bd9dc472.jpg",
+          "uploadedAt": "2026-10-04T11:29:49.744Z"
+        },
+        {
+          "id": "aa9cce05-b608-4f98-acdb-36595f9adb27",
+          "filename": "property-hotel-01-1791113389727-57b54d47.jpg",
+          "originalName": "2aobor3aw9kkipfuuvqoktsypf0asnvqha1oe7fs37.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113389727-57b54d47.jpg",
+          "uploadedAt": "2026-10-04T11:29:49.744Z"
+        },
+        {
+          "id": "2595da89-9aff-4497-b047-7f5d87fae424",
+          "filename": "property-hotel-01-1791113389735-97ab00a2.jpg",
+          "originalName": "2aobor3awa5e1jefwvxcnohtitaewvdqwj6b2cd238.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791113389735-97ab00a2.jpg",
+          "uploadedAt": "2026-10-04T11:29:49.744Z"
+        }
+      ]
+    },
+    "hotel-02": {
+      "gallery": [
+        {
+          "id": "70c4bad4-6dbf-4470-81a3-956f92ba94b6",
+          "filename": "property-hotel-02-1791114196697-4fc3eed1.jpg",
+          "originalName": "2aobor3atbd6ylem4l4nglgbel2y6wowoz3wbgcs84.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114196697-4fc3eed1.jpg",
+          "uploadedAt": "2026-10-04T11:43:16.714Z"
+        },
+        {
+          "id": "920bb56a-98cc-44bc-a52b-c937fba90e6c",
+          "filename": "property-hotel-02-1791114196700-65671e90.jpg",
+          "originalName": "2aobor3atcclnd8wcvarb9tr8oob9n59xe5juzsw85.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114196700-65671e90.jpg",
+          "uploadedAt": "2026-10-04T11:43:16.714Z"
+        },
+        {
+          "id": "92d3b0ca-545a-4bde-a81c-c9be9b75f30e",
+          "filename": "property-hotel-02-1791114196702-6cc1427c.jpg",
+          "originalName": "2aobor3atclsyzse7lrq6pxwjpoyedslonbazkqy86.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114196702-6cc1427c.jpg",
+          "uploadedAt": "2026-10-04T11:43:16.714Z"
+        },
+        {
+          "id": "47231c55-319f-43d2-8358-039c520087b7",
+          "filename": "property-hotel-02-1791114196704-37b72992.jpg",
+          "originalName": "2aobor3atdntq7vokhcqnjndpmcrljnawwzfqwve87.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114196704-37b72992.jpg",
+          "uploadedAt": "2026-10-04T11:43:16.714Z"
+        },
+        {
+          "id": "97e41289-fa06-4ee4-8818-abe3a99b5b05",
+          "filename": "property-hotel-02-1791114218501-f1b363dc.jpg",
+          "originalName": "2aobor3atall4mxflc8q7whvzhmmcesjauzxwpc882.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114218501-f1b363dc.jpg",
+          "uploadedAt": "2026-10-04T11:43:38.508Z"
+        },
+        {
+          "id": "c7f8d2e7-3330-4c2c-a6e8-695b473bb4d6",
+          "filename": "property-hotel-02-1791114218503-18cc2ffb.jpg",
+          "originalName": "2aobor3atb3znov4zunol61m7eivvoteukwsj7ec83.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114218503-18cc2ffb.jpg",
+          "uploadedAt": "2026-10-04T11:43:38.508Z"
+        },
+        {
+          "id": "a2ea2214-f92c-4c3d-89e0-f1720a031524",
+          "filename": "property-hotel-02-1791114317572-380a595c.jpg",
+          "originalName": "2aobor39sotkfiixjx778agjouknc3ua8evhv0k088.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114317572-380a595c.jpg",
+          "uploadedAt": "2026-10-04T11:45:17.585Z"
+        },
+        {
+          "id": "abd1e105-1b73-4a52-9845-d9813247611a",
+          "filename": "property-hotel-02-1791114317575-b05ee571.jpg",
+          "originalName": "2aobor39sq9bmb7ygaiman3aqhf4ehvmoakbqkoi90.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114317575-b05ee571.jpg",
+          "uploadedAt": "2026-10-04T11:45:17.585Z"
+        },
+        {
+          "id": "c8e78159-e9cd-41aa-836f-dd2a4cb00540",
+          "filename": "property-hotel-02-1791114317578-b2abbc7b.jpg",
+          "originalName": "2aobor39sqlcdjb8t63nhhgg1ppqskgd4el5lxby91.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114317578-b2abbc7b.jpg",
+          "uploadedAt": "2026-10-04T11:45:17.585Z"
+        },
+        {
+          "id": "f2088126-ae6e-456c-95eb-5bd597efc686",
+          "filename": "property-hotel-02-1791114359169-fe576ef8.jpg",
+          "originalName": "2aOboR3AvxLeOZOHG95BkFpNH5ujsbxaj5yAcFXM.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114359169-fe576ef8.jpg",
+          "uploadedAt": "2026-10-04T11:45:59.173Z"
+        },
+        {
+          "id": "d7767bc7-dbe5-478e-9541-1954357e8133",
+          "filename": "property-hotel-02-1791114381390-968e2e25.jpg",
+          "originalName": "2aobor39sodp5qln8c86n59pz09zjpd1wv7r8piy94.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114381390-968e2e25.jpg",
+          "uploadedAt": "2026-10-04T11:46:21.411Z"
+        },
+        {
+          "id": "8c5f9310-ba40-4b1d-9119-b6d217062355",
+          "filename": "property-hotel-02-1791114381393-42ab605e.jpg",
+          "originalName": "2aobor39soistpoh4oskgz0acy5nojrbbsav5y5i93.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114381393-42ab605e.jpg",
+          "uploadedAt": "2026-10-04T11:46:21.411Z"
+        },
+        {
+          "id": "9ff7f6d6-695d-4d5e-b87a-af67a60ebace",
+          "filename": "property-hotel-02-1791114381396-4a3a11d8.jpg",
+          "originalName": "2aobor39sqdyc7vogtedxg2uqa9knymb4h9crcli95.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114381396-4a3a11d8.jpg",
+          "uploadedAt": "2026-10-04T11:46:21.411Z"
+        },
+        {
+          "id": "d187b76b-eab9-4291-b95c-1488fff7dae3",
+          "filename": "property-hotel-02-1791114381399-c1b5793f.jpg",
+          "originalName": "2aobor39sqqis7aqk5gd1613l6mxoorpxf89kere89.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114381399-c1b5793f.jpg",
+          "uploadedAt": "2026-10-04T11:46:21.411Z"
+        },
+        {
+          "id": "067be31b-13e3-41aa-a599-b0e9507fcd37",
+          "filename": "property-hotel-02-1791114381403-4def8c39.jpg",
+          "originalName": "2aobor39sqwxelihm6f0egmqbfukkr4flliy4ebs92.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791114381403-4def8c39.jpg",
+          "uploadedAt": "2026-10-04T11:46:21.411Z"
+        },
+        {
+          "id": "59ce931a-d201-48f8-bc2c-1b95190b65f8",
+          "filename": "property-hotel-02-1791115304615-54f4e9ea.jpg",
+          "originalName": "2aobor3ayxck0azxkou2kat3pt6jywhf5ztot2xm105.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115304615-54f4e9ea.jpg",
+          "uploadedAt": "2026-10-04T12:01:44.621Z"
+        },
+        {
+          "id": "9b755cc5-11b2-4024-90cf-99f0ede957d1",
+          "filename": "property-hotel-02-1791115304617-bc063934.jpg",
+          "originalName": "2aobor3ayyuvozjvvzh5ioxpqpsiit4shb5ypgti109.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115304617-bc063934.jpg",
+          "uploadedAt": "2026-10-04T12:01:44.621Z"
+        },
+        {
+          "id": "ff71d619-d850-485c-9ff9-eaa439fb6650",
+          "filename": "property-hotel-02-1791115320373-39c6abd0.jpg",
+          "originalName": "2aobor3b0sxqf4sawlxdxznefex7ttwuo8prdxic111.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115320373-39c6abd0.jpg",
+          "uploadedAt": "2026-10-04T12:02:00.380Z"
+        },
+        {
+          "id": "2c79fb17-5445-42a4-9c2b-7f445ec36e44",
+          "filename": "property-hotel-02-1791115320375-a844c34a.jpg",
+          "originalName": "2aobor3b0uhgiiyx7igherulaos3reo762nys3xm115.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115320375-a844c34a.jpg",
+          "uploadedAt": "2026-10-04T12:02:00.380Z"
+        },
+        {
+          "id": "dad570d5-034f-4d78-b936-b6ede4a5bcc1",
+          "filename": "property-hotel-02-1791115333631-49b88ef9.jpg",
+          "originalName": "2aobor3b1dqk3ohfnvzfjn00gheoeirzyvcyrfwy120.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115333631-49b88ef9.jpg",
+          "uploadedAt": "2026-10-04T12:02:13.646Z"
+        },
+        {
+          "id": "94600c89-ba00-427d-ae0f-0efdf34c9bb1",
+          "filename": "property-hotel-02-1791115333634-4542313f.jpg",
+          "originalName": "2aobor3b1egx2fgu2drhcwsrf4hxmsag6vt9n69i121.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115333634-4542313f.jpg",
+          "uploadedAt": "2026-10-04T12:02:13.646Z"
+        },
+        {
+          "id": "50087a19-2fbb-4fc9-a17d-368ad623a53c",
+          "filename": "property-hotel-02-1791115333637-952b78a1.jpg",
+          "originalName": "2aobor3b1elkdequadzfhxh0ap1ji20xyyaqfkow122.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115333637-952b78a1.jpg",
+          "uploadedAt": "2026-10-04T12:02:13.646Z"
+        },
+        {
+          "id": "d161ed5a-ffc8-4c20-a1c5-49e0ee53e3b8",
+          "filename": "property-hotel-02-1791115333639-d0e2456e.jpg",
+          "originalName": "2aobor3b1ffinvrwbzj5vlr5eibhx5corb9mwsg0123.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115333639-d0e2456e.jpg",
+          "uploadedAt": "2026-10-04T12:02:13.646Z"
+        },
+        {
+          "id": "4c1a483e-a594-46fa-8c3f-c71818b8e7f4",
+          "filename": "property-hotel-02-1791115344410-22e39c26.jpg",
+          "originalName": "2aobor3b2tthr8gfwt6qip7cdmnhxhdawsphoede126.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115344410-22e39c26.jpg",
+          "uploadedAt": "2026-10-04T12:02:24.425Z"
+        },
+        {
+          "id": "dbea2f70-c54c-47c1-a9cf-7c6ebec9a242",
+          "filename": "property-hotel-02-1791115344412-fee0d27c.jpg",
+          "originalName": "2aobor3b2twq6zw9ysugd8qpdgq5pmqbqluoz3qk127.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115344412-fee0d27c.jpg",
+          "uploadedAt": "2026-10-04T12:02:24.425Z"
+        },
+        {
+          "id": "acd7907a-8ec0-4bfc-b8b2-6637b162972d",
+          "filename": "property-hotel-02-1791115344415-fd259e6d.jpg",
+          "originalName": "2aobor3b2upddf4prisuexshnwmqujsbypvwgzuk128.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115344415-fd259e6d.jpg",
+          "uploadedAt": "2026-10-04T12:02:24.425Z"
+        },
+        {
+          "id": "0914bd20-7bda-4f19-87e1-23818d3cbdf6",
+          "filename": "property-hotel-02-1791115344417-cf3772a6.jpg",
+          "originalName": "2aobor3b2uuaxvzva85dgtv6hrfrgg4gk4vf4q4g129.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115344417-cf3772a6.jpg",
+          "uploadedAt": "2026-10-04T12:02:24.425Z"
+        },
+        {
+          "id": "8af4b02f-878b-4007-97aa-1f4be6d7c586",
+          "filename": "property-hotel-02-1791115344418-41812911.jpg",
+          "originalName": "2aobor3b2vnkopbazpvzsv5whjpzzpibbraqukba130.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115344418-41812911.jpg",
+          "uploadedAt": "2026-10-04T12:02:24.425Z"
+        },
+        {
+          "id": "0149e25a-667a-48bd-bf04-5fe2ba7dd2b5",
+          "filename": "property-hotel-02-1791115370009-b7018434.jpg",
+          "originalName": "2aobor3b44tgsddsgtwllgtq3sh3ylyctfpvy1zy138.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115370009-b7018434.jpg",
+          "uploadedAt": "2026-10-04T12:02:50.021Z"
+        },
+        {
+          "id": "2ae18cfe-4798-4589-ae0d-d068fc39af31",
+          "filename": "property-hotel-02-1791115370011-c477ad5d.jpg",
+          "originalName": "2aobor3b45rilkhsobf3johjgi52ghlub0ntvy48140.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115370011-c477ad5d.jpg",
+          "uploadedAt": "2026-10-04T12:02:50.021Z"
+        },
+        {
+          "id": "6c5656a0-3301-439a-a6cf-b1de69679507",
+          "filename": "property-hotel-02-1791115370013-e81c5684.jpg",
+          "originalName": "2aobor3b46m5bh5iotkughge45ocpsxkzdwzkbqi141.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115370013-e81c5684.jpg",
+          "uploadedAt": "2026-10-04T12:02:50.021Z"
+        },
+        {
+          "id": "9952e599-b946-463e-a6a6-6181c821b959",
+          "filename": "property-hotel-02-1791115370014-a8fa153f.jpg",
+          "originalName": "2aobor3b46prbroqudxo6oxgbv8ypq8vcjusx0uo142.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115370014-a8fa153f.jpg",
+          "uploadedAt": "2026-10-04T12:02:50.021Z"
+        },
+        {
+          "id": "7473c238-fb8b-44a8-ad20-985765071ca3",
+          "filename": "property-hotel-02-1791115394312-ec438c6c.jpg",
+          "originalName": "2aobor3b4siqbknm7kcvopitbrajj1kgzu6a7pii148.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115394312-ec438c6c.jpg",
+          "uploadedAt": "2026-10-04T12:03:14.324Z"
+        },
+        {
+          "id": "d65b9e9f-46ca-4c7e-81d0-68014c7844f1",
+          "filename": "property-hotel-02-1791115394314-9e7cae94.jpg",
+          "originalName": "2aobor3b4spebgkrscwjojp5m8mxq4b7swxmogge149.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115394314-9e7cae94.jpg",
+          "uploadedAt": "2026-10-04T12:03:14.324Z"
+        },
+        {
+          "id": "3e94954e-4da0-48fc-b5a4-80652d437a36",
+          "filename": "property-hotel-02-1791115394316-5d8f3994.jpg",
+          "originalName": "2aobor3b4tglx0yogguk7ehhcwpypfvfemcfque0150.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115394316-5d8f3994.jpg",
+          "uploadedAt": "2026-10-04T12:03:14.324Z"
+        },
+        {
+          "id": "9feb5f44-fafc-4774-b173-3c19329e997e",
+          "filename": "property-hotel-02-1791115394318-eb70d7ac.jpg",
+          "originalName": "2aobor3b4toc73dn7bbvkpncdah38nuvkgzdzhqs151.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-02/property-hotel-02-1791115394318-eb70d7ac.jpg",
+          "uploadedAt": "2026-10-04T12:03:14.324Z"
+        }
+      ]
+    },
+    "hotel-03": {
+      "gallery": [
+        {
+          "id": "58668e71-c92b-4e4c-94eb-fa64a90c0381",
+          "filename": "property-hotel-03-1791115811544-74305c3c.jpg",
+          "originalName": "2aobor3b90fmywh3w6a1npndlk40z5hg6scook8w165.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115811544-74305c3c.jpg",
+          "uploadedAt": "2026-10-04T12:10:11.551Z"
+        },
+        {
+          "id": "b9534452-1680-49c6-88a7-4e154555ce6d",
+          "filename": "property-hotel-03-1791115811547-34cdf5a5.jpg",
+          "originalName": "2aobor3b905nr5frmgeqikptp9ykgqpbc9vkajow164.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115811547-34cdf5a5.jpg",
+          "uploadedAt": "2026-10-04T12:10:11.552Z"
+        },
+        {
+          "id": "5b9268b9-e76e-4a94-9564-cf380b3607b3",
+          "filename": "property-hotel-03-1791115820359-4d97b1bb.jpg",
+          "originalName": "2aobor3b91chvsh7fjuicd6l8a1hrikfttswow4m166.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115820359-4d97b1bb.jpg",
+          "uploadedAt": "2026-10-04T12:10:20.369Z"
+        },
+        {
+          "id": "36dc74ac-cfb4-4c91-899b-0755750d1e3c",
+          "filename": "property-hotel-03-1791115820362-b462657f.jpg",
+          "originalName": "2aobor3b91jqj7zh2urcdjzdlufng1tsfirsrmjy167.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115820362-b462657f.jpg",
+          "uploadedAt": "2026-10-04T12:10:20.369Z"
+        },
+        {
+          "id": "9841b4d7-b263-44a7-bd75-7b6fdc7f3276",
+          "filename": "property-hotel-03-1791115820364-36d49f84.jpg",
+          "originalName": "2aobor3b92hphhljtaz9xlprbx3bgdr1cccj1bdu168.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115820364-36d49f84.jpg",
+          "uploadedAt": "2026-10-04T12:10:20.369Z"
+        },
+        {
+          "id": "50f218b5-2efa-4395-a40a-aa0ed300558a",
+          "filename": "property-hotel-03-1791115835339-5344bb48.jpg",
+          "originalName": "2aobor3bapj1z8wadskk8e80d0isl77cesxvoeaa156.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115835339-5344bb48.jpg",
+          "uploadedAt": "2026-10-04T12:10:35.355Z"
+        },
+        {
+          "id": "408ee645-202f-4c61-84a4-8f359645153c",
+          "filename": "property-hotel-03-1791115835341-26b09922.jpg",
+          "originalName": "2aobor3baqddq1nrfq5kz8xts5jujosmryposuxm157.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115835341-26b09922.jpg",
+          "uploadedAt": "2026-10-04T12:10:35.355Z"
+        },
+        {
+          "id": "ec6629e2-3e0f-473f-a059-dbf98505ce52",
+          "filename": "property-hotel-03-1791115835343-a3186901.jpg",
+          "originalName": "2aobor3baqeklm1o4k3ks2z4mhp0iv0ps6jxljko158.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115835343-a3186901.jpg",
+          "uploadedAt": "2026-10-04T12:10:35.355Z"
+        },
+        {
+          "id": "22dcabff-34e3-4f94-8dbb-836c0375b840",
+          "filename": "property-hotel-03-1791115835346-9a2464df.jpg",
+          "originalName": "2aobor3bar3qsaiffvpuq3prnyvrhniesrmvqmvq159.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115835346-9a2464df.jpg",
+          "uploadedAt": "2026-10-04T12:10:35.355Z"
+        },
+        {
+          "id": "9cad5b1e-2abf-4394-8020-f8719a0231c4",
+          "filename": "property-hotel-03-1791115854449-c1cb3434.jpg",
+          "originalName": "2aobor3barnlmwjx8a5wm82vj2nkm91u84iqp4re161.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115854449-c1cb3434.jpg",
+          "uploadedAt": "2026-10-04T12:10:54.457Z"
+        },
+        {
+          "id": "5eb89a74-6e4e-4a93-8e3f-c4f5e41f5ff5",
+          "filename": "property-hotel-03-1791115854451-7daa2fb4.jpg",
+          "originalName": "2aobor3bas8kow4lqfhjosqu6lb0t54nycycafsm162.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115854451-7daa2fb4.jpg",
+          "uploadedAt": "2026-10-04T12:10:54.458Z"
+        },
+        {
+          "id": "4ff31e68-c55a-485a-9708-c3949099be84",
+          "filename": "property-hotel-03-1791115854453-24567bc0.jpg",
+          "originalName": "2aobor3basunbetdlfizwbbq2y7vijz6fxpismhc163.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115854453-24567bc0.jpg",
+          "uploadedAt": "2026-10-04T12:10:54.458Z"
+        },
+        {
+          "id": "a4e4e6db-428b-4bfc-b3e4-2b312a039059",
+          "filename": "property-hotel-03-1791115860781-0ee8ccdd.jpg",
+          "originalName": "2aobor3bars6zoyhhxc4o4p52uzf78qpuqnc2wl6160.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791115860781-0ee8ccdd.jpg",
+          "uploadedAt": "2026-10-04T12:11:00.785Z"
+        },
+        {
+          "id": "08a5be1f-b697-48ff-80f8-120b09cc83bb",
+          "filename": "property-hotel-03-1791116358821-d8c6a63b.jpg",
+          "originalName": "2aobor3baenh4rqfbc8fy296vtgl2wds24ifjdaq192.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116358821-d8c6a63b.jpg",
+          "uploadedAt": "2026-10-04T12:19:18.836Z"
+        },
+        {
+          "id": "717f1531-8b97-410a-83aa-89bb37ee93f9",
+          "filename": "property-hotel-03-1791116358823-352c90f6.jpg",
+          "originalName": "2aobor3baewbkfvt38qayjpd2dskhbzv1cdvx4kw193.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116358823-352c90f6.jpg",
+          "uploadedAt": "2026-10-04T12:19:18.836Z"
+        },
+        {
+          "id": "2e2e0452-acc1-4674-889a-d1fda290fdf1",
+          "filename": "property-hotel-03-1791116358825-ae1dccd8.jpg",
+          "originalName": "2aobor3bafmy2ogdifmyeomp5m0botvquikuaydi194.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116358825-ae1dccd8.jpg",
+          "uploadedAt": "2026-10-04T12:19:18.836Z"
+        },
+        {
+          "id": "50d33690-d106-4f93-9ded-1e817e163106",
+          "filename": "property-hotel-03-1791116358827-15bfcea0.jpg",
+          "originalName": "2aobor3bagfvgt8rfkykzt3yfjprwvxo2xqbugtw197.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116358827-15bfcea0.jpg",
+          "uploadedAt": "2026-10-04T12:19:18.836Z"
+        },
+        {
+          "id": "a10aed4a-31e5-4cef-a7e2-69ac2a156949",
+          "filename": "property-hotel-03-1791116358829-43bed448.jpg",
+          "originalName": "2aobor3bahj0xzfliobgr4jxd3jhxogi7oigrsk0199.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116358829-43bed448.jpg",
+          "uploadedAt": "2026-10-04T12:19:18.836Z"
+        },
+        {
+          "id": "3110ee1e-b04b-4a6c-b29d-4b787625772c",
+          "filename": "property-hotel-03-1791116368784-498d46e7.jpg",
+          "originalName": "2aobor3b9hutvdad4hvwbekzspt6kmzlqhoiflgu172.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116368784-498d46e7.jpg",
+          "uploadedAt": "2026-10-04T12:19:28.793Z"
+        },
+        {
+          "id": "555dcfa1-9893-49d7-9e85-235f906b5534",
+          "filename": "property-hotel-03-1791116368787-4fb24e3f.jpg",
+          "originalName": "2aobor3b9j3ejnz2klkcgqfga1uoun58exllbwfe174.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116368787-4fb24e3f.jpg",
+          "uploadedAt": "2026-10-04T12:19:28.793Z"
+        },
+        {
+          "id": "c47f6d52-df6d-45e8-aca2-eb4e2578bb6b",
+          "filename": "property-hotel-03-1791116377345-20b4f808.jpg",
+          "originalName": "2aobor3b9vercpmqyuuclyxgdwr9cjgq9krjcl16179.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116377345-20b4f808.jpg",
+          "uploadedAt": "2026-10-04T12:19:37.355Z"
+        },
+        {
+          "id": "294da410-d7ed-464a-b9d9-134048d77fbc",
+          "filename": "property-hotel-03-1791116377348-b3621189.jpg",
+          "originalName": "2aobor3b9xjcxjlqn1ecssbgiicv3fphluqgsbfi181.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116377348-b3621189.jpg",
+          "uploadedAt": "2026-10-04T12:19:37.355Z"
+        },
+        {
+          "id": "731f3923-534a-4e18-b31d-e28207117fa2",
+          "filename": "property-hotel-03-1791116387971-4ece5144.jpg",
+          "originalName": "2aobor3ba6dnqza48tdidpnfmji0wsn31tfs6pgo186.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116387971-4ece5144.jpg",
+          "uploadedAt": "2026-10-04T12:19:47.982Z"
+        },
+        {
+          "id": "022be043-e145-4a30-b103-bec7b572f759",
+          "filename": "property-hotel-03-1791116387973-92724b2c.jpg",
+          "originalName": "2aobor3ba7tbiilnhesx9omq8yysefoewdp7oszm188.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116387973-92724b2c.jpg",
+          "uploadedAt": "2026-10-04T12:19:47.982Z"
+        },
+        {
+          "id": "e255b62b-090c-428f-b388-200eff665f1e",
+          "filename": "property-hotel-03-1791116387974-76139342.jpg",
+          "originalName": "2aobor3ba8tmzqvjn6kfsahru0buee0duwnzkbda189.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116387974-76139342.jpg",
+          "uploadedAt": "2026-10-04T12:19:47.982Z"
+        },
+        {
+          "id": "b6e1b4ac-197e-48ce-b209-85a3b95bf3cf",
+          "filename": "property-hotel-03-1791116387976-f7d29ed7.jpg",
+          "originalName": "2aobor3ba66jalouoqofbgtboixjkmdniynlkjpk185.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116387976-f7d29ed7.jpg",
+          "uploadedAt": "2026-10-04T12:19:47.982Z"
+        },
+        {
+          "id": "a70d1674-8a93-468f-9b24-566bae862930",
+          "filename": "property-hotel-03-1791116395934-44a6727f.jpg",
+          "originalName": "2aobor3ba4zokvaeown6zgmpipgoblmsdgwirm2y183.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-03/property-hotel-03-1791116395934-44a6727f.jpg",
+          "uploadedAt": "2026-10-04T12:19:55.943Z"
+        }
+      ]
+    },
+    "hotel-04": {
+      "gallery": [
+        {
+          "id": "10305f23-3207-4912-8237-628d001957a4",
+          "filename": "property-hotel-04-1791116677843-108c2522.jpg",
+          "originalName": "2aobor3bj8ljbjevhmehiq3bdywawn1bqnly1tyi200.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677843-108c2522.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "81a4483c-538d-4143-83c3-4daa5f6f5cfb",
+          "filename": "property-hotel-04-1791116677848-d56096b3.jpg",
+          "originalName": "2aobor3bj9fwlgbz2d7vg8qtfsgf6juymo8tdaga201.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677848-d56096b3.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "f7c3fc8c-7a51-404e-9b44-130628fef528",
+          "filename": "property-hotel-04-1791116677851-e78cf894.jpg",
+          "originalName": "2aobor3bja48pbh0muemcxjqzuoxd5puwstjzqw8202.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677851-e78cf894.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "61003e0b-4a56-4033-aee0-579285d20092",
+          "filename": "property-hotel-04-1791116677856-bd07dd52.jpg",
+          "originalName": "2aobor3bjasakeavfwg2cprqhduk78jn0lmwukew203.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677856-bd07dd52.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "32444be6-5961-47f7-a4f8-0ee4a5629146",
+          "filename": "property-hotel-04-1791116677859-f2aa078c.jpg",
+          "originalName": "2aobor3bjbeoq1ophisoefsmu3bmakhapmjig4yq204.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677859-f2aa078c.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "665a0d5c-c8c4-4a02-8226-32109ad66415",
+          "filename": "property-hotel-04-1791116677864-75fdeabd.jpg",
+          "originalName": "2aobor3bjczqfe7qcm8tl3avqs1f3zsps0kwaxoe205.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116677864-75fdeabd.jpg",
+          "uploadedAt": "2026-10-04T12:24:37.874Z"
+        },
+        {
+          "id": "65d7d23b-1401-4172-b83f-400cba224d00",
+          "filename": "property-hotel-04-1791116702571-25fc5527.jpg",
+          "originalName": "2aobor3bje0t0yxkfmy2pyfuebmec775vm1mdceo207.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116702571-25fc5527.jpg",
+          "uploadedAt": "2026-10-04T12:25:02.578Z"
+        },
+        {
+          "id": "a08ec432-d82f-4ea5-b60d-e0168b85ba23",
+          "filename": "property-hotel-04-1791116718747-f8850fbb.jpg",
+          "originalName": "2aobor3bjfgt2ormuazozdyzvpibl7fsxwqwpvwu209.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116718747-f8850fbb.jpg",
+          "uploadedAt": "2026-10-04T12:25:18.753Z"
+        },
+        {
+          "id": "334d4409-ffcf-4ffa-90b9-a1044f69c715",
+          "filename": "property-hotel-04-1791116747291-6775a372.jpg",
+          "originalName": "2aobor3bjgdekb14omhsoqshzk6xlxvca0btnijq210.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116747291-6775a372.jpg",
+          "uploadedAt": "2026-10-04T12:25:47.306Z"
+        },
+        {
+          "id": "5202dbb1-458e-4cb1-a1e4-f8366e57c4db",
+          "filename": "property-hotel-04-1791116747297-777cb611.jpg",
+          "originalName": "2aobor3bjh2qspnmgkvbqibhwffgvcppm8fkkhw0211.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116747297-777cb611.jpg",
+          "uploadedAt": "2026-10-04T12:25:47.307Z"
+        },
+        {
+          "id": "8922fa8a-be13-49e1-934e-ddd53e07d958",
+          "filename": "property-hotel-04-1791116756217-f479fe41.jpg",
+          "originalName": "2aobor3bjexxlketldfdpt2qccywwybsbb3umjse208.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116756217-f479fe41.jpg",
+          "uploadedAt": "2026-10-04T12:25:56.225Z"
+        },
+        {
+          "id": "55b1c140-8f76-4b6a-92d3-85f265be8328",
+          "filename": "property-hotel-04-1791116763409-a6ca01fe.jpg",
+          "originalName": "2aobor3bjdv1jonvxbeuxrwvxcrilrm5jgbpvyje206.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116763409-a6ca01fe.jpg",
+          "uploadedAt": "2026-10-04T12:26:03.417Z"
+        },
+        {
+          "id": "4723a81d-1d2f-477d-b4b9-8131a63f184a",
+          "filename": "property-hotel-04-1791116994652-b9368793.jpg",
+          "originalName": "2aobor3bmi1ufucirf5pzyqhi39qyii5bihto19u213.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116994652-b9368793.jpg",
+          "uploadedAt": "2026-10-04T12:29:54.665Z"
+        },
+        {
+          "id": "d5a93134-4a2b-4cdc-9f19-7b88581b76c6",
+          "filename": "property-hotel-04-1791116994654-9ce376f1.jpg",
+          "originalName": "2aobor3bmizyvhrvslnkafmjxvm8bd1yxbgfinra214.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116994654-9ce376f1.jpg",
+          "uploadedAt": "2026-10-04T12:29:54.665Z"
+        },
+        {
+          "id": "f1460316-e5f7-4b9e-8114-3b93d26a78c6",
+          "filename": "property-hotel-04-1791116994656-ba84cfeb.jpg",
+          "originalName": "2aobor3bmk4b8ycmkjogkln6d63bysrxviril8eu217.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116994656-ba84cfeb.jpg",
+          "uploadedAt": "2026-10-04T12:29:54.665Z"
+        },
+        {
+          "id": "7b7ce7aa-12db-4ad9-be6c-1e648b4dbda2",
+          "filename": "property-hotel-04-1791116994658-256ebd23.jpg",
+          "originalName": "2aobor3bmkch4yrnaawgtg8oaoq7tsyxgemch6og218.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791116994658-256ebd23.jpg",
+          "uploadedAt": "2026-10-04T12:29:54.665Z"
+        },
+        {
+          "id": "e990ddab-77f5-4968-8220-061eac8a38f4",
+          "filename": "property-hotel-04-1791117017160-c49adce1.jpg",
+          "originalName": "2aobor3bmhrrrre5ohrx5vagwqrn6exwfrxc26xw212.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117017160-c49adce1.jpg",
+          "uploadedAt": "2026-10-04T12:30:17.166Z"
+        },
+        {
+          "id": "a06f0f2c-2f3c-4e3d-8e0b-369e020ba84d",
+          "filename": "property-hotel-04-1791117017162-330c7c00.jpg",
+          "originalName": "2aobor3bmj3b82liuxhyujadkas8gije69trssve215.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117017162-330c7c00.jpg",
+          "uploadedAt": "2026-10-04T12:30:17.166Z"
+        },
+        {
+          "id": "eaed93bf-7eb2-4f90-aa1b-4bbc699095c0",
+          "filename": "property-hotel-04-1791117041214-a8e8cafd.jpg",
+          "originalName": "2aobor3bmshvxydrlic570oucdjdmwoav84kwk08219.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117041214-a8e8cafd.jpg",
+          "uploadedAt": "2026-10-04T12:30:41.224Z"
+        },
+        {
+          "id": "6c404f0f-1807-4211-85d0-11d3266b5d58",
+          "filename": "property-hotel-04-1791117048459-b956f1d9.jpg",
+          "originalName": "2aobor3bmtnih11aprtx7ycvwfixgogutxrkhbvu220.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117048459-b956f1d9.jpg",
+          "uploadedAt": "2026-10-04T12:30:48.476Z"
+        },
+        {
+          "id": "c8c618ad-67af-4a2e-8703-c489471c9563",
+          "filename": "property-hotel-04-1791117048461-335e6186.jpg",
+          "originalName": "2aobor3bmtxujbxh2axlisnn1zm4dvjaugxo8mtw221.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117048461-335e6186.jpg",
+          "uploadedAt": "2026-10-04T12:30:48.476Z"
+        },
+        {
+          "id": "228c7848-58ae-4cdf-aac0-5a9e1d73eab4",
+          "filename": "property-hotel-04-1791117048464-dca1bd77.jpg",
+          "originalName": "2aobor3bmuyanpvifkcnzcgzjdesmpvizggvwgpg222.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117048464-dca1bd77.jpg",
+          "uploadedAt": "2026-10-04T12:30:48.476Z"
+        },
+        {
+          "id": "49acfc81-2de5-4b07-ab3f-c42844d66209",
+          "filename": "property-hotel-04-1791117048468-058a00c8.jpg",
+          "originalName": "2aobor3bmvcvwttq7cilm7thj4gvvn5qo2de2djq223.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117048468-058a00c8.jpg",
+          "uploadedAt": "2026-10-04T12:30:48.476Z"
+        },
+        {
+          "id": "820203cb-2a87-4c3d-8ac4-d853a8b73d5d",
+          "filename": "property-hotel-04-1791117069135-ca386afb.jpg",
+          "originalName": "2aobor3bmhtdfo2nwuttkrnkv7lyav92sn7nxdna224.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117069135-ca386afb.jpg",
+          "uploadedAt": "2026-10-04T12:31:09.144Z"
+        },
+        {
+          "id": "23bfbdc0-169c-4305-8f1b-94c3809e2d23",
+          "filename": "property-hotel-04-1791117069138-242e8a91.jpg",
+          "originalName": "2aobor3bmi3qxl8hxzedtyjf0xx2rxqjzng5zhmo225.jpg",
+          "category": "dining",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117069138-242e8a91.jpg",
+          "uploadedAt": "2026-10-04T12:31:09.144Z"
+        },
+        {
+          "id": "5331380e-5e33-4c57-91b6-358bae2a44cd",
+          "filename": "property-hotel-04-1791117338548-71091608.jpg",
+          "originalName": "2aobor3bqoikr6cc3kond3vt5qb2ajqdumlftyxq238.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117338548-71091608.jpg",
+          "uploadedAt": "2026-10-04T12:35:38.563Z"
+        },
+        {
+          "id": "3b8bdba2-9259-494c-ac45-0398d47ea3ef",
+          "filename": "property-hotel-04-1791117338553-a947621f.jpg",
+          "originalName": "2aobor3bqp8e15zyrl90jhwvpavmafecm8bsz9yy239.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117338553-a947621f.jpg",
+          "uploadedAt": "2026-10-04T12:35:38.563Z"
+        },
+        {
+          "id": "e3442df5-d565-4e35-aa5a-f15cf457ae26",
+          "filename": "property-hotel-04-1791117359541-d147e42f.jpg",
+          "originalName": "2aobor3bpgla0gkzyolggtmmgy3psqgl9epkgnsa226.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359541-d147e42f.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "ec9b1d31-866e-4cfb-afda-3b6360d07eba",
+          "filename": "property-hotel-04-1791117359543-820fd9c1.jpg",
+          "originalName": "2aobor3bphmtpdn5erzm3rh6zjiwahgmqfkahgbo227.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359543-820fd9c1.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "ab8779d9-1a62-41e4-aae1-2369dc9eadaf",
+          "filename": "property-hotel-04-1791117359544-663e36ac.jpg",
+          "originalName": "2aobor3bphtnbxqy0nhx0wk8amtwvowlp7gr6r96228.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359544-663e36ac.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "cd2269ea-f7fb-4ac7-9051-596eb112776f",
+          "filename": "property-hotel-04-1791117359546-3e683f5a.jpg",
+          "originalName": "2aobor3bpiuh1ktthgvcn4f90b8jxetvso1tean6229.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359546-3e683f5a.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "fce77660-62c2-4f4c-a3f1-1fb81d427f0c",
+          "filename": "property-hotel-04-1791117359548-0c35e4d7.jpg",
+          "originalName": "2aobor3bpj5dmhwpjaf3gscpbaggqsbcwcdjbols230.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359548-0c35e4d7.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "d249903e-a1c8-4c97-9223-e377ef88693a",
+          "filename": "property-hotel-04-1791117359550-380b1781.jpg",
+          "originalName": "2aobor3bpjbvousozu0hqhapzv4hlm5kc5q2zjaq231.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359550-380b1781.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "9b6d9061-f339-416b-8008-b815bea2e126",
+          "filename": "property-hotel-04-1791117359551-af17999c.jpg",
+          "originalName": "2aobor3bpk5nmnn39mll6ukho8c259mve9x4xbw8232.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359551-af17999c.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "1c702fea-ccaf-4b8e-a45c-ff06961e9456",
+          "filename": "property-hotel-04-1791117359552-102e0150.jpg",
+          "originalName": "2aobor3bpkfjinw7ghme3xnzk8owolyfitunppoc233.jpg",
+          "category": "amenities",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117359552-102e0150.jpg",
+          "uploadedAt": "2026-10-04T12:35:59.562Z"
+        },
+        {
+          "id": "234e68f0-df90-4622-accf-c2e7a1f25b19",
+          "filename": "property-hotel-04-1791117902435-3e16931d.jpg",
+          "originalName": "2aobor3btkqzplif8snpvagevj8m3m8bisxsoqv6273.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117902435-3e16931d.jpg",
+          "uploadedAt": "2026-10-04T12:45:02.462Z"
+        },
+        {
+          "id": "7590850d-3d60-41b1-8397-7a9cbcc25fae",
+          "filename": "property-hotel-04-1791117902439-8836735f.jpg",
+          "originalName": "2aobor3btnexwmqmnmskumkbizbqre178e5c6os0276.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117902439-8836735f.jpg",
+          "uploadedAt": "2026-10-04T12:45:02.462Z"
+        },
+        {
+          "id": "f10121cd-98dc-4f86-9ead-124a13622ec6",
+          "filename": "property-hotel-04-1791117902443-47ae96ef.jpg",
+          "originalName": "2aobor3btoqm52glk22jzqvblpeb5ud9k6asy8tg278.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117902443-47ae96ef.jpg",
+          "uploadedAt": "2026-10-04T12:45:02.462Z"
+        },
+        {
+          "id": "163f6731-acf4-47d2-8268-722fd2fc6671",
+          "filename": "property-hotel-04-1791117902447-2aac4ab3.jpg",
+          "originalName": "2aobor3btqt3p8zhsm6bdnyqp1b9ocomgy3gtaly280.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117902447-2aac4ab3.jpg",
+          "uploadedAt": "2026-10-04T12:45:02.462Z"
+        },
+        {
+          "id": "4be3d478-c1d1-47a7-b17c-e8235095d30b",
+          "filename": "property-hotel-04-1791117902451-33bee6a9.jpg",
+          "originalName": "2aobor3btrhtiwwpgbg5mvioxukcp5jgvo3z7hhu281.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117902451-33bee6a9.jpg",
+          "uploadedAt": "2026-10-04T12:45:02.462Z"
+        },
+        {
+          "id": "4c799750-6ed7-4f74-be0c-15d5e24b6858",
+          "filename": "property-hotel-04-1791117914062-0e7b4eea.jpg",
+          "originalName": "2aobor3bsadc3mspmh81y6z3t1vfxzaujkpqgtrs266.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914062-0e7b4eea.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "046c3983-2493-4140-8aee-e011731f6c72",
+          "filename": "property-hotel-04-1791117914065-63ded71a.jpg",
+          "originalName": "2aobor3bsavoqjht6qzdcgusfvveh7gkuivsxpva267.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914065-63ded71a.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "7af01e98-8103-40d2-8d93-62a1d1a8722f",
+          "filename": "property-hotel-04-1791117914069-c9124b9e.jpg",
+          "originalName": "2aobor3bsbde45tklmsbwlsonijkef8sutvglf84268.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914069-c9124b9e.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "6c91f1d7-99c2-4a49-886c-b3b91e5432a3",
+          "filename": "property-hotel-04-1791117914072-6bef8137.jpg",
+          "originalName": "2aobor3bsctn02r8ikuuois3ekhtmj4omhdkc05q269.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914072-6bef8137.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "e0c9d61f-d734-4aa7-9518-133a477c4503",
+          "filename": "property-hotel-04-1791117914075-be801fd8.jpg",
+          "originalName": "2aobor3bsx6gakggrpobb3njkot1acjcruvptsx2262.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914075-be801fd8.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "5c29f450-4bf5-4cd1-af7c-324e5c9c0089",
+          "filename": "property-hotel-04-1791117914080-63446d9e.jpg",
+          "originalName": "2aobor3bsxswgwqxyotztec413qza9swa2qmtslg263.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914080-63446d9e.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "b01d6ffc-f1f1-4b8d-8d0d-c7efd4dcd1a1",
+          "filename": "property-hotel-04-1791117914085-9b6c428d.jpg",
+          "originalName": "2aobor3bsydwxgt6za0rbrmvzkcwzrzc4tskofmc264.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914085-9b6c428d.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "91c6b2cd-3e10-4379-b097-5c4794903989",
+          "filename": "property-hotel-04-1791117914088-3d62f210.jpg",
+          "originalName": "2aobor3bszqgami6glbntn01sdgre5rocqcgwpks265.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117914088-3d62f210.jpg",
+          "uploadedAt": "2026-10-04T12:45:14.105Z"
+        },
+        {
+          "id": "5301d7a1-04ea-4f1f-a049-2793cd91329c",
+          "filename": "property-hotel-04-1791117925808-2cbd3bf5.jpg",
+          "originalName": "2aobor3bsjytp14tifhnmghcttt8a5p7hs7seare256.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117925808-2cbd3bf5.jpg",
+          "uploadedAt": "2026-10-04T12:45:25.828Z"
+        },
+        {
+          "id": "e356bacd-bab0-4af7-96a4-ac3f829f0d13",
+          "filename": "property-hotel-04-1791117925811-2e487bed.jpg",
+          "originalName": "2aobor3bskk8ggljkfdo85ohygeefg6b3rec2qqe257.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117925811-2e487bed.jpg",
+          "uploadedAt": "2026-10-04T12:45:25.828Z"
+        },
+        {
+          "id": "d27a3cf5-bcb6-4c83-b23f-9602aab4240d",
+          "filename": "property-hotel-04-1791117925816-14d92f42.jpg",
+          "originalName": "2aobor3bskwqublj0uig1477lxfynorfexxfkchc258.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117925816-14d92f42.jpg",
+          "uploadedAt": "2026-10-04T12:45:25.828Z"
+        },
+        {
+          "id": "c7b28c2a-7d63-46c6-b914-3f6e9aa61e1d",
+          "filename": "property-hotel-04-1791117925820-871dab01.jpg",
+          "originalName": "2aobor3bsn2xlmswekfputr8gc8xejenudjlnoiu261.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117925820-871dab01.jpg",
+          "uploadedAt": "2026-10-04T12:45:25.828Z"
+        },
+        {
+          "id": "8c260788-2a01-4eba-a6e7-2b27091d5986",
+          "filename": "property-hotel-04-1791117938544-e667e9e4.jpg",
+          "originalName": "2aobor3bsb93jdp3ayr2dktewbr6msom1ub58mrw251.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117938544-e667e9e4.jpg",
+          "uploadedAt": "2026-10-04T12:45:38.564Z"
+        },
+        {
+          "id": "24676e3b-0235-4d82-b535-5df1b3cab877",
+          "filename": "property-hotel-04-1791117938547-1edf5edf.jpg",
+          "originalName": "2aobor3bscycy5706jhktwgvew0iesjumc6cfc8w253.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117938547-1edf5edf.jpg",
+          "uploadedAt": "2026-10-04T12:45:38.564Z"
+        },
+        {
+          "id": "78a3b6e0-5028-4cd1-937d-78450c74e4cb",
+          "filename": "property-hotel-04-1791117938551-e78a1fcf.jpg",
+          "originalName": "2aobor3bsdcgeyu31k6nm5ws9rc9vvkkjsohzehk254.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117938551-e78a1fcf.jpg",
+          "uploadedAt": "2026-10-04T12:45:38.564Z"
+        },
+        {
+          "id": "fe436f3c-14b4-4827-9091-207efb53f08f",
+          "filename": "property-hotel-04-1791117938556-da0d9efe.jpg",
+          "originalName": "2aobor3bsds7pfax6iid3jcq5cdwvwvviyheh6sc255.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117938556-da0d9efe.jpg",
+          "uploadedAt": "2026-10-04T12:45:38.564Z"
+        },
+        {
+          "id": "b06e0986-2987-405f-9938-20d03e938c1d",
+          "filename": "property-hotel-04-1791117951588-d9c52434.jpg",
+          "originalName": "2aobor3brvzzi7c00kwoq3ssksamt7d0ystuinqu247.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117951588-d9c52434.jpg",
+          "uploadedAt": "2026-10-04T12:45:51.598Z"
+        },
+        {
+          "id": "d61584ed-40e5-403a-8010-7b47ad4195cb",
+          "filename": "property-hotel-04-1791117951592-bfcec229.jpg",
+          "originalName": "2aobor3brxwi5gyhhomwzuq8dwljakse72b2kzyc250.jpg",
+          "category": "rooms",
+          "url": "/uploads/property/hotel-04/property-hotel-04-1791117951592-bfcec229.jpg",
+          "uploadedAt": "2026-10-04T12:45:51.598Z"
+        }
+      ]
+    }
+  }
+}

@@ -37,12 +37,14 @@
          exactly what it needs: the home Collection card keeps its dedicated
          collection image, while the Hotels listing and hotel detail use this
          gallery. */
+      hotel.propertyGalleryItems = property.propertyImages.map(function(x){ return typeof x === 'string' ? {url:x, category:'other'} : Object.assign({}, x, {category:x.category || 'other'}); }).filter(function(x){ return x.url; });
       hotel.propertyGalleryImages = propertyGallery.slice();
       hotel.images = propertyGallery.slice();
       hotel.imageSource = 'KAS admin uploaded property gallery';
       hotel.hasCustomPropertyGallery = true;
     } else {
       hotel.propertyGalleryImages = [];
+      hotel.propertyGalleryItems = [];
     }
     hotel.rooms.forEach(function(r){
       var mapping = global.KAS_RATES && global.KAS_RATES.mappingFor(r.id);

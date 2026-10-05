@@ -1,0 +1,1181 @@
+{
+  "version": 1,
+  "rooms": {
+    "hotel-01:1": [
+      {
+        "id": "286a03a9-93ba-4528-a418-15d61d818e82",
+        "originalName": "2aobor3avfsl8si1wubhey4koneyd7cxyg8kxopy58.jpg",
+        "filename": "1791113703465-f0e3da4c.jpg",
+        "url": "/uploads/hotel-01/1/1791113703465-f0e3da4c.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      },
+      {
+        "id": "05579c3f-0bf2-4932-9585-059261529894",
+        "originalName": "2aobor3avgg03cpme57s3ynoz47jk3vhhjpg1eg459.jpg",
+        "filename": "1791113703469-e56b883e.jpg",
+        "url": "/uploads/hotel-01/1/1791113703469-e56b883e.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      },
+      {
+        "id": "13beb30a-44cc-402c-8bc9-293538412c69",
+        "originalName": "2aobor3avgzr14mlwxgfzsy7xtsdfgsdqsv7kg8w60.jpg",
+        "filename": "1791113703471-b43fd9ec.jpg",
+        "url": "/uploads/hotel-01/1/1791113703471-b43fd9ec.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      },
+      {
+        "id": "4dbe7c33-99cf-4aac-bc64-806c4746d2b0",
+        "originalName": "2aobor3avhfc4l0hcks22dleqspt0itjbhyfhs5261.jpg",
+        "filename": "1791113703474-c5beb805.jpg",
+        "url": "/uploads/hotel-01/1/1791113703474-c5beb805.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      },
+      {
+        "id": "cdd20b71-7713-4795-bf07-fe7c933fcd05",
+        "originalName": "2aobor3avisqeslrn4bg9x0349qnrxkgmwsbkga862.jpg",
+        "filename": "1791113703476-554f0319.jpg",
+        "url": "/uploads/hotel-01/1/1791113703476-554f0319.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      },
+      {
+        "id": "1728df06-9caf-41aa-9648-ebe6d0a4d63e",
+        "originalName": "2aobor3avjcd5jcgcoccgsjtcpebxfxsllexxy6c63.jpg",
+        "filename": "1791113703480-1a8d1888.jpg",
+        "url": "/uploads/hotel-01/1/1791113703480-1a8d1888.jpg",
+        "uploadedAt": "2026-10-04T11:35:03.489Z"
+      }
+    ],
+    "hotel-01:3": [
+      {
+        "id": "f406c5e3-bc2b-4fbe-ab73-6376649e5491",
+        "originalName": "2aobor3awe8ayvhix1x3xf8ubfid2ibx1tgwpxxk72.jpg",
+        "filename": "1791113775788-8ac3c546.jpg",
+        "url": "/uploads/hotel-01/3/1791113775788-8ac3c546.jpg",
+        "uploadedAt": "2026-10-04T11:36:15.799Z"
+      },
+      {
+        "id": "c750eca8-73f7-409c-8706-3c6390e006f0",
+        "originalName": "2aobor3awejw3fk1bqqpiq25mzzgddmph43qsbpm73.jpg",
+        "filename": "1791113775791-844c761e.jpg",
+        "url": "/uploads/hotel-01/3/1791113775791-844c761e.jpg",
+        "uploadedAt": "2026-10-04T11:36:15.799Z"
+      },
+      {
+        "id": "dd2e11f1-a535-432a-89fa-f7ac1bd620b9",
+        "originalName": "2aobor3awfswg5kpwaxwx1ohtep1z8fzuzhklhwk74.jpg",
+        "filename": "1791113775793-711df3e3.jpg",
+        "url": "/uploads/hotel-01/3/1791113775793-711df3e3.jpg",
+        "uploadedAt": "2026-10-04T11:36:15.799Z"
+      },
+      {
+        "id": "083141a3-3c73-46c1-87a0-506c89f23a0e",
+        "originalName": "2aobor3awbtem38n3tkvxzppfee5znmcjdjctqgy68.jpg",
+        "filename": "1791113781796-b3a3c873.jpg",
+        "url": "/uploads/hotel-01/3/1791113781796-b3a3c873.jpg",
+        "uploadedAt": "2026-10-04T11:36:21.812Z"
+      },
+      {
+        "id": "a0a89e29-a9ef-4d8d-a563-a368923d05d3",
+        "originalName": "2aobor3awcs24ql2webxiyh8espaagofvxmcrwcu69.jpg",
+        "filename": "1791113781799-3a2a4cdc.jpg",
+        "url": "/uploads/hotel-01/3/1791113781799-3a2a4cdc.jpg",
+        "uploadedAt": "2026-10-04T11:36:21.812Z"
+      },
+      {
+        "id": "b33542aa-efa0-4cff-8d14-2e000f9842f0",
+        "originalName": "2aobor3awcznnehgn9ykptlax68aa5fydcloh9de70.jpg",
+        "filename": "1791113781802-53ad8653.jpg",
+        "url": "/uploads/hotel-01/3/1791113781802-53ad8653.jpg",
+        "uploadedAt": "2026-10-04T11:36:21.812Z"
+      },
+      {
+        "id": "a48d7c70-684a-4dae-94db-de89a1ef38bc",
+        "originalName": "2aobor3awdzwdxuoxoyhhukxfhtfnmnhi3zmxqpu71.jpg",
+        "filename": "1791113781805-59ace2d5.jpg",
+        "url": "/uploads/hotel-01/3/1791113781805-59ace2d5.jpg",
+        "uploadedAt": "2026-10-04T11:36:21.812Z"
+      },
+      {
+        "id": "4fec53f8-e6fb-40b4-96ae-51aa000776c3",
+        "originalName": "2aobor3aw8y4bnvdn6lqsjl5p35kmfywhuzyww7s64.jpg",
+        "filename": "1791113791804-634815d4.jpg",
+        "url": "/uploads/hotel-01/3/1791113791804-634815d4.jpg",
+        "uploadedAt": "2026-10-04T11:36:31.828Z"
+      },
+      {
+        "id": "48507c03-b42d-4951-9464-0e1f4f7068d0",
+        "originalName": "2aobor3aw9kkipfuuvqoktsypf0asnvqha1oe7fs65.jpg",
+        "filename": "1791113791811-febff14d.jpg",
+        "url": "/uploads/hotel-01/3/1791113791811-febff14d.jpg",
+        "uploadedAt": "2026-10-04T11:36:31.828Z"
+      },
+      {
+        "id": "604af418-d886-49d5-b581-c5e8316d798e",
+        "originalName": "2aobor3awa5e1jefwvxcnohtitaewvdqwj6b2cd266.jpg",
+        "filename": "1791113791818-c2578672.jpg",
+        "url": "/uploads/hotel-01/3/1791113791818-c2578672.jpg",
+        "uploadedAt": "2026-10-04T11:36:31.828Z"
+      }
+    ],
+    "hotel-01:2": [
+      {
+        "id": "2dc988a5-b0fa-4651-b3d6-bd26a3e4830a",
+        "originalName": "2aobor3avzewyjxebpxuurpm7seqilwqke9my3sg76.jpg",
+        "filename": "1791113847263-39fc4a8d.jpg",
+        "url": "/uploads/hotel-01/2/1791113847263-39fc4a8d.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "1166719e-6dbc-46e2-83a1-c725f096072f",
+        "originalName": "2aobor3aw0mzzgzeo9dznzwdlmbwxrowgwkoiuei78.jpg",
+        "filename": "1791113847266-eae15115.jpg",
+        "url": "/uploads/hotel-01/2/1791113847266-eae15115.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "a694278a-4a07-4a74-bea3-2d85421b921f",
+        "originalName": "2aobor3aw1ud3lcmx3a04nxysmk1kd8c3iz9x9sw79.jpg",
+        "filename": "1791113847269-bb0714aa.jpg",
+        "url": "/uploads/hotel-01/2/1791113847269-bb0714aa.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "3d5287c2-b60b-4142-a583-09ada6621401",
+        "originalName": "2aobor3aw2hyvvnvczwdihc8xqc7tbwkjqin8fpu80.jpg",
+        "filename": "1791113847272-373f2f8b.jpg",
+        "url": "/uploads/hotel-01/2/1791113847272-373f2f8b.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "186c2804-bd6f-4816-a03c-a36a075273e0",
+        "originalName": "2aobor3aw0026hs8d0p9sv2endgyon23gscatx5c77.jpg",
+        "filename": "1791113847275-219bd210.jpg",
+        "url": "/uploads/hotel-01/2/1791113847275-219bd210.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "49e543b9-cb1c-46ce-afa6-07cf60572917",
+        "originalName": "2aobor3aw3239zaig3gb27tdyzlbuqcgiwntfplg81.jpg",
+        "filename": "1791113847279-c1b94d21.jpg",
+        "url": "/uploads/hotel-01/2/1791113847279-c1b94d21.jpg",
+        "uploadedAt": "2026-10-04T11:37:27.293Z"
+      },
+      {
+        "id": "7be6160d-1216-483e-a94b-4e3afcea594a",
+        "originalName": "2aobor3avyuskfk18mdxb1auahqwmfnczu4kxgey75.jpg",
+        "filename": "1791113860686-07061a42.jpg",
+        "url": "/uploads/hotel-01/2/1791113860686-07061a42.jpg",
+        "uploadedAt": "2026-10-04T11:37:40.691Z"
+      }
+    ],
+    "hotel-02:1": [
+      {
+        "id": "018cc5dd-9716-43e7-9cf1-8ab9bf46f0f3",
+        "originalName": "2aobor3aylv45lpsdjbqnskziq3ibkzj37t2izvg99.jpg",
+        "filename": "1791114643122-c38ff8d9.jpg",
+        "url": "/uploads/hotel-02/1/1791114643122-c38ff8d9.jpg",
+        "uploadedAt": "2026-10-04T11:50:43.135Z"
+      },
+      {
+        "id": "c526fdee-5957-4149-ae80-978152a4308c",
+        "originalName": "2aobor3aylvpv2o7zdaaaj010sv1e8m3vw4creis98.jpg",
+        "filename": "1791114643125-e321c9dd.jpg",
+        "url": "/uploads/hotel-02/1/1791114643125-e321c9dd.jpg",
+        "uploadedAt": "2026-10-04T11:50:43.135Z"
+      },
+      {
+        "id": "aaed5eff-4c15-45e4-beb4-3151c45cc962",
+        "originalName": "2aobor3aymhpoef5iq2seqsejpuewhyeynahimtm101.jpg",
+        "filename": "1791114643127-ad248aa9.jpg",
+        "url": "/uploads/hotel-02/1/1791114643127-ad248aa9.jpg",
+        "uploadedAt": "2026-10-04T11:50:43.135Z"
+      },
+      {
+        "id": "dfff997b-917a-4f11-8729-5334852f9f07",
+        "originalName": "2aobor3aymhtrxqvaaibfcstsmavkmivb1iivd7i100.jpg",
+        "filename": "1791114643129-b5f28185.jpg",
+        "url": "/uploads/hotel-02/1/1791114643129-b5f28185.jpg",
+        "uploadedAt": "2026-10-04T11:50:43.135Z"
+      },
+      {
+        "id": "a747259a-c55f-40d7-adfe-03d9b8435fdd",
+        "originalName": "2aobor3aykgdmnbq7exhyrg5nzss1eziejwwxvra96.jpg",
+        "filename": "1791114649271-358a5510.jpg",
+        "url": "/uploads/hotel-02/1/1791114649271-358a5510.jpg",
+        "uploadedAt": "2026-10-04T11:50:49.277Z"
+      },
+      {
+        "id": "b99f8364-cd3f-4d8e-a6a4-18b478b82a29",
+        "originalName": "2aobor3aylab7ucs8b78cfm5sismk1ncv1oj8i8o97.jpg",
+        "filename": "1791114649273-75fdb33b.jpg",
+        "url": "/uploads/hotel-02/1/1791114649273-75fdb33b.jpg",
+        "uploadedAt": "2026-10-04T11:50:49.277Z"
+      }
+    ],
+    "hotel-02:2": [
+      {
+        "id": "cc322c3c-32e3-4ef3-9830-b3c9528038bb",
+        "originalName": "2aobor3ayxck0azxkou2kat3pt6jywhf5ztot2xm105.jpg",
+        "filename": "1791114716663-a419b00d.jpg",
+        "url": "/uploads/hotel-02/2/1791114716663-a419b00d.jpg",
+        "uploadedAt": "2026-10-04T11:51:56.672Z"
+      },
+      {
+        "id": "40f09262-a64b-4f2c-b8f8-1d93376f7117",
+        "originalName": "2aobor3ayxedamtud2lrwfibw0umeqmgewij9nuu106.jpg",
+        "filename": "1791114716665-0223bf39.jpg",
+        "url": "/uploads/hotel-02/2/1791114716665-0223bf39.jpg",
+        "uploadedAt": "2026-10-04T11:51:56.672Z"
+      },
+      {
+        "id": "2ee6db30-50f3-45ad-80c7-e78199235d2c",
+        "originalName": "2aobor3ayyuvozjvvzh5ioxpqpsiit4shb5ypgti109.jpg",
+        "filename": "1791114716667-f27aee54.jpg",
+        "url": "/uploads/hotel-02/2/1791114716667-f27aee54.jpg",
+        "uploadedAt": "2026-10-04T11:51:56.672Z"
+      },
+      {
+        "id": "5c4b5cfe-252b-47c8-b6ad-e48147c541e0",
+        "originalName": "2aobor3ayy4gqlhcquiis3ukdaqyqrtfytst2x3q107.jpg",
+        "filename": "1791114728045-57cb93b4.jpg",
+        "url": "/uploads/hotel-02/2/1791114728045-57cb93b4.jpg",
+        "uploadedAt": "2026-10-04T11:52:08.050Z"
+      },
+      {
+        "id": "c4f48adb-6663-4b5f-a18c-893aa7719a4a",
+        "originalName": "2aobor3ayyviussoeywl4i7qyciveworr2ixsu6a108.jpg",
+        "filename": "1791114728047-c3709b0d.jpg",
+        "url": "/uploads/hotel-02/2/1791114728047-c3709b0d.jpg",
+        "uploadedAt": "2026-10-04T11:52:08.050Z"
+      },
+      {
+        "id": "3c670c24-3896-4a0d-9add-72c88d99099e",
+        "originalName": "2aobor3aywlu6awf2n3nm2humfjutwvkwkpb0xqi104.jpg",
+        "filename": "1791114732754-96b8669c.jpg",
+        "url": "/uploads/hotel-02/2/1791114732754-96b8669c.jpg",
+        "uploadedAt": "2026-10-04T11:52:12.758Z"
+      },
+      {
+        "id": "f83dde33-da46-4cb4-a726-05b888f2b6dc",
+        "originalName": "2aobor3ayvvlvfv1ch3alnmwvhvqwrahqqzcjn32102.jpg",
+        "filename": "1791114739877-290426b9.jpg",
+        "url": "/uploads/hotel-02/2/1791114739877-290426b9.jpg",
+        "uploadedAt": "2026-10-04T11:52:19.890Z"
+      },
+      {
+        "id": "80d8106d-eea5-4a81-b0d9-c8fd64308f6a",
+        "originalName": "2aobor3aywnaedvnuul2glw12ad5yob43iglvv0y103.jpg",
+        "filename": "1791114739879-1cc8f311.jpg",
+        "url": "/uploads/hotel-02/2/1791114739879-1cc8f311.jpg",
+        "uploadedAt": "2026-10-04T11:52:19.890Z"
+      }
+    ],
+    "hotel-02:3": [
+      {
+        "id": "4f983b88-56a6-4ae3-8ba5-d8e2298e8bc4",
+        "originalName": "2aobor3b0uhgiiyx7igherulaos3reo762nys3xm115.jpg",
+        "filename": "1791114806010-dd9cfad2.jpg",
+        "url": "/uploads/hotel-02/3/1791114806010-dd9cfad2.jpg",
+        "uploadedAt": "2026-10-04T11:53:26.014Z"
+      },
+      {
+        "id": "d345da03-6e38-4273-88ee-ed577e6fc5a7",
+        "originalName": "2aobor3b0swtv4cf3arc5fiudyroktne3snxcbdk112.jpg",
+        "filename": "1791114812982-e1df0ff4.jpg",
+        "url": "/uploads/hotel-02/3/1791114812982-e1df0ff4.jpg",
+        "uploadedAt": "2026-10-04T11:53:32.993Z"
+      },
+      {
+        "id": "8478222e-ff8f-4697-8409-3a19574e6921",
+        "originalName": "2aobor3b0sxqf4sawlxdxznefex7ttwuo8prdxic111.jpg",
+        "filename": "1791114812984-c70c1a4e.jpg",
+        "url": "/uploads/hotel-02/3/1791114812984-c70c1a4e.jpg",
+        "uploadedAt": "2026-10-04T11:53:32.993Z"
+      },
+      {
+        "id": "161fdaef-01c7-4836-b4cc-6d948f46cf7d",
+        "originalName": "2aobor3b0toc6bksx38all4rrpffkvs7njhvgak4113.jpg",
+        "filename": "1791114812986-70e2e740.jpg",
+        "url": "/uploads/hotel-02/3/1791114812986-70e2e740.jpg",
+        "uploadedAt": "2026-10-04T11:53:32.993Z"
+      },
+      {
+        "id": "997bd147-6700-41a6-9c14-d4810ae5a75d",
+        "originalName": "2aobor3b0tsu4uf7xlu41yfcn14ja0ehwvjz1ih6114.jpg",
+        "filename": "1791114812987-1de6fc63.jpg",
+        "url": "/uploads/hotel-02/3/1791114812987-1de6fc63.jpg",
+        "uploadedAt": "2026-10-04T11:53:32.993Z"
+      },
+      {
+        "id": "3eddfc28-eaab-4abd-b355-cfc3bc1f9fde",
+        "originalName": "2aobor3b0s6kz6or6cpjdhyid3bncwmnbp8lxhz6110.jpg",
+        "filename": "1791114817626-971b2ae4.jpg",
+        "url": "/uploads/hotel-02/3/1791114817626-971b2ae4.jpg",
+        "uploadedAt": "2026-10-04T11:53:37.632Z"
+      },
+      {
+        "id": "490ea288-1a51-4ce9-a449-17b3b214744a",
+        "originalName": "2aobor3b0ufaw8lzc2b8bqcimowkwosfbgbgkjzi116.jpg",
+        "filename": "1791114817629-d2d6926e.jpg",
+        "url": "/uploads/hotel-02/3/1791114817629-d2d6926e.jpg",
+        "uploadedAt": "2026-10-04T11:53:37.632Z"
+      }
+    ],
+    "hotel-02:4": [
+      {
+        "id": "aa43c2ca-bc90-40a1-8fe1-cd214fe37227",
+        "originalName": "2aobor3b1ffinvrwbzj5vlr5eibhx5corb9mwsg0123.jpg",
+        "filename": "1791114885634-3d20a107.jpg",
+        "url": "/uploads/hotel-02/4/1791114885634-3d20a107.jpg",
+        "uploadedAt": "2026-10-04T11:54:45.638Z"
+      },
+      {
+        "id": "b5dcb8d1-91c1-40ea-b5a9-b022fb006247",
+        "originalName": "2aobor3b1dlcenet6yq52n6snlbpgntkqm0445z6119.jpg",
+        "filename": "1791114894174-9e306c74.jpg",
+        "url": "/uploads/hotel-02/4/1791114894174-9e306c74.jpg",
+        "uploadedAt": "2026-10-04T11:54:54.185Z"
+      },
+      {
+        "id": "9644b865-8c6d-4143-afc9-5af51664413d",
+        "originalName": "2aobor3b1dqk3ohfnvzfjn00gheoeirzyvcyrfwy120.jpg",
+        "filename": "1791114894176-b6ccd0c9.jpg",
+        "url": "/uploads/hotel-02/4/1791114894176-b6ccd0c9.jpg",
+        "uploadedAt": "2026-10-04T11:54:54.185Z"
+      },
+      {
+        "id": "fa390012-be37-494e-9cff-d47232f663c0",
+        "originalName": "2aobor3b1egx2fgu2drhcwsrf4hxmsag6vt9n69i121.jpg",
+        "filename": "1791114894177-0d33b0cc.jpg",
+        "url": "/uploads/hotel-02/4/1791114894177-0d33b0cc.jpg",
+        "uploadedAt": "2026-10-04T11:54:54.185Z"
+      },
+      {
+        "id": "ac595c5b-907b-4cec-914a-8cb0bf7d6ab6",
+        "originalName": "2aobor3b1elkdequadzfhxh0ap1ji20xyyaqfkow122.jpg",
+        "filename": "1791114894179-451d7584.jpg",
+        "url": "/uploads/hotel-02/4/1791114894179-451d7584.jpg",
+        "uploadedAt": "2026-10-04T11:54:54.185Z"
+      },
+      {
+        "id": "ce394403-601d-491d-8c89-475d4200b28c",
+        "originalName": "2aobor3b1csynhwztau4qycbjnttapow7m26nvga117.jpg",
+        "filename": "1791114901340-824a0137.jpg",
+        "url": "/uploads/hotel-02/4/1791114901340-824a0137.jpg",
+        "uploadedAt": "2026-10-04T11:55:01.346Z"
+      },
+      {
+        "id": "5490046a-0783-44de-9465-a39876609464",
+        "originalName": "2aobor3b1cwf6enmyuwaaq5pf0qqxygya9y2srdk118.jpg",
+        "filename": "1791114901342-83a1bb04.jpg",
+        "url": "/uploads/hotel-02/4/1791114901342-83a1bb04.jpg",
+        "uploadedAt": "2026-10-04T11:55:01.346Z"
+      }
+    ],
+    "hotel-02:5": [
+      {
+        "id": "b1717bc8-8841-4e4e-8a75-54f899e3688c",
+        "originalName": "2aobor3b2twq6zw9ysugd8qpdgq5pmqbqluoz3qk127.jpg",
+        "filename": "1791114964096-67e818f7.jpg",
+        "url": "/uploads/hotel-02/5/1791114964096-67e818f7.jpg",
+        "uploadedAt": "2026-10-04T11:56:04.100Z"
+      },
+      {
+        "id": "17932a45-62df-4489-ad92-db61a578ad1c",
+        "originalName": "2aobor3b2tthr8gfwt6qip7cdmnhxhdawsphoede126.jpg",
+        "filename": "1791114973925-91085489.jpg",
+        "url": "/uploads/hotel-02/5/1791114973925-91085489.jpg",
+        "uploadedAt": "2026-10-04T11:56:13.937Z"
+      },
+      {
+        "id": "91836201-0f39-4203-809e-bf8011acb0bd",
+        "originalName": "2aobor3b2upddf4prisuexshnwmqujsbypvwgzuk128.jpg",
+        "filename": "1791114973927-696bb468.jpg",
+        "url": "/uploads/hotel-02/5/1791114973927-696bb468.jpg",
+        "uploadedAt": "2026-10-04T11:56:13.937Z"
+      },
+      {
+        "id": "62d1e402-c525-4d5b-bbf5-415a82ac4206",
+        "originalName": "2aobor3b2uuaxvzva85dgtv6hrfrgg4gk4vf4q4g129.jpg",
+        "filename": "1791114973928-bc895ba7.jpg",
+        "url": "/uploads/hotel-02/5/1791114973928-bc895ba7.jpg",
+        "uploadedAt": "2026-10-04T11:56:13.937Z"
+      },
+      {
+        "id": "39665519-980b-44a0-95bb-6d554f1d134d",
+        "originalName": "2aobor3b2vnkopbazpvzsv5whjpzzpibbraqukba130.jpg",
+        "filename": "1791114973930-c27aa6dd.jpg",
+        "url": "/uploads/hotel-02/5/1791114973930-c27aa6dd.jpg",
+        "uploadedAt": "2026-10-04T11:56:13.937Z"
+      },
+      {
+        "id": "ed67a229-fafb-478f-b03d-0a2adf732903",
+        "originalName": "2aobor3b2stej5facjcipnghxizorgdlgjns1pys124.jpg",
+        "filename": "1791114978409-9cff17b9.jpg",
+        "url": "/uploads/hotel-02/5/1791114978409-9cff17b9.jpg",
+        "uploadedAt": "2026-10-04T11:56:18.415Z"
+      },
+      {
+        "id": "eae77a07-a30a-4ac8-9dd9-df7615bf6e32",
+        "originalName": "2aobor3b2swydtovji9whihjpoj6pufx4tl3xthc125.jpg",
+        "filename": "1791114978411-bdfa86b2.jpg",
+        "url": "/uploads/hotel-02/5/1791114978411-bdfa86b2.jpg",
+        "uploadedAt": "2026-10-04T11:56:18.415Z"
+      }
+    ],
+    "hotel-02:6": [
+      {
+        "id": "08ba70d8-6da4-47f8-9b56-f0b68e40deeb",
+        "originalName": "2aobor3b3iqhbwafe0fi0zzethhxzmgwcz3ykw9w132.jpg",
+        "filename": "1791115033815-e685532d.jpg",
+        "url": "/uploads/hotel-02/6/1791115033815-e685532d.jpg",
+        "uploadedAt": "2026-10-04T11:57:13.819Z"
+      },
+      {
+        "id": "e068c989-87fc-468e-96ce-071205a346a3",
+        "originalName": "2aobor3b3hntkuvkpeem9duu4bxpuua6qztf9u2a131.jpg",
+        "filename": "1791115041315-d1808044.jpg",
+        "url": "/uploads/hotel-02/6/1791115041315-d1808044.jpg",
+        "uploadedAt": "2026-10-04T11:57:21.327Z"
+      },
+      {
+        "id": "2f68fd39-930f-44e3-8c0d-5c864dfd8c63",
+        "originalName": "2aobor3b3ivjnqy6ng2ojbmzcc2zjvbrwkdhawmo133.jpg",
+        "filename": "1791115041317-625c325a.jpg",
+        "url": "/uploads/hotel-02/6/1791115041317-625c325a.jpg",
+        "uploadedAt": "2026-10-04T11:57:21.327Z"
+      },
+      {
+        "id": "d97eedcc-c54a-4392-8d20-d9b349406722",
+        "originalName": "2aobor3b3jrfwfqgwhwjryfnzu9mjt2cwht6nsdm134.jpg",
+        "filename": "1791115041319-e08bdcf5.jpg",
+        "url": "/uploads/hotel-02/6/1791115041319-e08bdcf5.jpg",
+        "uploadedAt": "2026-10-04T11:57:21.327Z"
+      },
+      {
+        "id": "fe810ec7-cd38-4a79-a579-e65a9ecb6db1",
+        "originalName": "2aobor3b3jsahtmjoj7mxccsujfys59alqlmwocc135.jpg",
+        "filename": "1791115041321-e17b9293.jpg",
+        "url": "/uploads/hotel-02/6/1791115041321-e17b9293.jpg",
+        "uploadedAt": "2026-10-04T11:57:21.327Z"
+      },
+      {
+        "id": "3a16a973-6b1d-4a43-b81d-4f7e68663528",
+        "originalName": "2aobor3b2stej5facjcipnghxizorgdlgjns1pys124.jpg",
+        "filename": "1791115050625-a9e43213.jpg",
+        "url": "/uploads/hotel-02/6/1791115050625-a9e43213.jpg",
+        "uploadedAt": "2026-10-04T11:57:30.631Z"
+      },
+      {
+        "id": "5b841715-ca51-4963-8cc2-22bd951f7f4f",
+        "originalName": "2aobor3b2swydtovji9whihjpoj6pufx4tl3xthc125.jpg",
+        "filename": "1791115050627-7259f5d4.jpg",
+        "url": "/uploads/hotel-02/6/1791115050627-7259f5d4.jpg",
+        "uploadedAt": "2026-10-04T11:57:30.631Z"
+      }
+    ],
+    "hotel-02:7": [
+      {
+        "id": "2ec3b06e-7eda-40b2-af74-474372cfac98",
+        "originalName": "2aobor3b46prbroqudxo6oxgbv8ypq8vcjusx0uo142.jpg",
+        "filename": "1791115109494-fb37aa18.jpg",
+        "url": "/uploads/hotel-02/7/1791115109494-fb37aa18.jpg",
+        "uploadedAt": "2026-10-04T11:58:29.498Z"
+      },
+      {
+        "id": "bb5d9a08-feb6-42d4-a9e1-402877913c4d",
+        "originalName": "2aobor3b44j7gs4zyxkj1xesltr0azetqdxevres137.jpg",
+        "filename": "1791115117693-434f8273.jpg",
+        "url": "/uploads/hotel-02/7/1791115117693-434f8273.jpg",
+        "uploadedAt": "2026-10-04T11:58:37.711Z"
+      },
+      {
+        "id": "589e9ae6-fe23-4c78-b7c1-5e87e1633c8a",
+        "originalName": "2aobor3b44tgsddsgtwllgtq3sh3ylyctfpvy1zy138.jpg",
+        "filename": "1791115117695-3afdebe9.jpg",
+        "url": "/uploads/hotel-02/7/1791115117695-3afdebe9.jpg",
+        "uploadedAt": "2026-10-04T11:58:37.711Z"
+      },
+      {
+        "id": "79ae7ee8-4785-4233-bf2e-f2a07db7d85e",
+        "originalName": "2aobor3b45rilkhsobf3johjgi52ghlub0ntvy48140.jpg",
+        "filename": "1791115117696-4e1e87da.jpg",
+        "url": "/uploads/hotel-02/7/1791115117696-4e1e87da.jpg",
+        "uploadedAt": "2026-10-04T11:58:37.711Z"
+      },
+      {
+        "id": "1ab45e97-f2b6-423c-b059-63f300995509",
+        "originalName": "2aobor3b45rvmtieztnrqetufluacwephweb989g139.jpg",
+        "filename": "1791115117700-77997865.jpg",
+        "url": "/uploads/hotel-02/7/1791115117700-77997865.jpg",
+        "uploadedAt": "2026-10-04T11:58:37.711Z"
+      },
+      {
+        "id": "e6282ef9-fc63-4c43-a998-4919d6071fe4",
+        "originalName": "2aobor3b46m5bh5iotkughge45ocpsxkzdwzkbqi141.jpg",
+        "filename": "1791115117701-b2d3dc35.jpg",
+        "url": "/uploads/hotel-02/7/1791115117701-b2d3dc35.jpg",
+        "uploadedAt": "2026-10-04T11:58:37.711Z"
+      },
+      {
+        "id": "364f94ad-24f7-49f4-b806-7171550d22fa",
+        "originalName": "2aobor3b43u0obrxq3wslp3htiwzw2s1fujccxug136.jpg",
+        "filename": "1791115121054-282b586c.jpg",
+        "url": "/uploads/hotel-02/7/1791115121054-282b586c.jpg",
+        "uploadedAt": "2026-10-04T11:58:41.058Z"
+      }
+    ],
+    "hotel-02:8": [
+      {
+        "id": "9453292d-5972-4d33-a342-77a8179da67b",
+        "originalName": "2aobor3b4siqbknm7kcvopitbrajj1kgzu6a7pii148.jpg",
+        "filename": "1791115192774-bfcf0ea7.jpg",
+        "url": "/uploads/hotel-02/8/1791115192774-bfcf0ea7.jpg",
+        "uploadedAt": "2026-10-04T11:59:52.778Z"
+      },
+      {
+        "id": "ee8f3f7a-8bee-4598-9f34-f350625af80c",
+        "originalName": "2aobor3b4spebgkrscwjojp5m8mxq4b7swxmogge149.jpg",
+        "filename": "1791115202374-48e048d7.jpg",
+        "url": "/uploads/hotel-02/8/1791115202374-48e048d7.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "31f48748-a342-4a2b-aa9f-1b2a5e0e09f8",
+        "originalName": "2aobor3b4tglx0yogguk7ehhcwpypfvfemcfque0150.jpg",
+        "filename": "1791115202376-661b5656.jpg",
+        "url": "/uploads/hotel-02/8/1791115202376-661b5656.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "ce314f5e-7538-4a01-9556-7c6b2db87921",
+        "originalName": "2aobor3b4toc73dn7bbvkpncdah38nuvkgzdzhqs151.jpg",
+        "filename": "1791115202378-7cd06fbd.jpg",
+        "url": "/uploads/hotel-02/8/1791115202378-7cd06fbd.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "2e547ca8-a239-47f7-918e-f74d3e590c22",
+        "originalName": "2aobor3b4uhvgoay7i6cuc3stqyqz8okkfzxev6e152.jpg",
+        "filename": "1791115202380-8b3ea425.jpg",
+        "url": "/uploads/hotel-02/8/1791115202380-8b3ea425.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "e5e95e6c-420c-43a8-8047-e328451a5a24",
+        "originalName": "2aobor3b4uvl7ofuyksd01l8q94s42obg4sk80vi153.jpg",
+        "filename": "1791115202383-97950264.jpg",
+        "url": "/uploads/hotel-02/8/1791115202383-97950264.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "22f1784a-15be-4087-b80a-e9afaf8c0dbe",
+        "originalName": "2aobor3b4vt9h1y5usgmmrue4m5uxkvu7eksdd5c154.jpg",
+        "filename": "1791115202385-61b79ddf.jpg",
+        "url": "/uploads/hotel-02/8/1791115202385-61b79ddf.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "80e413ed-a500-48cb-9c24-21fd382d7776",
+        "originalName": "2aobor3b4w5tvlusgkdq6akwdidpfdkzbyupomhi155.jpg",
+        "filename": "1791115202387-3c6e5d04.jpg",
+        "url": "/uploads/hotel-02/8/1791115202387-3c6e5d04.jpg",
+        "uploadedAt": "2026-10-04T12:00:02.396Z"
+      },
+      {
+        "id": "8788dc60-f83d-4c8e-ac23-34896c08dfbe",
+        "originalName": "2aobor3b4qia7ckn0i5vplbmgfdydtbf51ef9sj2144.jpg",
+        "filename": "1791115210899-a6db0b03.jpg",
+        "url": "/uploads/hotel-02/8/1791115210899-a6db0b03.jpg",
+        "uploadedAt": "2026-10-04T12:00:10.911Z"
+      },
+      {
+        "id": "9ea73afc-df04-4217-b947-f4d60f17efec",
+        "originalName": "2aobor3b4qojbahqn3yu36sp0vsb5vzkc8fkwtka145.jpg",
+        "filename": "1791115210901-77d5ad44.jpg",
+        "url": "/uploads/hotel-02/8/1791115210901-77d5ad44.jpg",
+        "uploadedAt": "2026-10-04T12:00:10.911Z"
+      },
+      {
+        "id": "359a7bad-7ddb-435c-a758-5130149f45c7",
+        "originalName": "2aobor3b4rit5y0mks5hubu5o6mexwo9h9pzxelg146.jpg",
+        "filename": "1791115210903-cff7711e.jpg",
+        "url": "/uploads/hotel-02/8/1791115210903-cff7711e.jpg",
+        "uploadedAt": "2026-10-04T12:00:10.911Z"
+      },
+      {
+        "id": "9e6a0550-1300-4368-b2a7-6773a950eccb",
+        "originalName": "2aobor3b4rn6xfoqrciubqj3pm1dp4lkd16ujows147.jpg",
+        "filename": "1791115210905-fb08822c.jpg",
+        "url": "/uploads/hotel-02/8/1791115210905-fb08822c.jpg",
+        "uploadedAt": "2026-10-04T12:00:10.911Z"
+      },
+      {
+        "id": "841803c1-20ba-41ef-bd31-2ae8a74ff367",
+        "originalName": "2aobor3b4pq1w5cz6pox9fnhlkd7fefwjenlcsj2143.jpg",
+        "filename": "1791115214245-3ae5d6a4.jpg",
+        "url": "/uploads/hotel-02/8/1791115214245-3ae5d6a4.jpg",
+        "uploadedAt": "2026-10-04T12:00:14.249Z"
+      }
+    ],
+    "hotel-03:1": [
+      {
+        "id": "21a957c1-6e75-4379-a3fd-01858c743a60",
+        "originalName": "2aobor3b9hutvdad4hvwbekzspt6kmzlqhoiflgu172.jpg",
+        "filename": "1791116004097-02f0164d.jpg",
+        "url": "/uploads/hotel-03/1/1791116004097-02f0164d.jpg",
+        "uploadedAt": "2026-10-04T12:13:24.114Z"
+      },
+      {
+        "id": "039e5a1d-48ee-4238-aa43-35901c24d1bc",
+        "originalName": "2aobor3b9igdex9o781udj8pnfmu1rvp5n3miwzs173.jpg",
+        "filename": "1791116004099-01d04950.jpg",
+        "url": "/uploads/hotel-03/1/1791116004099-01d04950.jpg",
+        "uploadedAt": "2026-10-04T12:13:24.114Z"
+      },
+      {
+        "id": "327f03b2-c82e-4664-85b0-c8fe92f5c674",
+        "originalName": "2aobor3b9j3ejnz2klkcgqfga1uoun58exllbwfe174.jpg",
+        "filename": "1791116004102-183d9d6a.jpg",
+        "url": "/uploads/hotel-03/1/1791116004102-183d9d6a.jpg",
+        "uploadedAt": "2026-10-04T12:13:24.114Z"
+      },
+      {
+        "id": "8036c480-674a-4962-92dd-811950f53671",
+        "originalName": "2aobor3b9jndkl7kg7ivbsxhkjilapysgmw1oi24175.jpg",
+        "filename": "1791116004107-9a856146.jpg",
+        "url": "/uploads/hotel-03/1/1791116004107-9a856146.jpg",
+        "uploadedAt": "2026-10-04T12:13:24.114Z"
+      },
+      {
+        "id": "3a2ba2d9-cce4-4ae9-9ce2-37f4a521a290",
+        "originalName": "2aobor3b9ezzzo9zqvbjuvb8oxiwlybutsmwt8kq169.jpg",
+        "filename": "1791116009045-c98c7b16.jpg",
+        "url": "/uploads/hotel-03/1/1791116009045-c98c7b16.jpg",
+        "uploadedAt": "2026-10-04T12:13:29.060Z"
+      },
+      {
+        "id": "98ec49bd-833b-456a-9854-b95202e403f7",
+        "originalName": "2aobor3b9frtdhyguwvhtvy7xmecjqg6rnai8yg4170.jpg",
+        "filename": "1791116009049-b8e0e8ad.jpg",
+        "url": "/uploads/hotel-03/1/1791116009049-b8e0e8ad.jpg",
+        "uploadedAt": "2026-10-04T12:13:29.060Z"
+      },
+      {
+        "id": "d3d338d9-c07b-42eb-8da8-cac9d9807092",
+        "originalName": "2aobor3b9giwrawxyxq53l7ttycceltgfxmqxbpe171.jpg",
+        "filename": "1791116009054-452a5cd7.jpg",
+        "url": "/uploads/hotel-03/1/1791116009054-452a5cd7.jpg",
+        "uploadedAt": "2026-10-04T12:13:29.060Z"
+      }
+    ],
+    "hotel-03:2": [
+      {
+        "id": "aee7bead-c7cf-43d5-abd6-a76d3501e089",
+        "originalName": "2aobor3b9xjcxjlqn1ecssbgiicv3fphluqgsbfi181.jpg",
+        "filename": "1791116103771-a7510969.jpg",
+        "url": "/uploads/hotel-03/2/1791116103771-a7510969.jpg",
+        "uploadedAt": "2026-10-04T12:15:03.776Z"
+      },
+      {
+        "id": "70e36cd4-acb7-4c1d-891a-8ef36282fd7f",
+        "originalName": "2aobor3b9ujgthswbnprqsslirt7gft0iiz8ngqq178.jpg",
+        "filename": "1791116109518-7ba8395d.jpg",
+        "url": "/uploads/hotel-03/2/1791116109518-7ba8395d.jpg",
+        "uploadedAt": "2026-10-04T12:15:09.533Z"
+      },
+      {
+        "id": "ac658fdc-ed32-4da7-be92-aeae599e9c0d",
+        "originalName": "2aobor3b9vercpmqyuuclyxgdwr9cjgq9krjcl16179.jpg",
+        "filename": "1791116109521-651ed321.jpg",
+        "url": "/uploads/hotel-03/2/1791116109521-651ed321.jpg",
+        "uploadedAt": "2026-10-04T12:15:09.533Z"
+      },
+      {
+        "id": "374058cc-fe16-49b8-af93-50941584a6ed",
+        "originalName": "2aobor3b9wrmezxzeqqqqiacnwkvokqcgtt5mtwe180.jpg",
+        "filename": "1791116109525-c02e3faa.jpg",
+        "url": "/uploads/hotel-03/2/1791116109525-c02e3faa.jpg",
+        "uploadedAt": "2026-10-04T12:15:09.533Z"
+      },
+      {
+        "id": "8d4d6c9d-5872-437f-8d8e-d2c94eddbec2",
+        "originalName": "2aobor3b9xrmzvxrfbkuqkncc4m57xcfycwumkqe182.jpg",
+        "filename": "1791116109527-bd44c89f.jpg",
+        "url": "/uploads/hotel-03/2/1791116109527-bd44c89f.jpg",
+        "uploadedAt": "2026-10-04T12:15:09.533Z"
+      },
+      {
+        "id": "b4046ba2-9ec4-4234-836e-510c3022cf8c",
+        "originalName": "2aobor3b9t4al3isky1vin0o5t4oofrbtoa7dida176.jpg",
+        "filename": "1791116114179-083d3b79.jpg",
+        "url": "/uploads/hotel-03/2/1791116114179-083d3b79.jpg",
+        "uploadedAt": "2026-10-04T12:15:14.189Z"
+      },
+      {
+        "id": "684ec85b-bb69-477b-a9f2-76579dbeff35",
+        "originalName": "2aobor3b9ttffmtra2qyvwexomvv2bbgdjumbhcg177.jpg",
+        "filename": "1791116114183-af7ffb88.jpg",
+        "url": "/uploads/hotel-03/2/1791116114183-af7ffb88.jpg",
+        "uploadedAt": "2026-10-04T12:15:14.189Z"
+      }
+    ],
+    "hotel-03:3": [
+      {
+        "id": "1f3c092e-e2a8-4af1-ae3c-ce88bd961523",
+        "originalName": "2aobor3ba8tmzqvjn6kfsahru0buee0duwnzkbda189.jpg",
+        "filename": "1791116186736-ff14c2c5.jpg",
+        "url": "/uploads/hotel-03/3/1791116186736-ff14c2c5.jpg",
+        "uploadedAt": "2026-10-04T12:16:26.740Z"
+      },
+      {
+        "id": "1ee24b00-8fac-427c-956e-65a71510aa63",
+        "originalName": "2aobor3ba5wvryibec4lsa8ueggfzm79iwzava8w184.jpg",
+        "filename": "1791116193743-38ffb83b.jpg",
+        "url": "/uploads/hotel-03/3/1791116193743-38ffb83b.jpg",
+        "uploadedAt": "2026-10-04T12:16:33.760Z"
+      },
+      {
+        "id": "555a0ef2-2dc0-405a-a4b9-24b1064ddb34",
+        "originalName": "2aobor3ba6dnqza48tdidpnfmji0wsn31tfs6pgo186.jpg",
+        "filename": "1791116193745-0305917c.jpg",
+        "url": "/uploads/hotel-03/3/1791116193745-0305917c.jpg",
+        "uploadedAt": "2026-10-04T12:16:33.760Z"
+      },
+      {
+        "id": "6c307a30-8dd2-4ffa-b4a9-718adcd802b3",
+        "originalName": "2aobor3ba7isnf0y9ilj2jwfpklmo88r9hiv2rrm187.jpg",
+        "filename": "1791116193747-29b12e5f.jpg",
+        "url": "/uploads/hotel-03/3/1791116193747-29b12e5f.jpg",
+        "uploadedAt": "2026-10-04T12:16:33.760Z"
+      },
+      {
+        "id": "e2b57401-c7f5-427b-aa89-5417b02148c8",
+        "originalName": "2aobor3ba7tbiilnhesx9omq8yysefoewdp7oszm188.jpg",
+        "filename": "1791116193749-2e907509.jpg",
+        "url": "/uploads/hotel-03/3/1791116193749-2e907509.jpg",
+        "uploadedAt": "2026-10-04T12:16:33.760Z"
+      },
+      {
+        "id": "51c3a231-f8df-45cb-b219-403778f7fc84",
+        "originalName": "2aobor3ba66jalouoqofbgtboixjkmdniynlkjpk185.jpg",
+        "filename": "1791116193750-01b080bb.jpg",
+        "url": "/uploads/hotel-03/3/1791116193750-01b080bb.jpg",
+        "uploadedAt": "2026-10-04T12:16:33.760Z"
+      },
+      {
+        "id": "75b67679-9a05-4e33-8194-1f3bcaffb55f",
+        "originalName": "2aobor3ba4zokvaeown6zgmpipgoblmsdgwirm2y183.jpg",
+        "filename": "1791116197135-8769d97d.jpg",
+        "url": "/uploads/hotel-03/3/1791116197135-8769d97d.jpg",
+        "uploadedAt": "2026-10-04T12:16:37.139Z"
+      }
+    ],
+    "hotel-03:4": [
+      {
+        "id": "f88ab67a-eedf-43ba-b83b-113169040fb2",
+        "originalName": "2aobor3bahj0xzfliobgr4jxd3jhxogi7oigrsk0199.jpg",
+        "filename": "1791116321193-1dc219ee.jpg",
+        "url": "/uploads/hotel-03/4/1791116321193-1dc219ee.jpg",
+        "uploadedAt": "2026-10-04T12:18:41.197Z"
+      },
+      {
+        "id": "858fbe29-d483-40ee-b3ef-55b78c5a6261",
+        "originalName": "2aobor3baenh4rqfbc8fy296vtgl2wds24ifjdaq192.jpg",
+        "filename": "1791116327127-18b053e4.jpg",
+        "url": "/uploads/hotel-03/4/1791116327127-18b053e4.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "520fd4d6-b99d-4451-bd55-ccdc2a42fb2a",
+        "originalName": "2aobor3baewbkfvt38qayjpd2dskhbzv1cdvx4kw193.jpg",
+        "filename": "1791116327129-62d6ce5f.jpg",
+        "url": "/uploads/hotel-03/4/1791116327129-62d6ce5f.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "c0fa199f-f050-418e-b784-45aa83f09906",
+        "originalName": "2aobor3bafmy2ogdifmyeomp5m0botvquikuaydi194.jpg",
+        "filename": "1791116327130-c5a22e17.jpg",
+        "url": "/uploads/hotel-03/4/1791116327130-c5a22e17.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "ed4e34eb-ce82-4ca8-8fa7-9cf73194fbe6",
+        "originalName": "2aobor3bafpj94svfsszzt0d1irb1bcs81wpvnnc195.jpg",
+        "filename": "1791116327132-eef1e87d.jpg",
+        "url": "/uploads/hotel-03/4/1791116327132-eef1e87d.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "0e3cc548-0a9b-4134-82b8-415bf5eba304",
+        "originalName": "2aobor3bagfvgt8rfkykzt3yfjprwvxo2xqbugtw197.jpg",
+        "filename": "1791116327135-7421d22d.jpg",
+        "url": "/uploads/hotel-03/4/1791116327135-7421d22d.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "c7ec7fb9-8773-44d8-bf0a-761bfc28f06f",
+        "originalName": "2aobor3baggh6zh6aoxvd9i84dmqhkonu7jlcdgw196.jpg",
+        "filename": "1791116327137-b2949a31.jpg",
+        "url": "/uploads/hotel-03/4/1791116327137-b2949a31.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "e8cef034-6dc3-49eb-aab1-f0e00097cb54",
+        "originalName": "2aobor3bahbwhlubylmdovjca78n0d3xljnvorfw198.jpg",
+        "filename": "1791116327138-1507d775.jpg",
+        "url": "/uploads/hotel-03/4/1791116327138-1507d775.jpg",
+        "uploadedAt": "2026-10-04T12:18:47.151Z"
+      },
+      {
+        "id": "16edebfe-bd5c-47c4-879d-7dad4e7c98ef",
+        "originalName": "2aobor3bad1ppziopafuk1ym90vp1rqnpqolsdzs190.jpg",
+        "filename": "1791116331711-e1ea8a76.jpg",
+        "url": "/uploads/hotel-03/4/1791116331711-e1ea8a76.jpg",
+        "uploadedAt": "2026-10-04T12:18:51.725Z"
+      },
+      {
+        "id": "867be26c-2fc8-4c7a-8b07-f1116b83715f",
+        "originalName": "2aobor3bade8oweydxmsuhlfsgnwzupeytvefi3c191.jpg",
+        "filename": "1791116331715-da492f28.jpg",
+        "url": "/uploads/hotel-03/4/1791116331715-da492f28.jpg",
+        "uploadedAt": "2026-10-04T12:18:51.725Z"
+      }
+    ],
+    "hotel-04:1": [
+      {
+        "id": "b574be37-29d1-4a79-8c15-8b0b9e8dfc1d",
+        "originalName": "2aobor3brmmkcqwidm3rd3kxm6rxzjnjurman4xg240.jpg",
+        "filename": "1791117588291-ec4a643c.jpg",
+        "url": "/uploads/hotel-04/1/1791117588291-ec4a643c.jpg",
+        "uploadedAt": "2026-10-04T12:39:48.304Z"
+      },
+      {
+        "id": "5ddf3b79-1e08-4428-8c66-17851d37aadc",
+        "originalName": "2aobor3brngpa0qb2mgxcqonf4cadrxqc8rf222y241.jpg",
+        "filename": "1791117588294-45479b20.jpg",
+        "url": "/uploads/hotel-04/1/1791117588294-45479b20.jpg",
+        "uploadedAt": "2026-10-04T12:39:48.304Z"
+      },
+      {
+        "id": "94853e16-f76f-4bad-972e-0b08b1c50524",
+        "originalName": "2aobor3brohvdcwaqg9iaqgrg9y5go4agu6sex9e242.jpg",
+        "filename": "1791117588298-d768fea4.jpg",
+        "url": "/uploads/hotel-04/1/1791117588298-d768fea4.jpg",
+        "uploadedAt": "2026-10-04T12:39:48.304Z"
+      },
+      {
+        "id": "599f19fc-a5f5-4be6-a613-b9006c9bb18c",
+        "originalName": "2aobor3bsbvvzwhdnzsy9br2d51ibuukbsiykkuy252.jpg",
+        "filename": "1791117695430-25d8e8cd.jpg",
+        "url": "/uploads/hotel-04/1/1791117695430-25d8e8cd.jpg",
+        "uploadedAt": "2026-10-04T12:41:35.436Z"
+      }
+    ],
+    "hotel-04:2": [
+      {
+        "id": "a458d91e-4cc4-4b3d-8f30-5e877993c0ee",
+        "originalName": "2aobor3brvzzi7c00kwoq3ssksamt7d0ystuinqu247.jpg",
+        "filename": "1791117614263-edab9d03.jpg",
+        "url": "/uploads/hotel-04/2/1791117614263-edab9d03.jpg",
+        "uploadedAt": "2026-10-04T12:40:14.268Z"
+      },
+      {
+        "id": "cd463819-6e63-44bb-99f7-88b91274e601",
+        "originalName": "2aobor3brt3mgqpwsrrecjyt9cgkncqcopncfrli243.jpg",
+        "filename": "1791117623173-103af80c.jpg",
+        "url": "/uploads/hotel-04/2/1791117623173-103af80c.jpg",
+        "uploadedAt": "2026-10-04T12:40:23.198Z"
+      },
+      {
+        "id": "fb8b628e-f273-4c78-a8d0-6028581caef8",
+        "originalName": "2aobor3brtyfxo9cjxeedu6aplfjqxfr28qcjjk8244.jpg",
+        "filename": "1791117623176-2cd16cfd.jpg",
+        "url": "/uploads/hotel-04/2/1791117623176-2cd16cfd.jpg",
+        "uploadedAt": "2026-10-04T12:40:23.198Z"
+      },
+      {
+        "id": "0cf0a671-4570-494f-88b8-33967d2f4398",
+        "originalName": "2aobor3brwbytt4xfl1jykydqnbtxwj9ueaxzdse248.jpg",
+        "filename": "1791117623183-44ad4518.jpg",
+        "url": "/uploads/hotel-04/2/1791117623183-44ad4518.jpg",
+        "uploadedAt": "2026-10-04T12:40:23.198Z"
+      },
+      {
+        "id": "948f20c9-a306-4136-a6be-3e276801000d",
+        "originalName": "2aobor3brxio7ewkndsfuhfqrgij0jeiwbhiryai249.jpg",
+        "filename": "1791117623186-74c20b7e.jpg",
+        "url": "/uploads/hotel-04/2/1791117623186-74c20b7e.jpg",
+        "uploadedAt": "2026-10-04T12:40:23.198Z"
+      },
+      {
+        "id": "99194c63-3638-41e7-a153-350fb1436304",
+        "originalName": "2aobor3brxwi5gyhhomwzuq8dwljakse72b2kzyc250.jpg",
+        "filename": "1791117623189-48d17fed.jpg",
+        "url": "/uploads/hotel-04/2/1791117623189-48d17fed.jpg",
+        "uploadedAt": "2026-10-04T12:40:23.198Z"
+      },
+      {
+        "id": "1e112207-513c-40b8-8eb5-ba9dc8558fe4",
+        "originalName": "2aobor3bruiedjljhc0rgoo5vvokmoc8c2ototb6245.jpg",
+        "filename": "1791117630136-c424ebe6.jpg",
+        "url": "/uploads/hotel-04/2/1791117630136-c424ebe6.jpg",
+        "uploadedAt": "2026-10-04T12:40:30.146Z"
+      },
+      {
+        "id": "976cd592-7244-4373-8be5-bb501fdf152c",
+        "originalName": "2aobor3brvowzsnyjsengagxyqfyh5mfdynvwt3w246.jpg",
+        "filename": "1791117630140-95f6a850.jpg",
+        "url": "/uploads/hotel-04/2/1791117630140-95f6a850.jpg",
+        "uploadedAt": "2026-10-04T12:40:30.146Z"
+      }
+    ],
+    "hotel-04:3": [
+      {
+        "id": "1fe35738-2e44-4a4d-b321-dd36881030e4",
+        "originalName": "2aobor3bsb93jdp3ayr2dktewbr6msom1ub58mrw251.jpg",
+        "filename": "1791117677069-1599d150.jpg",
+        "url": "/uploads/hotel-04/3/1791117677069-1599d150.jpg",
+        "uploadedAt": "2026-10-04T12:41:17.074Z"
+      },
+      {
+        "id": "e69ad7dc-49cc-4c98-8cc7-ca8b1b61773d",
+        "originalName": "2aobor3bscycy5706jhktwgvew0iesjumc6cfc8w253.jpg",
+        "filename": "1791117682416-1db2200d.jpg",
+        "url": "/uploads/hotel-04/3/1791117682416-1db2200d.jpg",
+        "uploadedAt": "2026-10-04T12:41:22.431Z"
+      },
+      {
+        "id": "54d253f7-8e5a-4e2e-bbe8-d4862e15d0e3",
+        "originalName": "2aobor3bsdcgeyu31k6nm5ws9rc9vvkkjsohzehk254.jpg",
+        "filename": "1791117682420-d950d1b5.jpg",
+        "url": "/uploads/hotel-04/3/1791117682420-d950d1b5.jpg",
+        "uploadedAt": "2026-10-04T12:41:22.431Z"
+      },
+      {
+        "id": "49586fa6-4862-4779-be86-1280d3279ce1",
+        "originalName": "2aobor3bsds7pfax6iid3jcq5cdwvwvviyheh6sc255.jpg",
+        "filename": "1791117682423-b336de00.jpg",
+        "url": "/uploads/hotel-04/3/1791117682423-b336de00.jpg",
+        "uploadedAt": "2026-10-04T12:41:22.431Z"
+      },
+      {
+        "id": "60c72165-ed20-43a4-98f5-6c3351ea5550",
+        "originalName": "2aobor3bsbvvzwhdnzsy9br2d51ibuukbsiykkuy252.jpg",
+        "filename": "1791117687820-bd384323.jpg",
+        "url": "/uploads/hotel-04/3/1791117687820-bd384323.jpg",
+        "uploadedAt": "2026-10-04T12:41:27.825Z"
+      }
+    ],
+    "hotel-04:4": [
+      {
+        "id": "8704a62e-e602-4bb3-b323-64931ee273ea",
+        "originalName": "2aobor3bskwqublj0uig1477lxfynorfexxfkchc258.jpg",
+        "filename": "1791117707165-627a717c.jpg",
+        "url": "/uploads/hotel-04/4/1791117707165-627a717c.jpg",
+        "uploadedAt": "2026-10-04T12:41:47.170Z"
+      },
+      {
+        "id": "699eb237-c896-49a2-87cc-d8fefaf3b0d8",
+        "originalName": "2aobor3bsjytp14tifhnmghcttt8a5p7hs7seare256.jpg",
+        "filename": "1791117713724-cd3ba19e.jpg",
+        "url": "/uploads/hotel-04/4/1791117713724-cd3ba19e.jpg",
+        "uploadedAt": "2026-10-04T12:41:53.747Z"
+      },
+      {
+        "id": "4c8962dc-1360-4f79-be68-828148241d40",
+        "originalName": "2aobor3bskk8ggljkfdo85ohygeefg6b3rec2qqe257.jpg",
+        "filename": "1791117713728-7b1cfb34.jpg",
+        "url": "/uploads/hotel-04/4/1791117713728-7b1cfb34.jpg",
+        "uploadedAt": "2026-10-04T12:41:53.747Z"
+      },
+      {
+        "id": "70b67e0b-1fb4-4fb1-9d35-d5f29a661026",
+        "originalName": "2aobor3bslhqkvns1fp7irgoifvodt7llfljrux2259.jpg",
+        "filename": "1791117713732-76eb8b49.jpg",
+        "url": "/uploads/hotel-04/4/1791117713732-76eb8b49.jpg",
+        "uploadedAt": "2026-10-04T12:41:53.747Z"
+      },
+      {
+        "id": "f7ba3c94-9e66-4549-91e4-4637d8870540",
+        "originalName": "2aobor3bsmnb2jenabontv6kfrboghudwq8ikbs8260.jpg",
+        "filename": "1791117713735-3c771975.jpg",
+        "url": "/uploads/hotel-04/4/1791117713735-3c771975.jpg",
+        "uploadedAt": "2026-10-04T12:41:53.747Z"
+      },
+      {
+        "id": "84cac647-b223-4080-a541-329828b5419b",
+        "originalName": "2aobor3bsn2xlmswekfputr8gc8xejenudjlnoiu261.jpg",
+        "filename": "1791117713738-72dbf801.jpg",
+        "url": "/uploads/hotel-04/4/1791117713738-72dbf801.jpg",
+        "uploadedAt": "2026-10-04T12:41:53.747Z"
+      },
+      {
+        "id": "237577c9-ebad-4764-8597-845a9939411b",
+        "originalName": "2aobor3bsxswgwqxyotztec413qza9swa2qmtslg263.jpg",
+        "filename": "1791117746269-8762a6ff.jpg",
+        "url": "/uploads/hotel-04/4/1791117746269-8762a6ff.jpg",
+        "uploadedAt": "2026-10-04T12:42:26.282Z"
+      },
+      {
+        "id": "04a903d3-87d4-46b0-b86c-a9e758b9089e",
+        "originalName": "2aobor3bsydwxgt6za0rbrmvzkcwzrzc4tskofmc264.jpg",
+        "filename": "1791117746275-becc27a1.jpg",
+        "url": "/uploads/hotel-04/4/1791117746275-becc27a1.jpg",
+        "uploadedAt": "2026-10-04T12:42:26.282Z"
+      }
+    ],
+    "hotel-04:5": [
+      {
+        "id": "e149e869-9790-4b59-bcd5-a1cc68f0c2f8",
+        "originalName": "2aobor3bsadc3mspmh81y6z3t1vfxzaujkpqgtrs266.jpg",
+        "filename": "1791117729422-b702df7e.jpg",
+        "url": "/uploads/hotel-04/5/1791117729422-b702df7e.jpg",
+        "uploadedAt": "2026-10-04T12:42:09.427Z"
+      },
+      {
+        "id": "830a53b2-bad7-4e06-ac61-fcb19c14793e",
+        "originalName": "2aobor3bsavoqjht6qzdcgusfvveh7gkuivsxpva267.jpg",
+        "filename": "1791117736379-e1c9119e.jpg",
+        "url": "/uploads/hotel-04/5/1791117736379-e1c9119e.jpg",
+        "uploadedAt": "2026-10-04T12:42:16.405Z"
+      },
+      {
+        "id": "5120d47b-7fd4-428c-8e7a-497077968851",
+        "originalName": "2aobor3bsbde45tklmsbwlsonijkef8sutvglf84268.jpg",
+        "filename": "1791117736382-206d5640.jpg",
+        "url": "/uploads/hotel-04/5/1791117736382-206d5640.jpg",
+        "uploadedAt": "2026-10-04T12:42:16.405Z"
+      },
+      {
+        "id": "9b20e63e-6225-4add-b39c-95af4670ba8c",
+        "originalName": "2aobor3bsctn02r8ikuuois3ekhtmj4omhdkc05q269.jpg",
+        "filename": "1791117736386-a887b90c.jpg",
+        "url": "/uploads/hotel-04/5/1791117736386-a887b90c.jpg",
+        "uploadedAt": "2026-10-04T12:42:16.405Z"
+      },
+      {
+        "id": "1a881362-fa76-4ced-adfd-81ee93c4d9b7",
+        "originalName": "2aobor3bsx6gakggrpobb3njkot1acjcruvptsx2262.jpg",
+        "filename": "1791117736389-85bc9a79.jpg",
+        "url": "/uploads/hotel-04/5/1791117736389-85bc9a79.jpg",
+        "uploadedAt": "2026-10-04T12:42:16.405Z"
+      },
+      {
+        "id": "59c468e2-07b3-4cd1-9f1f-23a3cc65d77a",
+        "originalName": "2aobor3bszqgami6glbntn01sdgre5rocqcgwpks265.jpg",
+        "filename": "1791117736393-b72126e8.jpg",
+        "url": "/uploads/hotel-04/5/1791117736393-b72126e8.jpg",
+        "uploadedAt": "2026-10-04T12:42:16.405Z"
+      },
+      {
+        "id": "386a6d46-efa5-4325-961f-acd0e86a2774",
+        "originalName": "2aobor3bsxswgwqxyotztec413qza9swa2qmtslg263.jpg",
+        "filename": "1791117740765-e8a80a7c.jpg",
+        "url": "/uploads/hotel-04/5/1791117740765-e8a80a7c.jpg",
+        "uploadedAt": "2026-10-04T12:42:20.775Z"
+      },
+      {
+        "id": "afde4b91-3dc3-4e11-b1fa-48d9cc5781e6",
+        "originalName": "2aobor3bsydwxgt6za0rbrmvzkcwzrzc4tskofmc264.jpg",
+        "filename": "1791117740769-aa5f5dbf.jpg",
+        "url": "/uploads/hotel-04/5/1791117740769-aa5f5dbf.jpg",
+        "uploadedAt": "2026-10-04T12:42:20.775Z"
+      }
+    ],
+    "hotel-04:6": [
+      {
+        "id": "5a1b7cf4-5a62-4215-b732-f8726a20bcf6",
+        "originalName": "2aobor3btnexwmqmnmskumkbizbqre178e5c6os0276.jpg",
+        "filename": "1791117783901-271a1c36.jpg",
+        "url": "/uploads/hotel-04/6/1791117783901-271a1c36.jpg",
+        "uploadedAt": "2026-10-04T12:43:03.913Z"
+      },
+      {
+        "id": "be72ac55-2482-404e-b24e-baf19547e5ca",
+        "originalName": "2aobor3btkqzplif8snpvagevj8m3m8bisxsoqv6273.jpg",
+        "filename": "1791117798926-1a181516.jpg",
+        "url": "/uploads/hotel-04/6/1791117798926-1a181516.jpg",
+        "uploadedAt": "2026-10-04T12:43:18.936Z"
+      },
+      {
+        "id": "b14b4378-92d1-4daa-a44b-62ef8d76dbd2",
+        "originalName": "2aobor3btmv5oi7do2h0gkwh4q4ihkcyuroft1xw275.jpg",
+        "filename": "1791117798929-faa1f33c.jpg",
+        "url": "/uploads/hotel-04/6/1791117798929-faa1f33c.jpg",
+        "uploadedAt": "2026-10-04T12:43:18.936Z"
+      },
+      {
+        "id": "6688166a-14ff-40fd-bd27-c616614a7264",
+        "originalName": "2aobor3btoqm52glk22jzqvblpeb5ud9k6asy8tg278.jpg",
+        "filename": "1791117809786-325b58f7.jpg",
+        "url": "/uploads/hotel-04/6/1791117809786-325b58f7.jpg",
+        "uploadedAt": "2026-10-04T12:43:29.812Z"
+      },
+      {
+        "id": "64e4d446-30f0-46c1-8a1b-dc8a0b6e37b3",
+        "originalName": "2aobor3btpiwkgg6uvu2tcejxkv5jzg9fhxzyzkk279.jpg",
+        "filename": "1791117809790-765f1669.jpg",
+        "url": "/uploads/hotel-04/6/1791117809790-765f1669.jpg",
+        "uploadedAt": "2026-10-04T12:43:29.812Z"
+      },
+      {
+        "id": "c49d1c6c-63e9-4192-93ec-fc616a0adc12",
+        "originalName": "2aobor3btqt3p8zhsm6bdnyqp1b9ocomgy3gtaly280.jpg",
+        "filename": "1791117809794-2663a90e.jpg",
+        "url": "/uploads/hotel-04/6/1791117809794-2663a90e.jpg",
+        "uploadedAt": "2026-10-04T12:43:29.812Z"
+      },
+      {
+        "id": "0e71f1aa-0aca-4035-a778-3e7551ca2fd6",
+        "originalName": "2aobor3btrhtiwwpgbg5mvioxukcp5jgvo3z7hhu281.jpg",
+        "filename": "1791117809799-d8ceb2c9.jpg",
+        "url": "/uploads/hotel-04/6/1791117809799-d8ceb2c9.jpg",
+        "uploadedAt": "2026-10-04T12:43:29.812Z"
+      },
+      {
+        "id": "7b302a30-630f-47cd-9e08-d6a67f95f338",
+        "originalName": "2aobor3bts4l4vaxtp41br7swpvfgpof4ubb0yf6282.jpg",
+        "filename": "1791117809802-bd17370a.jpg",
+        "url": "/uploads/hotel-04/6/1791117809802-bd17370a.jpg",
+        "uploadedAt": "2026-10-04T12:43:29.812Z"
+      },
+      {
+        "id": "7940817e-73a2-4117-8ba7-83db8a740496",
+        "originalName": "2aobor3btippkc6dgghsiakxhxnhzhonrng5yliu270.jpg",
+        "filename": "1791117832915-bedd7421.jpg",
+        "url": "/uploads/hotel-04/6/1791117832915-bedd7421.jpg",
+        "uploadedAt": "2026-10-04T12:43:52.946Z"
+      },
+      {
+        "id": "c352ecb2-4f60-4ea5-a0b0-3f246ff13600",
+        "originalName": "2aobor3btjafremqgcjyd2jppyecjzibihcpeoi0271.jpg",
+        "filename": "1791117832919-0b0c718b.jpg",
+        "url": "/uploads/hotel-04/6/1791117832919-0b0c718b.jpg",
+        "uploadedAt": "2026-10-04T12:43:52.946Z"
+      },
+      {
+        "id": "e204d20a-095e-4c79-8ddc-564bd2152813",
+        "originalName": "2aobor3btjymismw2mtvbta0tajinemlc7nw8uoc272.jpg",
+        "filename": "1791117832924-20b76923.jpg",
+        "url": "/uploads/hotel-04/6/1791117832924-20b76923.jpg",
+        "uploadedAt": "2026-10-04T12:43:52.946Z"
+      },
+      {
+        "id": "39be629c-62c7-4555-ad69-1ce86d4cf5dd",
+        "originalName": "2aobor3btlbjoxwka3psajd0ddxeyh9qwxfzpclm274.jpg",
+        "filename": "1791117832929-c5a26f65.jpg",
+        "url": "/uploads/hotel-04/6/1791117832929-c5a26f65.jpg",
+        "uploadedAt": "2026-10-04T12:43:52.946Z"
+      },
+      {
+        "id": "00b2a347-c724-475c-893b-42793547454a",
+        "originalName": "2aobor3bto2jkpng100eqnql1i2k2ruk3abpsefk277.jpg",
+        "filename": "1791117832934-c236752c.jpg",
+        "url": "/uploads/hotel-04/6/1791117832934-c236752c.jpg",
+        "uploadedAt": "2026-10-04T12:43:52.946Z"
+      }
+    ]
+  }
+}
