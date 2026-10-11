@@ -1,9 +1,5 @@
 <!DOCTYPE html>
-<<<<<<< HEAD
-<html lang="en">
-=======
 <html lang="vi">
->>>>>>> origin/thu
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -24,20 +20,6 @@
   <div class="hero__bg" id="heroBg"></div>
   <div class="container hero__in">
     <div class="hero__ct">
-<<<<<<< HEAD
-      <a href="index.html" class="tiny" style="color:var(--tx-inv-2);display:inline-flex;align-items:center;gap:6px;margin-bottom:14px" id="backHome"></a>
-      <h1>Find Your Stay</h1>
-      <p style="margin-top:.9rem">Signature hotels in the heart of Ho Chi Minh City.</p>
-    </div>
-    <div id="sumBar" style="margin-top:2rem"></div>
-  </div>
-</section>
-
-<div id="editSearch" style="background:var(--surface);border-bottom:1px solid var(--line);display:none">
-  <div class="container" style="padding-block:22px"><div id="searchWrap"></div></div>
-</div>
-
-=======
       <a href="index.html" class="tiny hotel-hero__back" id="backHome"></a>
       <h1>Find Your Stay</h1>
       <p class="hotel-hero__description">Signature hotels in the heart of Ho Chi Minh City.</p>
@@ -49,7 +31,6 @@
   </div>
 </section>
 
->>>>>>> origin/thu
 <section class="section section--tight">
   <div class="container">
     <div class="split split--filters">
@@ -64,17 +45,6 @@
 
           <div class="fgrp">
             <h5>Price per night (VND)</h5>
-<<<<<<< HEAD
-            <div class="range"><input type="range" id="fPrice" min="600000" max="2800000" step="50000" value="2800000"></div>
-            <div class="range__v"><span>600,000</span><span id="fPriceV">2,800,000+</span></div>
-          </div>
-
-          <div class="fgrp"><h5>Room type</h5><div id="fType"></div></div>
-          <div class="fgrp"><h5>Bed type</h5><div id="fBed"></div></div>
-          <div class="fgrp"><h5>View</h5><div id="fView"></div></div>
-          <div class="fgrp"><h5>Amenities</h5><div id="fAmen"></div></div>
-          <div class="fgrp"><h5>Property</h5><div id="fStar"></div></div>
-=======
             <div class="range"><input type="range" id="fPrice" aria-label="Maximum price per night (VND)" min="600000" max="2800000" step="50000" value="2800000"></div>
             <div class="range__v"><span>600,000</span><span id="fPriceV">2,800,000+</span></div>
           </div>
@@ -84,7 +54,6 @@
           <div class="fgrp"><h5>Phong cách lưu trú</h5><div id="fStyle"></div></div>
           <div class="fgrp"><h5>Amenities</h5><div id="fAmen"></div></div>
           <div class="fgrp"><h5>Property rating</h5><div id="fStar"></div></div>
->>>>>>> origin/thu
 
           <button class="btn btn--ghost btn--block" id="applyF" type="button" style="margin-top:16px">Apply filters</button>
         </div>
@@ -99,11 +68,7 @@
           </div>
           <div style="display:flex;align-items:center;gap:10px">
             <span class="tiny muted nowrap">Sort by</span>
-<<<<<<< HEAD
-            <select class="select" id="sortBy" style="width:auto;min-width:190px">
-=======
             <select class="select" id="sortBy" aria-label="Sort by" style="width:auto;min-width:190px">
->>>>>>> origin/thu
               <option value="recommended">Recommended</option>
               <option value="price-asc">Price: low to high</option>
               <option value="price-desc">Price: high to low</option>
@@ -114,10 +79,6 @@
 
         <div id="results" class="stack" style="gap:20px"></div>
 
-<<<<<<< HEAD
-        <div class="alert alert--info" style="margin-top:26px" id="srcNote"></div>
-=======
->>>>>>> origin/thu
       </div>
     </div>
   </div>
@@ -132,15 +93,12 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<<<<<<< HEAD
-<script src="js/app.js"></script>
-=======
 <script src="js/i18n.js"></script><script src="js/app.js"></script>
->>>>>>> origin/thu
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
 <script src="js/live.js"></script>
+<script src="js/site-images.js"></script>
 <script>
 (function () {
   var U = window.U, D = window.KAS_DATA, App = window.App,
@@ -171,16 +129,8 @@
       });
     }
     window.__KAS_SYNC_PROPERTY_GALLERIES__ = syncPropertyGalleries;
-    var heroHotel = D.getHotel('hotel-02');
-    if (heroHotel && heroHotel.images && heroHotel.images.length) {
-      U.$('#heroBg').innerHTML = U.img(heroHotel.images[0], heroHotel.name, '', false, false);
-    }
     return catalog;
   }).catch(function() {
-    var fallbackHero = D.getHotel('hotel-02');
-    if (fallbackHero && fallbackHero.images && fallbackHero.images.length) {
-      U.$('#heroBg').innerHTML = U.img(fallbackHero.images[0], fallbackHero.name, '', false, false);
-    }
     return null;
   });
 
@@ -188,42 +138,6 @@
      repaint so hotel cards use the same uploaded property gallery as the
      hotel-detail page. */
   var search = B.readSearch();
-<<<<<<< HEAD
-
-  /* ---- search summary + modify ---- */
-  function paintSummary() {
-    window.Search.summaryBar(U.$('#sumBar'), search, function () {
-      var box = U.$('#editSearch');
-      var open = box.style.display !== 'none';
-      box.style.display = open ? 'none' : 'block';
-      if (!open) window.Search.render(U.$('#searchWrap'), {
-        solid: true, cta: 'Search', values: search,
-        onSearch: function (s) {
-          B.saveSearch(s);
-          if (s.hotelId) {
-            location.href = 'hotel-detail.html?' + U.buildQS({
-              hotel: s.hotelId, checkIn: s.checkIn, checkOut: s.checkOut,
-              adults: s.adults, children: s.children, rooms: s.rooms });
-            return;
-          }
-          search = s;
-          box.style.display = 'none';
-          paintSummary(); paint();
-          U.toast('Search updated.');
-        }
-      });
-    });
-  }
-  paintSummary();
-
-  /* ---- filter definitions ---- */
-  var TYPES = [['standard','Standard'],['superior','Superior'],['deluxe','Deluxe'],
-               ['premium|premier','Premium'],['suite|studio','Suite & Studio'],['family','Family']];
-  var BEDS  = [['king','King bed'],['queen','Queen bed'],['twin','Twin / single'],['double','Double bed']];
-  var VIEWS = [['city','City view'],['street','Street view'],['window','Has window'],['balcony','Balcony']];
-  var AMEN  = [['breakfast','Breakfast included'],['balcony','Private balcony'],['bathtub','Bathtub']];
-  var STARS = [['4','4-star property'],['3','3-star property']];
-=======
   /* Hotels listing is intentionally collection-wide. Normalize any stale
      hotel query/localStorage value so this page can never become a
      single-property result page through the shared search bar. */
@@ -462,20 +376,14 @@
   var PRIORITIES = [['ben-thanh-market','Gần Chợ Bến Thành'],['walkable','Dễ đi bộ khám phá'],['food','Gần phố ẩm thực'],['central','Trung tâm Quận 1']];
   var AMEN  = [['wifi','Wi-Fi miễn phí'],['restaurant','Nhà hàng'],['gym','Phòng gym'],['airport','Đưa đón sân bay'],['parking','Bãi đỗ xe'],['spa','Spa']];
   var STARS = [['4','Khách sạn 4 sao'],['3','Khách sạn 3 sao']];
->>>>>>> origin/thu
 
   function chk(host, list, name) {
     U.$(host).innerHTML = list.map(function (x) {
       return '<label class="opt"><input type="checkbox" value="' + x[0] + '" data-f="' + name + '"><span>' + x[1] + '</span></label>';
     }).join('');
   }
-<<<<<<< HEAD
-  chk('#fType', TYPES, 'type'); chk('#fBed', BEDS, 'bed');
-  chk('#fView', VIEWS, 'view'); chk('#fAmen', AMEN, 'amen'); chk('#fStar', STARS, 'star');
-=======
   chk('#fArea', AREAS, 'area'); chk('#fStyle', STYLES, 'style');
   chk('#fPriority', PRIORITIES, 'priority'); chk('#fAmen', AMEN, 'amen'); chk('#fStar', STARS, 'star');
->>>>>>> origin/thu
 
   var priceEl = U.$('#fPrice'), priceV = U.$('#fPriceV');
   priceEl.addEventListener('input', function () {
@@ -488,17 +396,6 @@
     function vals(n) {
       return U.$$('[data-f="' + n + '"]:checked').map(function (i) { return i.value; });
     }
-<<<<<<< HEAD
-    var amen = vals('amen');
-    return {
-      priceMax: +priceEl.value >= 2800000 ? null : +priceEl.value,
-      types: vals('type'), beds: vals('bed'), views: vals('view'),
-      breakfast: amen.indexOf('breakfast') > -1,
-      balcony:   amen.indexOf('balcony') > -1,
-      bathtub:   amen.indexOf('bathtub') > -1,
-      stars: vals('star').map(Number),
-      guests: Math.ceil((+search.adults + +search.children) / (+search.rooms || 1))
-=======
     return {
       priceMax: +priceEl.value >= 2800000 ? null : +priceEl.value,
       areas: vals('area'),
@@ -506,7 +403,6 @@
       priorities: vals('priority'),
       amenities: vals('amen'),
       stars: vals('star').map(Number)
->>>>>>> origin/thu
     };
   }
 
@@ -525,13 +421,6 @@
   function paint() {
     var f = readFilters();
     var list = D.hotels.filter(function (h) {
-<<<<<<< HEAD
-      // NOTE: a hotelId carried over from a previous search must NOT filter
-      // this page — "Find Your Stay" always presents the full collection.
-      // Choosing a specific hotel in the search box navigates to its own page.
-      if (f.stars.length && f.stars.indexOf(h.starRating) < 0) return false;
-      var ok = h.rooms.filter(function (r) { return H.roomMatches(r, f); });
-=======
       /* Destination is a real search constraint on the Hotels listing.
          Empty hotelId means all properties; a selected hotel means that
          property only. This keeps the result list consistent with the
@@ -552,7 +441,6 @@
       var ok = h.rooms.filter(function (r) {
         return f.priceMax == null || r.pricePerNight <= f.priceMax;
       });
->>>>>>> origin/thu
       h._matching = ok;
       h._from = ok.length ? Math.min.apply(null, ok.map(function (r) { return r.pricePerNight; })) : h.startingPrice;
       return ok.length > 0;
@@ -588,11 +476,6 @@
     if (window.__KAS_SYNC_PROPERTY_GALLERIES__) window.__KAS_SYNC_PROPERTY_GALLERIES__();
   });
 
-<<<<<<< HEAD
-  U.$('#srcNote').innerHTML = U.icon('info', 17) +
-    '<span><b>About this data</b>Property names, addresses, room inventory and reference rates are maintained from the KAS dataset and current property references. Guest scores shown in the interface use a clearly labelled 10-point source score (Google or Trip.com, depending on the property). KAS reference rates are not live OTA prices.</span>';
-=======
->>>>>>> origin/thu
 })();
 </script>
 </body>

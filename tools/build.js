@@ -39,11 +39,7 @@ SCRIPTS.forEach(f => {
 });
 
 /* 3. no machine-local paths would ship */
-<<<<<<< HEAD
-const LOCAL = /(file:\/\/\/|[A-Z]:\\\\|localhost|127\.0\.0\.1|192\.168\.|\/home\/[a-z]+\/|\/Users\/)/;
-=======
 const LOCAL = /(file:\/\/\/|[A-Z]:\\|192\.168\.|\/home\/[a-z]+\/|\/Users\/)/;
->>>>>>> origin/thu
 [].concat(PAGES, SCRIPTS.map(f => 'js/' + f), STYLES.map(f => 'css/' + f)).forEach(f => {
   const p = path.join(ROOT, f);
   if (!fs.existsSync(p)) return;

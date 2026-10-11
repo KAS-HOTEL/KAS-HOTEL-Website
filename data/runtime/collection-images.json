@@ -17,14 +17,6 @@
           "uploadedAt": "2026-10-04T11:09:04.797Z"
         },
         {
-          "id": "a2418151-e160-4e8e-be79-d7b1bfd8ebd4",
-          "filename": "property-hotel-01-1791112320160-383c63dc.jpg",
-          "originalName": "2aobor3avlx9tptqtiddnlilcx7iw17pxmqeypoi14.jpg",
-          "category": "lobby",
-          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320160-383c63dc.jpg",
-          "uploadedAt": "2026-10-04T11:12:00.209Z"
-        },
-        {
           "id": "ccb1a5a5-56f1-48e2-a62b-8b99a261af34",
           "filename": "property-hotel-01-1791112320165-524f48d4.jpg",
           "originalName": "2aobor3avmn6fgzkudszs28bmja9vuszfvaag6sk15.jpg",
@@ -33,11 +25,19 @@
           "uploadedAt": "2026-10-04T11:12:00.209Z"
         },
         {
-          "id": "c70de996-8fae-4dce-9ffb-6d2c9debc25c",
-          "filename": "property-hotel-01-1791112320170-20a7783d.jpg",
-          "originalName": "2aobor3avnbrhqe7hdhfuujxuoylcme5oy1kvgqm16.jpg",
+          "id": "a2418151-e160-4e8e-be79-d7b1bfd8ebd4",
+          "filename": "property-hotel-01-1791112320160-383c63dc.jpg",
+          "originalName": "2aobor3avlx9tptqtiddnlilcx7iw17pxmqeypoi14.jpg",
           "category": "lobby",
-          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320170-20a7783d.jpg",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320160-383c63dc.jpg",
+          "uploadedAt": "2026-10-04T11:12:00.209Z"
+        },
+        {
+          "id": "5d7f42d9-efde-4da2-9e25-2ed74e6d985d",
+          "filename": "property-hotel-01-1791112320179-eaba2fa3.jpg",
+          "originalName": "2aobor3avocf1pqajos54xnzr9ir7p4jizvhkd4418.jpg",
+          "category": "lobby",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320179-eaba2fa3.jpg",
           "uploadedAt": "2026-10-04T11:12:00.209Z"
         },
         {
@@ -49,11 +49,11 @@
           "uploadedAt": "2026-10-04T11:12:00.209Z"
         },
         {
-          "id": "5d7f42d9-efde-4da2-9e25-2ed74e6d985d",
-          "filename": "property-hotel-01-1791112320179-eaba2fa3.jpg",
-          "originalName": "2aobor3avocf1pqajos54xnzr9ir7p4jizvhkd4418.jpg",
+          "id": "c70de996-8fae-4dce-9ffb-6d2c9debc25c",
+          "filename": "property-hotel-01-1791112320170-20a7783d.jpg",
+          "originalName": "2aobor3avnbrhqe7hdhfuujxuoylcme5oy1kvgqm16.jpg",
           "category": "lobby",
-          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320179-eaba2fa3.jpg",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791112320170-20a7783d.jpg",
           "uploadedAt": "2026-10-04T11:12:00.209Z"
         },
         {
@@ -263,8 +263,17 @@
           "category": "exterior",
           "url": "/uploads/property/hotel-01/property-hotel-01-1791113389735-97ab00a2.jpg",
           "uploadedAt": "2026-10-04T11:29:49.744Z"
+        },
+        {
+          "id": "64accc29-81f7-4e29-8b46-3dc88526860c",
+          "filename": "property-hotel-01-1791615518221-b9c844a3.jpg",
+          "originalName": "site-guidebook_entry_ben-thanh-market-1790846455977-0250db0d.jpg",
+          "category": "exterior",
+          "url": "/uploads/property/hotel-01/property-hotel-01-1791615518221-b9c844a3.jpg",
+          "uploadedAt": "2026-10-10T06:58:38.230Z"
         }
-      ]
+      ],
+      "heroId": "21b09bce-8901-4245-8cea-cfc35883caa9"
     },
     "hotel-02": {
       "gallery": [

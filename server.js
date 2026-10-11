@@ -16,14 +16,6 @@ const RATE_FILE = path.join(DATA_DIR, 'rate-sheet.json');
 const UPLOAD_FILE = path.join(UPLOAD_DIR, 'manifest.json');
 const RATE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'rate-overrides.json');
 const COLLECTION_FILE = path.join(CONFIG_DIR, 'collection-images.json');
-<<<<<<< HEAD
-const PORT = Number(process.env.PORT || 3000);
-const ADMIN_KEY = process.env.ADMIN_KEY || 'kas-admin-2026';
-if (process.env.NODE_ENV === 'production' && !process.env.ADMIN_KEY) {
-  console.error('ADMIN_KEY is required in production. Set it as an environment variable.');
-  process.exit(1);
-}
-=======
 const IMAGE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'image-overrides.json');
 const PORT = Number(process.env.PORT || 3000);
 const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
@@ -41,7 +33,6 @@ if (ADMIN_KEY && (PLACEHOLDER_KEYS.has(ADMIN_KEY) || /^<.*>$/.test(ADMIN_KEY))) 
 }
 if (ADMIN_KEY && ADMIN_KEY.length < 12) console.warn('Warning: ADMIN_KEY is shorter than 12 characters. Use a longer key.');
 const ADMIN_KEY_DIGEST = ADMIN_KEY ? crypto.createHash('sha256').update(ADMIN_KEY).digest() : null;
->>>>>>> origin/thu
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
@@ -71,11 +62,10 @@ function normalizePair(pair) {
 const rateData = readJson(RATE_FILE, { branches: {}, seasons: [], policy: {} });
 let uploads = readJson(UPLOAD_FILE, { version: 1, rooms: {} });
 let rateOverrides = readJson(RATE_OVERRIDE_FILE, { version: 1, rooms: {} });
-<<<<<<< HEAD
-=======
 let imageOverrides = readJson(IMAGE_OVERRIDE_FILE, { version: 2, collection: {}, property: {}, rooms: {}, site: {} });
 if (!imageOverrides.site || typeof imageOverrides.site !== 'object') imageOverrides.site = {};
->>>>>>> origin/thu
+if (!imageOverrides.property || typeof imageOverrides.property !== 'object') imageOverrides.property = {};
+
 let collectionImages = readJson(COLLECTION_FILE, { version: 1, hotels: {} });
 
 function allRooms() {
@@ -108,13 +98,6 @@ function effectiveRates(key, room) {
   };
 }
 
-<<<<<<< HEAD
-function auth(req, res, next) {
-  if (req.get('x-admin-key') !== ADMIN_KEY) return res.status(401).json({ error: 'Sai mã quản trị.' });
-  next();
-}
-
-=======
 /* Constant-time key comparison + a small in-memory brake on repeated failures. */
 const failedAuth = new Map();
 const AUTH_WINDOW_MS = 15 * 60 * 1000;
@@ -195,7 +178,6 @@ function isBranch(hotelId) {
   return !!(rateData.branches && Object.prototype.hasOwnProperty.call(rateData.branches, hotelId));
 }
 
->>>>>>> origin/thu
 const storage = multer.diskStorage({
   destination(req, file, cb) {
     const key = String(req.body.roomKey || '');
@@ -206,12 +188,7 @@ const storage = multer.diskStorage({
     cb(null, dir);
   },
   filename(req, file, cb) {
-<<<<<<< HEAD
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
-=======
     const safeExt = safeExtension(file.originalname);
->>>>>>> origin/thu
     cb(null, Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -228,22 +205,13 @@ const upload = multer({
 const collectionStorage = multer.diskStorage({
   destination(req, file, cb) {
     const hotelId = String(req.body.hotelId || '');
-<<<<<<< HEAD
-    if (!rateData.branches || !rateData.branches[hotelId]) return cb(new Error('Chi nhánh không hợp lệ.'));
-=======
     if (!isBranch(hotelId)) return cb(new Error('Chi nhánh không hợp lệ.'));
->>>>>>> origin/thu
     const dir = path.join(UPLOAD_DIR, 'collection', hotelId);
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename(req, file, cb) {
-<<<<<<< HEAD
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
-=======
     const safeExt = safeExtension(file.originalname);
->>>>>>> origin/thu
     cb(null, 'collection-' + hotelIdSafe(req.body.hotelId) + '-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -260,22 +228,13 @@ const collectionUpload = multer({
 const propertyStorage = multer.diskStorage({
   destination(req, file, cb) {
     const hotelId = String(req.body.hotelId || '');
-<<<<<<< HEAD
-    if (!rateData.branches || !rateData.branches[hotelId]) return cb(new Error('Chi nhánh không hợp lệ.'));
-=======
     if (!isBranch(hotelId)) return cb(new Error('Chi nhánh không hợp lệ.'));
->>>>>>> origin/thu
     const dir = path.join(UPLOAD_DIR, 'property', hotelId);
     fs.mkdirSync(dir, { recursive: true });
     cb(null, dir);
   },
   filename(req, file, cb) {
-<<<<<<< HEAD
-    const ext = path.extname(file.originalname || '').toLowerCase();
-    const safeExt = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext) ? ext : '.jpg';
-=======
     const safeExt = safeExtension(file.originalname);
->>>>>>> origin/thu
     cb(null, 'property-' + hotelIdSafe(req.body.hotelId) + '-' + Date.now() + '-' + crypto.randomBytes(4).toString('hex') + safeExt);
   }
 });
@@ -288,12 +247,6 @@ const propertyUpload = multer({
   }
 });
 
-<<<<<<< HEAD
-const app = express();
-app.use(function(req, res, next) {
-  if (/^\/(?:server\.js|package(?:\.json|-lock\.json)?|\.env(?:\..*)?)$/.test(req.path)) return res.sendStatus(404);
-  if (req.path === '/uploads/manifest.json') return res.sendStatus(404);
-=======
 const siteStorage = multer.diskStorage({
   destination(req, file, cb) {
     const key = String(req.body.key || '');
@@ -323,15 +276,10 @@ app.use(function(req, res, next) {
   res.set('X-Content-Type-Options', 'nosniff');
   res.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.set('X-Frame-Options', 'SAMEORIGIN');
->>>>>>> origin/thu
   next();
 });
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
-<<<<<<< HEAD
-app.use(express.static(ROOT, { extensions: ['html'] }));
-app.use('/uploads', express.static(UPLOAD_DIR, { maxAge: '1h' }));
-=======
 
 /* ---------- public static files: explicit allowlist ----------
    Only the site's pages and its css/, js/ and assets/ folders are public.
@@ -357,64 +305,58 @@ app.get('/:page', (req, res, next) => {
   if (!PUBLIC_PAGES.has(file)) return next();
   res.sendFile(path.join(ROOT, file));
 });
->>>>>>> origin/thu
 
 function publicCatalog() {
-  const branches = Object.entries(rateData.branches || {}).map(([hotelId, b]) => ({
+  const branches = Object.entries(rateData.branches || {}).map(([hotelId, b]) => {
+    const stored = collectionImages.hotels && collectionImages.hotels[hotelId];
+    const propertyImages = Array.isArray(imageOverrides.property && imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length
+      ? imageOverrides.property[hotelId].map(x => Object.assign({ category: 'other' }, x, { category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other' }))
+      : (stored && Array.isArray(stored.gallery)
+        ? stored.gallery.map(x => ({ id: x.id, url: x.url, name: x.originalName, originalName: x.originalName, filename: x.filename, category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other', source: 'upload' }))
+        : []);
+    const heroId = (stored && stored.heroId) || '';
+    const heroIndex = heroId ? propertyImages.findIndex(x => x.id === heroId) : -1;
+    const orderedPropertyImages = heroIndex > 0
+      ? [propertyImages[heroIndex]].concat(propertyImages.slice(0, heroIndex), propertyImages.slice(heroIndex + 1))
+      : propertyImages;
+    const hero = orderedPropertyImages[0] || null;
+    return {
     hotelId,
     address: b.address,
     gid: b.gid || null,
-<<<<<<< HEAD
-    collectionImage: collectionImages.hotels && collectionImages.hotels[hotelId] ? collectionImages.hotels[hotelId].url : null,
-    propertyImages: collectionImages.hotels && collectionImages.hotels[hotelId] && Array.isArray(collectionImages.hotels[hotelId].gallery)
-      ? collectionImages.hotels[hotelId].gallery.map(x => ({ id: x.id, url: x.url, name: x.originalName }))
-      : [],
-    rooms: (b.sheetRooms || []).map(r => {
-      const key = hotelId + ':' + r.stt;
-      const rates = effectiveRates(key, r);
-=======
-    collectionImage: (imageOverrides.collection && imageOverrides.collection[hotelId] && imageOverrides.collection[hotelId].url)
-      || (collectionImages.hotels && collectionImages.hotels[hotelId] ? collectionImages.hotels[hotelId].url : null),
-    propertyImages: Array.isArray(imageOverrides.property && imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length
-      ? imageOverrides.property[hotelId].map(x => Object.assign({ category: 'other' }, x, { category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other' }))
-      : (collectionImages.hotels && collectionImages.hotels[hotelId] && Array.isArray(collectionImages.hotels[hotelId].gallery)
-        ? collectionImages.hotels[hotelId].gallery.map(x => ({ id: x.id, url: x.url, name: x.originalName, originalName: x.originalName, filename: x.filename, category: PROPERTY_IMAGE_CATEGORIES.has(x.category) ? x.category : 'other', source: 'upload' }))
-        : []),
+    propertyHeroId: hero ? hero.id : null,
+    propertyHeroUrl: hero ? hero.url : null,
+    collectionImage: hero ? hero.url : ((imageOverrides.collection && imageOverrides.collection[hotelId] && imageOverrides.collection[hotelId].url)
+      || (stored ? stored.url : null)),
+    propertyImages: orderedPropertyImages,
     rooms: (b.sheetRooms || []).map(r => {
       const key = hotelId + ':' + r.stt;
       const rates = effectiveRates(key, r);
       const overrideImages = imageOverrides.rooms && Array.isArray(imageOverrides.rooms[key]) ? imageOverrides.rooms[key] : [];
->>>>>>> origin/thu
       return {
         key,
         stt: r.stt,
         ez: r.ez,
         name: r.name,
         rates,
-<<<<<<< HEAD
-        images: (uploads.rooms[key] || []).map(x => ({ id: x.id, url: x.url, name: x.originalName }))
-=======
         images: overrideImages.length
           ? overrideImages
           : (uploads.rooms[key] || []).map(x => ({ id: x.id, url: x.url, name: x.originalName }))
->>>>>>> origin/thu
       };
     })
-  }));
+  };
+  });
   const collection = {};
-<<<<<<< HEAD
-  Object.entries(collectionImages.hotels || {}).forEach(([hotelId, item]) => { collection[hotelId] = item.url; });
-  return {
-=======
   Object.entries(rateData.branches || {}).forEach(([hotelId]) => {
+    const branch = branches.find(x => x.hotelId === hotelId);
     const override = imageOverrides.collection && imageOverrides.collection[hotelId];
     const stored = collectionImages.hotels && collectionImages.hotels[hotelId];
-    if (override && override.url) collection[hotelId] = override.url;
+    if (branch && branch.collectionImage) collection[hotelId] = branch.collectionImage;
+    else if (override && override.url) collection[hotelId] = override.url;
     else if (stored && stored.url) collection[hotelId] = stored.url;
   });
   return {
     siteImages: imageOverrides.site || {},
->>>>>>> origin/thu
     generatedAt: new Date().toISOString(),
     source: rateData.source,
     policy: rateData.policy,
@@ -426,8 +368,6 @@ function publicCatalog() {
 
 app.get('/api/catalog', (req, res) => res.json(publicCatalog()));
 app.get('/api/admin/status', auth, (req, res) => res.json({ ok: true, admin: true, publicPath: '/reference.html' }));
-<<<<<<< HEAD
-=======
 app.get('/api/admin/image-overrides', auth, (req, res) => res.json(imageOverrides));
 
 function validImageUrl(value) {
@@ -478,6 +418,7 @@ app.delete('/api/admin/image-url/:scope/:key/:id', auth, (req, res) => {
     delete imageOverrides[scope][key];
   } else {
     const arr = imageOverrides[scope] && imageOverrides[scope][key];
+    if (scope === 'property' && collectionImages.hotels && collectionImages.hotels[key] && collectionImages.hotels[key].heroId === id) return res.status(409).json({ error: 'Không thể xóa ảnh Hero. Hãy chọn ảnh Hero khác trước.' });
     if (!Array.isArray(arr)) return res.status(404).json({ error: 'Không tìm thấy URL ảnh.' });
     const idx = arr.findIndex(x => x.id === id);
     if (idx < 0) return res.status(404).json({ error: 'Không tìm thấy URL ảnh.' });
@@ -487,7 +428,6 @@ app.delete('/api/admin/image-url/:scope/:key/:id', auth, (req, res) => {
   writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
   res.json({ ok: true });
 });
->>>>>>> origin/thu
 
 app.post('/api/admin/upload', auth, (req, res) => {
   upload.array('images', 10)(req, res, err => {
@@ -495,17 +435,11 @@ app.post('/api/admin/upload', auth, (req, res) => {
     const key = String(req.body.roomKey || '');
     const room = roomIndex.get(key);
     if (!room) {
-<<<<<<< HEAD
-      (req.files || []).forEach(f => { try { fs.unlinkSync(f.path); } catch (_) {} });
-      return res.status(400).json({ error: 'Hạng phòng không hợp lệ.' });
-    }
-=======
       (req.files || []).forEach(f => removeUploadedFile(f.path));
       return res.status(400).json({ error: 'Hạng phòng không hợp lệ.' });
     }
     if (!verifyImages(req.files)) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
     if (!uploads.rooms || typeof uploads.rooms !== 'object') uploads.rooms = {};
->>>>>>> origin/thu
     if (!uploads.rooms[key]) uploads.rooms[key] = [];
     (req.files || []).forEach(file => {
       uploads.rooms[key].push({
@@ -530,20 +464,12 @@ app.delete('/api/admin/upload/:id', auth, (req, res) => {
     return true;
   });
   if (!found) return res.status(404).json({ error: 'Không tìm thấy ảnh.' });
-<<<<<<< HEAD
-  const rel = found.item.url.replace(/^\/uploads\//, '');
-  const file = path.join(UPLOAD_DIR, rel);
-  try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
-=======
   removeUploadedFile(uploadPathFromUrl(found.item.url));
->>>>>>> origin/thu
   uploads.rooms[found.key].splice(found.idx, 1);
   writeJsonAtomic(UPLOAD_FILE, uploads);
   res.json({ ok: true });
 });
 
-<<<<<<< HEAD
-=======
 app.post('/api/admin/site-image', auth, (req, res) => {
   siteUpload.single('image')(req, res, err => {
     if (err) return res.status(400).json({ error: err.message });
@@ -571,7 +497,6 @@ app.delete('/api/admin/site-image/:key', auth, (req, res) => {
   res.json({ ok: true });
 });
 
->>>>>>> origin/thu
 app.put('/api/admin/room-rates', auth, (req, res) => {
   const key = String(req.body.roomKey || '');
   const room = roomIndex.get(key);
@@ -582,10 +507,7 @@ app.put('/api/admin/room-rates', auth, (req, res) => {
     if (!pair) return res.status(400).json({ error: 'Giá của ' + season + ' phải gồm 2 số không âm.' });
     next[season] = pair;
   }
-<<<<<<< HEAD
-=======
   if (!rateOverrides.rooms || typeof rateOverrides.rooms !== 'object') rateOverrides.rooms = {};
->>>>>>> origin/thu
   rateOverrides.rooms[key] = next;
   writeJsonAtomic(RATE_OVERRIDE_FILE, rateOverrides);
   res.json({ ok: true, roomKey: key, rates: effectiveRates(key, room) });
@@ -595,18 +517,6 @@ app.post('/api/admin/collection-image', auth, (req, res) => {
   collectionUpload.single('image')(req, res, err => {
     if (err) return res.status(400).json({ error: err.message });
     const hotelId = String(req.body.hotelId || '');
-<<<<<<< HEAD
-    if (!rateData.branches || !rateData.branches[hotelId]) {
-      if (req.file) { try { fs.unlinkSync(req.file.path); } catch (_) {} }
-      return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
-    }
-    if (!req.file) return res.status(400).json({ error: 'Hãy chọn ảnh.' });
-    const old = collectionImages.hotels && collectionImages.hotels[hotelId];
-    if (old && old.filename) {
-      const oldFile = path.join(UPLOAD_DIR, 'collection', hotelId, old.filename);
-      try { if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile); } catch (_) {}
-    }
-=======
     if (!isBranch(hotelId)) {
       if (req.file) removeUploadedFile(req.file.path);
       return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
@@ -615,7 +525,6 @@ app.post('/api/admin/collection-image', auth, (req, res) => {
     if (!verifyImages([req.file])) return res.status(400).json({ error: 'Chỉ nhận JPG, PNG hoặc WEBP.' });
     const old = collectionImages.hotels && collectionImages.hotels[hotelId];
     if (old && old.filename) removeUploadedFile(uploadPathFromUrl('/uploads/collection/' + hotelId + '/' + old.filename));
->>>>>>> origin/thu
     const item = {
       id: crypto.randomUUID(),
       filename: req.file.filename,
@@ -635,16 +544,6 @@ app.post('/api/admin/property-images', auth, (req, res) => {
   propertyUpload.array('images', 20)(req, res, err => {
     if (err) return res.status(400).json({ error: err.message });
     const hotelId = String(req.body.hotelId || '');
-<<<<<<< HEAD
-    if (!rateData.branches || !rateData.branches[hotelId]) {
-      (req.files || []).forEach(f => { try { fs.unlinkSync(f.path); } catch (_) {} });
-      return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
-    }
-    if (!req.files || !req.files.length) return res.status(400).json({ error: 'Hãy chọn ít nhất 1 ảnh.' });
-    if (!collectionImages.hotels) collectionImages.hotels = {};
-    if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
-    if (!Array.isArray(collectionImages.hotels[hotelId].gallery)) collectionImages.hotels[hotelId].gallery = [];
-=======
     if (!isBranch(hotelId)) {
       (req.files || []).forEach(f => removeUploadedFile(f.path));
       return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
@@ -655,17 +554,13 @@ app.post('/api/admin/property-images', auth, (req, res) => {
     if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
     if (!Array.isArray(collectionImages.hotels[hotelId].gallery)) collectionImages.hotels[hotelId].gallery = [];
     const category = PROPERTY_IMAGE_CATEGORIES.has(String(req.body.category || '')) ? String(req.body.category) : 'other';
->>>>>>> origin/thu
     req.files.forEach(file => {
       collectionImages.hotels[hotelId].gallery.push({
         id: crypto.randomUUID(),
         filename: file.filename,
         originalName: file.originalname,
-<<<<<<< HEAD
-=======
         filename: file.filename,
         category,
->>>>>>> origin/thu
         url: '/uploads/property/' + hotelId + '/' + file.filename,
         uploadedAt: new Date().toISOString()
       });
@@ -674,6 +569,45 @@ app.post('/api/admin/property-images', auth, (req, res) => {
     res.json({ ok: true, hotelId, added: req.files.length,
       images: collectionImages.hotels[hotelId].gallery });
   });
+});
+
+app.put('/api/admin/property-images/order', auth, (req, res) => {
+  const hotelId = String(req.body.hotelId || '');
+  const order = Array.isArray(req.body.order) ? req.body.order.map(String) : [];
+  if (!isBranch(hotelId) || !order.length) return res.status(400).json({ error: 'Danh sách thứ tự ảnh không hợp lệ.' });
+  const current = Array.isArray(imageOverrides.property && imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length
+    ? imageOverrides.property[hotelId]
+    : ((collectionImages.hotels && collectionImages.hotels[hotelId] && collectionImages.hotels[hotelId].gallery) || []);
+  if (current.length !== order.length || current.some(x => !order.includes(String(x.id))) || new Set(order).size !== order.length) {
+    return res.status(400).json({ error: 'Thứ tự ảnh không khớp gallery hiện tại.' });
+  }
+  const byId = new Map(current.map(x => [String(x.id), x]));
+  const next = order.map(id => byId.get(id));
+  if (imageOverrides.property && Array.isArray(imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length) {
+    imageOverrides.property[hotelId] = next;
+    writeJsonAtomic(IMAGE_OVERRIDE_FILE, imageOverrides);
+  } else {
+    if (!collectionImages.hotels) collectionImages.hotels = {};
+    if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
+    collectionImages.hotels[hotelId].gallery = next;
+    writeJsonAtomic(COLLECTION_FILE, collectionImages);
+  }
+  res.json({ ok: true, hotelId, images: next });
+});
+
+app.put('/api/admin/property-images/hero', auth, (req, res) => {
+  const hotelId = String(req.body.hotelId || ''), imageId = String(req.body.imageId || '');
+  if (!isBranch(hotelId) || !imageId) return res.status(400).json({ error: 'Khách sạn hoặc ảnh Hero không hợp lệ.' });
+  const current = Array.isArray(imageOverrides.property && imageOverrides.property[hotelId]) && imageOverrides.property[hotelId].length
+    ? imageOverrides.property[hotelId]
+    : ((collectionImages.hotels && collectionImages.hotels[hotelId] && collectionImages.hotels[hotelId].gallery) || []);
+  const hero = current.find(x => String(x.id) === imageId);
+  if (!hero) return res.status(404).json({ error: 'Không tìm thấy ảnh trong gallery.' });
+  if (!collectionImages.hotels) collectionImages.hotels = {};
+  if (!collectionImages.hotels[hotelId]) collectionImages.hotels[hotelId] = {};
+  collectionImages.hotels[hotelId].heroId = hero.id;
+  writeJsonAtomic(COLLECTION_FILE, collectionImages);
+  res.json({ ok: true, hotelId, heroId: hero.id, heroUrl: hero.url });
 });
 
 app.delete('/api/admin/property-images/:id', auth, (req, res) => {
@@ -686,13 +620,9 @@ app.delete('/api/admin/property-images/:id', auth, (req, res) => {
     return true;
   });
   if (!found) return res.status(404).json({ error: 'Không tìm thấy ảnh nội thất/khách sạn.' });
-<<<<<<< HEAD
-  const rel = String(found.item.url || '').replace(/^\/uploads\//, '');
-  const file = path.join(UPLOAD_DIR, rel);
-  try { if (fs.existsSync(file)) fs.unlinkSync(file); } catch (_) {}
-=======
+  const hotelConfig = collectionImages.hotels && collectionImages.hotels[found.hotelId];
+  if (hotelConfig && hotelConfig.heroId === found.item.id) return res.status(409).json({ error: 'Không thể xóa ảnh Hero. Hãy chọn ảnh Hero khác trước.' });
   removeUploadedFile(uploadPathFromUrl(found.item.url));
->>>>>>> origin/thu
   collectionImages.hotels[found.hotelId].gallery.splice(found.idx, 1);
   writeJsonAtomic(COLLECTION_FILE, collectionImages);
   res.json({ ok: true });
@@ -700,17 +630,10 @@ app.delete('/api/admin/property-images/:id', auth, (req, res) => {
 
 app.delete('/api/admin/collection-image/:hotelId', auth, (req, res) => {
   const hotelId = String(req.params.hotelId || '');
-<<<<<<< HEAD
-  const old = collectionImages.hotels && collectionImages.hotels[hotelId];
-  if (!old) return res.status(404).json({ error: 'Chi nhánh chưa có ảnh collection riêng.' });
-  const oldFile = path.join(UPLOAD_DIR, 'collection', hotelId, old.filename || '');
-  try { if (fs.existsSync(oldFile)) fs.unlinkSync(oldFile); } catch (_) {}
-=======
   if (!isBranch(hotelId)) return res.status(400).json({ error: 'Chi nhánh không hợp lệ.' });
   const old = collectionImages.hotels && collectionImages.hotels[hotelId];
   if (!old) return res.status(404).json({ error: 'Chi nhánh chưa có ảnh collection riêng.' });
   if (old.filename) removeUploadedFile(uploadPathFromUrl('/uploads/collection/' + hotelId + '/' + old.filename));
->>>>>>> origin/thu
   const gallery = Array.isArray(old.gallery) ? old.gallery : [];
   if (gallery.length) {
     collectionImages.hotels[hotelId] = { gallery: gallery };
@@ -725,15 +648,6 @@ app.get('/health', (req, res) => res.json({ ok: true, service: 'KAS Hotel Collec
 app.get('/reference', (req, res) => res.sendFile(path.join(ROOT, 'reference.html')));
 app.get('/admin', (req, res) => res.sendFile(path.join(ROOT, 'admin.html')));
 
-<<<<<<< HEAD
-app.use((err, req, res, next) => {
-  console.error(err);
-  if (res.headersSent) return next(err);
-  res.status(500).json({ error: err.message || 'Server error' });
-});
-
-app.listen(PORT, '0.0.0.0', () => {
-=======
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found' }));
 app.use((req, res) => res.status(404).type('text').send('Not found'));
 
@@ -748,7 +662,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, IS_PRODUCTION || ADMIN_KEY ? '0.0.0.0' : '127.0.0.1', () => {
->>>>>>> origin/thu
   console.log('KAS server running on http://localhost:' + PORT);
   console.log('Upload directory: ' + UPLOAD_DIR);
   console.log('Config directory: ' + CONFIG_DIR);

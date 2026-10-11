@@ -1,18 +1,10 @@
 {
   "name": "kas-hotel-collection",
-<<<<<<< HEAD
-  "version": "1.0.0",
-  "private": true,
-  "description": "KAS Hotel Collection — hotel reference catalog + persistent room-photo admin",
-  "scripts": {
-    "dev": "npx --yes serve . -l 3000",
-=======
   "version": "22.0.0",
   "private": true,
   "description": "KAS Hotel Collection — hotel reference catalog + persistent room-photo admin",
   "scripts": {
     "dev": "node server.js",
->>>>>>> origin/thu
     "build": "node tools/build.js",
     "start": "node server.js",
     "server": "node server.js"

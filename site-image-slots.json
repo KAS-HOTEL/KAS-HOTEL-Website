@@ -383,6 +383,18 @@
       "label": "Hỗ trợ · Ảnh Hero",
       "selector": ".content-page-hero",
       "default": ""
+    },
+    {
+      "key": "page.hero.hotels",
+      "label": "Khách sạn · Ảnh Hero Find Your Stay",
+      "selector": "#heroBg",
+      "default": ""
+    },
+    {
+      "key": "page.hero.welcome",
+      "label": "Welcome Popup · Ảnh cửa sổ chào mừng",
+      "selector": ".kas-welcome__visual img",
+      "default": "https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90"
     }
   ]
 }

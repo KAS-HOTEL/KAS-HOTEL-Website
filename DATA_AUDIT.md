@@ -639,7 +639,7 @@ All phone / Zalo / WhatsApp values now resolve from a single object,
 | Field | Value |
 |---|---|
 | Phone | 0869 768 885 |
-| Tel link | `tel:+84869768885` |
+| Tel link | `tel:+84968694864` |
 | Zalo | `https://zalo.me/0869768885` |
 | WhatsApp | `https://wa.me/84869768885` |
 

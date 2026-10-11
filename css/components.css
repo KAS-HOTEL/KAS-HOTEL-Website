@@ -2,10 +2,6 @@
    KAS — COMPONENTS
    ========================================================================== */
 
-<<<<<<< HEAD
-/* ---------- hero ---------- */
-.hero{position:relative;min-height:640px;display:flex;align-items:flex-end;background:var(--black)}
-=======
 /* ---------- shared content-page hero / layout ---------- */
 .content-page-hero{
   padding:3rem 0 3rem;
@@ -44,7 +40,6 @@
 
 /* ---------- hero ---------- */
 .hero{position:relative;display:flex;background:var(--black)}
->>>>>>> origin/thu
 /* NOTE: no overflow:hidden here — the search bar overhangs the hero by design.
    Clipping is done on .hero__bg instead, which is what actually needs it. */
 .hero--sm{min-height:340px;align-items:center}
@@ -55,41 +50,8 @@
   content:'';position:absolute;inset:0;
   background:linear-gradient(100deg,rgba(14,13,11,.94) 0%,rgba(14,13,11,.72) 38%,rgba(14,13,11,.34) 70%,rgba(14,13,11,.55) 100%);
 }
-<<<<<<< HEAD
-.hero__in{position:relative;z-index:2;width:100%;padding-block:clamp(5rem,11vw,7rem) 0}
-.hero--sm .hero__in .searchbar,.hero .searchbar{z-index:3}
-.hero__ct{max-width:640px;color:var(--tx-inv)}
-.hero__ct h1{color:var(--ivory);margin:.9rem 0 0}
-.hero__ct p{color:var(--tx-inv-2);font-size:1rem;max-width:460px;margin-top:1.5rem}
-.hero--sm .hero__in{padding-block:0}
-.hero--sm .hero__ct h1{font-size:clamp(2.1rem,4vw,3.2rem)}
-
-/* ---------- search bar ---------- */
-.searchbar{
-  display:grid;grid-template-columns:1.5fr 1fr 1fr 1.2fr auto;
-  background:rgba(14,13,11,.82);backdrop-filter:blur(14px);
-  border:1px solid rgba(194,162,92,.28);border-radius:var(--r);
-  margin-top:2.6rem;transform:translateY(38px);box-shadow:var(--sh-4);
-}
-.searchbar--solid{
-  background:var(--surface);border-color:var(--line);
-  transform:none;margin-top:2rem;box-shadow:var(--sh-3);
-}
-.sf{padding:15px 20px;border-right:1px solid rgba(194,162,92,.2);min-width:0;position:relative}
-.searchbar--solid .sf{border-right-color:var(--line)}
-.sf:last-of-type{border-right:none}
-.sf__lb{
-  display:block;font-size:.58rem;font-weight:600;letter-spacing:.18em;
-  text-transform:uppercase;color:var(--gold-lt);margin-bottom:5px;
-}
-.searchbar--solid .sf__lb{color:var(--tx-3)}
-.sf__ctl{display:flex;align-items:center;gap:9px}
-.sf__ctl svg{color:var(--gold);flex-shrink:0}
-.searchbar--solid .sf__ctl svg{color:var(--gold-dk)}
-.sf input,.sf select{
-  width:100%;background:transparent;border:none;padding:0;color:var(--ivory);
-  font-size:.92rem;font-weight:500;cursor:pointer;min-width:0;
-=======
+.hero--no-overlay .hero__bg img{opacity:1}
+.hero--no-overlay .hero__bg::after{background:transparent}
 .hero__in{position:relative;z-index:2;width:100%}
 .hotel-search-wrap{position:relative;margin-top:2rem;z-index:8;overflow:visible}
 .hero--sm .hero__in .searchbar,.hero .searchbar{
@@ -115,7 +77,6 @@
 .sf input,.sf select{
   width:100%;background:transparent;border:none;padding:0;color:var(--tx);
   font-size:.95rem;font-weight:500;cursor:pointer;min-width:0;height:24px;
->>>>>>> origin/thu
 }
 .searchbar--solid .sf input,.searchbar--solid .sf select{color:var(--tx)}
 .sf input:focus,.sf select:focus{outline:none}
@@ -123,10 +84,6 @@
 .searchbar--solid .sf select option{background:#fff;color:var(--tx)}
 .sf input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.72) sepia(.5) saturate(3) hue-rotate(2deg);cursor:pointer}
 .searchbar--solid input[type=date]::-webkit-calendar-picker-indicator{filter:none;opacity:.5}
-<<<<<<< HEAD
-.searchbar .btn{border-radius:0;height:100%;padding-inline:34px}
-.searchbar--solid .btn{border-radius:0 var(--r) var(--r) 0}
-=======
 /* ---------- KAS date picker ---------- */
 .sf--date{z-index:30}
 .kas-date-value{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important;clip:rect(0 0 0 0)!important}
@@ -312,7 +269,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 }
 .kas-quick-tag:hover{border-color:rgba(194,162,92,.55);background:#f4ead7;color:var(--gold-dk);transform:translateY(-1px)}
 .kas-quick-tag.is-active{background:var(--gold);border-color:var(--gold);color:#201a12;box-shadow:0 5px 14px rgba(194,162,92,.22)}
->>>>>>> origin/thu
 
 /* guests popover */
 .gpop{
@@ -349,34 +305,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 
 /* ---------- property rail (home) ---------- */
 .rail{display:grid;grid-template-columns:repeat(8,1fr);gap:14px}
-<<<<<<< HEAD
-.pcard{
-  background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
-  overflow:hidden;transition:all var(--t);cursor:pointer;display:flex;flex-direction:column;
-}
-.pcard:hover{transform:translateY(-5px);box-shadow:var(--sh-3);border-color:var(--sand)}
-.pcard__img{aspect-ratio:3/4;overflow:hidden;background:var(--beige);position:relative;contain:paint}
-.pcard__img img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
-.pcard:hover .pcard__img img{transform:scale(1.07)}
-.pcard__b{padding:13px 10px 15px;text-align:center;display:flex;flex-direction:column;min-width:0}
-.pcard__b h4{font-size:.93rem;line-height:1.25;margin-bottom:5px;overflow-wrap:anywhere}
-.pcard__b .area{font-size:.68rem;color:var(--tx-3);letter-spacing:.02em;line-height:1.4}
-.pcard__address{display:block;min-height:2.8em}
-.pcard__rate{font-size:.7rem;color:var(--gold-dk);font-weight:600;margin-top:6px}
-
-/* ---------- hotel card (listing) ---------- */
-.hcard{
-  display:grid;grid-template-columns:330px 1fr;background:var(--surface);
-  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
-  transition:all var(--t);
-}
-.hcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
-.hcard__media{position:relative;background:var(--beige);min-height:250px;overflow:hidden;contain:paint}
-.hcard__media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .7s var(--ease)}
-.hcard:hover .hcard__media img{transform:scale(1.05)}
-.hcard__b{padding:24px 26px;display:flex;flex-direction:column;gap:12px}
-.hcard__hd{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}
-=======
 
 /* ---------- hotel card (listing) ---------- */
 /* ---------- property summary bar ---------- */
@@ -488,7 +416,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .hcard__am{align-items:flex-start}
 .hcard__ft > div:last-child{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;justify-content:flex-end}
 .hcard__ft .btn{white-space:nowrap}
->>>>>>> origin/thu
 .hcard__hd h3{margin-bottom:5px}
 .hcard__loc{display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--tx-2)}
 .hcard__loc svg{color:var(--gold-dk);flex-shrink:0}
@@ -498,10 +425,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   display:flex;justify-content:space-between;align-items:flex-end;gap:18px;
   margin-top:auto;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap;
 }
-<<<<<<< HEAD
-.legacy{font-size:.7rem;color:var(--tx-3);font-style:italic;margin-top:4px}
-=======
->>>>>>> origin/thu
 
 /* rating block */
 .rate{display:flex;align-items:center;gap:9px;flex-shrink:0}
@@ -543,17 +466,10 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 /* ---------- room card ---------- */
 .rcard{
   display:grid;grid-template-columns:300px 1fr 226px;background:var(--surface);
-<<<<<<< HEAD
-  border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:all var(--t);
-}
-.rcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
-.rcard__media{position:relative;background:var(--beige);min-height:224px;overflow:hidden;contain:paint}
-=======
   border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
 }
 .rcard:hover{box-shadow:var(--sh-3);border-color:var(--sand)}
 .rcard__media{position:relative;background:var(--beige);overflow:hidden;contain:paint}
->>>>>>> origin/thu
 .rcard__b{padding:22px 24px;display:flex;flex-direction:column;gap:11px;min-width:0}
 .rcard__b h3{font-size:1.32rem}
 .rcard__specs{display:grid;grid-template-columns:1fr 1fr;gap:7px 16px}
@@ -599,11 +515,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .gal__t:hover img{opacity:.82}
 .gal__t.is-active{border-color:var(--gold)}
 .gal__more{
-<<<<<<< HEAD
-  position:absolute;inset:0;background:rgba(14,13,11,.68);color:var(--ivory);
-=======
   position:absolute;inset:0;color:var(--ivory);
->>>>>>> origin/thu
   display:grid;place-items:center;font-size:.76rem;text-align:center;line-height:1.3;
 }
 
@@ -641,14 +553,10 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 /* ---------- stepper / progress ---------- */
 .steps{background:var(--surface);border-bottom:1px solid var(--line)}
 .steps__in{display:flex;align-items:center;padding-block:20px;gap:0}
-<<<<<<< HEAD
-.step{display:flex;align-items:center;gap:11px;flex-shrink:0}
-=======
 .step{display:flex;align-items:center;gap:11px;flex-shrink:1;min-width:0}
 /* long step captions (e.g. a room name) truncate instead of pushing the row off-screen */
 .step__t{min-width:0}
 .step__t b,.step__t span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
->>>>>>> origin/thu
 .step__n{
   width:29px;height:29px;border-radius:50%;display:grid;place-items:center;
   font-size:.76rem;font-weight:600;flex-shrink:0;
@@ -811,11 +719,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 /* ---------- misc ---------- */
 .fade-up{opacity:0;transform:translateY(22px);transition:opacity .75s var(--ease),transform .75s var(--ease)}
 .fade-up.in{opacity:1;transform:none}
-<<<<<<< HEAD
-
-.skel{background:linear-gradient(90deg,var(--beige) 25%,var(--ivory-2) 50%,var(--beige) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
-=======
->>>>>>> origin/thu
 @keyframes shimmer{to{background-position:-200% 0}}
 
 /* Branded placeholder — shown only when every candidate URL fails.
@@ -842,16 +745,9 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 /* ensure image containers can host the absolute placeholder.
    NOTE: .mini is intentionally EXCLUDED — it is position:absolute;inset:0
    and must stay that way, or it collapses to zero height. */
-<<<<<<< HEAD
-.pcard__img,.hcard__media,.rcard__media,.gal__main,.gal__t{position:relative}
-
-.divider{height:1px;background:var(--line);margin-block:22px}
-.srcnote{font-size:.7rem;color:var(--tx-3);font-style:italic}
-=======
 .hcard__media,.rcard__media,.gal__main,.gal__t{position:relative}
 
 .divider{height:1px;background:var(--line);margin-block:22px}
->>>>>>> origin/thu
 .amgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px 18px}
 .am{display:flex;align-items:center;gap:9px;font-size:.83rem;color:var(--tx-2)}
 .am svg{color:var(--gold-dk);flex-shrink:0}
@@ -870,12 +766,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .mobile-cta{display:none}
 
 /* V12.1: featured gallery must be seamless — no dark slivers between image tiles. */
-<<<<<<< HEAD
-.featured-gallery{gap:0!important;line-height:0}
-.featured-gallery>div{margin:0!important;padding:0!important;line-height:0;background:transparent!important}
-.featured-gallery>div img{display:block;width:100%;height:100%;margin:0!important;vertical-align:top}
-=======
->>>>>>> origin/thu
 
 /* room-detail + reviews responsive helpers */
 @media (max-width:1100px){ .specstrip{grid-template-columns:repeat(3,1fr)!important} }
@@ -883,14 +773,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 @media (max-width:720px){ .revlist{grid-template-columns:1fr!important} }
 @media (max-width:560px){ .specstrip{grid-template-columns:repeat(2,1fr)!important} }
 
-<<<<<<< HEAD
-/* summary bar variant — grid lives in CSS (not inline) so the
-   responsive media queries in responsive.css can override it. */
-.searchbar--sum{margin:0;grid-template-columns:1.5fr 1fr 1fr 1.2fr auto}
-.searchbar--sum .sf__ctl > div{min-width:0}
-
-=======
->>>>>>> origin/thu
 /* guests trigger must inherit the same light treatment as the other fields
    on the dark hero variant (it is a <button>, not an <input>) */
 .searchbar #sbGuests{color:var(--ivory)}
@@ -978,11 +860,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 /* ---- room / hotel card refinements (STEP 6) ----
    Same design language; better ratio, cropping and hover. */
 .rcard__media{aspect-ratio:4/3;min-height:0}
-<<<<<<< HEAD
-.hcard__media{aspect-ratio:4/3;min-height:0}
-=======
 .hcard__media{min-height:280px;aspect-ratio:auto}
->>>>>>> origin/thu
 .mini img{object-position:center 55%}          /* rooms read better slightly low */
 .rcard{transition:box-shadow var(--t),border-color var(--t),transform var(--t)}
 .rcard:hover{transform:translateY(-2px)}
@@ -993,25 +871,6 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .rcard__media .mini img,.hcard__media .mini img{transition:transform .8s var(--ease)}
 .rcard:hover .mini img.is-on,.hcard:hover .mini img.is-on{transform:scale(1.045)}
 /* photo-provenance chip on room cards */
-<<<<<<< HEAD
-.photochip{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:100px;
-  font-size:.64rem;letter-spacing:.06em;background:rgba(194,162,92,.12);
-  border:1px solid rgba(194,162,92,.32);color:var(--brown)}
-.photochip--warn{background:rgba(168,118,44,.1);border-color:rgba(168,118,44,.35);color:var(--warn)}
-.photochip svg{flex-shrink:0}
-
-
-/* V11.1 footer contact/travel-trade spacing */
-.ftr__contact .ct-link,
-.ftr__trade > a{display:flex;align-items:center;gap:13px;padding:7px 0;line-height:1.35;min-height:32px}
-.ftr__contact .ct-link svg,
-.ftr__trade > a svg{width:17px;height:17px;flex:0 0 17px}
-.ftr__contact .ct-stack--footer{gap:5px;margin-top:8px}
-.ftr__contact .tiny{line-height:1.65}
-.ftr__trade-intro{font-size:.76rem;color:var(--tx-3);line-height:1.55;margin:0 0 8px;max-width:190px}
-.ftr__trade > a{font-size:.82rem;color:var(--tx-2)}
-.ftr__trade > a:hover{color:var(--gold-dk)}
-=======
 
 
 /* V11.1 footer contact/travel-trade spacing */
@@ -1135,6 +994,11 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   box-sizing:border-box;
 }
 
+.home-redesign .home-page-grid__content .home-hero__bg.site-image-pending .home-hero__slide{
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+
 .home-redesign .home-page-grid__content .home-hero__bg{
   position:absolute;
   inset:0;
@@ -1175,7 +1039,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   inset:0;
   opacity:0;
   visibility:hidden;
-  transition:opacity .5s ease,visibility .5s ease;
+  transition:opacity .3s ease,visibility .3s ease;
   z-index:0;
 }
 
@@ -1191,7 +1055,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   object-fit:cover;
   object-position:center;
   transform:scale(1.045);
-  transition:transform 4.5s cubic-bezier(.2,.65,.2,1),filter .5s ease;
+  transition:transform 4.5s cubic-bezier(.2,.65,.2,1),filter .3s ease;
   filter:saturate(.9) contrast(.98);
 }
 
@@ -2097,10 +1961,12 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 
 
 /* V13 — My KAS hero aligned with the shared editorial page-intro system.
-   Background image continues to be supplied by the hotel image data slot. */
+   Background image is supplied only by the Admin-managed page hero slot. */
 .hero.hero--mykas-intro{
+  height:340px;
   min-height:340px;
   background:var(--black);
+  background-image:none;
 }
 .hero.hero--mykas-intro .hero__in{
   width:min(100% - 48px,980px);
@@ -2129,17 +1995,17 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   line-height:1.75;
 }
 @media(max-width:700px){
-  .hero.hero--mykas-intro{min-height:280px}
+  .hero.hero--mykas-intro{height:250px;min-height:250px}
   .hero.hero--mykas-intro .hero__in{width:calc(100% - 32px);padding-bottom:28px}
   .hero.hero--mykas-intro .hero__ct h1{font-size:clamp(2.25rem,9vw,3.1rem)}
 }
-.hero.hero--mykas-intro .hero__bg img{opacity:.78}
-.hero.hero--mykas-intro .hero__bg::after{background:linear-gradient(100deg,rgba(14,13,11,.62) 0%,rgba(14,13,11,.40) 42%,rgba(14,13,11,.18) 72%,rgba(14,13,11,.34) 100%)}
+/* My KAS uses only the Admin-managed background image. */
+.hero.hero--mykas-intro{background-repeat:no-repeat;background-position:center;background-size:cover;}
 
 
 /* V15 — Media-only intro areas, scoped exclusively to the five requested pages.
-   The content-page pages use the existing local Saigon image; My KAS keeps its
-   existing data-driven hotel background image. */
+   The content-page pages use the existing local Saigon image; My KAS uses only
+   the Admin-managed hero image. */
 .content-page-hero.media-only-page-hero{
   position:relative;
   min-height:340px;
@@ -2147,7 +2013,9 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   align-items:stretch;
   padding:0;
   background-color:#171613;
-  background-image:linear-gradient(90deg,rgba(15,14,12,.30),rgba(15,14,12,.10)),url('../assets/home/a-day-in-saigon.jpg');
+  /* Hero imagery is owned by Admin siteImages. Do not paint the legacy
+     static image underneath the Admin-managed image. */
+  background-image:none;
   background-position:center 48%;
   background-size:cover;
   background-repeat:no-repeat;
@@ -2205,4 +2073,63 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 @media(max-width:520px){.hotel-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 @media(max-width:520px){.hotel-gallery-preview-thumbs{gap:6px;margin-top:7px}.hotel-gallery-preview-thumb{border-radius:6px}}
 @media(max-width:640px){.hotel-gallery-modal{padding:0}.hotel-gallery-modal__panel{width:100%;height:100%;max-height:100%;border-radius:0;padding:16px 12px}.hotel-gallery-modal .gal__main{aspect-ratio:4/3}.hotel-gallery-grid{gap:7px}.hotel-gallery-grid__item{border-radius:8px}.hotel-gallery-launch__label{right:10px;bottom:10px}}
->>>>>>> origin/thu
+
+
+/* ---------- first-visit KAS welcome ---------- */
+.kas-welcome{position:fixed;inset:0;z-index:1400;display:grid;place-items:center;padding:16px;background:rgba(10,9,7,.52);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+.kas-welcome.is-open{opacity:1;visibility:visible}
+.kas-welcome__box{width:min(70vw,1120px);height:min(76vh,680px);display:grid;grid-template-columns:42% 58%;overflow:hidden;background:#f4f0e7;border:1px solid rgba(194,162,92,.24);box-shadow:0 24px 70px rgba(0,0,0,.32)}
+ .kas-welcome__visual{position:relative;overflow:hidden;background:#211b17;color:#f4f0e7}
+ .kas-welcome__visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.84) contrast(1)}
+ .kas-welcome__visual-copy{position:absolute;z-index:1;left:34px;bottom:62px;display:flex;flex-direction:column;font:600 15px/1.42 var(--sans);letter-spacing:.2em;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+ .kas-welcome__visual small{position:absolute;z-index:1;left:34px;bottom:24px;font:600 7px/1 var(--sans);letter-spacing:.25em;text-shadow:0 1px 7px rgba(0,0,0,.25)}
+ .kas-welcome__content{position:relative;padding:25px 50px 16px;text-align:center;color:#51483e;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+ .kas-welcome__close{position:absolute;right:16px;top:14px;width:26px;height:26px;border:0;background:transparent;color:#625a52;font-size:21px;font-weight:300;cursor:pointer}
+ .kas-welcome__logo{display:block;width:126px;height:auto;margin:0 auto 12px}
+ .kas-welcome__eyebrow,.kas-welcome__label{font:600 9px/1.4 var(--sans);letter-spacing:.28em;color:#4e463d}
+ .kas-welcome__content h2{font:400 17px/1.4 var(--serif);margin:7px 0 12px;color:#71675d}
+ .kas-welcome__label{margin-bottom:10px}
+ .kas-welcome__langs{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:255px;margin:0 auto}
+ .kas-welcome__lang{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #cec6b9;background:transparent;color:#4d463f;font:500 10px/1 var(--sans);cursor:pointer}
+ .kas-welcome__lang.is-active{border-color:#3f3a34;color:#26231f}
+ .kas-welcome__lang i{font-style:normal;font-size:11px;color:#9c9184}
+ .kas-welcome__lang.is-active i{color:#2b2925}
+ .kas-welcome__rule{height:1px;background:#d7d0c4;margin:14px 0 13px;width:100%}
+ .kas-welcome__choice-title{margin-bottom:10px}
+ .kas-welcome__choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+ .kas-welcome__choice{display:flex;flex-direction:column;min-height:188px;padding:16px 15px;border:1px solid #d2cabc;background:#f8f5ee;text-align:left}
+ .kas-welcome__choice--member{background:#f1ede4}
+ .kas-welcome__choice-heading{font:600 9px/1.35 var(--sans);letter-spacing:.18em;color:#4e463d;margin-bottom:8px}
+ .kas-welcome__choice-copy{font:400 11px/1.45 var(--serif);color:#625a52;margin:0 0 9px}
+ .kas-welcome__benefits{list-style:none;padding:0;margin:0 0 11px;color:#625a52;font:400 10px/1.4 var(--serif)}
+ .kas-welcome__benefits li{margin:4px 0}
+ .kas-welcome__benefits li::before{content:'◇';color:#8a7c69;margin-right:6px}
+ .kas-welcome__choice-btn{width:100%;height:38px;margin-top:auto;border:1px solid #272522;background:transparent;color:#272522;display:flex;align-items:center;justify-content:center;gap:12px;font:600 8.5px/1 var(--sans);letter-spacing:.13em;cursor:pointer}
+ .kas-welcome__choice-btn--dark{background:#272522;color:#f4f0e7}
+ .kas-welcome__choice-btn b{font-size:13px;font-weight:300;line-height:1}
+ .kas-welcome__signin{margin:10px auto 0;display:block;border:0;border-bottom:1px solid #a99e91;background:transparent;color:#514a43;font:600 9px/1.8 var(--sans);letter-spacing:.18em;cursor:pointer}
+@media(max-width:700px){
+  .kas-welcome{padding:8px}
+  .kas-welcome__box{width:min(560px,calc(100vw - 16px));height:min(760px,calc(100vh - 16px));grid-template-columns:1fr;grid-template-rows:34% 66%;overflow:auto}
+  .kas-welcome__visual-copy{left:22px;bottom:48px;font-size:12px}
+  .kas-welcome__visual small{left:22px;bottom:17px;font-size:7px}
+  .kas-welcome__content{padding:24px 24px 20px}
+  .kas-welcome__logo{width:145px;margin-bottom:17px}
+  .kas-welcome__content h2{font-size:15px;margin:10px 0 15px}
+  .kas-welcome__rule{margin:15px 0}
+  .kas-welcome__choices{grid-template-columns:1fr 1fr;gap:10px}
+  .kas-welcome__choice{min-height:176px;padding:14px 12px}
+  .kas-welcome__choice-copy{font-size:10px}
+  .kas-welcome__benefits{font-size:9px}
+}
+@media(max-width:560px){
+  .kas-welcome__choices{grid-template-columns:1fr;gap:9px}
+  .kas-welcome__choice{min-height:0}
+}
+@media(max-width:430px){
+  .kas-welcome__box{grid-template-rows:30% 70%}
+  .kas-welcome__content{padding-inline:18px}
+  .kas-welcome__eyebrow,.kas-welcome__label{font-size:8px}
+  .kas-welcome__lang{height:38px;font-size:10px}
+  .kas-welcome__benefits{font-size:9px}
+}

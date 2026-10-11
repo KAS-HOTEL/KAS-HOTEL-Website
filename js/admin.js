@@ -1,97 +1,16 @@
 'use strict';
 (function(){
-<<<<<<< HEAD
-  var key='', data=null;
-  var status=document.getElementById('status'), management=document.getElementById('management');
-  var collectionGrid=document.getElementById('collectionGrid'), propertyGrid=document.getElementById('propertyGrid'), rooms=document.getElementById('rooms'), photoRooms=document.getElementById('photoRooms');
-=======
   var key='', data=null, siteSlots={home:[],guidebook:[]}, overrides={collection:{},property:{},rooms:{},site:{}};
   var status=document.getElementById('status'), management=document.getElementById('management');
   var collectionGrid=document.getElementById('collectionGrid'), propertyGrid=document.getElementById('propertyGrid');
-  var pageHeroImages=document.getElementById('pageHeroImages'), homeHeroImages=document.getElementById('homeHeroImages'), homeSiteImages=document.getElementById('homeSiteImages'), guidebookSiteImages=document.getElementById('guidebookSiteImages');
+  var pageHeroImages=document.getElementById('pageHeroImages'), welcomePopupImage=document.getElementById('welcomePopupImage'), homeHeroImages=document.getElementById('homeHeroImages'), homeSiteImages=document.getElementById('homeSiteImages'), guidebookSiteImages=document.getElementById('guidebookSiteImages');
   var rooms=document.getElementById('rooms'), photoRooms=document.getElementById('photoRooms'), imageMatrix=document.getElementById('imageMatrix');
->>>>>>> origin/thu
   function esc(s){return String(s==null?'':s).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];});}
   function money(v){return new Intl.NumberFormat('vi-VN').format(+v||0)+' ₫';}
   function setStatus(t,ok){status.className='status '+(ok?'ok':'err');status.textContent=t;}
   function toast(t){var el=document.getElementById('toast');el.textContent=t;el.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(function(){el.style.display='none';},2400);}
   function api(url,opts){opts=opts||{};opts.headers=Object.assign({'x-admin-key':key},opts.headers||{});return fetch(url,opts).then(function(r){return r.json().then(function(x){if(!r.ok)throw new Error(x.error||'Có lỗi.');return x;});});}
   function roomRows(){var arr=[];(data.branches||[]).forEach(function(b){(b.rooms||[]).forEach(function(r){arr.push({branch:b,room:r});});});return arr;}
-<<<<<<< HEAD
-  function renderCollections(){
-    collectionGrid.innerHTML=(data.branches||[]).map(function(b){
-      var img=(data.collectionImages||{})[b.hotelId];
-      var fallback='';
-      return '<article class="collectionCard"><div class="media">'+(img?'<img src="'+esc(img)+'" alt="">':'<div class="small">Chưa có ảnh Collection riêng</div>')+'</div><div class="body"><h3>'+esc('Chi nhánh '+b.address)+'</h3><div class="small">'+esc(b.hotelId)+'</div><div class="rowActions"><input type="file" accept="image/jpeg,image/png,image/webp" data-collection-input="'+esc(b.hotelId)+'"><button class="btn gold" data-collection-upload="'+esc(b.hotelId)+'">Thay ảnh</button>'+(img?'<button class="btn danger" data-collection-delete="'+esc(b.hotelId)+'">Xóa</button>':'')+'</div></div></article>';
-    }).join('');
-    collectionGrid.querySelectorAll('[data-collection-upload]').forEach(function(btn){btn.addEventListener('click',function(){
-      var id=btn.dataset.collectionUpload, input=collectionGrid.querySelector('[data-collection-input="'+CSS.escape(id)+'"]');
-      if(!input || !input.files.length){toast('Hãy chọn ảnh Collection trước.');return;}
-      var fd=new FormData();fd.append('hotelId',id);fd.append('image',input.files[0]);btn.disabled=true;
-      api('/api/admin/collection-image',{method:'POST',body:fd}).then(function(){toast('Đã đổi ảnh Collection cho '+id);return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});
-    });});
-    collectionGrid.querySelectorAll('[data-collection-delete]').forEach(function(btn){btn.addEventListener('click',function(){
-      var id=btn.dataset.collectionDelete;if(!confirm('Xóa ảnh Collection riêng của '+id+' và quay về ảnh mặc định?'))return;
-      api('/api/admin/collection-image/'+encodeURIComponent(id),{method:'DELETE'}).then(function(){toast('Đã xóa ảnh Collection.');return load();}).catch(function(e){setStatus(e.message,false);});
-    });});
-  }
-  function renderPropertyGallery(){
-    if(!propertyGrid) return;
-    propertyGrid.innerHTML=(data.branches||[]).map(function(b){
-      var imgs=b.propertyImages||[];
-      var thumbs=imgs.map(function(x){
-        return '<div class="thumb"><img src="'+esc(x.url||x)+'" alt=""><div><span title="'+esc(x.name||'')+'">'+esc((x.name||'').slice(0,16))+'</span><button class="btn danger" style="padding:5px 7px;font-size:10px" data-property-delete="'+esc(x.id||'')+'">Xóa</button></div></div>';
-      }).join('');
-      return '<article class="collectionCard"><div class="media">'+
-        (imgs.length?'<img src="'+esc(imgs[0].url||imgs[0])+'" alt="">':'<div class="small">Chưa có gallery riêng</div>')+
-        '</div><div class="body"><h3>'+esc(b.address)+'</h3><div class="small">'+esc(b.hotelId)+' · '+imgs.length+' ảnh bên trong</div>'+
-        '<div class="upload"><input type="file" accept="image/jpeg,image/png,image/webp" multiple data-property-input="'+esc(b.hotelId)+'"><button class="btn gold" data-property-upload="'+esc(b.hotelId)+'">Thêm ảnh</button></div>'+
-        '<div class="thumbs">'+thumbs+'</div></div></article>';
-    }).join('');
-    propertyGrid.querySelectorAll('[data-property-upload]').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        var id=btn.dataset.propertyUpload, input=propertyGrid.querySelector('[data-property-input="'+CSS.escape(id)+'"]');
-        if(!input || !input.files.length){toast('Hãy chọn ảnh bên trong khách sạn trước.');return;}
-        if(input.files.length>20){toast('Mỗi lần tối đa 20 ảnh.');return;}
-        var fd=new FormData();fd.append('hotelId',id);
-        Array.prototype.forEach.call(input.files,function(f){fd.append('images',f);});
-        btn.disabled=true;
-        api('/api/admin/property-images',{method:'POST',body:fd}).then(function(x){toast('Đã thêm '+x.added+' ảnh cho '+id);return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});
-      });
-    });
-    propertyGrid.querySelectorAll('[data-property-delete]').forEach(function(btn){
-      btn.addEventListener('click',function(){
-        if(!btn.dataset.propertyDelete)return;
-        if(!confirm('Xóa ảnh này khỏi gallery khách sạn?'))return;
-        api('/api/admin/property-images/'+encodeURIComponent(btn.dataset.propertyDelete),{method:'DELETE'}).then(function(){toast('Đã xóa ảnh gallery.');return load();}).catch(function(e){setStatus(e.message,false);});
-      });
-    });
-  }
-
-  function priceInput(key,season,idx,val,label){return '<label>'+label+'<input type="number" min="0" step="50000" data-rate="'+esc(key)+'" data-season="'+season+'" data-idx="'+idx+'" value="'+esc(val)+'"></label>';}
-  function renderRooms(filter){
-    var q=(filter||'').trim().toLowerCase();
-    var arr=roomRows().filter(function(x){var b=x.branch,r=x.room;return !q || [b.address,b.hotelId,r.stt,r.ez,r.name].join(' ').toLowerCase().indexOf(q)>-1;});
-    rooms.innerHTML=arr.map(function(x){var b=x.branch,r=x.room;return '<article class="room"><div class="roomHead"><div><h3>'+esc('Chi nhánh '+b.address)+' · STT '+r.stt+' · '+esc(r.name)+'</h3><div class="meta">Ez: '+esc(r.ez)+' · Mã room: '+esc(r.key)+'</div></div><div class="galleryCount">'+money(r.rates.jul_sep[0])+' / '+money(r.rates.jul_sep[1])+' · Jul–Sep</div></div><div class="priceGrid">'+seasonBox(r,'jul_sep','Tháng 7–9')+seasonBox(r,'oct','Tháng 10')+seasonBox(r,'nov_jan','Tháng 11–1/2027')+'</div><div class="saveRow"><button class="btn gold" data-save-rate="'+esc(r.key)+'">Lưu giá hạng phòng này</button></div></article>';}).join('');
-    rooms.querySelectorAll('[data-save-rate]').forEach(function(btn){btn.addEventListener('click',function(){saveRates(btn.dataset.saveRate,btn);});});
-  }
-  function seasonBox(r,season,title){var p=r.rates[season];return '<div class="seasonBox"><div class="seasonTitle">'+title+'</div><div class="priceInputs">'+priceInput(r.key,season,0,p[0],'Trong tuần')+priceInput(r.key,season,1,p[1],'Cuối tuần (T6–CN)')+'</div></div>';}
-  function saveRates(keyRoom,btn){
-    var rates={};['jul_sep','oct','nov_jan'].forEach(function(s){rates[s]=[0,1].map(function(i){var el=document.querySelector('[data-rate="'+CSS.escape(keyRoom)+'"][data-season="'+s+'"][data-idx="'+i+'"]');return Number(el.value||0);});});
-    btn.disabled=true;api('/api/admin/room-rates',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({roomKey:keyRoom,rates:rates})}).then(function(){toast('Đã lưu giá cho '+keyRoom);return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});
-  }
-  function renderPhotos(){
-    photoRooms.innerHTML=(data.branches||[]).map(function(b){
-      return '<section class="room"><div class="roomHead"><div><h3>'+esc('Chi nhánh '+b.address)+'</h3><div class="meta">'+b.rooms.length+' hạng phòng</div></div></div>'+b.rooms.map(function(r){var imgs=r.images||[];return '<div style="border-top:1px solid var(--line);padding-top:12px;margin-top:12px"><div class="roomHead"><div><b>'+esc('STT '+r.stt+' · '+r.name)+'</b><div class="meta">Ez: '+esc(r.ez)+'</div></div><span class="galleryCount">'+imgs.length+' ảnh</span></div><div class="upload"><input type="file" accept="image/jpeg,image/png,image/webp" multiple data-room="'+esc(r.key)+'"><button class="btn gold" data-upload="'+esc(r.key)+'">Upload ảnh</button></div><div class="thumbs">'+imgs.map(function(x){return '<div class="thumb"><img src="'+esc(x.url)+'" alt=""><div><span title="'+esc(x.name)+'">'+esc((x.name||'').slice(0,16))+'</span><button class="btn danger" style="padding:5px 7px;font-size:10px" data-delete="'+esc(x.id)+'">Xóa</button></div></div>';}).join('')+'</div></div>';}).join('')+'</section>';
-    }).join('');
-    photoRooms.querySelectorAll('[data-upload]').forEach(function(btn){btn.addEventListener('click',function(){var keyRoom=btn.dataset.upload;var input=photoRooms.querySelector('input[data-room="'+CSS.escape(keyRoom)+'"]');if(!input.files.length){toast('Hãy chọn ảnh phòng.');return;}var fd=new FormData();fd.append('roomKey',keyRoom);Array.prototype.forEach.call(input.files,function(f){fd.append('images',f);});btn.disabled=true;api('/api/admin/upload',{method:'POST',body:fd}).then(function(x){toast('Đã upload '+x.added+' ảnh.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
-    photoRooms.querySelectorAll('[data-delete]').forEach(function(btn){btn.addEventListener('click',function(){if(!confirm('Xóa ảnh này?'))return;api('/api/admin/upload/'+encodeURIComponent(btn.dataset.delete),{method:'DELETE'}).then(function(){toast('Đã xóa ảnh.');return load();}).catch(function(e){setStatus(e.message,false);});});});
-  }
-  function render(){renderCollections();renderPropertyGallery();renderRooms(document.getElementById('roomSearch').value);renderPhotos();}
-  function load(){return fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.json();}).then(function(x){data=x;render();});}
-  document.getElementById('roomSearch').addEventListener('input',function(){renderRooms(this.value);});
-  document.getElementById('login').addEventListener('click',function(){key=document.getElementById('key').value.trim();if(!key){setStatus('Hãy nhập ADMIN_KEY.',false);return;}api('/api/admin/status').then(function(){setStatus('Đã mở quyền quản trị.',true);management.classList.remove('hidden');document.getElementById('publicBox').classList.remove('hidden');document.getElementById('publicUrl').textContent=location.origin+'/index.html';document.getElementById('referenceUrl').textContent=location.origin+'/reference';return load();}).catch(function(e){setStatus(e.message,false);});});
-=======
   function sourceMeta(id){return window.KAS_IMAGES&&window.KAS_IMAGES.meta?window.KAS_IMAGES.meta(id):{};}
   function sourceUrls(id){var c=window.KAS_IMAGES&&window.KAS_IMAGES.CATALOGUE?window.KAS_IMAGES.CATALOGUE[id]:null;if(!c)return [];function urls(a){return (a||[]).map(function(x){return window.KAS_IMAGES.url(x,960,660);});}return [].concat(urls(c.rooms),urls(c.exterior),urls(c.dining),urls(c.publicAreas),urls(c.leisure),urls(c.raw),urls(c.uncategorised));}
   function renderImageMatrix(){
@@ -107,12 +26,16 @@
   }
   function renderSiteImages(target, slots){
     if(!target) return;
+    /* Admin Hero preview uses the same public siteImages payload as the website.
+       This prevents the Admin panel from showing a stale/default hero while the
+       public page is already using the current Admin-managed image. */
     var siteOverrides=overrides.site||{};
+    var publicSiteImages=(data&&data.siteImages)||{};
     target.innerHTML=(slots||[]).map(function(slot){
-      var item=siteOverrides[slot.key];
+      var item=publicSiteImages[slot.key]||siteOverrides[slot.key];
       var overrideUrl=item&&item.url?String(item.url):'';
-      var current=overrideUrl||String(slot.default||'');
-      var source=item?(item.source==='admin-upload'?'Ảnh upload trong Admin':'URL ghi đè từ Admin'):(slot.default?'Ảnh mặc định đang khai báo trên Website':'Chưa khai báo nguồn ảnh');
+      var current=overrideUrl;
+      var source=item?(item.source==='admin-upload'?'Ảnh upload trong Admin':'URL ghi đè từ Admin'):'Chưa có ảnh Admin';
       var currentLink=current?'<a class="default" target="_blank" rel="noopener" href="'+esc(current)+'" title="'+esc(current)+'">Mở / copy link ảnh đang dùng ↗</a>':'';
       return '<article class="siteCard"><div class="media">'+(current?'<img src="'+esc(current)+'" alt="'+esc(slot.label)+'" loading="lazy">':'<div class="small">Chưa có ảnh</div>')+'</div><div class="body"><h3>'+esc(slot.label)+'</h3><div class="current">Nguồn hiện hành: '+esc(source)+'</div>'+currentLink+'<div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" data-site-input="'+esc(slot.key)+'"><button class="btn gold" data-site-upload="'+esc(slot.key)+'">Upload / thay ảnh</button></div>'+urlInput('site',slot.key,'https://link-anh...')+'<div class="thumbs">'+(item?imageThumb(item,'site',slot.key):'')+'</div></div></article>';
     }).join('');
@@ -121,24 +44,45 @@
   }
 
   function renderCollections(){
-    collectionGrid.innerHTML=(data.branches||[]).map(function(b){var uploaded=(data.collectionImages||{})[b.hotelId],imgs=mergeList('collection',b.hotelId,uploaded);return '<article class="collectionCard"><div class="media">'+(imgs.length?'<img src="'+esc(imgs[0].url||imgs[0])+'" alt="">':'<div class="small">Chưa có ảnh Collection</div>')+'</div><div class="body"><h3>'+esc(b.address)+'</h3><div class="small">'+esc(b.hotelId)+' · '+imgs.length+' ảnh hiện hành</div><div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" data-collection-input="'+esc(b.hotelId)+'"><button class="btn gold" data-collection-upload="'+esc(b.hotelId)+'">Thay bằng file</button></div>'+urlInput('collection',b.hotelId,'https://link-anh-collection...')+'<div class="thumbs">'+imgs.map(function(x){return imageThumb(x,'collection',b.hotelId);}).join('')+'</div>'+((uploaded&&!(overrides.collection&&overrides.collection[b.hotelId]))?'<div class="rowActions"><button class="btn danger" data-collection-delete="'+esc(b.hotelId)+'">Xóa ảnh upload / về mặc định</button></div>':'')+'</div></article>';}).join('');
+    collectionGrid.innerHTML=(data.branches||[]).map(function(b){
+      var uploaded=(data.collectionImages||{})[b.hotelId],imgs=mergeList('collection',b.hotelId,uploaded),mapped=!!b.propertyHeroId;
+      return '<article class="collectionCard"><div class="media">'+(imgs.length?'<img src="'+esc(imgs[0].url||imgs[0])+'" alt="">':'<div class="small">Chưa có ảnh Collection</div>')+'</div><div class="body"><h3>'+esc(b.address)+'</h3><div class="small">'+esc(b.hotelId)+' · '+(mapped?'Ảnh Collection đang lấy từ Hero gallery':'Chưa mapping Hero')+'</div>'+ (mapped?'<div class="current">Hero: '+esc(b.propertyHeroUrl||'')+'</div>':'') +'<div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" data-collection-input="'+esc(b.hotelId)+'"><button class="btn gold" data-collection-upload="'+esc(b.hotelId)+'">Thay bằng file</button></div>'+urlInput('collection',b.hotelId,'https://link-anh-collection...')+'<div class="thumbs">'+imgs.map(function(x){return imageThumb(x,'collection',b.hotelId);}).join('')+'</div>'+((uploaded&&!mapped&&!(overrides.collection&&overrides.collection[b.hotelId]))?'<div class="rowActions"><button class="btn danger" data-collection-delete="'+esc(b.hotelId)+'">Xóa ảnh upload / về mặc định</button></div>':'')+'</div></article>';
+    }).join('');
     bindUrlActions(collectionGrid);
     collectionGrid.querySelectorAll('[data-collection-upload]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.dataset.collectionUpload,input=collectionGrid.querySelector('[data-collection-input="'+CSS.escape(id)+'"]');if(!input||!input.files.length){toast('Hãy chọn ảnh Collection.');return;}var fd=new FormData();fd.append('hotelId',id);fd.append('image',input.files[0]);btn.disabled=true;api('/api/admin/collection-image',{method:'POST',body:fd}).then(function(){toast('Đã cập nhật ảnh Collection.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
     collectionGrid.querySelectorAll('[data-collection-delete]').forEach(function(btn){btn.addEventListener('click',function(){if(!confirm('Xóa ảnh Collection upload và quay về ảnh mặc định?'))return;api('/api/admin/collection-image/'+encodeURIComponent(btn.dataset.collectionDelete),{method:'DELETE'}).then(function(){toast('Đã xóa ảnh Collection upload.');return load();}).catch(function(e){setStatus(e.message,false);});});});
   }
   function renderPropertyGallery(){
-    var categoryOptions='<option value="rooms">Phòng nghỉ</option><option value="lobby">Sảnh & Lễ tân</option><option value="dining">Nhà hàng & Ăn uống</option><option value="exterior">Ngoại thất</option><option value="amenities">Tiện ích</option><option value="other">Khác</option>';
     var categoryLabels={rooms:'Phòng nghỉ',lobby:'Sảnh & Lễ tân',dining:'Nhà hàng & Ăn uống',exterior:'Ngoại thất',amenities:'Tiện ích',other:'Khác'};
     propertyGrid.innerHTML=(data.branches||[]).map(function(b){
-      var uploaded=b.propertyImages||[],imgs=mergeList('property',b.hotelId,uploaded);
-      var groups=['rooms','lobby','dining','exterior','amenities','other'].map(function(cat){
-        var items=imgs.filter(function(x){return (typeof x==='object'&&x.category?x.category:'other')===cat;});
-        return '<section class="propertyCategoryGroup"><div class="propertyCategoryHead"><strong>'+categoryLabels[cat]+'</strong><span class="badge">'+items.length+' ảnh</span></div>'+(items.length?'<div class="thumbs">'+items.map(function(x){return imageThumb(x,'property',b.hotelId);}).join('')+'</div>':'<div class="small propertyEmpty">Chưa có ảnh trong danh mục này</div>')+'</section>';
+      var uploaded=b.propertyImages||[],imgs=mergeList('property',b.hotelId,uploaded),heroId=b.propertyHeroId||'';
+      var ordered=imgs.map(function(x){return typeof x==='string'?{url:x}:x;});
+      var categoryOrder=['rooms','lobby','dining','exterior','amenities','other'];
+      var categoryGroups=categoryOrder.map(function(category){
+        var categoryImages=ordered.map(function(x,i){return {image:x,index:i};}).filter(function(entry){return (entry.image.category||'other')===category;});
+        var cards=categoryImages.map(function(entry){
+          var x=entry.image,i=entry.index,id=x.id||'',isHero=!!id&&id===heroId;
+          return '<div class="thumb propertyThumb" draggable="'+(id?'true':'false')+'" data-property-thumb="'+esc(id)+'" data-property-source="'+esc(x.source||'upload')+'" data-hero="'+(isHero?'true':'false')+'">'+
+            '<span class="propertyOrder">'+(i+1)+'</span>'+(isHero?'<span class="propertyHero">HERO · COLLECTION</span>':'')+
+            '<img src="'+esc(x.url||'')+'" alt="" loading="lazy"><div class="tBody"><a target="_blank" rel="noopener" href="'+esc(x.url||'')+'" title="'+esc(x.url||'')+'">Mở / copy link</a><div><span class="source">'+esc((x.name||x.originalName||categoryLabels[x.category]||'URL').slice(0,22))+'</span></div><div class="small">'+esc(categoryLabels[x.category]||'Khác')+'</div><div class="propertyThumbActions">'+(isHero?'<button class="btn ghost" disabled>Đang là Hero</button>':'<button class="btn gold" data-property-hero="'+esc(x.id||'')+'">Đặt làm Hero</button>')+(x.id&&!isHero?'<button class="btn danger" data-property-delete="'+esc(x.id)+'" title="Xóa ảnh" aria-label="Xóa ảnh">x</button>':'')+'</div></div></div>';
+        }).join('');
+        return '<section class="propertyCategoryGroup"><div class="propertyCategoryHead"><strong>'+esc(categoryLabels[category])+'</strong><span class="small">'+categoryImages.length+' ảnh</span></div><div class="thumbs">'+(cards||'<div class="propertyEmpty">Chưa có ảnh trong danh mục này.</div>')+'</div></section>';
       }).join('');
-      return '<article class="collectionCard propertyGalleryCard"><div class="media">'+(imgs.length?'<img src="'+esc(imgs[0].url||imgs[0])+'" alt="Ảnh đại diện gallery '+esc(b.address)+'" loading="lazy">':'<div class="small">Chưa có gallery riêng</div>')+'</div><div class="body"><h3>'+esc(b.address)+'</h3><div class="propertyMeta"><span class="small">'+esc(b.hotelId)+'</span><span class="galleryCount">'+imgs.length+' ảnh</span></div><div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" multiple data-property-input="'+esc(b.hotelId)+'"><select class="input" aria-label="Danh mục áp dụng cho upload và URL" data-property-category="'+esc(b.hotelId)+'">'+categoryOptions+'</select><button class="btn gold" data-property-upload="'+esc(b.hotelId)+'">Upload file</button></div>'+urlInput('property',b.hotelId,'https://link-anh-gallery...')+'<div class="small" style="margin-top:6px">Danh mục đang chọn sẽ áp dụng cho cả upload file và URL.</div><div class="propertyCategoryGroups">'+groups+'</div></div></article>';
+      return '<article class="collectionCard propertyGalleryCard"><div class="media">'+(ordered.length?'<img src="'+esc(ordered[0].url||'')+'" alt="Ảnh Hero '+esc(b.address)+'" loading="lazy">':'<div class="small">Chưa có gallery riêng</div>')+'</div><div class="body"><h3>'+esc(b.address)+'</h3><div class="propertyMeta"><span class="small">'+esc(b.hotelId)+'</span><span class="galleryCount">'+ordered.length+' ảnh</span></div><div class="small" style="margin-bottom:8px">Kéo thả để đổi thứ tự. Ảnh có nhãn <b>HERO · COLLECTION</b> là ảnh dùng cho Hero khách sạn và KAS Collection.</div><div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" multiple data-property-input="'+esc(b.hotelId)+'"><select class="input" aria-label="Danh mục áp dụng cho upload và URL" data-property-category="'+esc(b.hotelId)+'"><option value="rooms">Phòng nghỉ</option><option value="lobby">Sảnh & Lễ tân</option><option value="dining">Nhà hàng & Ăn uống</option><option value="exterior">Ngoại thất</option><option value="amenities">Tiện ích</option><option value="other">Khác</option></select><button class="btn gold" data-property-upload="'+esc(b.hotelId)+'">Upload file</button></div>'+urlInput('property',b.hotelId,'https://link-anh-gallery...')+'<div class="propertyOrderedThumbs propertyCategoryGroups" data-property-list="'+esc(b.hotelId)+'">'+categoryGroups+'</div></div></article>';
     }).join('');
     bindUrlActions(propertyGrid);
     propertyGrid.querySelectorAll('[data-property-upload]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.dataset.propertyUpload,input=propertyGrid.querySelector('[data-property-input="'+CSS.escape(id)+'"]'),select=propertyGrid.querySelector('[data-property-category="'+CSS.escape(id)+'"]');if(!input||!input.files.length){toast('Hãy chọn ảnh gallery.');return;}if(input.files.length>20){toast('Mỗi lần tối đa 20 ảnh.');return;}var fd=new FormData();fd.append('hotelId',id);fd.append('category',select?select.value:'other');Array.prototype.forEach.call(input.files,function(f){fd.append('images',f);});btn.disabled=true;api('/api/admin/property-images',{method:'POST',body:fd}).then(function(x){toast('Đã upload '+x.added+' ảnh vào danh mục.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
+    propertyGrid.querySelectorAll('[data-property-hero]').forEach(function(btn){btn.addEventListener('click',function(){var card=btn.closest('.propertyGalleryCard'),hotelId=card&&card.querySelector('[data-property-list]')?card.querySelector('[data-property-list]').dataset.propertyList:'',imageId=btn.dataset.propertyHero;if(!hotelId||!imageId)return;btn.disabled=true;api('/api/admin/property-images/hero',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({hotelId:hotelId,imageId:imageId})}).then(function(){toast('Đã đặt Hero và đồng bộ KAS Collection.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
+    propertyGrid.querySelectorAll('[data-property-delete]').forEach(function(btn){btn.addEventListener('click',function(){var card=btn.closest('.propertyGalleryCard'),hotelId=card&&card.querySelector('[data-property-list]')?card.querySelector('[data-property-list]').dataset.propertyList:'',imageId=btn.dataset.propertyDelete,item=btn.closest('[data-property-thumb]'),source=(item&&item.dataset.propertySource)||'upload';if(!hotelId||!imageId)return;if(!confirm('Xóa ảnh này khỏi gallery khách sạn?'))return;btn.disabled=true;var isUpload=source==='upload';var endpoint=isUpload?'/api/admin/property-images/'+encodeURIComponent(imageId):'/api/admin/image-url/property/'+encodeURIComponent(hotelId)+'/'+encodeURIComponent(imageId);api(endpoint,{method:'DELETE'}).then(function(){toast('Đã xóa ảnh khỏi gallery.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
+    propertyGrid.querySelectorAll('[data-property-list]').forEach(function(list){
+      var dragId='';
+      list.querySelectorAll('[data-property-thumb]').forEach(function(item){
+        item.addEventListener('dragstart',function(e){if(!item.dataset.propertyThumb)return;dragId=item.dataset.propertyThumb;item.classList.add('is-dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',dragId);});
+        item.addEventListener('dragend',function(){item.classList.remove('is-dragging');dragId='';});
+        item.addEventListener('dragover',function(e){e.preventDefault();e.dataTransfer.dropEffect='move';});
+        item.addEventListener('drop',function(e){e.preventDefault();var from=dragId||e.dataTransfer.getData('text/plain'),to=item.dataset.propertyThumb;if(!from||!to||from===to)return;var nodes=Array.prototype.slice.call(list.querySelectorAll('[data-property-thumb]')),ids=nodes.map(function(n){return n.dataset.propertyThumb;}),fromIndex=ids.indexOf(from),toIndex=ids.indexOf(to);if(fromIndex<0||toIndex<0)return;ids.splice(fromIndex,1);ids.splice(toIndex,0,from);var hotelId=list.dataset.propertyList;api('/api/admin/property-images/order',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({hotelId:hotelId,order:ids})}).then(function(){toast('Đã lưu thứ tự ảnh.');return load();}).catch(function(e){setStatus(e.message,false);});});
+      });
+    });
   }
   function priceInput(k,s,i,v,l){return '<label>'+l+'<input type="number" min="0" step="50000" data-rate="'+esc(k)+'" data-season="'+s+'" data-idx="'+i+'" value="'+esc(v)+'"></label>';}
   function seasonBox(r,s,t){var p=r.rates[s];return '<div class="seasonBox"><div class="seasonTitle">'+t+'</div><div class="priceInputs">'+priceInput(r.key,s,0,p[0],'Trong tuần')+priceInput(r.key,s,1,p[1],'Cuối tuần')+'</div></div>';}
@@ -151,12 +95,12 @@
   }
   function render(){renderImageMatrix();
     renderSiteImages(homeHeroImages,siteSlots.homeHero||[]);
-    renderSiteImages(pageHeroImages,siteSlots.pageHero||[]);
+    renderSiteImages(pageHeroImages,(siteSlots.pageHero||[]).filter(function(slot){return slot.key!=='page.hero.welcome';}));
+    renderSiteImages(welcomePopupImage,(siteSlots.pageHero||[]).filter(function(slot){return slot.key==='page.hero.welcome';}));
     renderSiteImages(homeSiteImages,siteSlots.home||[]);
     renderSiteImages(guidebookSiteImages,siteSlots.guidebook||[]);
     renderCollections();renderPropertyGallery();renderRooms(document.getElementById('roomSearch').value);renderPhotos();}
-  function load(){return Promise.all([fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.json();}),api('/api/admin/image-overrides'),fetch('/site-image-slots.json',{cache:'no-store'}).then(function(r){return r.json();})]).then(function(xs){data=xs[0];overrides=xs[1]||{collection:{},property:{},rooms:{},site:{}};if(!overrides.site)overrides.site={};siteSlots=xs[2]||{home:[],guidebook:[],pageHero:[]};render();});}
+  function load(){return Promise.all([fetch('/api/catalog?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}),api('/api/admin/image-overrides?ts='+Date.now()),fetch('/site-image-slots.json?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})]).then(function(xs){data=xs[0];overrides=xs[1]||{collection:{},property:{},rooms:{},site:{}};if(!overrides.site)overrides.site={};siteSlots=xs[2]||{home:[],guidebook:[],pageHero:[]};render();});}
   document.getElementById('roomSearch').addEventListener('input',function(){renderRooms(this.value);});
   document.getElementById('login').addEventListener('click',function(){key=document.getElementById('key').value.trim();var localNoKey=location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='[::1]';if(!key&&!localNoKey){setStatus('Hãy nhập ADMIN_KEY.',false);return;}api('/api/admin/status').then(function(){setStatus('Đã mở quyền quản trị.',true);management.classList.remove('hidden');document.getElementById('publicBox').classList.remove('hidden');document.getElementById('publicUrl').textContent=location.origin+'/index.html';document.getElementById('referenceUrl').textContent=location.origin+'/reference';return load();}).catch(function(e){setStatus(e.message,false);});});
->>>>>>> origin/thu
 })();

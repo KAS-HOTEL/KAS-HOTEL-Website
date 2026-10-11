@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-# Welcome to your organization's demo respository
-This code repository (or "repo") is designed to demonstrate the best GitHub has to offer with the least amount of noise.
-
-The repo includes an `index.html` file (so it can render a web page), two GitHub Actions workflows, and a CSS stylesheet dependency.
-=======
 # KAS Hotel Collection — Booking Demo
 
 A fully functional hotel booking platform for the eight KAS properties in
@@ -311,4 +305,3 @@ The suite drives a real headless browser through the whole product:
 ## V22.6 — Collection card names
 - Collection card display names remove the trailing “Hotel” suffix.
 - Hotel names are white, bold, and kept on one line to match the editorial reference layout.
->>>>>>> origin/thu

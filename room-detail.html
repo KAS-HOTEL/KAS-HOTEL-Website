@@ -91,11 +91,7 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<<<<<<< HEAD
-<script src="js/app.js"></script>
-=======
 <script src="js/i18n.js"></script><script src="js/app.js"></script>
->>>>>>> origin/thu
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
@@ -176,12 +172,7 @@
   /* ---- description ---- */
   U.$('#rDesc').innerHTML =
     '<p>' + U.esc(H.roomBlurb(hotel, room)) + '</p>' +
-<<<<<<< HEAD
-    '<p>' + U.esc(hotel.description) + '</p>' +
-    (room.notes ? '<p class="srcnote">' + U.esc(room.notes) + '</p>' : '');
-=======
     '<p>' + U.esc(hotel.description) + '</p>';
->>>>>>> origin/thu
 
   var love = (hotel.subRatings ? Object.keys(hotel.subRatings)
       .sort(function (a, b) { return hotel.subRatings[b] - hotel.subRatings[a]; })
@@ -203,10 +194,7 @@
   var verified = room.photoCategory === 'VERIFIED_ROOM_PHOTO';
   /* ---- reviews ---- */
   U.$('#reviews').innerHTML = R.reviewsHTML(hotel);
-<<<<<<< HEAD
-=======
   if (window.KAS_I18N) window.KAS_I18N.apply();
->>>>>>> origin/thu
 
   /* ---- sidebar ---- */
   function paintSide() {
@@ -241,10 +229,7 @@
     U.$('#mctaBtn').addEventListener('click', goBook);
   }
   paintSide();
-<<<<<<< HEAD
-=======
   if (window.KAS_I18N) window.KAS_I18N.apply();
->>>>>>> origin/thu
   /* Repaint the price immediately after /api/catalog has overlaid any
      admin-edited rates into KAS_RATES. */
   liveCatalogPromise.then(function(){ paintSide(); });
@@ -253,16 +238,12 @@
   U.$('#saveBtn').addEventListener('click', function () { U.toast(room.name + ' saved to your list.'); });
 
   function goBook() {
-    var phone = (D.config && D.config.contact) ? D.config.contact.displayPhone : '0869 768 885';
+    var phone = (D.config && D.config.contact) ? D.config.contact.displayPhone : '+84 968 694 864';
     var zalo = '0869768885';
-<<<<<<< HEAD
-    alert('Trang web hiện tại chưa hoạt động chính thức.\n\nVui lòng liên hệ Zalo ' + phone + ' để đặt phòng nha.\nZalo: ' + zalo);
-=======
     var en = window.KAS_I18N && window.KAS_I18N.getLanguage && window.KAS_I18N.getLanguage() === 'en';
     alert(en
       ? 'Online booking is not available yet.\n\nPlease contact us on Zalo ' + phone + ' to book your room.\nZalo: ' + zalo
       : 'Trang web hiện tại chưa hoạt động chính thức.\n\nVui lòng liên hệ Zalo ' + phone + ' để đặt phòng nha.\nZalo: ' + zalo);
->>>>>>> origin/thu
   }
   U.$('#bookBtn').addEventListener('click', goBook);
 

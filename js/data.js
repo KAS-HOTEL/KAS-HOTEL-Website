@@ -65,10 +65,7 @@
       tagline: 'Boutique calm, one block from Ben Thanh.',
       address: '05 Truong Dinh, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','boutique','breakfast','staycation','ben-thanh-market','walkable','food','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 9.4, ratingScale: 10, reviews: 423, ratingSource: 'Google',
       altScore: { value: 9.1, scale: 10, count: 96, source: 'Planet of Hotels' },
       description: 'A boutique address in the heart of District 1, minutes from Ben Thanh Market. KAS Passion blends a quiet, relaxing atmosphere with modern, generously sized rooms — a comfortable retreat for travellers who want the centre of Saigon on their doorstep.',
@@ -82,10 +79,6 @@
       source: 'Agoda (slug) → resolved: kashotelpremium.com + external review source + Kayak',
       sourceUrl: 'https://www.agoda.com/vi-vn/cabana-hotel-saigon/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-passion-boutique-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135237286/kas-passion-boutique-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'Mihaela K', date: 'Sep 2026', stars: 5, text: 'The room is big, the staff friendly and the prices are good, but the location was just perfect!!!!!! In the center!!' },
         { name: 'Yee Leng P', date: 'Sep 2026', stars: 5, text: 'Room is clean and quite new, cozy and value for money. Staff here are all friendly and helpful.' },
@@ -121,10 +114,7 @@
       tagline: 'Ly Tu Trong elegance, steps from the opera quarter.',
       address: '260 Ly Tu Trong, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','boutique','rooftop','breakfast','walkable','food','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 9.2, ratingScale: 10, reviews: 369, ratingSource: 'Google',
       altScore: { value: 8.6, scale: 10, count: 91, source: 'Trip.com' },
       description: 'Set in the heart of District 1, a few minutes on foot from the city\'s most iconic addresses. KAS Premium offers a broad range of rooms suited to couples, families and groups, with continental breakfast served daily and a rooftop bar above the street.',
@@ -138,10 +128,6 @@
       source: 'Agoda (slug) → resolved: Agoda indexed title "KAS Premium Saigon" + kashotelpremium.com + Trip.com',
       sourceUrl: 'https://www.agoda.com/vi-vn/pravina-hotel_2/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-premium-boutique-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266253/kas-elegance-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'KAS guest', date: '2026', stars: 5, text: 'Friendly and accommodating staff, and a walkable neighbourhood with excellent access to dining and attractions.' }
       ],
@@ -191,10 +177,7 @@
       tagline: 'A rooftop bar above Nguyen Trai.',
       address: '47A Nguyen Trai, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','nguyen-trai','boutique','rooftop','breakfast','staycation','walkable','food','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 9.6, ratingScale: 10, reviews: 518, ratingSource: 'Google',
       altScore: { value: 8.1, scale: 10, count: 109, source: 'Trip.com' },
       description: 'A recently renovated boutique address on Nguyen Trai, with a rooftop bar, a ground-floor café and a prime walkable position in District 1. Rooms run from compact city bolt-holes to a 42 m² family layout.',
@@ -208,10 +191,6 @@
       source: 'Agoda (slug) → resolved: Agoda indexed titles "KAS Ancient Boutique Hotel" / "KAS Nguyen Trai Hotel" + address match',
       sourceUrl: 'https://www.agoda.com/vi-vn/song-anh-1-hotel/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-ancient-luxury-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-100937358/kas-ancient-luxury-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'KAS guest', date: '2026', stars: 4, text: 'Comfortable. Staff attentive and the location could not be better for walking the centre.' }
       ],
@@ -245,10 +224,7 @@
       tagline: 'The flagship. Rooftop bar, gym, and a 50 m² suite.',
       address: '170–174 Nguyen Thai Binh, Nguyen Thai Binh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Nguyen Thai Binh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','nguyen-thai-binh','rooftop','balcony','breakfast','central','food'],
->>>>>>> origin/thu
       starRating: 4, rating: 8.5, ratingScale: 10, reviews: 95, ratingSource: 'Trip.com',
       altScore: { value: 8.7, scale: 10, count: 94, source: 'Trip.com' },
       description: 'The collection\'s flagship: a four-star house opened in 2023 with 41 rooms, a rooftop bar over District 1, a fitness centre, an all-day restaurant serving Vietnamese and international menus, and a breakfast guests write home about.',
@@ -263,10 +239,6 @@
       source: 'Agoda (slug) → resolved: Agoda indexed title "KAS Milestone Premium Hotel" + Trip.com + kashotelpremium.com',
       sourceUrl: 'https://www.agoda.com/vi-vn/the-kas-hotel-saigon-h75242621/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/home',
-<<<<<<< HEAD
-      tripUrl: 'https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266341/kas-milestone-premium-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'Hannah C', date: 'Jun 2026', stars: 5, text: 'Great service and prices. Located conveniently in District 1 — breakfast was so good as well!' },
         { name: 'Anis', date: 'Jun 2026', stars: 5, text: 'The location very strategic. The service very good n friendly. Price very affordable.' },
@@ -303,10 +275,7 @@
       tagline: 'Quiet rooms on Le Thanh Ton.',
       address: '278 Le Thanh Ton, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','le-thanh-ton','boutique','spa','breakfast','walkable','food','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 8.8, ratingScale: 10, reviews: 86, ratingSource: 'Trip.com',
       altScore: { value: 8.8, scale: 10, count: 78, source: 'Trip.com' },
       description: 'Nestled in the heart of the city on Le Thanh Ton, with convenience stores, restaurants and cafés a short walk in every direction. Guests single out how quiet the rooms are — a rare thing this close to the centre.',
@@ -320,10 +289,6 @@
       source: 'Agoda (slug) → resolved by elimination + address/brand match across the 8-property KAS collection',
       sourceUrl: 'https://www.agoda.com/vi-vn/tuyet-lan-corner/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-zody-boutique-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://www.trip.com/hotels/ho-chi-minh-city-hotel-detail-119255177/kas-zody-boutique-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'Ping P', date: 'Jun 2026', stars: 5, text: 'The location is excellent, with plenty of convenience stores, restaurants and cafés just a short walk away.' },
         { name: 'Brick S', date: 'Jun 2026', stars: 5, text: 'The room was nice and clean, the bed was comfortable, and the room was very quiet.' },
@@ -369,10 +334,7 @@
       tagline: 'Thai kitchen downstairs, the comfiest bed in Vietnam upstairs.',
       address: '40–42 Bui Thi Xuan, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','breakfast','food','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 9.1, ratingScale: 10, reviews: 81, ratingSource: 'Trip.com',
       altScore: { value: 9.1, scale: 10, count: 90, source: 'Trip.com' },
       description: 'Opened in 2022 on Bui Thi Xuan, with an in-house Thai restaurant, free luggage storage and a room mix that runs from a 15 m² city single up to a 45 m² family suite. Guests repeatedly call the beds the most comfortable of their trip.',
@@ -386,10 +348,6 @@
       source: 'Agoda (slug) → resolved: exact street-address match (40–42 Bui Thi Xuan) with kashotelpremium.com + Trip.com + Expedia',
       sourceUrl: 'https://www.agoda.com/vi-vn/tuong-vy-hotel/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-sonata-luxury-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266420/kas-sonata-luxury-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'Josh P', date: 'Apr 2026', stars: 5, text: 'Customer service here is exceptional. Spacious room and definitely the comfiest bed I have had in Vietnam.' },
         { name: 'Jesse H', date: 'Jun 2026', stars: 5, text: 'Cozy and comfortable room with a huge shower. Value for the money is affordable.' },
@@ -434,10 +392,7 @@
       tagline: 'Balconies over Bui Thi Xuan.',
       address: '13 Bui Thi Xuan, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 8.7, ratingScale: 10, reviews: 96, ratingSource: 'Trip.com',
       altScore: { value: 8.7, scale: 10, count: 88, source: 'Trip.com' },
       description: 'A romantic, newly renovated address in the heart of District 1 — modern design, balconies in selected rooms, and a 45 m² Premium Suite. Ben Thanh Market, Independence Palace and Pham Ngu Lao are all within a few minutes\' walk.',
@@ -452,10 +407,6 @@
       source: 'Agoda (slug) → resolved: Agoda indexed title "KAS Luxury Saigon" → Traveloka confirms "KAS Luxury Saigon" = KAS Eliana Luxury Hotel',
       sourceUrl: 'https://www.agoda.com/vi-vn/apec-hotel/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-eliana-luxury-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266582/kas-eliana-luxury-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'H I R', date: 'Feb 2026', stars: 5, text: 'The staff made me feel like part of a family celebration during my Lunar New Year stay.' },
         { name: 'Petra Vuković', date: 'Jul 2026', stars: 5, text: 'The room was clean, cozy, and comfortable, with welcoming staff and a convenient location near attractions.' },
@@ -491,10 +442,7 @@
       tagline: 'Forty rooms and a spa, a block from Ben Thanh.',
       address: '191 Le Thanh Ton, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-<<<<<<< HEAD
-=======
       quickSearchTags: ['district1','ben-thanh','le-thanh-ton','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central'],
->>>>>>> origin/thu
       starRating: 3, rating: 9.6, ratingScale: 10, reviews: 476, ratingSource: 'Google',
       altScore: { value: 9.2, scale: 10, count: 67, source: 'Trip.com' },
       description: 'Elegant yet warm, renovated through 2025, with 40 rooms, a spa, express check-in and a position a single block from Ben Thanh Market. The Premium King adds a 37 m² footprint and a private balcony.',
@@ -509,10 +457,6 @@
       source: 'Agoda (slug) → resolved: Agoda indexed title "KAS Dilly Hotel" + address match (191 Le Thanh Ton)',
       sourceUrl: 'https://www.agoda.com/vi-vn/kas-mays-saigon/hotel/ho-chi-minh-city-vn.html',
       officialUrl: 'https://www.kashotelpremium.com/our-properties/kas-dilly-luxury-hotel',
-<<<<<<< HEAD
-      tripUrl: 'https://us.trip.com/hotels/ho-chi-minh-city-hotel-detail-135266918/kas-dilly-luxury-hotel/',
-=======
->>>>>>> origin/thu
       guestReviews: [
         { name: 'Seo Yuna', date: 'Jul 2026', stars: 5, text: 'Friendly service and good location. Clean, comfortable rooms; staff provided kind, quick assistance.' },
         { name: 'Revatey', date: 'Apr 2026', stars: 5, text: 'Unbeatable location near Ben Thanh Market, warm receptionist staff, spacious clean room with fresh linens.' },
@@ -788,26 +732,18 @@
   });
 
   /* ---- config --------------------------------------------------------- */
-<<<<<<< HEAD
-=======
   /* Default stay = today through tomorrow, relative to today (a fixed
      calendar date goes stale and puts every new visitor's stay in the past). */
   function isoFromToday(n) {
     var d = new Date(); d.setDate(d.getDate() + n);
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
->>>>>>> origin/thu
   var CONFIG = {
     currency: 'VND',
     serviceChargeRate: 0.05,
     vatRate: 0.08,
-<<<<<<< HEAD
-    defaultCheckIn: '2026-09-20',
-    defaultCheckOut: '2026-09-22',
-=======
     defaultCheckIn: isoFromToday(0),
     defaultCheckOut: isoFromToday(1),
->>>>>>> origin/thu
     defaultAdults: 2,
     defaultChildren: 0,
     defaultRooms: 1,
@@ -817,8 +753,8 @@
        widget reads from here. No component may hard-code a number or link.
        ------------------------------------------------------------------ */
     contact: {
-      phone:        '0869768885',
-      displayPhone: '0869 768 885',
+      phone:        '+84 968 694 864',
+      displayPhone: '+84 968 694 864',
       tel:          'tel:+84869768885',
       zalo:         'https://zalo.me/0869768885',
       whatsapp:     'https://wa.me/84869768885',

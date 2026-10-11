@@ -10,10 +10,3 @@ npm-debug.log*
 .cache/
 tools/image-map.json
 assets/images/hotels/
-<<<<<<< HEAD
-uploads/
-.env
-.env.*
-!.env.example
-=======
->>>>>>> origin/thu

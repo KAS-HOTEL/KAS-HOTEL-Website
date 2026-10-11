@@ -10,31 +10,17 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
-<<<<<<< HEAD
-</head>
-=======
 <script src="js/site-images.js" defer></script></head>
->>>>>>> origin/thu
 <body>
 
 <header id="hdr"></header>
 
-<<<<<<< HEAD
-<section class="hero hero--sm" style="min-height:300px">
-=======
 <section class="hero hero--sm hero--compact-intro hero--mykas-intro hero--media-only">
->>>>>>> origin/thu
-  <div class="hero__bg" id="heroBg"></div>
   <div class="container hero__in">
     <div class="hero__ct">
       <span class="eyebrow eyebrow--lt">My KAS</span>
-<<<<<<< HEAD
-      <h1 style="margin-top:.7rem">Manage Your Booking</h1>
-      <p style="margin-top:.7rem">Look up your reservation to view, modify or cancel it.</p>
-=======
       <h1>Manage Your Booking</h1>
       <p>Look up your reservation to view, modify or cancel it.</p>
->>>>>>> origin/thu
     </div>
   </div>
 </section>
@@ -77,11 +63,7 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<<<<<<< HEAD
-<script src="js/app.js"></script>
-=======
 <script src="js/i18n.js"></script><script src="js/app.js"></script>
->>>>>>> origin/thu
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
@@ -91,7 +73,6 @@
   var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
   App.boot({ active: 'my kas' });
 
-  U.$('#heroBg').innerHTML = U.img(D.getHotel('hotel-08').images[0], 'KAS Hotel Collection', '', false, false);
   U.$('#lookupHd').innerHTML = U.icon('key', 18) + '<h4>Find your booking</h4>';
   U.$('#trustStrip').outerHTML = B.trustStripHTML();
 

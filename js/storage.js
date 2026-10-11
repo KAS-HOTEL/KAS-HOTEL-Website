@@ -49,16 +49,10 @@
     })[0] || null;
   }
   function getByNumber(number) {
-<<<<<<< HEAD
-    var n = String(number || '').trim().toUpperCase();
-    return getBookings().filter(function (b) {
-      return String(b.bookingNumber).toUpperCase() === n;
-=======
     /* same normalisation as findBooking(), so "kas 0242480" is recognised */
     var n = String(number || '').trim().toUpperCase().replace(/\s|-/g, '');
     return getBookings().filter(function (b) {
       return String(b.bookingNumber).toUpperCase().replace(/\s|-/g, '') === n;
->>>>>>> origin/thu
     })[0] || null;
   }
   function updateBooking(number, patch) {

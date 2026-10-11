@@ -15,19 +15,11 @@
   }
   function logo(dark, href) {
     return '<a class="logo" href="' + (href || 'index.html') + '" aria-label="KAS Hotel Collection — home">' +
-<<<<<<< HEAD
-      '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:150px;max-width:40vw;height:auto;display:block">' +
-=======
       '<img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection" style="width:180px;max-width:42vw;height:auto;display:block">' +
->>>>>>> origin/thu
       '</a>';
   }
 
   var NAV = [
-<<<<<<< HEAD
-    { t: 'Destinations', h: 'hotels.html' },
-=======
->>>>>>> origin/thu
     { t: 'Hotels',       h: 'hotels.html' },
     { t: 'Experiences',  h: 'experiences.html' },
     { t: 'Offers',       h: 'offers.html' },
@@ -37,8 +29,6 @@
   ];
 
   /* ---------------- header ---------------- */
-<<<<<<< HEAD
-=======
   function flagIcon(lang) {
     if (lang === 'vi') {
       return '<svg class="lang-flag-svg" viewBox="0 0 28 18" aria-hidden="true"><rect width="28" height="18" rx="2" fill="#da251d"/><path d="M14 3.1l1.35 4.05h4.28l-3.46 2.5 1.32 4.08L14 11.25l-3.49 2.48 1.32-4.08-3.46-2.5h4.28L14 3.1z" fill="#ffdf00"/></svg>';
@@ -46,21 +36,16 @@
     return '<svg class="lang-flag-svg" viewBox="0 0 28 18" aria-hidden="true"><rect width="28" height="18" rx="2" fill="#012169"/><path d="M0 0l28 18M28 0L0 18" stroke="#fff" stroke-width="4"/><path d="M0 0l28 18M28 0L0 18" stroke="#c8102e" stroke-width="1.7"/><path d="M14 0v18M0 9h28" stroke="#fff" stroke-width="6"/><path d="M14 0v18M0 9h28" stroke="#c8102e" stroke-width="3"/></svg>';
   }
 
->>>>>>> origin/thu
   function renderHeader(opts) {
     opts = opts || {};
     var host = U.$('#hdr'); if (!host) return;
     var active = opts.active || '';
-<<<<<<< HEAD
-    host.className = 'hdr' + (opts.floating ? ' hdr--float' : '');
-=======
     /* Remove any previous scroll binding before re-rendering the header. */
     if (host.__kasScrollHandler) {
       window.removeEventListener('scroll', host.__kasScrollHandler);
       host.__kasScrollHandler = null;
     }
     host.className = 'hdr' + (opts.floating ? ' hdr--float header--transparent' : '');
->>>>>>> origin/thu
     host.innerHTML =
       '<div class="container hdr__in">' +
         logo(true) +
@@ -71,10 +56,6 @@
         '</nav>' +
         '<div class="hdr__right">' +
           global.Contact.headerBlock() +
-<<<<<<< HEAD
-          '<button class="lang" type="button">' + U.icon('globe', 15) + ' EN ' + U.icon('chevD', 12) + '</button>' +
-          '<a class="btn btn--gold btn--sm" href="manage-booking.html">Sign in / Join</a>' +
-=======
           '<div class="lang-wrap lang-wrap--custom" title="Language">' +
             '<span class="sr">Language</span>' +
             '<select class="lang-select" aria-label="Language"><option value="en">EN</option><option value="vi">VI</option></select>' +
@@ -85,22 +66,11 @@
             '</div>' +
           '</div>' +
           '<button class="btn btn--gold btn--sm js-kas-auth" type="button">Sign in / Join</button>' +
->>>>>>> origin/thu
           '<button class="burger" type="button" aria-label="Open menu">' + U.icon('menu', 22) + '</button>' +
         '</div>' +
       '</div>';
 
     U.$('.burger', host).addEventListener('click', openDrawer);
-<<<<<<< HEAD
-    U.$('.lang', host).addEventListener('click', function () {
-      U.toast('Language switching is not part of this demo.');
-    });
-
-    if (opts.floating) {
-      var onScroll = function () {
-        host.classList.toggle('hdr--solid', window.scrollY > 40);
-      };
-=======
 
     /* Custom language picker: keeps the EN/VI control visually consistent and
        adds country flags while the native select remains the i18n bridge. */
@@ -136,7 +106,6 @@
       };
       if (host.__kasScrollHandler) window.removeEventListener('scroll', host.__kasScrollHandler);
       host.__kasScrollHandler = onScroll;
->>>>>>> origin/thu
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
     }
@@ -171,10 +140,6 @@
 
   /* ---------------- footer ---------------- */
   var FOOT_COLS = [
-<<<<<<< HEAD
-    { h: 'Destinations', l: [['All properties','hotels.html'],['District 1','hotels.html'],['Ben Thanh','hotels.html'],['Nguyen Thai Binh','hotels.html'],['Le Thanh Ton','hotels.html']] },
-=======
->>>>>>> origin/thu
     { h: 'Hotels',       l: [['KAS Passion Boutique','hotel-detail.html?hotel=hotel-01'],['KAS Elegance','hotel-detail.html?hotel=hotel-02'],['KAS Ancient Boutique','hotel-detail.html?hotel=hotel-03'],['KAS Milestone Premium','hotel-detail.html?hotel=hotel-04'],['KAS Zody Boutique','hotel-detail.html?hotel=hotel-05'],['KAS Sonata Luxury','hotel-detail.html?hotel=hotel-06'],['KAS Eliana Luxury','hotel-detail.html?hotel=hotel-07'],['KAS Dilly Luxury','hotel-detail.html?hotel=hotel-08']] },
     { h: 'Experiences',  l: [['Dining','experiences.html#dining'],['Rooftop bars','experiences.html#rooftops'],['Wellness & spa','experiences.html#wellness'],['Local experiences','experiences.html#local'],['Airport transfer','experiences.html#transfer']] },
     { h: 'Support',      l: [['FAQ','support.html#faq'],['Booking information','support.html#booking'],['Cancellation policy','support.html#cancellation'],['Payment methods','support.html#payment'],['Contact us','support.html#contact']] },
@@ -185,10 +150,6 @@
 
   function renderFooter() {
     var host = U.$('#ftr'); if (!host) return;
-<<<<<<< HEAD
-    var CT = D.config.contact;
-    host.className = 'ftr';
-=======
     var CT = D.config.contact || {};
     /* Names follow KAS_DATA; each of the 8 properties appears exactly once. */
     var footerLinks = [
@@ -204,57 +165,10 @@
       ['KAS Zody','hotel-detail.html?hotel=hotel-05']
     ];
     host.className = 'ftr ftr--dark';
->>>>>>> origin/thu
     host.innerHTML =
       '<div class="container">' +
         '<div class="ftr__main">' +
           '<div class="ftr__brand">' + logo(false) +
-<<<<<<< HEAD
-            '<p>A legacy of Vietnamese hospitality. Distinctive stays in the heart of District 1. One heartfelt promise.</p>' +
-            '<div class="social">' +
-              ['fb','ig','yt','tiktok'].map(function (s) {
-                return '<a href="#" aria-label="' + s + '" onclick="return false">' + U.icon(s, 15) + '</a>';
-              }).join('') +
-            '</div></div>' +
-          FOOT_COLS.map(function (c) {
-            if (c.h === '__CONTACT__') {
-              return '<div class="ftr__col ftr__contact">' + global.Contact.footerBlock() + '</div>';
-            }
-            if (c.h === '__TRADE__') {
-              var TT = CT.travelTrade || {};
-              return '<div class="ftr__col ftr__trade">' +
-                '<h5>Travel Trade</h5>' +
-                '<p class="ftr__trade-intro">For travel agencies, tour operators and trade enquiries.</p>' +
-                '<a href="' + U.esc(TT.tel || '#') + '"><span class="sr">Travel Trade phone</span>' + U.icon('phone', 15) + '<span>' + U.esc(TT.displayPhone || '') + '</span></a>' +
-                '<a href="' + U.esc(TT.zalo || '#') + '" target="_blank" rel="noopener">' + U.icon('chat', 15) + '<span>Chat on Zalo</span></a>' +
-                '<a href="' + U.esc(TT.whatsapp || '#') + '" target="_blank" rel="noopener">' + U.icon('phone', 15) + '<span>Chat on WhatsApp</span></a>' +
-              '</div>';
-            }
-            return '<div class="ftr__col"><h5>' + c.h + '</h5>' +
-              c.l.map(function (x) { return '<a href="' + x[1] + '">' + x[0] + '</a>'; }).join('') + '</div>';
-          }).join('') +
-          '<div class="ftr__col ftr__news"><h5>Stay in the know</h5>' +
-            '<p style="font-size:.82rem;color:var(--tx-2);margin:0">Exclusive offers and updates, delivered to you.</p>' +
-            '<form class="news" id="newsForm">' +
-              '<input type="email" placeholder="Your email address" aria-label="Email address" required>' +
-              '<button type="submit" aria-label="Subscribe">' + U.icon('arrR', 15) + '</button>' +
-            '</form></div>' +
-        '</div>' +
-        '<div class="ftr__btm">' +
-          '<span>© 2026 KAS Hotel Collection. All rights reserved. · Demo booking platform.</span>' +
-          '<span class="ftr__legal"><a href="#" onclick="return false">Privacy Policy</a>' +
-          '<a href="#" onclick="return false">Terms &amp; Conditions</a></span>' +
-        '</div>' +
-      '</div>';
-
-    var f = U.$('#newsForm');
-    if (f) f.addEventListener('submit', function (e) {
-      e.preventDefault();
-      U.toast('Thank you — you are on the list.');
-      f.reset();
-    });
-
-=======
             '<p>Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.</p>' +
             '<div class="social">' +
               ['ig','fb','phone'].map(function (s) {
@@ -287,7 +201,6 @@
         '</div>' +
         '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="reference.html">Privacy Policy</a><a href="reference.html">Terms of Service</a><a href="support.html#contact">Contact</a></div></div>' +
       '</div>';
->>>>>>> origin/thu
   }
 
   /* ---------------- chat + back to top ---------------- */
@@ -439,14 +352,6 @@
         x0 = null;
       }, { passive: true });
     }
-<<<<<<< HEAD
-    // keyboard
-    document.addEventListener('keydown', function (e) {
-      if (U.$('.lb.open')) return;
-      if (e.key === 'ArrowLeft') show(i - 1);
-      if (e.key === 'ArrowRight') show(i + 1);
-    });
-=======
     // keyboard — one handler per gallery host; re-rendering replaces it instead of stacking listeners
     if (host.__kasGalKey) document.removeEventListener('keydown', host.__kasGalKey);
     host.__kasGalKey = function (e) {
@@ -457,7 +362,6 @@
       if (e.key === 'ArrowRight') show(i + 1);
     };
     document.addEventListener('keydown', host.__kasGalKey);
->>>>>>> origin/thu
     return { show: show };
   }
 
@@ -574,8 +478,6 @@
     return 'checkC';
   }
 
-<<<<<<< HEAD
-=======
 
   /* ---------------- member sign-in / join ---------------- */
   function authSession() {
@@ -641,6 +543,127 @@
     };
   }
 
+  /* ---------------- first-visit welcome ---------------- */
+  var WELCOME_KEY = 'kas-welcome-seen';
+
+  function welcomeSeen() {
+    try { return localStorage.getItem(WELCOME_KEY) === '1'; } catch (e) { return false; }
+  }
+
+  function markWelcomeSeen() {
+    try { localStorage.setItem(WELCOME_KEY, '1'); } catch (e) {}
+  }
+
+  function openWelcome() {
+    if (welcomeSeen() || U.$('.kas-welcome')) return;
+
+    function renderWelcome(imageUrl) {
+      if (welcomeSeen() || U.$('.kas-welcome')) return;
+      var m = U.el('div', { class: 'kas-welcome is-open' });
+      m.innerHTML =
+        '<div class="kas-welcome__box" role="dialog" aria-modal="true" aria-labelledby="kasWelcomeTitle">' +
+          '<div class="kas-welcome__visual" aria-hidden="true">' +
+            '<img src="'+String(imageUrl||'https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90').replace(/"/g,'&quot;')+'" alt="">' +
+            '<div class="kas-welcome__visual-copy"><span>AMORE</span><span>MEANINGFUL</span><span>STAYS.</span></div>' +
+            '<small>KAS HOTEL</small>' +
+          '</div>' +
+          '<div class="kas-welcome__content">' +
+            '<button class="kas-welcome__close" type="button" aria-label="Close">×</button>' +
+            '<img class="kas-welcome__logo" src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection">' +
+          '<div class="kas-welcome__eyebrow" data-welcome="eyebrow">WELCOME TO KAS</div>' +
+          '<h2 id="kasWelcomeTitle" data-welcome="title">Choose your language and discover<br>the KAS experience.</h2>' +
+          '<div class="kas-welcome__label" data-welcome="language">LANGUAGE</div>' +
+          '<div class="kas-welcome__langs" role="group" aria-label="Language">' +
+            '<button type="button" class="kas-welcome__lang" data-welcome-lang="en"><span>English</span><i>●</i></button>' +
+            '<button type="button" class="kas-welcome__lang" data-welcome-lang="vi"><span>Tiếng Việt</span><i>○</i></button>' +
+          '</div>' +
+          '<div class="kas-welcome__rule"></div>' +
+          '<div class="kas-welcome__eyebrow kas-welcome__choice-title" data-welcome="choiceEyebrow">CHOOSE HOW YOU\'D LIKE TO CONTINUE</div>' +
+          '<div class="kas-welcome__choices">' +
+            '<div class="kas-welcome__choice">' +
+              '<div class="kas-welcome__choice-heading" data-welcome="guestHeading">CONTINUE AS GUEST</div>' +
+              '<p class="kas-welcome__choice-copy" data-welcome="guestCopy">Explore KAS and make a reservation without becoming a member.</p>' +
+              '<button class="kas-welcome__choice-btn kas-welcome__choice-btn--dark" type="button" data-welcome-action="guest"><span data-welcome="guest">CONTINUE AS GUEST</span><b>→</b></button>' +
+            '</div>' +
+            '<div class="kas-welcome__choice kas-welcome__choice--member">' +
+              '<div class="kas-welcome__choice-heading" data-welcome="memberEyebrow">BECOME A KAS MEMBER</div>' +
+              '<p class="kas-welcome__choice-copy" data-welcome="memberCopy">Enjoy exclusive benefits while keeping the freedom to book as usual.</p>' +
+              '<ul class="kas-welcome__benefits">' +
+                '<li data-welcome="benefit1">10–20% member offers</li>' +
+                '<li data-welcome="benefit2">Early check-in / late check-out up to 2 hours</li>' +
+                '<li data-welcome="benefit4">Easier booking management</li>' +
+                '<li data-welcome="benefit3">Free cancellation until 12:00 on check-in day</li>' +
+              '</ul>' +
+              '<button class="kas-welcome__choice-btn" type="button" data-welcome-action="join"><span data-welcome="join">JOIN KAS MEMBER</span><b>→</b></button>' +
+            '</div>' +
+          '</div>' +
+          '<button class="kas-welcome__signin" type="button" data-welcome-action="signin" data-welcome="signin">SIGN IN</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(m);
+    document.body.style.overflow = 'hidden';
+
+    var copy = {
+      en: {
+        eyebrow:'WELCOME TO KAS', title:'Choose your language and discover<br>the KAS experience.', language:'LANGUAGE',
+        choiceEyebrow:'CHOOSE HOW YOU\'D LIKE TO CONTINUE', guestHeading:'CONTINUE AS GUEST',
+        guestCopy:'Explore KAS and make a reservation without becoming a member.',
+        memberEyebrow:'BECOME A KAS MEMBER',
+        memberCopy:'Enjoy exclusive benefits while keeping the freedom to book as usual.',
+        benefit1:'10–20% member offers', benefit2:'Early check-in / late check-out up to 2 hours', benefit3:'Free cancellation until 12:00 on check-in day', benefit4:'Easier booking management', join:'JOIN KAS MEMBER', signin:'SIGN IN', guest:'CONTINUE AS GUEST'
+      },
+      vi: {
+        eyebrow:'CHÀO MỪNG ĐẾN VỚI KAS', title:'Chọn ngôn ngữ và khám phá<br>trải nghiệm KAS.', language:'NGÔN NGỮ',
+        choiceEyebrow:'CHỌN CÁCH BẠN MUỐN TIẾP TỤC', guestHeading:'TIẾP TỤC VỚI TƯ CÁCH KHÁCH',
+        guestCopy:'Khám phá KAS và đặt phòng mà không cần trở thành thành viên.',
+        memberEyebrow:'TRỞ THÀNH THÀNH VIÊN KAS',
+        memberCopy:'Tận hưởng quyền lợi riêng mà vẫn tự do đặt phòng theo cách bạn muốn.',
+        benefit1:'Ưu đãi 10–20%', benefit2:'Check-in sớm / check-out muộn tối đa 2 giờ', benefit3:'Hủy phòng miễn phí đến 12:00 cùng ngày check-in', benefit4:'Quản lý đặt phòng dễ dàng', join:'THAM GIA KAS MEMBER', signin:'ĐĂNG NHẬP', guest:'TIẾP TỤC VỚI TƯ CÁCH KHÁCH'
+      }
+    };
+
+    function setWelcomeLanguage(lang) {
+      var l = lang === 'vi' ? 'vi' : 'en', t = copy[l];
+      Object.keys(t).forEach(function(key){ var el = m.querySelector('[data-welcome="'+key+'"]'); if(el) el.innerHTML=t[key]; });
+      m.querySelectorAll('[data-welcome-lang]').forEach(function(btn){
+        var active=btn.getAttribute('data-welcome-lang')===l;
+        btn.classList.toggle('is-active',active);
+        btn.setAttribute('aria-pressed',active?'true':'false');
+        var dot=btn.querySelector('i'); if(dot) dot.textContent=active?'●':'○';
+      });
+    }
+    function close(){
+      markWelcomeSeen();
+      document.removeEventListener('keydown',m.__kasEscape);
+      m.classList.remove('is-open');
+      document.body.style.overflow='';
+      setTimeout(function(){m.remove()},180);
+    }
+    m.__kasEscape=function(e){if(e.key==='Escape')close()};
+    m.querySelector('.kas-welcome__close').onclick=close;
+    m.querySelector('[data-welcome-action="guest"]').onclick=close;
+    m.addEventListener('click',function(e){if(e.target===m)close()});
+    m.querySelector('[data-welcome-action="join"]').onclick=function(){ close(); setTimeout(function(){openAuth('join')},190); };
+    m.querySelector('[data-welcome-action="signin"]').onclick=function(){ close(); setTimeout(function(){openAuth('login')},190); };
+    m.querySelectorAll('[data-welcome-lang]').forEach(function(btn){
+      btn.onclick=function(){
+        var lang=btn.getAttribute('data-welcome-lang');
+        if(global.KAS_I18N) global.KAS_I18N.setLanguage(lang);
+        setWelcomeLanguage(lang);
+      };
+    });
+      document.addEventListener('keydown',m.__kasEscape);
+      setWelcomeLanguage(global.KAS_I18N ? global.KAS_I18N.getLanguage() : 'en');
+    }
+
+    fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(c){
+      var item=c&&c.siteImages&&c.siteImages['page.hero.welcome'];
+      renderWelcome(item&&item.url ? item.url : 'https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90');
+    }).catch(function(){
+      renderWelcome('https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90');
+    });
+  }
+
   function bindAuthButtons(){
     U.$$('.js-kas-auth').forEach(function(b){
       if(b.__kasAuthBound)return;b.__kasAuthBound=true;
@@ -654,32 +677,22 @@
     });
   }
 
->>>>>>> origin/thu
   /* ---------------- boot ---------------- */
   function boot(opts) {
     opts = opts || {};
     renderHeader(opts);
-<<<<<<< HEAD
-    renderFooter();
-    renderFloat();
-    reveal();
-  }
-
-  global.App = {
-    boot: boot, logo: logo, logoMark: logoMark,
-=======
     bindAuthButtons();
     renderFooter();
     renderFloat();
     reveal();
     if (global.KAS_I18N) global.KAS_I18N.init();
+    openWelcome();
   }
 
   global.flagIcon = flagIcon;
 
   global.App = {
     boot: boot, logo: logo, logoMark: logoMark, flagIcon: flagIcon,
->>>>>>> origin/thu
     renderSteps: renderSteps, gallery: gallery, openLightbox: openLightbox,
     miniHTML: miniHTML, miniCarousel: miniCarousel,
     modal: modal, amenityIcon: amenityIcon, reveal: reveal,

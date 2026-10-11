@@ -1,7 +1,4 @@
 /* ==========================================================================
-<<<<<<< HEAD
-   KAS — RESPONSIVE  ( desktop 1440+ / tablet 768–1439 / mobile <768 )
-=======
    KAS — RESPONSIVE
    Breakpoint scale (max-width, desktop-first). Use these for new rules:
      1200px  small desktop / tablet landscape  (container goes fluid)
@@ -17,7 +14,6 @@
    they are kept to avoid visual changes and are candidates to fold into
    the scale above during the redesign.
    Load order on every page: style.css → components.css → responsive.css.
->>>>>>> origin/thu
    ========================================================================== */
 
 /* ---------------- large desktop down ---------------- */
@@ -32,58 +28,41 @@
   .nav a{font-size:.66rem}
   .split{grid-template-columns:1fr 320px;gap:22px}
   .split--filters{grid-template-columns:236px 1fr}
-<<<<<<< HEAD
-=======
   .step__t span{max-width:170px}  /* long room-name caption gives way first */
   .step__line{margin-inline:10px;min-width:12px}  /* connectors give up space before captions truncate */
->>>>>>> origin/thu
   .rcard{grid-template-columns:250px 1fr 208px}
   .hcard{grid-template-columns:280px 1fr}
   .ftr__main{grid-template-columns:1.35fr repeat(3,minmax(0,1fr));row-gap:34px}
   .ftr__main .ftr__col:nth-child(5){grid-column:2}
   .ftr__main .ftr__contact{grid-column:3}
-<<<<<<< HEAD
-  .ftr__main .ftr__trade{grid-column:4}
-=======
->>>>>>> origin/thu
   .ftr__news{grid-column:1/-1}
   .amgrid{grid-template-columns:repeat(4,1fr)}
 }
 
 /* ---------------- tablet ---------------- */
 @media (max-width:1024px){
-<<<<<<< HEAD
-=======
   .propbar{grid-template-columns:88px minmax(0,1fr);gap:16px}
   .propbar__rating{grid-column:2;text-align:left;min-width:0}
   .propbar__score{justify-content:flex-start}
   .propbar__rating .btn{margin-top:10px}
 
->>>>>>> origin/thu
   .container{padding-inline:22px}
   .nav,.lang{display:none}
   .burger{display:grid;place-items:center}
   .hdr__right{gap:10px}
 
-<<<<<<< HEAD
-  .searchbar{grid-template-columns:1fr 1fr;transform:translateY(26px)}
-=======
   .searchbar{grid-template-columns:1fr 1fr;transform:none;overflow:visible}
->>>>>>> origin/thu
   .sf{border-right:none;border-bottom:1px solid rgba(194,162,92,.2)}
   .searchbar--solid .sf{border-bottom-color:var(--line)}
   .sf:nth-child(odd){border-right:1px solid rgba(194,162,92,.2)}
   .searchbar--solid .sf:nth-child(odd){border-right-color:var(--line)}
   .searchbar .btn{grid-column:1/-1;border-radius:0 0 var(--r) var(--r);padding-block:15px}
-<<<<<<< HEAD
-=======
   .searchbar__submit{min-height:52px}
   .searchbar__hotel-pop{left:12px;right:12px}
   .kas-quick-search{margin-top:8px}
   .hotel-search-wrap.is-search-open .kas-quick-search{max-height:520px}
   .kas-quick-search__tags{gap:7px}
   .kas-quick-tag{padding:7px 10px;font-size:.74rem}
->>>>>>> origin/thu
 
   .split,.split--filters{grid-template-columns:1fr}
   .sticky{position:static}
@@ -109,8 +88,6 @@
 
 /* ---------------- mobile ---------------- */
 @media (max-width:767px){
-<<<<<<< HEAD
-=======
   .propbar{grid-template-columns:76px minmax(0,1fr);gap:14px}
   .propbar__media{width:76px;height:76px}
   .propbar__title h3{font-size:1.35rem}
@@ -121,27 +98,12 @@
   .propbar__score-num{font-size:1.65rem}
   .propbar__reviews{font-size:.66rem}
 
->>>>>>> origin/thu
   body{font-size:14.5px}
   .container{padding-inline:16px}
   :root{--nav-h:62px}
 
   .hero{min-height:520px}
   .hero__ct p{font-size:.92rem}
-<<<<<<< HEAD
-  .searchbar{grid-template-columns:1fr;transform:translateY(20px);margin-top:2rem}
-  .sf{border-right:none!important;padding:13px 17px}
-  .sf:last-of-type{border-bottom:none}
-  .gpop{width:calc(100vw - 46px);right:auto;left:0}
-
-  .section{padding-block:2.6rem}
-  .section-sub{margin-bottom:2rem}
-
-  .rail{grid-template-columns:repeat(2,1fr);gap:11px}
-  .pcard__img{aspect-ratio:4/5}
-  .pcard__b h4{overflow-wrap:anywhere}
-  .pcard__address{min-height:0}
-=======
   .searchbar{grid-template-columns:1fr;transform:none;margin-top:0;overflow:visible}
   .sf{border-right:none!important;padding:13px 17px}
   .sf:last-of-type{border-bottom:none}
@@ -156,7 +118,6 @@
   .section{padding-block:2.6rem}
 
   .rail{grid-template-columns:repeat(2,1fr);gap:11px}
->>>>>>> origin/thu
 
   /* vertical cards on mobile */
   .hcard,.rcard{grid-template-columns:1fr}
@@ -183,15 +144,9 @@
   .trust--pad .trust__in{flex-direction:column;gap:18px}
   .trust--pad .trust__i{min-width:0}
 
-<<<<<<< HEAD
-  .ftr__main{grid-template-columns:1fr 1fr;gap:26px}
-  .ftr__brand,.ftr__news{grid-column:1/-1}
-  .ftr__contact,.ftr__trade{min-width:0}
-=======
   .ftr__main{gap:26px}
   .ftr__brand,.ftr__news{grid-column:1/-1}
   .ftr__contact{min-width:0}
->>>>>>> origin/thu
   .ftr__btm{flex-direction:column;gap:10px}
 
   .modal__b{padding:24px 22px}
@@ -226,18 +181,11 @@
 /* ---------------- mobile drawer ---------------- */
 .drawer{
   position:fixed;inset:0;z-index:1100;background:var(--black);
-<<<<<<< HEAD
-  transform:translateX(100%);transition:transform .38s var(--ease);
-  display:flex;flex-direction:column;overflow-y:auto;
-}
-.drawer.open{transform:none}
-=======
   transform:translateX(100%);transition:transform .38s var(--ease),visibility 0s linear .38s;
   display:flex;flex-direction:column;overflow-y:auto;
   visibility:hidden;   /* closed drawer must not be reachable with Tab */
 }
 .drawer.open{transform:none;visibility:visible;transition:transform .38s var(--ease)}
->>>>>>> origin/thu
 .drawer__hd{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(194,162,92,.16);flex-shrink:0}
 .drawer__hd button{color:var(--ivory);padding:8px}
 .drawer nav{display:flex;flex-direction:column;padding:14px 20px}
@@ -273,28 +221,11 @@
   .step__line{margin-inline:9px;min-width:14px}
 }
 
-<<<<<<< HEAD
-/* ---- summary bar collapse ---- */
-@media (max-width:1024px){
-  .searchbar--sum{grid-template-columns:1fr 1fr}
-  .searchbar--sum .btn{grid-column:1/-1}
-}
 @media (max-width:767px){
-  .searchbar--sum{grid-template-columns:1fr}
-=======
-@media (max-width:767px){
->>>>>>> origin/thu
   body{max-width:100%}
   .searchbar .btn{white-space:normal}
 }
 
-<<<<<<< HEAD
-/* ---- contact ---- */
-@media (max-width:1180px){ .hdr__tel span{display:none} .hdr__tel{padding:7px 9px} }
-@media (max-width:1024px){ .hdr__tel{display:inline-flex} }
-@media (max-width:767px){
-  .ct-channels{grid-template-columns:1fr}
-=======
 
 @media (max-width:767px){
   .hero.hero--sm{min-height:0;height:auto}
@@ -360,17 +291,12 @@
 @media (max-width:1180px){ .hdr__tel span{display:none} .hdr__tel{padding:7px 9px} }
 @media (max-width:1024px){ .hdr__tel{display:inline-flex} }
 @media (max-width:767px){
->>>>>>> origin/thu
   .ct-fab{right:14px;bottom:14px}
   .ct-fab__btn{padding:11px 17px;font-size:.75rem}
   .ct-fab__label{display:none}
   .ct-fab__menu{min-width:min(248px,calc(100vw - 44px))}
   /* never cover the sticky booking CTA / price */
   body.has-mcta .ct-fab{bottom:80px}
-<<<<<<< HEAD
-}
-
-=======
 
   
   /* Room-detail support card: mobile spacing only. */
@@ -405,7 +331,6 @@
 
 
 
->>>>>>> origin/thu
 /* ---- header crowding ----
    The header now carries the official phone. Below 520px the Sign in / Join
    button is dropped (the drawer still offers it) so the phone and the burger
@@ -414,16 +339,10 @@
   .hdr__right > .btn--gold{display:none}
   .hdr__in{gap:12px}
   .hdr__right{gap:8px}
-<<<<<<< HEAD
-  .logo__sub{letter-spacing:.26em}
-=======
->>>>>>> origin/thu
 }
 @media (max-width:360px){
   .hdr__tel{display:none}
 }
-<<<<<<< HEAD
-=======
 /* The header sign-in button overflowed the bar (horizontal scroll, burger
    pushed off-screen) at 521–560px in EN and up to ~620px in VI, where the
    label is longer. Hide it a little earlier; sign-in stays in the page flow. */
@@ -435,7 +354,6 @@
 /* Home "Rooms & Suites" image: aspect-ratio + min-height made it wider than
    the phone viewport (cropped on the right edge). Keep it inside the column. */
 @media (max-width:767px){ .home-rooms__image{max-width:100%} }
->>>>>>> origin/thu
 
 
 /* V11.2 footer spacious two-row layout */
@@ -453,24 +371,11 @@
   .ftr__main > .ftr__col:nth-child(5){grid-column:5}
   .ftr__main > .ftr__col:nth-child(6){grid-column:6}
   .ftr__contact{grid-column:1 / span 2 !important;padding-top:4px}
-<<<<<<< HEAD
-  .ftr__trade{grid-column:3 / span 2 !important;padding-top:4px}
-  .ftr__news{grid-column:5 / span 2 !important;padding-top:4px}
-  .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:16px;padding:8px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
-  .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
-  .ftr__trade-intro{margin-bottom:12px;max-width:220px}
-  .ftr__trade > a{font-size:.82rem}
-=======
   .ftr__news{grid-column:5 / span 2 !important;padding-top:4px}
   .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
   .ftr__contact .ct-link{gap:16px;padding:8px 0;min-height:34px}
   .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
   .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
->>>>>>> origin/thu
 }
 
 @media (min-width:768px) and (max-width:1200px){
@@ -486,20 +391,10 @@
   .ftr__main > .ftr__col:nth-child(5){grid-column:1}
   .ftr__main > .ftr__col:nth-child(6){grid-column:2}
   .ftr__contact{grid-column:1 !important}
-<<<<<<< HEAD
-  .ftr__trade{grid-column:2 !important}
-  .ftr__news{grid-column:3 !important}
-  .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:15px;padding:8px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
-=======
   .ftr__news{grid-column:3 !important}
   .ftr__contact .ct-stack--footer{gap:9px;margin-top:12px}
   .ftr__contact .ct-link{gap:15px;padding:8px 0;min-height:34px}
   .ftr__contact .ct-link svg{width:18px;height:18px;flex:0 0 18px}
->>>>>>> origin/thu
   .ftr__contact .tiny{margin-top:16px !important;line-height:1.7}
 }
 
@@ -508,17 +403,6 @@
   .ftr__brand,
   .ftr__main > .ftr__col,
   .ftr__contact,
-<<<<<<< HEAD
-  .ftr__trade,
-  .ftr__news{grid-column:1 !important}
-  .ftr__contact .ct-stack--footer{gap:8px;margin-top:10px}
-  .ftr__contact .ct-link,
-  .ftr__trade > a{gap:15px;padding:7px 0;min-height:34px}
-  .ftr__contact .ct-link svg,
-  .ftr__trade > a svg{width:18px;height:18px;flex:0 0 18px}
-  .ftr__contact .tiny{margin-top:14px !important;line-height:1.7}
-  .ftr__trade-intro{margin-bottom:10px}
-=======
   .ftr__news{grid-column:1 !important}
   .ftr__contact .ct-stack--footer{gap:8px;margin-top:10px}
   .ftr__contact .ct-link{gap:15px;padding:7px 0;min-height:34px}
@@ -1419,5 +1303,4 @@ body.home-redesign{overflow-x:hidden}
   }
   .split__side #assist .ct-ch b{font-size:.74rem}
   .split__side #assist .ct-ch small{font-size:.66rem}
->>>>>>> origin/thu
 }

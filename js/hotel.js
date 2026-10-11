@@ -25,11 +25,6 @@
           '<div style="min-width:0">' +
             '<h3><a href="' + href + '">' + U.esc(h.name) + '</a></h3>' +
             '<div class="hcard__loc">' + U.icon('pin', 14) + U.esc(h.address) + '</div>' +
-<<<<<<< HEAD
-            '<div class="legacy">Former listing: “' + U.esc(h.legacyName) + '”</div>' +
-            (h.tripUrl ? '<a class="tiny" href="' + h.tripUrl + '" target="_blank" rel="noopener" style="display:inline-block;margin-top:5px;color:var(--gold-dk)">Property reference ↗</a>' : '') +
-=======
->>>>>>> origin/thu
           '</div>' +
           '<div class="rate"><span class="rate__n">' + h.rating.toFixed(1) + '</span>' +
             '<div class="rate__m">' + U.stars(h.rating / 2, 11) +
@@ -87,11 +82,7 @@
       '<div class="rcard__side">' +
         '<div class="price"><span class="price__lb">From</span>' + U.priceHTML(displayRate) +
           '<div class="price__u">per night</div>' +
-<<<<<<< HEAD
-          '<div class="tiny muted" style="margin-top:2px">Giá KAS · không VAT · không service charge</div></div>' +
-=======
           '<div class="tiny muted" style="margin-top:2px">KAS rate · excl. VAT · excl. service charge</div></div>' +
->>>>>>> origin/thu
         '<div class="rcard__perks">' +
           '<span class="perk perk--gold">' + U.icon(r.breakfast ? 'coffee' : 'x', 13) +
             (r.breakfast ? 'Breakfast included' : 'Breakfast not included') + '</span>' +

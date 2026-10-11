@@ -1,15 +1,3 @@
-<<<<<<< HEAD
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>KAS Admin — Quản lý ảnh & giá</title><style>
-:root{--navy:#0c2742;--blue:#173f63;--gold:#c99b2e;--bg:#f4f6f8;--line:#dbe2e8;--muted:#687786;--ok:#19734c;--danger:#a72e2e;--white:#fff;--ink:#162433}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,Segoe UI,Arial,sans-serif}.top{background:var(--navy);color:#fff}.topin{max-width:1320px;margin:auto;padding:17px 22px;display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-weight:800;letter-spacing:.12em}.top a{color:#fff;text-decoration:none;font-size:13px}.wrap{max-width:1320px;margin:auto;padding:28px 22px 70px}.hero,.panel{background:var(--white);border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px}.hero h1,.panel h2{margin:0 0 8px;color:var(--navy);font-family:Georgia,serif}.hero p{color:var(--muted);line-height:1.6}.key{display:flex;gap:8px;max-width:620px}.key input{flex:1;padding:12px;border:1px solid #c9d3db;border-radius:10px}.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--navy);color:#fff;font-weight:700;cursor:pointer}.btn.gold{background:var(--gold)}.btn.danger{background:var(--danger)}.btn.ghost{background:#eef3f7;color:var(--navy)}.status{margin-top:10px;font-size:13px}.ok{color:var(--ok)}.err{color:var(--danger)}.hidden{display:none!important}.public{margin-top:16px;background:#f9f5e8;border:1px solid #ead9a9;padding:13px;border-radius:12px}.grid8{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.collectionCard{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}.collectionCard .media{aspect-ratio:16/10;background:#eef2f5;display:flex;align-items:center;justify-content:center}.collectionCard img{width:100%;height:100%;object-fit:cover}.collectionCard .body{padding:12px}.collectionCard h3{font-size:15px;margin:0 0 4px;color:var(--navy)}.small{font-size:11px;color:var(--muted)}.rowActions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px}.room{background:#fff;border:1px solid var(--line);border-radius:15px;margin:10px 0;padding:16px}.roomHead{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}.room h3{margin:0;color:var(--navy);font-size:17px}.meta{font-size:12px;color:var(--muted);margin:5px 0 14px}.priceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.seasonBox{border:1px solid var(--line);border-radius:12px;padding:12px;background:#fafbfd}.seasonTitle{font-weight:800;color:var(--blue);font-size:12px;margin-bottom:8px}.priceInputs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.priceInputs label{font-size:10px;color:var(--muted);display:block}.priceInputs input{width:100%;padding:9px;border:1px solid #cdd7df;border-radius:8px;margin-top:4px}.saveRow{display:flex;justify-content:flex-end;margin-top:10px}.galleryCount{color:var(--blue);font-size:12px;font-weight:700}.thumbs{display:flex;gap:8px;flex-wrap:wrap;padding-top:12px}.thumb{width:126px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fafafa}.thumb img{display:block;width:100%;height:82px;object-fit:cover}.thumb div{padding:6px;font-size:10px;display:flex;justify-content:space-between;gap:5px;align-items:center}.upload{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}.note{font-size:12px;color:var(--muted);line-height:1.5}.toast{position:fixed;right:20px;bottom:20px;z-index:50;background:#142a3c;color:#fff;padding:12px 15px;border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:none}.sectionTop{display:flex;justify-content:space-between;align-items:end;gap:15px;margin-bottom:14px}.search{padding:9px 11px;border:1px solid var(--line);border-radius:9px;min-width:260px}
-@media(max-width:1000px){.grid8{grid-template-columns:repeat(2,1fr)}.priceGrid{grid-template-columns:1fr 1fr}.sectionTop{align-items:stretch;flex-direction:column}.search{min-width:0;width:100%}}
-@media(max-width:680px){.grid8{grid-template-columns:1fr}.priceGrid{grid-template-columns:1fr}.roomHead{flex-direction:column}.key{flex-direction:column}.wrap{padding:16px 12px}.topin{padding:14px 12px}.thumb{width:112px}}
-</style></head><body><header class="top"><div class="topin"><div class="brand">KAS ADMIN · MANAGEMENT</div><a href="index.html">Trang chính</a></div></header><main class="wrap">
-<section class="hero"><h1>Quản lý giá phòng & KAS Collection</h1><p>Bạn có thể sửa <b>giá KAS theo mùa/ngày thường/cuối tuần</b>, thay <b>ảnh đại diện của từng khách sạn trong KAS Collection</b> và upload <b>nhiều ảnh bên trong từng khách sạn</b> để khách xem đúng gallery của chi nhánh đó. Mọi thay đổi được lưu trên Persistent Disk của server nên không cần sửa code lại.</p><div class="key"><input id="key" type="password" placeholder="Nhập ADMIN_KEY"><button class="btn" id="login">Mở quản trị</button></div><div id="status" class="status"></div><div class="public hidden" id="publicBox">Link khách: <code id="publicUrl"></code> · Link tham khảo: <code id="referenceUrl"></code></div></section>
-<div id="management" class="hidden"><section class="panel"><div class="sectionTop"><div><h2>Ảnh KAS Collection</h2><div class="note">Đây là ảnh đại diện hiển thị ở dải “The KAS Collection” trên trang chính. Upload ảnh mới sẽ thay ảnh cũ của đúng chi nhánh.</div></div></div><div class="grid8" id="collectionGrid"></div></section>
-<section class="panel"><div class="sectionTop"><div><h2>Ảnh bên trong khách sạn</h2><div class="note">Upload nhiều ảnh sảnh, phòng mẫu, hành lang, nhà hàng, tiện ích... theo đúng từng chi nhánh. Khi chi nhánh có gallery riêng, trang chi tiết sẽ ưu tiên toàn bộ ảnh này và không dùng gallery tĩnh cũ.</div></div></div><div class="grid8" id="propertyGrid"></div></section>
-<section class="panel"><div class="sectionTop"><div><h2>Chỉnh giá phòng</h2><div class="note">Mỗi phòng có 6 mức: Tháng 7–9 (trong tuần/cuối tuần), Tháng 10 (trong tuần/cuối tuần), Tháng 11–1/2027 (trong tuần/cuối tuần).</div></div><input id="roomSearch" class="search" placeholder="Tìm theo chi nhánh / STT / Ez / tên phòng"></div><div id="rooms"></div></section>
-<section class="panel"><h2>Ảnh phòng</h2><div class="note">Phần upload ảnh phòng theo từng STT vẫn giữ nguyên. Ảnh sẽ được lưu vào Persistent Disk.</div><div id="photoRooms"></div></section></div></main><div id="toast" class="toast"></div><script src="js/admin.js"></script></body></html>
-=======
 <!doctype html>
 <html lang="vi">
 <head>
@@ -29,7 +17,7 @@
 .propertyGalleryGrid .upload .file{grid-column:1/-1;width:100%;font-size:12px}
 .propertyGalleryGrid .upload .input{width:100%;min-width:0}
 .propertyGalleryGrid .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:9px}
-.propertyGalleryGrid .thumb{width:auto;min-width:0}
+.propertyGalleryGrid .thumb{width:auto;min-width:0;position:relative;cursor:grab}.propertyGalleryGrid .thumb.is-dragging{opacity:.45}.propertyGalleryGrid .thumb[data-hero="true"]{border-color:#c49b45;box-shadow:0 0 0 2px #f2dfb1}.propertyGalleryGrid .propertyOrder{position:absolute;top:6px;left:6px;background:rgba(36,35,31,.86);color:#fff;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:700}.propertyGalleryGrid .propertyHero{position:absolute;top:6px;right:6px;background:#c49b45;color:#211c15;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:800}.propertyGalleryGrid .propertyThumbActions{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.propertyGalleryGrid .propertyThumbActions .btn{padding:4px 6px;font-size:10px}
 .propertyGalleryGrid .thumb img{height:92px}
 @media(max-width:900px){.propertyGalleryGrid{grid-template-columns:1fr}}
 @media(max-width:680px){.propertyGalleryGrid .upload{grid-template-columns:1fr}.propertyGalleryGrid .upload .file{grid-column:auto}.propertyGalleryGrid .upload .btn{width:100%}}
@@ -62,7 +50,8 @@
   <a href="#secCollection"><span class="sideIcon">02</span><span><b>KAS Collection</b><small>Ảnh đại diện theo chi nhánh</small></span></a>
   <a href="#secHome"><span class="sideIcon">03</span><span><b>Trang chủ · Nội dung</b><small>A Day in Saigon & Bốn câu chuyện khu phố</small></span></a>
   <div class="sideLabel">TRANG NỘI DUNG</div>
-  <a href="#secPageHero"><span class="sideIcon">03</span><span><b>Ảnh Hero các trang</b><small>Trải nghiệm · Ưu đãi · My KAS · Về KAS · Hỗ trợ</small></span></a>
+  <a href="#secPageHero"><span class="sideIcon">03</span><span><b>Ảnh Hero các trang</b><small>Trải nghiệm · Ưu đãi · My KAS · Khách sạn · Về KAS · Hỗ trợ</small></span></a>
+  <a href="#secWelcomePopup"><span class="sideIcon">03A</span><span><b>Welcome Popup</b><small>Chỉnh ảnh cửa sổ chào mừng</small></span></a>
   <div class="sideLabel">LƯU TRÚ</div>
   <a href="#secHotels"><span class="sideIcon">04</span><span><b>Khách sạn · Gallery</b><small>Ảnh & danh mục theo khách sạn</small></span></a>
   <a href="#secRoomsGallery"><span class="sideIcon">05</span><span><b>Hạng phòng</b><small>Gallery từng loại phòng</small></span></a>
@@ -79,10 +68,10 @@
   <div class="sectionTop"><div><div class="sectionEyebrow">WEBSITE STRUCTURE · PAGE MAP</div><h2>Section thực tế trên website</h2><div class="note">Đối chiếu theo các trang HTML và nguồn ảnh đang được gọi trong bản hiện tại. “Đã kết nối” là có luồng Admin/API hiện hữu; “Theo dõi nguồn” chỉ cung cấp đường dẫn chính xác, chưa tự tạo chức năng ghi dữ liệu.</div></div></div>
   <div class="pageMap">
     <article class="pageMapCard"><h3>Trang chủ</h3><p>Hero slideshow, Neighborhoods và A day in Saigon.</p><a href="index.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>homeHero.* · home.* · assets/home/a-day-in-saigon.jpg</code></article>
-    <article class="pageMapCard"><h3>Khách sạn</h3><p>Danh sách khách sạn, ảnh Collection, gallery chi tiết và hạng phòng.</p><a href="hotels.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>collection[hotelId] · property[hotelId] · rooms[roomKey] · Hero danh sách dùng hotel-02.images[0]</code></article>
+    <article class="pageMapCard"><h3>Khách sạn</h3><p>Danh sách khách sạn, ảnh Collection, gallery chi tiết và hạng phòng.</p><a href="hotels.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>collection[hotelId] · property[hotelId] · rooms[roomKey] · page.hero.hotels</code></article>
     <article class="pageMapCard"><h3>Trải nghiệm</h3><p>Các khối Dining, Rooftop, Wellness, Local experiences và Transfer.</p><a href="experiences.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
     <article class="pageMapCard"><h3>Ưu đãi</h3><p>Trang Offers & Member Benefits.</p><a href="offers.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
-    <article class="pageMapCard"><h3>My KAS</h3><p>Tra cứu và quản lý đặt phòng của khách hàng.</p><a href="manage-booking.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Booking giữ nguyên · hero dùng dữ liệu khách sạn</span><code>js/data.js → D.getHotel('hotel-08').images[0]</code></article>
+    <article class="pageMapCard"><h3>My KAS</h3><p>Tra cứu và quản lý đặt phòng của khách hàng.</p><a href="manage-booking.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Booking giữ nguyên · hero dùng dữ liệu khách sạn</span><code>siteImages → page.hero.my-kas</code></article>
     <article class="pageMapCard"><h3>Về KAS</h3><p>Giới thiệu thương hiệu và định hướng lưu trú.</p><a href="about.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
     <article class="pageMapCard"><h3>Hỗ trợ</h3><p>Thông tin đặt phòng, hướng dẫn và kênh liên hệ.</p><a href="support.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
     <article class="pageMapCard"><h3>Guidebook</h3><p>Hero và ảnh địa điểm dùng chung giữa các trang guidebook liên quan.</p><a href="city-guidebook-vi.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>guidebook.hero · guidebook.entry.*</code></article>
@@ -95,12 +84,17 @@
 </section>
 
 <section class="panel adminSection" id="secPageHero">
-  <div class="sectionTop"><div><div class="sectionEyebrow">CONTENT PAGES · HERO MEDIA</div><h2>Ảnh Hero các trang</h2><div class="note">Quản lý riêng ảnh đầu trang của Trải nghiệm, Ưu đãi, My KAS, Về KAS và Hỗ trợ. Mỗi vị trí có key độc lập; không tác động dữ liệu booking, giá hoặc gallery khách sạn.</div></div><span class="galleryCount">5 vị trí</span></div>
+  <div class="sectionTop"><div><div class="sectionEyebrow">CONTENT PAGES · HERO MEDIA</div><h2>Ảnh Hero các trang</h2><div class="note">Quản lý riêng ảnh đầu trang của Trải nghiệm, Ưu đãi, My KAS, Khách sạn, Về KAS và Hỗ trợ. Mỗi vị trí có key độc lập; không tác động dữ liệu booking, giá hoặc gallery khách sạn.</div></div><span class="galleryCount">6 vị trí</span></div>
   <div class="siteGrid" id="pageHeroImages"></div>
 </section>
 
+<section class="panel adminSection" id="secWelcomePopup">
+  <div class="sectionTop"><div><div class="sectionEyebrow">WELCOME EXPERIENCE · FIRST VISIT</div><h2>Welcome Popup · Ảnh cửa sổ chào mừng</h2><div class="note">Chỉ chỉnh ảnh bên trái của cửa sổ Welcome Popup. Upload file hoặc thêm URL HTTPS; thay đổi chỉ áp dụng cho popup, không ảnh hưởng Hero My KAS hay các ảnh khác.</div></div><span class="galleryCount">1 vị trí</span></div>
+  <div class="siteGrid" id="welcomePopupImage"></div>
+</section>
+
 <section class="panel adminSection" id="secSources">
-  <div class="sectionTop"><div><div class="sectionEyebrow">SECTION 01 · SOURCE CATALOG</div><h2>Ảnh đang dùng & link nguồn</h2><div class="note">Danh mục này lấy trực tiếp từ <code>js/images.js</code>. Mỗi link là ảnh nguồn hiện có của website; không cần sửa code để xem/copy link.</div></div></div>
+  <div class="sectionTop"><div><div class="sectionEyebrow">SECTION 01 · SOURCE CATALOG</div><h2>Ảnh đang dùng & link nguồn</h2><div class="note">Danh mục này lấy trực tiếp từ <code>images.js</code>. Mỗi link là ảnh nguồn hiện có của website; không cần sửa code để xem/copy link.</div></div></div>
   <div class="matrix" id="imageMatrix"></div>
 </section>
 
@@ -116,7 +110,7 @@
 </section>
 
 <section class="panel adminSection" id="secHotels">
-  <div class="sectionTop"><div><div class="sectionEyebrow">SECTION 04</div><h2>Gallery khách sạn</h2><div class="note">Ảnh hero/gallery trong <code>hotel-detail.html</code>. Chọn danh mục trước khi upload; ảnh cũ chưa phân loại sẽ nằm trong Khác.</div></div></div>
+  <div class="sectionTop"><div><div class="sectionEyebrow">SECTION 04</div><h2>Gallery khách sạn</h2><div class="note">Ảnh hero/gallery trong <code>hotel-detail.html</code>. Kéo thả ảnh để đổi thứ tự. Chọn một ảnh làm Hero; ảnh Hero sẽ tự động được dùng làm ảnh KAS Collection của cùng khách sạn. Ảnh cũ chưa phân loại sẽ nằm trong Khác.</div></div></div>
   <div class="propertyGalleryGrid" id="propertyGrid"></div>
 </section>
 
@@ -135,6 +129,5 @@
   <div id="rooms"></div>
 </section>
 </div></div></main><div id="toast" class="toast"></div>
-<script src="js/images.js"></script><script src="js/data.js"></script><script src="js/admin.js"></script>
+<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/utils.js"></script><script src="js/data.js"></script><script src="js/admin.js"></script>
 </body></html>
->>>>>>> origin/thu

@@ -49,11 +49,7 @@
                 <span class="err-msg"></span></div>
               <div class="field"><label class="label" for="phone">Phone number <span class="req">*</span></label>
                 <div style="display:flex;gap:8px">
-<<<<<<< HEAD
-                  <select class="select" id="dial" style="width:110px">
-=======
                   <select class="select" id="dial" aria-label="Country calling code" style="width:110px">
->>>>>>> origin/thu
                     <option value="+84">+84</option><option value="+1">+1</option><option value="+44">+44</option>
                     <option value="+65">+65</option><option value="+61">+61</option><option value="+82">+82</option>
                     <option value="+81">+81</option><option value="+86">+86</option>
@@ -151,11 +147,7 @@
             <div style="aspect-ratio:16/10;background:var(--beige);overflow:hidden" id="sideImg"></div>
             <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
               <h4 style="color:var(--tx)">Your stay</h4>
-<<<<<<< HEAD
-              <a class="btn btn--link" id="editStay">Edit</a></div>
-=======
               <a class="btn btn--link" id="editStay" href="#">Edit</a></div>
->>>>>>> origin/thu
             <div id="stayPanel"></div>
           </div>
           <div class="panel">
@@ -181,11 +173,7 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<<<<<<< HEAD
-<script src="js/app.js"></script>
-=======
 <script src="js/i18n.js"></script><script src="js/app.js"></script>
->>>>>>> origin/thu
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
@@ -437,12 +425,8 @@
   }
   paintSide();
 
-<<<<<<< HEAD
-  U.$('#editStay').addEventListener('click', function () {
-=======
   U.$('#editStay').addEventListener('click', function (e) {
     e.preventDefault();
->>>>>>> origin/thu
     location.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
   });
   U.$('#assist').innerHTML = B.assistHTML();
