@@ -3,56 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Manage Your Booking — KAS Hotel Collection</title>
+<title>My bookings — KAS Hotel Collection</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+
+<style>
+.mykas-banner{height:178px;position:relative;overflow:hidden;background:#403d34 url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=85") center 47%/cover no-repeat}
+.mykas-banner:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,14,12,.25),rgba(14,14,12,.04) 55%,rgba(14,14,12,.24))}
+.mykas-banner__copy{position:absolute;z-index:1;right:max(7%,calc((100vw - 1320px)/2));top:50%;transform:translateY(-50%);color:#fff;font:500 24px/1.08 "Cormorant Garamond",Georgia,serif;max-width:330px}
+.mykas-page{background:#f4f1e9;color:#25241f;padding:22px max(6.3%,calc((100vw - 1320px)/2)) 76px;min-height:50vh}
+.mykas-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:18px}
+.mykas-eyebrow{font-size:9px;letter-spacing:.25em;color:#9b7b4b}
+.mykas-heading h1{font:400 clamp(32px,3vw,42px)/1.05 "Cormorant Garamond",Georgia,serif;margin:3px 0 2px;letter-spacing:-.025em}
+.mykas-heading p{font:300 13px/1.5 "Cormorant Garamond",Georgia,serif;color:#777065;margin:0}
+.mykas-tabs{display:flex;align-items:center;gap:clamp(14px,2.1vw,34px);flex-wrap:wrap;justify-content:flex-end}
+.mykas-tabs button{border:0;border-bottom:1px solid transparent;background:transparent;padding:11px 0 12px;font:500 8px/1.2 Inter,Arial,sans-serif;letter-spacing:.16em;color:#625c52;cursor:pointer;white-space:nowrap}
+.mykas-tabs button.is-active{border-color:#b49358;color:#25241f}
+.mykas-bookings{display:grid;gap:26px}
+.mykas-booking{display:grid;grid-template-columns:minmax(280px,40.5%) minmax(0,1fr);min-height:330px;border:1px solid #d9d0c1;background:#fbf9f4}
+.mykas-booking__image{min-height:100%;overflow:hidden;background:#e1dbd0}
+.mykas-booking__image img{display:block;width:100%;height:100%;min-height:330px;object-fit:cover}
+.mykas-booking__content{padding:20px 24px 15px;display:flex;flex-direction:column;min-width:0}
+.mykas-booking__top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.mykas-booking__hotel{font:400 clamp(27px,2.3vw,34px)/1.05 "Cormorant Garamond",Georgia,serif;margin:0 0 4px}
+.mykas-booking__location{font:400 12px "Cormorant Garamond",Georgia,serif;color:#887c6b;margin:0}
+.mykas-booking__ref{text-align:right;flex:0 0 auto;font-size:7px;letter-spacing:.12em;color:#786e5e;line-height:1.8;max-width:130px;overflow-wrap:anywhere}
+.mykas-status{display:block;text-transform:uppercase;font-size:7px;letter-spacing:.12em;margin-top:3px}
+.mykas-status:before{content:"";display:inline-block;width:4px;height:4px;border-radius:50%;background:#b49358;vertical-align:middle;margin-right:5px}
+.mykas-dates{display:grid;grid-template-columns:minmax(0,1fr) minmax(70px,1fr) minmax(0,1fr);align-items:center;gap:12px;margin:20px 0 13px}
+.mykas-date-label{font-size:7px;letter-spacing:.15em;color:#777065;text-transform:uppercase}
+.mykas-date-value{font:400 clamp(17px,1.5vw,23px)/1.15 "Cormorant Garamond",Georgia,serif;white-space:nowrap;margin-top:3px}
+.mykas-date-time{font-size:7px;color:#877e71}
+.mykas-night-line{height:1px;background:#d5cbbb;position:relative;text-align:center}
+.mykas-night-line span{position:relative;top:-7px;padding:0 8px;background:#fbf9f4;font-size:7px;letter-spacing:.12em;color:#6f675b;white-space:nowrap}
+.mykas-booking__meta{display:grid;grid-template-columns:1.2fr .75fr .9fr auto;gap:12px;border-top:1px solid #d9d0c1;padding-top:12px;align-items:start}
+.mykas-meta-item{border-right:1px solid #ded5c7;min-width:0;padding-right:10px}
+.mykas-meta-item:last-of-type{border:0}
+.mykas-meta-label{font-size:7px;letter-spacing:.13em;color:#8a8072;text-transform:uppercase}
+.mykas-meta-value{font-size:8px;letter-spacing:.02em;text-transform:uppercase;margin-top:3px;overflow-wrap:anywhere}
+.mykas-meta-value small{display:block;font-size:7px;color:#948979;text-transform:none}
+.mykas-booking__actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:118px}
+.mykas-action-main{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#25241f;color:#fff;text-decoration:none;border:1px solid #25241f;padding:13px 12px;font-size:7px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.mykas-action-links{display:flex;justify-content:space-between;gap:8px}
+.mykas-action-links button{border:0;background:none;padding:2px 0;color:#3e3931;font-size:7px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.mykas-timeline{display:flex;justify-content:space-between;position:relative;margin-top:auto;padding:22px 8px 0}
+.mykas-timeline:before{content:"";position:absolute;top:25px;left:8%;right:8%;height:1px;background:#d7cdbd}
+.mykas-timeline span{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:6px;letter-spacing:.09em;color:#8b8172;text-align:center}
+.mykas-timeline i{width:6px;height:6px;border:1px solid #c9bdab;border-radius:50%;background:#fbf9f4}
+.mykas-timeline span.is-current{color:#8c6a32}.mykas-timeline span.is-current i{width:9px;height:9px;margin-top:-2px;border:2px solid #b49358}
+.mykas-cancel-details{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;border-top:1px solid #d9d0c1;margin-top:auto;padding-top:16px}
+.mykas-empty{padding:50px 20px;text-align:center;border:1px solid #d9d0c1;background:#fbf9f4;color:#766e62}
+.mykas-empty h2{font:400 28px "Cormorant Garamond",Georgia,serif;color:#25241f;margin:0 0 8px}
+.mykas-empty p{font-size:13px;margin:0 0 18px}
+.mykas-lookup{margin:28px 0 0;border-top:1px solid #d8cfbf;padding-top:16px}
+.mykas-lookup summary{cursor:pointer;font-size:11px;letter-spacing:.08em;color:#625747}
+.mykas-lookup__body{max-width:760px;margin:18px auto 0}
+.mykas-lookup__intro{font-size:12px;color:#777065}
+.mykas-lookup #lookupCard{background:#fbf9f4;border:1px solid #d9d0c1;padding:24px}
+.mykas-lookup #lookupCard .card__hd{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.mykas-lookup #lookupCard .card__hd h4{margin:0}
+#trustStrip{margin-left:3px;margin-right:3px;box-sizing:border-box}
+@media(max-width:900px){.mykas-page{padding-left:4%;padding-right:4%}.mykas-booking{grid-template-columns:35% minmax(0,1fr)}.mykas-booking__content{padding:16px}.mykas-booking__meta{grid-template-columns:1fr 1fr}.mykas-booking__actions{grid-column:1/-1;flex-direction:row}.mykas-action-main{flex:1}.mykas-action-links{align-items:center;gap:12px}.mykas-dates{gap:7px}.mykas-date-value{font-size:17px}}
+@media(max-width:620px){.mykas-banner{height:140px}.mykas-banner__copy{right:6%;font-size:20px}.mykas-page{padding:20px 16px 54px}.mykas-heading{align-items:flex-start;flex-direction:column;gap:14px}.mykas-tabs{width:100%;justify-content:space-between;gap:10px}.mykas-tabs button{font-size:7px;letter-spacing:.1em}.mykas-bookings{gap:18px}.mykas-booking{grid-template-columns:1fr;min-height:0}.mykas-booking__image{height:220px}.mykas-booking__image img{height:220px;min-height:220px}.mykas-booking__content{padding:17px 15px}.mykas-booking__hotel{font-size:29px}.mykas-booking__ref{font-size:6px;max-width:105px}.mykas-dates{margin:17px 0 12px;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:5px}.mykas-date-value{font-size:17px}.mykas-night-line span{font-size:6px;padding:0 3px}.mykas-booking__meta{gap:10px}.mykas-booking__actions{flex-wrap:wrap}.mykas-action-main{min-width:100%;padding:12px}.mykas-action-links{width:100%}.mykas-timeline{padding-top:19px}.mykas-timeline span{font-size:5px;letter-spacing:.02em}.mykas-cancel-details{gap:8px}.mykas-cancel-details .mykas-meta-label{font-size:6px}.mykas-lookup #lookupCard{padding:16px}}
+@media print{.mykas-tabs,.mykas-lookup,.mykas-booking__actions{display:none!important}.mykas-page{padding:0}.mykas-booking{break-inside:avoid}}
+</style>
+
 <script src="js/site-images.js" defer></script></head>
 <body>
 
 <header id="hdr"></header>
 
-<section class="hero hero--sm hero--compact-intro hero--mykas-intro hero--media-only">
-  <div class="container hero__in">
-    <div class="hero__ct">
-      <span class="eyebrow eyebrow--lt">My KAS</span>
-      <h1>Manage Your Booking</h1>
-      <p>Look up your reservation to view, modify or cancel it.</p>
-    </div>
-  </div>
+<section class="mykas-banner hero--mykas-intro" aria-label="My KAS">
+  <div class="mykas-banner__copy"><span data-mykas="banner">Meaningful places<br>for a more inspired you.</span></div>
 </section>
 
-<section class="section section--tight">
-  <div class="container container--narrow">
-
-    <!-- lookup -->
-    <div class="card" id="lookupCard" style="max-width:620px;margin:0 auto">
-      <div class="card__hd" id="lookupHd"></div>
-      <form id="lookupForm" novalidate>
-        <div class="field" style="margin-bottom:16px">
-          <label class="label" for="ref">Booking number <span class="req">*</span></label>
-          <input class="input" id="ref" placeholder="KAS0412345" autocomplete="off" required>
-          <span class="err-msg"></span>
-          <span class="hint">Format: KAS + 2-digit branch code + 5 digits.</span>
-        </div>
-        <div class="field" style="margin-bottom:20px">
-          <label class="label" for="email">Email address <span class="req">*</span></label>
-          <input class="input" type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
-          <span class="err-msg"></span>
-        </div>
-        <button class="btn btn--gold btn--block" type="submit">Find my booking</button>
-      </form>
-      <div class="divider"></div>
-      <div id="recent"></div>
+<main class="mykas-page">
+  <div class="mykas-heading">
+    <div>
+      <span class="mykas-eyebrow" data-mykas="eyebrow">YOUR STAYS</span>
+      <h1 data-mykas="title">My bookings</h1>
+      <p data-mykas="subtitle">View, manage and revisit your KAS stays.</p>
     </div>
-
-    <!-- result -->
-    <div id="result" style="margin-top:26px"></div>
+    <div class="mykas-tabs" role="tablist" aria-label="Booking status">
+      <button type="button" class="is-active" data-filter="all" role="tab" aria-selected="true" data-mykas="all">ALL</button>
+      <button type="button" data-filter="upcoming" role="tab" aria-selected="false" data-mykas="upcoming">UPCOMING</button>
+      <button type="button" data-filter="completed" role="tab" aria-selected="false" data-mykas="completed">COMPLETED</button>
+      <button type="button" data-filter="cancelled" role="tab" aria-selected="false" data-mykas="cancelled">CANCELLED</button>
+    </div>
   </div>
-</section>
+
+  <div id="myKasBookings" class="mykas-bookings" aria-live="polite"></div>
+
+  <details class="mykas-lookup">
+    <summary data-mykas="lookupTitle">Look up a booking with booking number and email</summary>
+    <div class="mykas-lookup__body">
+      <p class="mykas-lookup__intro" data-mykas="lookupIntro">Use this option if you need to retrieve a reservation by its reference.</p>
+      <div class="card" id="lookupCard">
+        <div class="card__hd" id="lookupHd"></div>
+        <form id="lookupForm" novalidate>
+          <div class="field" style="margin-bottom:16px">
+            <label class="label" for="ref" data-mykas="bookingNumber">Booking number <span class="req">*</span></label>
+            <input class="input" id="ref" placeholder="KAS0412345" autocomplete="off" required>
+            <span class="err-msg"></span>
+            <span class="hint" data-mykas="formatHint">Format: KAS + 2-digit branch code + 5 digits.</span>
+          </div>
+          <div class="field" style="margin-bottom:20px">
+            <label class="label" for="email" data-mykas="email">Email address <span class="req">*</span></label>
+            <input class="input" type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+            <span class="err-msg"></span>
+          </div>
+          <button class="btn btn--gold btn--block" type="submit" data-mykas="findBooking">Find my booking</button>
+        </form>
+        <div class="divider"></div>
+        <div id="recent"></div>
+      </div>
+    </div>
+  </details>
+
+  <div id="result" style="margin-top:26px"></div>
+</main>
 
 <div id="trustStrip"></div>
 <footer id="ftr"></footer>
@@ -106,6 +179,179 @@
     });
   }
   paintRecent();
+
+  /* ---- My KAS bookings view: render only bookings already present in KAS storage ---- */
+  var MYKAS_TEXT = {
+    en: {
+      banner:'Meaningful places<br>for a more inspired you.', eyebrow:'YOUR STAYS', title:'My bookings',
+      subtitle:'View, manage and revisit your KAS stays.', all:'ALL', upcoming:'UPCOMING', completed:'COMPLETED', cancelled:'CANCELLED',
+      lookupTitle:'Look up a booking with booking number and email', lookupIntro:'Use this option to retrieve a reservation by its reference.',
+      bookingNumber:'Booking number', email:'Email address', formatHint:'Format: KAS + 2-digit branch code + 5 digits.', findBooking:'Find my booking',
+      noBookings:'Your stays will appear here', noBookingsText:'There are no bookings saved in this browser yet. Find a stay to make your first reservation.',
+      findStay:'Find a stay', checkIn:'CHECK-IN', checkOut:'CHECK-OUT', nights:'NIGHTS', room:'ROOM', guests:'GUESTS', total:'TOTAL',
+      view:'VIEW RESERVATION', manage:'MANAGE STAY', cancel:'CANCEL RESERVATION', bookAgain:'BOOK AGAIN', refund:'VIEW REFUND STATUS',
+      confirmed:'CONFIRMED', pending:'PENDING', cancelledStatus:'CANCELLED', completedStatus:'COMPLETED', modified:'MODIFIED',
+      booked:'BOOKED', checkinStep:'CHECK-IN', stay:'STAY', checkoutStep:'CHECK-OUT', cancelledOn:'CANCELLED ON',
+      expectedRefund:'EXPECTED REFUND', refundStatus:'REFUND STATUS', processing:'PROCESSING', pendingCalculation:'PENDING CALCULATION',
+      leadGuest:'LEAD GUEST', booking:'BOOKING', status:'STATUS'
+    },
+    vi: {
+      banner:'Những điểm đến ý nghĩa<br>khơi nguồn cảm hứng.', eyebrow:'KỲ NGHỈ CỦA BẠN', title:'Đặt phòng của tôi',
+      subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'TẤT CẢ', upcoming:'SẮP TỚI', completed:'ĐÃ HOÀN TẤT', cancelled:'ĐÃ HỦY',
+      lookupTitle:'Tra cứu đặt phòng bằng mã đặt phòng và email', lookupIntro:'Dùng chức năng này để tìm đặt phòng bằng mã xác nhận.',
+      bookingNumber:'Mã đặt phòng', email:'Địa chỉ email', formatHint:'Định dạng: KAS + mã chi nhánh 2 chữ số + 5 chữ số.', findBooking:'Tìm đặt phòng',
+      noBookings:'Các kỳ nghỉ của bạn sẽ hiển thị tại đây', noBookingsText:'Chưa có đặt phòng nào được lưu trong trình duyệt này. Hãy tìm khách sạn để bắt đầu đặt phòng.',
+      findStay:'Tìm khách sạn', checkIn:'NHẬN PHÒNG', checkOut:'TRẢ PHÒNG', nights:'ĐÊM', room:'PHÒNG', guests:'KHÁCH', total:'TỔNG CỘNG',
+      view:'XEM ĐẶT PHÒNG', manage:'QUẢN LÝ KỲ NGHỈ', cancel:'HỦY ĐẶT PHÒNG', bookAgain:'ĐẶT LẠI', refund:'XEM TRẠNG THÁI HOÀN TIỀN',
+      confirmed:'ĐÃ XÁC NHẬN', pending:'ĐANG CHỜ', cancelledStatus:'ĐÃ HỦY', completedStatus:'ĐÃ HOÀN TẤT', modified:'ĐÃ THAY ĐỔI',
+      booked:'ĐÃ ĐẶT', checkinStep:'NHẬN PHÒNG', stay:'LƯU TRÚ', checkoutStep:'TRẢ PHÒNG', cancelledOn:'NGÀY HỦY',
+      expectedRefund:'DỰ KIẾN HOÀN TIỀN', refundStatus:'TRẠNG THÁI HOÀN TIỀN', processing:'ĐANG XỬ LÝ', pendingCalculation:'CHỜ TÍNH TOÁN',
+      leadGuest:'KHÁCH ĐẠI DIỆN', booking:'MÃ ĐẶT PHÒNG', status:'TRẠNG THÁI'
+    }
+  };
+  function myKasLang() {
+    var lang = window.KAS_I18N && window.KAS_I18N.getLanguage ? window.KAS_I18N.getLanguage() : 'en';
+    return lang === 'vi' ? 'vi' : 'en';
+  }
+  function mt(key) { return MYKAS_TEXT[myKasLang()][key] || MYKAS_TEXT.en[key] || key; }
+  function applyMyKasText() {
+    document.documentElement.lang = myKasLang();
+    document.querySelectorAll('[data-mykas]').forEach(function (el) {
+      var key = el.getAttribute('data-mykas');
+      if (MYKAS_TEXT[myKasLang()][key]) el.innerHTML = MYKAS_TEXT[myKasLang()][key];
+    });
+    document.title = (myKasLang() === 'vi' ? 'Đặt phòng của tôi' : 'My bookings') + ' — KAS Hotel Collection';
+  }
+  function dateLabel(value) {
+    if (!value) return '—';
+    var d = new Date(value + 'T12:00:00');
+    if (isNaN(d.getTime())) return U.esc(value);
+    return d.toLocaleDateString(myKasLang() === 'vi' ? 'vi-VN' : 'en-GB', {day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
+  }
+  function statusKey(b) {
+    var s = String(b.status || '').toUpperCase();
+    if (s === 'CANCELLED') return 'cancelled';
+    if (s === 'COMPLETED' || (b.checkOut && b.checkOut < U.today())) return 'completed';
+    return 'upcoming';
+  }
+  function renderMyKas(filter) {
+    var host = U.$('#myKasBookings');
+    if (!host) return;
+    var all = S.getBookings() || [];
+    var now = U.today();
+    var list = all.filter(function (b) {
+      if (filter === 'all') return true;
+      if (filter === 'upcoming') return statusKey(b) === 'upcoming' && (!b.checkIn || b.checkIn >= now);
+      return statusKey(b) === filter;
+    });
+    if (!list.length) {
+      host.innerHTML = '<div class="mykas-empty"><h2>' + (all.length ? (myKasLang()==='vi'?'Không có đặt phòng trong mục này':'No bookings in this category') : mt('noBookings')) + '</h2><p>' + (all.length ? '' : mt('noBookingsText')) + '</p><a class="btn btn--gold" href="hotels.html">' + mt('findStay') + '</a></div>';
+      return;
+    }
+    host.innerHTML = list.map(function (b) {
+      var st = statusKey(b), cancelled = st === 'cancelled';
+      var hotel = D.getHotel(b.hotelId) || {};
+      var image = b.roomImage || (hotel.images && hotel.images[0]) || (hotel.image || '');
+      var roomName = b.roomName || (myKasLang()==='vi'?'Phòng đã đặt':'Reserved room');
+      var nights = Number(b.nights || U.nights(b.checkIn,b.checkOut) || 1);
+      var guestCount = B.guestLabel ? B.guestLabel(b) : ((b.adults || 2) + ' ' + (myKasLang()==='vi'?'khách':'guests'));
+      var amount = U.vnd ? U.vnd(b.total || 0) : String(b.total || 0);
+      var statusText = mt(st === 'cancelled' ? 'cancelledStatus' : st === 'completed' ? 'completedStatus' : (String(b.status).toUpperCase()==='PENDING'?'pending':String(b.status).toUpperCase()==='MODIFIED'?'modified':'confirmed'));
+      var bookingNo = b.bookingNumber || '';
+      var imgHtml = image ? U.img(image, roomName) : '<div class="mykas-image-fallback"></div>';
+      var timeline = '<div class="mykas-timeline"><span class="is-current"><i></i>'+mt('booked')+'</span><span class="'+(st==='upcoming'?'is-current':'')+'"><i></i>'+mt('checkinStep')+'</span><span><i></i>'+mt('stay')+'</span><span><i></i>'+mt('checkoutStep')+'</span></div>';
+      var cancelledInfo = '<div class="mykas-cancel-details"><div><div class="mykas-meta-label">'+mt('cancelledOn')+'</div><div class="mykas-meta-value">'+dateLabel(b.cancelledAt || b.updatedAt || b.createdAt)+'</div></div><div><div class="mykas-meta-label">'+mt('expectedRefund')+'</div><div class="mykas-meta-value">'+mt('pendingCalculation')+'</div></div><div><div class="mykas-meta-label">'+mt('refundStatus')+'</div><div class="mykas-meta-value">'+mt('processing')+'</div></div></div>';
+      return '<article class="mykas-booking" data-booking="'+U.esc(bookingNo)+'"><div class="mykas-booking__image">'+imgHtml+'</div><div class="mykas-booking__content">'+
+        '<div class="mykas-booking__top"><div><h2 class="mykas-booking__hotel">'+U.esc(b.hotelName || hotel.name || 'KAS')+'</h2><p class="mykas-booking__location">'+U.esc(b.hotelAddress || hotel.city || '')+'</p></div><div class="mykas-booking__ref">'+mt('booking')+'<br>'+U.esc(bookingNo)+'<span class="mykas-status">'+statusText+'</span></div></div>'+
+        '<div class="mykas-dates"><div><div class="mykas-date-label">'+mt('checkIn')+'</div><div class="mykas-date-value">'+dateLabel(b.checkIn)+'</div><div class="mykas-date-time">'+U.esc(b.checkInTime || '14:00')+'</div></div><div class="mykas-night-line"><span>'+nights+' '+mt('nights')+'</span></div><div style="text-align:right"><div class="mykas-date-label">'+mt('checkOut')+'</div><div class="mykas-date-value">'+dateLabel(b.checkOut)+'</div><div class="mykas-date-time">'+U.esc(b.checkOutTime || '12:00')+'</div></div></div>'+
+        '<div class="mykas-booking__meta"><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('room')+'</div><div class="mykas-meta-value">'+U.esc(roomName)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('guests')+'</div><div class="mykas-meta-value">'+U.esc(guestCount)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('total')+'</div><div class="mykas-meta-value">VND '+amount+'<small>Taxes &amp; fees included</small></div></div><div class="mykas-booking__actions"><button class="mykas-action-main" type="button" data-view="'+U.esc(bookingNo)+'">'+mt('view')+' <span>⟶</span></button><div class="mykas-action-links">'+(cancelled?'<button type="button" data-refund="'+U.esc(bookingNo)+'">'+mt('refund')+'</button>':'<button type="button" data-view="'+U.esc(bookingNo)+'">'+mt('manage')+'</button>'+(st==='upcoming'?'<button type="button" data-cancel="'+U.esc(bookingNo)+'">'+mt('cancel')+'</button>':''))+'</div></div></div>'+
+        (cancelled ? cancelledInfo : timeline)+'</div></article>';
+    }).join('');
+    host.querySelectorAll('[data-view]').forEach(function(btn){btn.addEventListener('click',function(){
+      var b=S.getByNumber(btn.getAttribute('data-view')); if(!b)return;
+      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
+      var details=U.$('.mykas-lookup'); if(details)details.open=true;
+      lookup();
+    });});
+    host.querySelectorAll('[data-cancel]').forEach(function(btn){btn.addEventListener('click',function(){
+      var b=S.getByNumber(btn.getAttribute('data-cancel')); if(!b)return;
+      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
+      var details=U.$('.mykas-lookup'); if(details)details.open=true;
+      lookup();
+      setTimeout(function(){var c=U.$('#canBtn');if(c)c.click();},180);
+    });});
+    host.querySelectorAll('[data-refund]').forEach(function(btn){btn.addEventListener('click',function(){
+      var b=S.getByNumber(btn.getAttribute('data-refund')); if(!b)return;
+      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
+      var details=U.$('.mykas-lookup'); if(details)details.open=true;
+      lookup();
+    });});
+  }
+  var activeFilter = 'all';
+  applyMyKasText();
+
+  /* Keep every My KAS label and dynamic booking state in sync with the
+     shared EN/VI selector, including changes made after this page loads. */
+  document.addEventListener('kas:language', function () {
+    applyMyKasText();
+    renderMyKas(activeFilter);
+  });
+  if (window.KAS_I18N && typeof window.KAS_I18N.init === 'function') {
+    window.KAS_I18N.init();
+    applyMyKasText();
+  }
+
+  /* Require login before exposing My KAS bookings; reuse shared sign-in modal. */
+  function myKasHasSession() {
+    try {
+      var raw = sessionStorage.getItem('kas-member-session-v1') || localStorage.getItem('kas-member-session-v1');
+      var session = raw ? JSON.parse(raw) : null;
+      return !!(session && (session.id || session.userId || session.email || session.memberId));
+    } catch (e) { return false; }
+  }
+  function openMyKasSignIn() {
+    var signIn = document.querySelector('#hdr .js-kas-auth');
+    if (signIn) signIn.click();
+  }
+  function bindMyKasLoginGate() {
+    var header = document.getElementById('hdr');
+    if (!header || header.__myKasLoginGateBound) return;
+    header.__myKasLoginGateBound = true;
+    header.addEventListener('click', function (event) {
+      var target = event.target;
+      var link = target && target.closest ? target.closest('a[href]') : null;
+      if (!link) return;
+      var label = (link.textContent || '').replace(/\s+/g, ' ').trim();
+      var href = link.getAttribute('href') || '';
+      var isMyKas = /manage-booking\.html(?:[?#]|$)/i.test(href) ||
+        (/my\s*kas/i.test(label) && !/sign\s*in|join|đăng nhập/i.test(label));
+      if (!isMyKas || myKasHasSession()) return;
+      event.preventDefault();
+      event.stopPropagation();
+      openMyKasSignIn();
+    }, true);
+  }
+  bindMyKasLoginGate();
+  if (!myKasHasSession()) {
+    var pageContent = document.querySelector('main') || document.querySelector('.mykas-page') || document.querySelector('.page-main');
+    if (pageContent) pageContent.hidden = true;
+    renderMyKas = function () {};
+    openMyKasSignIn();
+  } else {
+    renderMyKas(activeFilter);
+  }
+  U.$$('.mykas-tabs [data-filter]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      activeFilter = btn.getAttribute('data-filter');
+      U.$$('.mykas-tabs [data-filter]').forEach(function (b) {
+        var active = b === btn;
+        b.classList.toggle('is-active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      renderMyKas(activeFilter);
+    });
+  });
+  window.addEventListener('kas:languagechange', function(){applyMyKasText();renderMyKas(activeFilter);});
 
   /* ---- lookup ---- */
   function lookup() {

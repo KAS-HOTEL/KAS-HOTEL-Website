@@ -229,6 +229,7 @@
   restartHeroTimer();
   var room=(hero.rooms&&hero.rooms[0])||null;
   U.$('#roomImage').innerHTML=U.img((room&&room.images&&room.images[0])||hero.images[1]||hero.images[0],hero.name,'',true,false);
+  fetch('/api/catalog?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(c){var managed=c&&c.siteImages&&c.siteImages['home.roomsSuites'];var img=U.$('#roomImage img');if(managed&&managed.url&&img){img.src=managed.url;img.removeAttribute('srcset');img.setAttribute('data-admin-site-image','home.roomsSuites');}}).catch(function(){});
   var usp=[['shield','Best Rate Guarantee'],['tag','Exclusive Offers'],['rot','Flexible Cancellation'],['gift','Direct Benefits'],['crown','Member Privileges']];
   U.$('#homeUsp').innerHTML=usp.map(function(x){return '<div>'+U.icon(x[0],16)+'<span>'+x[1]+'</span></div>';}).join('');
   U.$('#homeCards').innerHTML=D.hotels.map(function(h){

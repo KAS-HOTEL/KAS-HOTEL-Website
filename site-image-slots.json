@@ -29,6 +29,18 @@
       "label": "Trang chủ · Bốn câu chuyện khu phố / 04 · Ở ngoài lâu hơn một chút",
       "selector": "a[href=\"city-guide.html#night\"] img",
       "default": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1600&q=85"
+    },
+    {
+      "key": "home.roomsSuites",
+      "label": "Trang chủ · Rooms & Suites — “A room that feels right”",
+      "selector": "#roomImage img",
+      "default": "Ảnh phòng đầu tiên đang lấy từ dữ liệu khách sạn"
+    },
+    {
+      "key": "page.hero.hotels",
+      "label": "Trang chủ · Nội dung bên dưới Hero · Find Your Stay",
+      "selector": "#heroBg",
+      "default": ""
     }
   ],
   "guidebook": [
@@ -385,16 +397,24 @@
       "default": ""
     },
     {
-      "key": "page.hero.hotels",
-      "label": "Khách sạn · Ảnh Hero Find Your Stay",
-      "selector": "#heroBg",
-      "default": ""
-    },
-    {
       "key": "page.hero.welcome",
       "label": "Welcome Popup · Ảnh cửa sổ chào mừng",
       "selector": ".kas-welcome__visual img",
       "default": "https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90"
+    }
+  ],
+  "findYourKas": [
+    {
+      "key": "find.zero.main",
+      "label": "Find Your KAS · Ảnh Zero chính",
+      "selector": ".find-page-hero-main",
+      "default": "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1800&q=88"
+    },
+    {
+      "key": "find.zero.card",
+      "label": "Find Your KAS · Ảnh Zero nổi",
+      "selector": ".find-page-hero-card",
+      "default": "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=900&q=88"
     }
   ]
 }

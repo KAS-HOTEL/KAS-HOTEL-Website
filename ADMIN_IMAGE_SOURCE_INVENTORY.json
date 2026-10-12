@@ -408,6 +408,13 @@
       "label": "Home Hero · 12 · Vietnam landscape",
       "selector": ".home-hero__slide[data-index=\"11\"] img",
       "default": ""
+    },
+    {
+      "group": "home",
+      "key": "home.roomsSuites",
+      "label": "Trang chủ · Rooms & Suites — “A room that feels right”",
+      "selector": "#roomImage img",
+      "default": "Ảnh phòng đầu tiên đang lấy từ dữ liệu khách sạn"
     }
   ],
   "hotelGalleryStaticImages": [

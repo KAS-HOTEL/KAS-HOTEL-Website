@@ -168,12 +168,9 @@
           '<span class="propbar__stars">' + U.stars(hotel.rating / 2, 15) + '</span>' +
         '</div>' +
         '<div class="propbar__reviews">' + hotel.reviews + ' reviews · ' + U.esc(hotel.ratingSource) + '</div>' +
-        '<button class="btn btn--ghost-lt btn--sm" id="saveHotel" type="button">' +
-          U.icon('heart', 13) + ' Save hotel</button>' +
       '</div>' +
     '</div>';
 
-  U.$('#saveHotel').addEventListener('click', function () { U.toast(hotel.name + ' saved to your list.'); });
 
   var GALLERY_CATEGORIES = [
     {id:'all', label:'Tất cả'}, {id:'rooms',label:'Phòng nghỉ'},
@@ -210,6 +207,9 @@
     var previewThumbs=imgs.slice(1,5);
     preview.innerHTML='<button type="button" class="hotel-gallery-launch" aria-haspopup="dialog" aria-controls="hotelGalleryModal">'+U.img(imgs[0],hotel.name,'',false,false)+'<span class="hotel-gallery-launch__shade"></span><span class="hotel-gallery-launch__label">'+U.icon('image',17)+' Xem thư viện ảnh <b>'+imgs.length+'</b></span></button>'+
       (previewThumbs.length?'<div class="hotel-gallery-preview-thumbs" aria-label="Một số ảnh khách sạn">'+previewThumbs.map(function(src,i){var imageIndex=i+1;return '<button type="button" class="hotel-gallery-preview-thumb" data-preview-image="'+imageIndex+'" aria-label="Xem ảnh '+(imageIndex+1)+'">'+U.img(src,hotel.name+' · '+(imageIndex+1),'',true,false)+'</button>';}).join('')+'</div>':'');
+    var saveButton=document.createElement('button'); saveButton.type='button'; saveButton.className='hotel-save-heart'; saveButton.id='saveHotel'; saveButton.setAttribute('aria-pressed',String(Store.isHotelSaved(hotel.id)));
+    function paintSaveButton(){var saved=Store.isHotelSaved(hotel.id);saveButton.classList.toggle('is-saved',saved);saveButton.setAttribute('aria-pressed',String(saved));saveButton.innerHTML=U.icon('heart',16)+(saved?(document.documentElement.lang==='vi'?'Đã lưu':'Saved'):(document.documentElement.lang==='vi'?'Lưu khách sạn':'Save hotel'));}
+    paintSaveButton(); saveButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var saved=Store.toggleSavedHotel(hotel.id);paintSaveButton();U.toast(saved?(document.documentElement.lang==='vi'?'Đã lưu khách sạn vào Saved.':'Hotel added to Saved.'):(document.documentElement.lang==='vi'?'Đã bỏ lưu khách sạn.':'Hotel removed from Saved.'));}); preview.appendChild(saveButton);
     var modal=U.$('#hotelGalleryModal'), content=U.$('#hotelGalleryModalContent');
     var lastFocus=null;
     function openGallery(){

@@ -45,6 +45,7 @@
       window.removeEventListener('scroll', host.__kasScrollHandler);
       host.__kasScrollHandler = null;
     }
+    opts.floating = opts.floating !== false;
     host.className = 'hdr' + (opts.floating ? ' hdr--float header--transparent' : '');
     host.innerHTML =
       '<div class="container hdr__in">' +
@@ -65,7 +66,7 @@
               '<button type="button" class="lang-option" data-lang="en" role="option"><span class="lang-option-flag" aria-hidden="true">' + flagIcon('en') + '</span><span>ENG</span></button>' +
             '</div>' +
           '</div>' +
-          '<button class="btn btn--gold btn--sm js-kas-auth" type="button">Sign in / Join</button>' +
+          '<button class="btn btn--gold btn--sm js-kas-auth" type="button">Sign in</button>' +
           '<button class="burger" type="button" aria-label="Open menu">' + U.icon('menu', 22) + '</button>' +
         '</div>' +
       '</div>';
@@ -78,19 +79,68 @@
       var wrap = U.$('.lang-wrap--custom', host), btn = U.$('.lang-button', wrap), menu = U.$('.lang-menu', wrap);
       if (!wrap || !btn || !menu) return;
       function close(){ wrap.classList.remove('is-open'); btn.setAttribute('aria-expanded','false'); }
-      btn.addEventListener('click', function(e){ e.stopPropagation(); var open = wrap.classList.toggle('is-open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      var contactBtn = U.$('.contact-trigger', host), contactPanel = U.$('#kasContactPopover', host);
+      function resetContactPosition(){
+        if(!contactPanel) return;
+        contactPanel.style.position = '';
+        contactPanel.style.left = '';
+        contactPanel.style.right = '';
+        contactPanel.style.top = '';
+        contactPanel.style.width = '';
+        contactPanel.style.setProperty('--contact-arrow-left', '');
+      }
+      function positionContactPanel(){
+        if(!contactBtn || !contactPanel) return;
+        var rect = contactBtn.getBoundingClientRect();
+        var mobile = window.matchMedia('(max-width: 700px)').matches;
+        if(mobile){
+          var viewport = document.documentElement.clientWidth || window.innerWidth;
+          var width = Math.min(320, Math.max(220, viewport - 10));
+          var left = Math.max(5, Math.min(rect.right - width, viewport - width - 5));
+          contactPanel.style.position = 'fixed';
+          contactPanel.style.left = left + 'px';
+          contactPanel.style.right = 'auto';
+          contactPanel.style.top = Math.min(rect.bottom + 8, window.innerHeight - 120) + 'px';
+          contactPanel.style.width = width + 'px';
+          contactPanel.style.setProperty('--contact-arrow-left', Math.max(12, Math.min(width - 20, rect.left + rect.width / 2 - left - 6)) + 'px');
+        } else { resetContactPosition(); }
+      }
+      function closeContact(){
+        if(contactPanel){ contactPanel.hidden = true; resetContactPosition(); }
+        if(contactBtn) contactBtn.setAttribute('aria-expanded','false');
+      }
+      if(contactBtn && contactPanel){
+        contactBtn.addEventListener('click', function(e){
+          e.stopPropagation(); close();
+          var open = contactPanel.hidden;
+          contactPanel.hidden = !open;
+          contactBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+          if(open) positionContactPanel(); else resetContactPosition();
+        });
+        contactPanel.addEventListener('click', function(e){ e.stopPropagation(); });
+        window.addEventListener('resize', function(){ if(!contactPanel.hidden) positionContactPanel(); }, {passive:true});
+        window.addEventListener('scroll', function(){ if(!contactPanel.hidden && window.matchMedia('(max-width: 700px)').matches) positionContactPanel(); }, {passive:true});
+      }
+      btn.addEventListener('click', function(e){ e.stopPropagation(); closeContact(); var open = wrap.classList.toggle('is-open'); btn.setAttribute('aria-expanded', open ? 'true' : 'false'); });
       U.$$('.lang-option', menu).forEach(function(opt){
         opt.addEventListener('click', function(){
           var select = U.$('.lang-select', wrap), lang = opt.getAttribute('data-lang');
           if (!select) return;
           select.value = lang;
           select.dispatchEvent(new Event('change', {bubbles:true}));
+          var labels = host.querySelectorAll('[data-contact-label]');
+          labels.forEach(function(label){
+            var key = label.getAttribute('data-contact-label');
+            if(lang === 'vi') label.innerHTML = key === 'partners' ? 'Đối tác du lịch<br>và đối tác doanh nghiệp' : 'Đặt phòng / Kinh doanh';
+            else label.innerHTML = key === 'partners' ? 'Travel Partners<br>and Corporate Partners' : 'Room Reservations / Sales';
+          });
           close();
         });
       });
       if (host.__kasLangClose) document.removeEventListener('click', host.__kasLangClose);
-      host.__kasLangClose = close;
-      document.addEventListener('click', close);
+      host.__kasLangClose = function(){ close(); closeContact(); };
+      document.addEventListener('click', host.__kasLangClose);
+      document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ close(); closeContact(); } });
     }());
 
     if (opts.floating) {
@@ -191,8 +241,13 @@
             '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
           '</div>' +
           '<div class="ftr__col ftr__contact"><h5>Contact</h5>' +
-            '<a href="' + CT.tel + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(CT.displayPhone) + '</span></a>' +
+            '<div class="ftr-contact-group"><span class="ftr-contact-label" data-i18n="Travel Partners &amp; Corporate Partners">Travel Partners &amp; Corporate Partners</span>' +
+              '<a href="' + CT.tel + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(CT.displayPhone) + '</span></a></div>' +
+            (Array.isArray(CT.reservationPhones) && CT.reservationPhones.length ? '<div class="ftr-contact-group"><span class="ftr-contact-label" data-i18n="Room Reservations / Sales">Room Reservations / Sales</span>' + CT.reservationPhones.map(function (p) {
+              return '<a href="' + U.esc(p.tel) + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(p.displayPhone) + '</span></a>';
+            }).join('') + '</div>' : '') +
             '<a href="mailto:' + CT.email + '" class="ftr-contact-row">' + U.icon('mail', 15) + '<span>' + U.esc(CT.email) + '</span></a>' +
+            (CT.hqAddress ? '<p class="ftr-contact-address">' + U.icon('map-pin', 15) + '<span>' + U.esc(CT.hqAddress) + '</span></p>' : '') +
           '</div>' +
           '<div class="ftr__col ftr__news"><h5>Stay in the know</h5>' +
             '<p>Seasonal offers, new openings, and stories from the KAS collection.</p>' +
@@ -480,67 +535,178 @@
 
 
   /* ---------------- member sign-in / join ---------------- */
-  function authSession() {
-    try { return JSON.parse(localStorage.getItem('kas-member-session') || 'null'); } catch (e) { return null; }
+  // Frontend demo: persist only the signed-in session across site pages. Member
+  // accounts/passwords remain in memory; real authentication requires a backend.
+  var KAS_MEMBER_SESSION_KEY = 'kas-member-session-v1';
+  var kasMemberSession = null;
+  var kasMemberAccounts = [];
+  function readStoredSession() {
+    try {
+      var value = sessionStorage.getItem(KAS_MEMBER_SESSION_KEY) || localStorage.getItem(KAS_MEMBER_SESSION_KEY);
+      return value ? JSON.parse(value) : null;
+    } catch (e) { return null; }
   }
-  function authAccounts() {
-    try { return JSON.parse(localStorage.getItem('kas-member-accounts') || '[]'); } catch (e) { return []; }
+  function persistSession(session, remember) {
+    try {
+      sessionStorage.removeItem(KAS_MEMBER_SESSION_KEY);
+      localStorage.removeItem(KAS_MEMBER_SESSION_KEY);
+      if (!session) return;
+      (remember ? localStorage : sessionStorage).setItem(KAS_MEMBER_SESSION_KEY, JSON.stringify(session));
+    } catch (e) { /* Storage may be disabled; keep the in-page session working. */ }
   }
-  function saveAccounts(a) { try { localStorage.setItem('kas-member-accounts', JSON.stringify(a)); } catch (e) {} }
+  kasMemberSession = readStoredSession();
+  function authSession() { return kasMemberSession; }
+  function authAccounts() { return kasMemberAccounts; }
+  function saveAccounts(a) { kasMemberAccounts = Array.isArray(a) ? a.slice() : []; }
+
+  function syncAuthHeader() {
+    var host = U.$('#hdr');
+    if (!host) return;
+    var old = U.$('.js-kas-auth, .kas-user-menu', host);
+    if (!old) return;
+    var session = authSession();
+    if (!session) {
+      if (old.classList.contains('kas-user-menu')) {
+        var button = U.el('button', { class: 'btn btn--gold btn--sm js-kas-auth', type: 'button' });
+        button.textContent = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi' ? 'ĐĂNG NHẬP' : 'Sign in';
+        button.addEventListener('click', function(){ openAuth('login'); });
+        old.replaceWith(button);
+      }
+      return;
+    }
+    if (old.classList.contains('kas-user-menu')) return;
+    var name = String(session.name || session.email || 'KAS Member').trim();
+    var avatar = name.charAt(0).toUpperCase() || 'K';
+    var wrap = U.el('div', { class: 'kas-user-menu' });
+    wrap.innerHTML = '<button class="kas-member-trigger" type="button" aria-label="Member menu" aria-expanded="false" title="' + name.replace(/[&<>"']/g, '') + '"><span class="kas-avatar" aria-hidden="true">' + avatar + '</span><span class="kas-member-trigger__name">' + name.replace(/[&<>"']/g, '') + '</span></button>' +
+      '<div class="kas-user-menu__panel" role="menu" hidden>' +
+      '<div class="kas-user-menu__identity"><strong>' + name.replace(/[&<>"']/g, '') + '</strong><span>' + String(session.email || '').replace(/[&<>"']/g, '') + '</span></div>' +
+      '<button type="button" role="menuitem" data-member-action="account">My account</button>' +
+      '<a role="menuitem" href="offers.html#member">Chính sách thành viên</a>' +
+      '<button type="button" role="menuitem" data-member-action="saved">Saved</button>' +
+      '<button type="button" role="menuitem" data-member-action="logout">Đăng xuất</button></div>';
+    old.replaceWith(wrap);
+    var toggle = U.$('.kas-member-trigger', wrap), panel = U.$('.kas-user-menu__panel', wrap);
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = panel.hidden;
+      panel.hidden = !open;
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    if (host.__kasMemberMenuClose) document.removeEventListener('click', host.__kasMemberMenuClose);
+    host.__kasMemberMenuClose = function () { panel.hidden = true; toggle.setAttribute('aria-expanded', 'false'); };
+    document.addEventListener('click', host.__kasMemberMenuClose);
+    U.$$('.kas-user-menu__panel [data-member-action]', wrap).forEach(function (item) {
+      item.addEventListener('click', function () {
+        var action = item.getAttribute('data-member-action');
+        panel.hidden = true;
+        if (action === 'logout') {
+          kasMemberSession = null;
+          persistSession(null, false);
+          syncAuthHeader();
+        } else if (action === 'account') {
+          showMemberNotice('My account', 'Hồ sơ thành viên sẽ được kết nối với backend ở bước tiếp theo.');
+        } else if (action === 'saved') {
+          window.location.href = 'saved-hotels.html';
+        }
+      });
+    });
+  }
+
+  function showSavedHotels() {
+    window.location.href = 'saved-hotels.html';
+  }
+
+  function showMemberNotice(title, message) {
+    var existing = U.$('.kas-member-notice'); if (existing) existing.remove();
+    var modal = U.el('div', { class: 'kas-auth kas-member-notice is-open' });
+    modal.innerHTML = '<div class="kas-auth__box" role="dialog" aria-modal="true"><button class="kas-auth__close" type="button" aria-label="Close">×</button><div class="kas-auth__eyebrow">KAS REWARDS</div><h2>' + title + '</h2><p class="kas-auth__sub">' + message + '</p><button class="kas-auth__submit" type="button">ĐÓNG</button></div>';
+    document.body.appendChild(modal);
+    function close(){modal.remove();document.body.style.overflow='';}
+    modal.querySelector('.kas-auth__close').onclick=close;
+    modal.querySelector('.kas-auth__submit').onclick=close;
+    modal.addEventListener('click',function(e){if(e.target===modal)close()});
+    document.body.style.overflow='hidden';
+  }
 
   function openAuth(mode) {
-    var existing = U.$('.kas-auth');
-    if (existing) existing.remove();
-    var isJoin = mode === 'join';
+    var existing = U.$('.kas-auth'); if (existing) existing.remove();
+    var isJoin = mode === 'join', step = 1, verifiedEmail = '';
     var m = U.el('div', { class: 'kas-auth is-open' });
-    m.innerHTML =
-      '<div class="kas-auth__box" role="dialog" aria-modal="true" aria-label="KAS member">' +
+    function render() {
+      var title = isJoin ? (step === 1 ? 'Xác thực email' : step === 2 ? 'Xác minh email' : 'Hoàn thiện hồ sơ') : 'Welcome back';
+      var sub = isJoin ? (step === 1 ? 'Nhập email để bắt đầu tạo tài khoản KAS.' : step === 2 ? 'Nhập mã demo để xem bước tiếp theo. Email chưa được gửi ở phiên bản frontend.' : 'Email đã xác minh trong bản demo. Hãy bổ sung thông tin cá nhân.') : 'Sign in to manage your KAS membership and bookings.';
+      var content = '<div class="kas-auth__box" role="dialog" aria-modal="true" aria-label="KAS member">' +
         '<button class="kas-auth__close" type="button" aria-label="Close">×</button>' +
         '<div class="kas-auth__brand"><img src="assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection"></div>' +
-        '<div class="kas-auth__eyebrow">KAS Rewards</div>' +
-        '<h2>' + (isJoin ? 'Create your KAS account' : 'Welcome back') + '</h2>' +
-        '<p class="kas-auth__sub">' + (isJoin ? 'Join KAS for member benefits and a smoother booking experience.' : 'Sign in to manage your KAS membership and bookings.') + '</p>' +
-        (isJoin ? '<div class="kas-auth__field"><label for="kasAuthName">Full name</label><input id="kasAuthName" type="text" autocomplete="name" placeholder="Your name"></div>' : '') +
-        '<div class="kas-auth__field"><label for="kasAuthEmail">Email *</label><input id="kasAuthEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>' +
-        '<div class="kas-auth__field"><label for="kasAuthPassword">Password *</label><input id="kasAuthPassword" type="password" autocomplete="' + (isJoin?'new-password':'current-password') + '" placeholder="At least 8 characters"></div>' +
-        (isJoin ? '' : '<label class="kas-auth__remember"><input id="kasAuthRemember" type="checkbox"> Remember me on this device</label>') +
-        '<button class="kas-auth__submit" id="kasAuthSubmit" type="button">' + (isJoin ? 'CREATE ACCOUNT' : 'SIGN IN') + '</button>' +
-        '<div class="kas-auth__message" id="kasAuthMessage"></div>' +
-        '<div class="kas-auth__switch">' + (isJoin ? 'Already a member?' : 'New to KAS?') + ' <button type="button" id="kasAuthSwitch">' + (isJoin ? 'Sign in' : 'Create an account') + '</button></div>' +
-      '</div>';
-    document.body.appendChild(m);
-
-    function close(){m.classList.remove('is-open');setTimeout(function(){m.remove()},180);document.body.style.overflow='';}
-    m.querySelector('.kas-auth__close').onclick=close;
-    m.addEventListener('click',function(e){if(e.target===m)close()});
-    document.body.style.overflow='hidden';
-
-    m.querySelector('#kasAuthSwitch').onclick=function(){close();setTimeout(function(){openAuth(isJoin?'login':'join')},40)};
-    m.querySelector('#kasAuthSubmit').onclick=function(){
-      var email=String(m.querySelector('#kasAuthEmail').value||'').trim().toLowerCase();
-      var pw=String(m.querySelector('#kasAuthPassword').value||'');
-      var msg=m.querySelector('#kasAuthMessage');
-      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){msg.textContent='Please enter a valid email address.';return}
-      if(pw.length<8){msg.textContent='Password must be at least 8 characters.';return}
-      if(isJoin){
-        var name=String(m.querySelector('#kasAuthName').value||'').trim();
-        if(!name){msg.textContent='Please enter your full name.';return}
-        var accounts=authAccounts();
-        if(accounts.some(function(a){return a.email===email})){msg.textContent='This email is already registered. Please sign in.';return}
-        accounts.push({name:name,email:email,password:pw});
-        saveAccounts(accounts);
-        try{localStorage.setItem('kas-member-session',JSON.stringify({name:name,email:email}))}catch(e){}
-        msg.textContent='Account created. Welcome to KAS.';
-        setTimeout(close,700);
-      }else{
-        var accounts=authAccounts();
-        var found=accounts.find(function(a){return a.email===email && a.password===pw});
-        if(!found){msg.textContent='Email or password is incorrect.';return}
-        try{localStorage.setItem('kas-member-session',JSON.stringify({name:found.name,email:found.email}))}catch(e){}
-        msg.textContent='Signed in successfully.';
-        setTimeout(close,650);
+        '<div class="kas-auth__eyebrow">KAS Rewards</div><h2>' + title + '</h2><p class="kas-auth__sub">' + sub + '</p>';
+      if (isJoin && step === 1) {
+        content += '<div class="kas-auth__field"><label for="kasAuthEmail">Email *</label><input id="kasAuthEmail" type="email" autocomplete="email" placeholder="you@example.com" required></div><button class="kas-auth__submit" id="kasAuthSubmit" type="button">TIẾP TỤC</button>';
+      } else if (isJoin && step === 2) {
+        content += '<div class="kas-auth__field"><label>Email</label><input type="email" value="' + verifiedEmail.replace(/[&<>"']/g, '') + '" disabled></div><div class="kas-auth__field"><label for="kasAuthCode">Mã xác thực demo *</label><input id="kasAuthCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="Nhập 123456"></div><p class="kas-auth__demo-note">Mã dùng thử giao diện: <strong>123456</strong>. Không có email thật được gửi.</p><button class="kas-auth__submit" id="kasAuthSubmit" type="button">XÁC MINH EMAIL</button>';
+      } else if (isJoin) {
+        content += '<div class="kas-auth__verified">✓ Email đã xác minh (bản demo)</div><div class="kas-auth__field"><label for="kasAuthName">Họ và tên *</label><input id="kasAuthName" type="text" autocomplete="name" placeholder="Họ và tên"></div><div class="kas-auth__field"><label for="kasAuthPhone">Số điện thoại *</label><input id="kasAuthPhone" type="tel" autocomplete="tel" placeholder="+84 ..."></div><div class="kas-auth__field"><label for="kasAuthBirthday">Ngày sinh (không bắt buộc)</label><input id="kasAuthBirthday" type="date" autocomplete="bday"></div><button class="kas-auth__submit" id="kasAuthSubmit" type="button">TẠO TÀI KHOẢN</button>';
+      } else {
+        content += '<div class="kas-auth__field"><label for="kasAuthEmail">Email *</label><input id="kasAuthEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="kas-auth__field"><label for="kasAuthPassword">Password *</label><input id="kasAuthPassword" type="password" autocomplete="current-password" placeholder="Your password"></div><label class="kas-auth__remember"><input id="kasAuthRemember" type="checkbox"> Remember me on this device</label><button class="kas-auth__submit" id="kasAuthSubmit" type="button">SIGN IN</button>';
       }
-    };
+      content += '<div class="kas-auth__message" id="kasAuthMessage" aria-live="polite"></div><div class="kas-auth__switch">' + (isJoin ? 'Đã có tài khoản?' : 'Chưa là thành viên?') + ' <button type="button" id="kasAuthSwitch">' + (isJoin ? 'Đăng nhập' : 'Tạo tài khoản') + '</button></div></div>';
+      m.innerHTML = content;
+      m.querySelector('.kas-auth__close').onclick=close;
+      m.querySelector('#kasAuthSwitch').onclick=function(){close();setTimeout(function(){openAuth(isJoin?'login':'join')},40)};
+      m.querySelector('#kasAuthSubmit').onclick=submit;
+    }
+    function close(){m.classList.remove('is-open');setTimeout(function(){m.remove()},180);document.body.style.overflow='';}
+    /* After a successful sign-in/join from My KAS, reload that page so its
+       booking view is initialized against the newly persisted member session.
+       Authentication on other pages keeps the existing no-reload behavior. */
+    function finishAuth(delay){
+      setTimeout(function(){
+        close();
+        if (/(^|\/)manage-booking\.html$/i.test(window.location.pathname)) {
+          window.location.reload();
+        }
+      }, delay);
+    }
+    function submit() {
+      var msg = m.querySelector('#kasAuthMessage');
+      if (isJoin && step === 1) {
+        var email = String(m.querySelector('#kasAuthEmail').value || '').trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { msg.textContent='Vui lòng nhập email hợp lệ.'; return; }
+        if (authAccounts().some(function(a){return a.email===email})) { msg.textContent='Email này đã đăng ký. Vui lòng đăng nhập.'; return; }
+        verifiedEmail = email; step = 2; render(); return;
+      }
+      if (isJoin && step === 2) {
+        if (String(m.querySelector('#kasAuthCode').value || '').trim() !== '123456') { msg.textContent='Mã chưa đúng. Hãy nhập mã demo 123456.'; return; }
+        step = 3; render(); return;
+      }
+      if (isJoin) {
+        var name=String(m.querySelector('#kasAuthName').value||'').trim();
+        var phone=String(m.querySelector('#kasAuthPhone').value||'').trim();
+        var birthday=String(m.querySelector('#kasAuthBirthday').value||'');
+        if (!name) { msg.textContent='Vui lòng nhập họ và tên.'; return; }
+        if (!phone) { msg.textContent='Vui lòng nhập số điện thoại.'; return; }
+        var accounts=authAccounts();
+        if(accounts.some(function(a){return a.email===verifiedEmail})){msg.textContent='Email này đã được đăng ký trong phiên hiện tại.';return;}
+        accounts.push({name:name,email:verifiedEmail,phone:phone,birthday:birthday,emailVerifiedDemo:true});
+        saveAccounts(accounts);
+        kasMemberSession={name:name,email:verifiedEmail,phone:phone};
+        persistSession(kasMemberSession, false);
+        msg.textContent='Đã tạo phiên thành viên demo. Phiên đăng nhập được giữ khi chuyển giữa các trang trong tab này.';
+        syncAuthHeader(); finishAuth(700); return;
+      }
+      var emailLogin=String(m.querySelector('#kasAuthEmail').value||'').trim().toLowerCase();
+      var password=String(m.querySelector('#kasAuthPassword').value||'');
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLogin)){msg.textContent='Please enter a valid email address.';return}
+      if(!password){msg.textContent='Please enter your password.';return}
+      var found=authAccounts().find(function(a){return a.email===emailLogin});
+      var displayName=found && found.name ? found.name : emailLogin.split('@')[0].replace(/[._-]+/g,' ').replace(/\b\w/g,function(c){return c.toUpperCase()});
+      kasMemberSession={name:displayName || 'KAS Member',email:emailLogin,phone:found && found.phone || ''};
+      persistSession(kasMemberSession, !!m.querySelector('#kasAuthRemember').checked);
+      msg.textContent='Đã đăng nhập giao diện demo. Phiên sẽ được giữ khi chuyển giữa các trang.'; syncAuthHeader(); finishAuth(650);
+    }
+    document.body.appendChild(m); document.body.style.overflow='hidden';
+    m.addEventListener('click',function(e){if(e.target===m)close()});
+    render();
   }
 
   /* ---------------- first-visit welcome ---------------- */
@@ -665,15 +831,10 @@
   }
 
   function bindAuthButtons(){
+    syncAuthHeader();
     U.$$('.js-kas-auth').forEach(function(b){
       if(b.__kasAuthBound)return;b.__kasAuthBound=true;
-      b.addEventListener('click',function(){
-        var s=authSession();
-        if(s){
-          openAuth('login');
-          var title=U.$('.kas-auth h2'); if(title) title.textContent='Welcome back, '+s.name;
-        }else openAuth('login');
-      });
+      b.addEventListener('click',function(){openAuth('login')});
     });
   }
 
@@ -686,7 +847,7 @@
     renderFloat();
     reveal();
     if (global.KAS_I18N) global.KAS_I18N.init();
-    openWelcome();
+    if (!opts.noWelcome) openWelcome();
   }
 
   global.flagIcon = flagIcon;

@@ -48,6 +48,14 @@
     }
     return Promise.all(heroLoads);
   }
+  function applyFindYourKas(site){
+    site=site||{};
+    var main=site['find.zero.main'], card=site['find.zero.card'];
+    var mainEl=document.querySelector('.find-page-hero-main');
+    var cardEl=document.querySelector('.find-page-hero-card');
+    if(main&&main.url&&mainEl) mainEl.style.backgroundImage="url('"+String(main.url).replace(/'/g,"%27")+"')";
+    if(card&&card.url&&cardEl) cardEl.style.backgroundImage="url('"+String(card.url).replace(/'/g,"%27")+"')";
+  }
   function applyGuidebook(site){
     site=site||{};
     var hero=site['guidebook.hero'], visual=document.querySelector('.hero-visual');
@@ -117,6 +125,7 @@
       if(!c) return;
       var site=c.siteImages||{};
       applyPageHeroes(site);
+      if(document.querySelector('.kas-find-page')) applyFindYourKas(site);
       var homeHero=document.querySelector('#homeHeroBg');
       if(homeHero){
         applyHome(site).then(function(){

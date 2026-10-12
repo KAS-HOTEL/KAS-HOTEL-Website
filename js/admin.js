@@ -3,7 +3,7 @@
   var key='', data=null, siteSlots={home:[],guidebook:[]}, overrides={collection:{},property:{},rooms:{},site:{}};
   var status=document.getElementById('status'), management=document.getElementById('management');
   var collectionGrid=document.getElementById('collectionGrid'), propertyGrid=document.getElementById('propertyGrid');
-  var pageHeroImages=document.getElementById('pageHeroImages'), welcomePopupImage=document.getElementById('welcomePopupImage'), homeHeroImages=document.getElementById('homeHeroImages'), homeSiteImages=document.getElementById('homeSiteImages'), guidebookSiteImages=document.getElementById('guidebookSiteImages');
+  var pageHeroImages=document.getElementById('pageHeroImages'), findYourKasImages=document.getElementById('findYourKasImages'), welcomePopupImage=document.getElementById('welcomePopupImage'), homeHeroImages=document.getElementById('homeHeroImages'), homeSiteImages=document.getElementById('homeSiteImages'), guidebookSiteImages=document.getElementById('guidebookSiteImages');
   var rooms=document.getElementById('rooms'), photoRooms=document.getElementById('photoRooms'), imageMatrix=document.getElementById('imageMatrix');
   function esc(s){return String(s==null?'':s).replace(/[&<>'"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c];});}
   function money(v){return new Intl.NumberFormat('vi-VN').format(+v||0)+' ₫';}
@@ -34,10 +34,11 @@
     target.innerHTML=(slots||[]).map(function(slot){
       var item=publicSiteImages[slot.key]||siteOverrides[slot.key];
       var overrideUrl=item&&item.url?String(item.url):'';
-      var current=overrideUrl;
-      var source=item?(item.source==='admin-upload'?'Ảnh upload trong Admin':'URL ghi đè từ Admin'):'Chưa có ảnh Admin';
-      var currentLink=current?'<a class="default" target="_blank" rel="noopener" href="'+esc(current)+'" title="'+esc(current)+'">Mở / copy link ảnh đang dùng ↗</a>':'';
-      return '<article class="siteCard"><div class="media">'+(current?'<img src="'+esc(current)+'" alt="'+esc(slot.label)+'" loading="lazy">':'<div class="small">Chưa có ảnh</div>')+'</div><div class="body"><h3>'+esc(slot.label)+'</h3><div class="current">Nguồn hiện hành: '+esc(source)+'</div>'+currentLink+'<div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" data-site-input="'+esc(slot.key)+'"><button class="btn gold" data-site-upload="'+esc(slot.key)+'">Upload / thay ảnh</button></div>'+urlInput('site',slot.key,'https://link-anh...')+'<div class="thumbs">'+(item?imageThumb(item,'site',slot.key):'')+'</div></div></article>';
+      var previewUrl=overrideUrl||(slot.default&&/^https?:\/\//i.test(String(slot.default))?String(slot.default):'');
+      var source=item?(item.source==='admin-upload'?'Ảnh upload trong Admin':'URL ghi đè từ Admin'):(previewUrl?'Ảnh mặc định của website':'Chưa có ảnh mặc định');
+      var currentLink=overrideUrl?'<a class="default" target="_blank" rel="noopener" href="'+esc(overrideUrl)+'" title="'+esc(overrideUrl)+'">Mở / copy link ảnh đang dùng ↗</a>':'';
+      var resetNote=item?'<div class="small" style="margin-top:7px">Muốn quay về ảnh mặc định, dùng nút Xóa ở ảnh ghi đè bên dưới.</div>':'';
+      return '<article class="siteCard"><div class="media">'+(previewUrl?'<img src="'+esc(previewUrl)+'" alt="'+esc(slot.label)+'" loading="lazy">':'<div class="small">Chưa có ảnh mặc định</div>')+'</div><div class="body"><h3>'+esc(slot.label)+'</h3><div class="current">Nguồn hiện hành: '+esc(source)+'</div>'+currentLink+resetNote+'<div class="upload"><input class="file" type="file" accept="image/jpeg,image/png,image/webp" data-site-input="'+esc(slot.key)+'"><button class="btn gold" data-site-upload="'+esc(slot.key)+'">Upload / thay ảnh</button></div>'+urlInput('site',slot.key,'https://link-anh...')+'<div class="thumbs">'+(item?imageThumb(item,'site',slot.key):'')+'</div></div></article>';
     }).join('');
     bindUrlActions(target);
     target.querySelectorAll('[data-site-upload]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.dataset.siteUpload,input=target.querySelector('[data-site-input="'+CSS.escape(id)+'"]');if(!input||!input.files.length){toast('Hãy chọn ảnh.');return;}var fd=new FormData();fd.append('key',id);fd.append('image',input.files[0]);btn.disabled=true;api('/api/admin/site-image',{method:'POST',body:fd}).then(function(){toast('Đã cập nhật ảnh '+id+'.');return load();}).catch(function(e){setStatus(e.message,false);}).finally(function(){btn.disabled=false;});});});
@@ -95,12 +96,13 @@
   }
   function render(){renderImageMatrix();
     renderSiteImages(homeHeroImages,siteSlots.homeHero||[]);
-    renderSiteImages(pageHeroImages,(siteSlots.pageHero||[]).filter(function(slot){return slot.key!=='page.hero.welcome';}));
+    renderSiteImages(pageHeroImages,(siteSlots.pageHero||[]).filter(function(slot){return slot.key!=='page.hero.welcome' && slot.key!=='page.hero.hotels';}));
     renderSiteImages(welcomePopupImage,(siteSlots.pageHero||[]).filter(function(slot){return slot.key==='page.hero.welcome';}));
+    renderSiteImages(findYourKasImages,siteSlots.findYourKas||[]);
     renderSiteImages(homeSiteImages,siteSlots.home||[]);
     renderSiteImages(guidebookSiteImages,siteSlots.guidebook||[]);
     renderCollections();renderPropertyGallery();renderRooms(document.getElementById('roomSearch').value);renderPhotos();}
-  function load(){return Promise.all([fetch('/api/catalog?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}),api('/api/admin/image-overrides?ts='+Date.now()),fetch('/site-image-slots.json?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})]).then(function(xs){data=xs[0];overrides=xs[1]||{collection:{},property:{},rooms:{},site:{}};if(!overrides.site)overrides.site={};siteSlots=xs[2]||{home:[],guidebook:[],pageHero:[]};render();});}
+  function load(){return Promise.all([fetch('/api/catalog?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();}),api('/api/admin/image-overrides?ts='+Date.now()),fetch('/site-image-slots.json?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.json();})]).then(function(xs){data=xs[0];overrides=xs[1]||{collection:{},property:{},rooms:{},site:{}};if(!overrides.site)overrides.site={};siteSlots=xs[2]||{home:[],guidebook:[],pageHero:[],findYourKas:[]};render();});}
   document.getElementById('roomSearch').addEventListener('input',function(){renderRooms(this.value);});
   document.getElementById('login').addEventListener('click',function(){key=document.getElementById('key').value.trim();var localNoKey=location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.hostname==='[::1]';if(!key&&!localNoKey){setStatus('Hãy nhập ADMIN_KEY.',false);return;}api('/api/admin/status').then(function(){setStatus('Đã mở quyền quản trị.',true);management.classList.remove('hidden');document.getElementById('publicBox').classList.remove('hidden');document.getElementById('publicUrl').textContent=location.origin+'/index.html';document.getElementById('referenceUrl').textContent=location.origin+'/reference';return load();}).catch(function(e){setStatus(e.message,false);});});
 })();

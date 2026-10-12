@@ -9,7 +9,8 @@
     BOOKINGS: 'kas_bookings',
     SEARCH:   'kas_recent_search',
     CURRENT:  'kas_current_booking',
-    GUEST:    'kas_guest_info'
+    GUEST:    'kas_guest_info',
+    SAVED_HOTELS: 'kas_saved_hotels'
   };
 
   function read(key, fallback) {
@@ -109,6 +110,44 @@
   function getGuest() { return read(K.GUEST, null); }
   function setGuest(g) { return write(K.GUEST, g); }
 
+  /* Saved hotels use one canonical key across all KAS pages. Read a small set of
+     * legacy aliases as a recovery path, then migrate them to the canonical key. */
+  function normalizeSavedIds(value) {
+    if (!Array.isArray(value)) return [];
+    var seen = Object.create(null), ids = [];
+    value.forEach(function (item) {
+      var id = String(item == null ? '' : item).trim();
+      if (id && !seen[id]) { seen[id] = true; ids.push(id); }
+    });
+    return ids;
+  }
+  function getSavedHotels() {
+    var ids = normalizeSavedIds(read(K.SAVED_HOTELS, null));
+    if (ids.length) return ids;
+    var aliases = ['kas_savedHotels', 'kas_saved_hotels_v1', 'kas-saved-hotels'];
+    for (var i = 0; i < aliases.length; i++) {
+      var legacy = normalizeSavedIds(read(aliases[i], null));
+      if (legacy.length) { write(K.SAVED_HOTELS, legacy); return legacy; }
+    }
+    return ids;
+  }
+  function notifySavedHotels() {
+    try { global.dispatchEvent(new CustomEvent('kas:saved-hotels-changed', { detail: { ids: getSavedHotels() } })); } catch (e) {}
+  }
+  function isHotelSaved(id) { return getSavedHotels().indexOf(String(id)) >= 0; }
+  function toggleSavedHotel(id) {
+    var key = String(id), all = getSavedHotels(), i = all.indexOf(key);
+    if (i >= 0) all.splice(i, 1); else all.unshift(key);
+    write(K.SAVED_HOTELS, all);
+    notifySavedHotels();
+    return i < 0;
+  }
+  function removeSavedHotel(id) {
+    var key = String(id);
+    write(K.SAVED_HOTELS, getSavedHotels().filter(function (x) { return x !== key; }));
+    notifySavedHotels();
+  }
+
   global.Store = {
     KEYS: K,
     getBookings: getBookings, saveBooking: saveBooking, findBooking: findBooking,
@@ -116,6 +155,7 @@
     generateBookingNumber: generateBookingNumber,
     getSearch: getSearch, setSearch: setSearch,
     getCurrent: getCurrent, setCurrent: setCurrent, patchCurrent: patchCurrent, clearCurrent: clearCurrent,
-    getGuest: getGuest, setGuest: setGuest
+    getGuest: getGuest, setGuest: setGuest,
+    getSavedHotels: getSavedHotels, isHotelSaved: isHotelSaved, toggleSavedHotel: toggleSavedHotel, removeSavedHotel: removeSavedHotel
   };
 })(window);

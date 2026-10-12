@@ -208,3 +208,41 @@ body.cg-night{
   .cg-night .cg-grid{grid-template-columns:1fr}
   .cg-night .cg-card{min-height:280px}
 }
+
+
+/* KAS City Guide — keep category tags visible while scrolling. */
+.cg-nav{position:sticky;top:76px;z-index:45;display:flex;align-items:center;gap:8px;flex-wrap:nowrap;overflow-x:auto;overscroll-behavior-x:contain;margin:0 -28px 68px;padding:12px 28px;background:rgba(247,244,238,.97);border-bottom:1px solid var(--cg-line);backdrop-filter:blur(14px);scrollbar-width:thin}
+.cg-nav a{flex:0 0 auto;white-space:nowrap;text-decoration:none;color:var(--cg-black)}
+.cg-section{scroll-margin-top:156px}
+@media(max-width:760px){.cg-nav{top:64px;margin:0 -18px 42px;padding:9px 18px;gap:7px}.cg-nav a{padding:10px 12px;font-size:8px}.cg-section{scroll-margin-top:128px}}
+
+
+/* KAS CITY GUIDE — sticky breadcrumb replacing section buttons */
+.cg-main{padding-top:0}
+.cg-breadcrumb{position:sticky;top:76px;z-index:40;display:flex;align-items:center;gap:13px;min-height:60px;width:100vw;margin-left:calc(50% - 50vw);margin-bottom:48px;padding:16px max(28px,calc((100vw - 1320px)/2));background:rgba(248,246,240,.97);border-bottom:1px solid var(--cg-line);backdrop-filter:blur(12px);font-family:Inter,Arial,sans-serif;font-size:13px;letter-spacing:0;color:#80786c}
+.cg-breadcrumb a{color:#80786c;text-decoration:none;transition:color .2s}
+.cg-breadcrumb a:hover{color:var(--cg-black)}
+.cg-breadcrumb span[aria-hidden="true"]{color:#b9ad9b;font-size:19px;line-height:1}
+.cg-breadcrumb [aria-current="page"]{color:#28251f}
+@media(max-width:640px){.cg-breadcrumb{top:64px;min-height:54px;gap:9px;padding:14px 20px;margin-bottom:36px;font-size:12px}.cg-main{padding-left:20px;padding-right:20px}}
+
+
+/* KAS CITY GUIDE — breadcrumb left, category tags retained on the right */
+.cg-breadcrumbbar{position:sticky;top:76px;z-index:45;display:flex;align-items:center;justify-content:space-between;gap:24px;width:100vw;margin-left:calc(50% - 50vw);margin-bottom:48px;padding:0 max(28px,calc((100vw - 1320px)/2));background:rgba(248,246,240,.97);border-bottom:1px solid var(--cg-line);backdrop-filter:blur(12px)}
+.cg-breadcrumbbar .cg-breadcrumb{position:static;flex:0 0 auto;width:auto;min-height:60px;margin:0;padding:12px 0;background:transparent;border:0;backdrop-filter:none;white-space:nowrap}
+.cg-breadcrumbbar .cg-nav{position:static;display:flex;align-items:center;justify-content:flex-end;gap:10px;flex:1 1 auto;min-width:0;overflow-x:auto;overflow-y:hidden;margin:0;padding:12px 0;background:transparent;border:0;backdrop-filter:none;scrollbar-width:thin}
+.cg-breadcrumbbar .cg-nav a{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;white-space:nowrap;padding:15px 18px;border:1px solid var(--cg-line);background:transparent;color:var(--cg-black);font-family:Inter,Arial,sans-serif;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;text-decoration:none;transition:background .2s,border-color .2s,color .2s}
+.cg-breadcrumbbar .cg-nav a:hover,.cg-breadcrumbbar .cg-nav a:focus-visible{border-color:var(--cg-gold);background:rgba(194,162,92,.08);color:var(--cg-black)}
+.cg-section{scroll-margin-top:160px}
+@media(max-width:900px){.cg-breadcrumbbar{align-items:stretch;flex-direction:column;gap:0;padding:0 22px}.cg-breadcrumbbar .cg-breadcrumb{min-height:46px;padding:12px 0 6px}.cg-breadcrumbbar .cg-nav{justify-content:flex-start;padding:6px 0 12px;gap:7px}.cg-breadcrumbbar .cg-nav a{padding:11px 12px;font-size:9px;letter-spacing:1px}.cg-section{scroll-margin-top:190px}}
+@media(max-width:640px){.cg-breadcrumbbar{top:64px;margin-bottom:36px;padding:0 20px}.cg-breadcrumbbar .cg-breadcrumb{font-size:12px;min-height:42px}.cg-breadcrumbbar .cg-nav{margin:0;padding:6px 0 10px}.cg-breadcrumbbar .cg-nav a{font-size:8px;padding:10px 11px}.cg-section{scroll-margin-top:180px}}
+
+
+/* V28 — selected City Guide category tag state (VI + EN). */
+.cg-breadcrumbbar .cg-nav a.active,
+.cg-breadcrumbbar .cg-nav a[aria-current="location"]{
+  color:#171510;background:var(--cg-gold,#c2a25c);border-color:var(--cg-gold,#c2a25c);
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.12);
+}
+.cg-breadcrumbbar .cg-nav a.active:hover,
+.cg-breadcrumbbar .cg-nav a[aria-current="location"]:hover{color:#171510;background:#cfb273;border-color:#cfb273}

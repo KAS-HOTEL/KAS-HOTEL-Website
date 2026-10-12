@@ -177,9 +177,31 @@ body{background:#f4f0e8;color:#24211d;}
   });
 })();
 </script>
-<script src="js/site-images.js" defer></script><script src="js/kas-guide-language.js" defer></script></head><body><main class="wrap">
-<div class="top"><div class="brand">KAS HOTEL COLLECTION</div><div class="guide-mark">CITY GUIDEBOOK · SAIGON</div><div class="top-actions"><a class="back" href="city-guide.html">← CITY GUIDE</a><div class="lang-switch"><a class="active" data-kas-lang="en" href="city-guidebook.html">EN</a><a data-kas-lang="vi" href="city-guidebook-vi.html">VI</a></div></div></div>
-<div class="guide-nav-wrap"><nav class="toc"><a href="#city">Central Saigon</a><a href="#taste">Food &amp; Local Life</a><a href="#slow">Walk &amp; Discover</a><a href="#night">After Dark</a></nav></div>
+<script src="js/site-images.js" defer></script><script src="js/kas-guide-language.js" defer></script><style id="kas-guidebook-back-link-cleanup-v1">
+/* Guidebook: render the return action as a compact text link, not a boxed button. */
+.top-actions .back{display:inline-flex;align-items:center;gap:5px;padding:0;border:0!important;background:transparent!important;color:var(--muted);font-size:10px;letter-spacing:.12em;text-decoration:none;white-space:nowrap;transition:color .2s}
+.top-actions .back:hover{background:transparent!important;border-color:transparent!important;color:var(--ink)}
+@media(max-width:600px){.top-actions .back{display:inline-flex;font-size:8px;padding:0}.top-actions .back:before{content:none}}
+</style>
+<style id="kas-guidebook-sticky-breadcrumb-v1">
+/* Sticky guidebook chrome: keep the main header and section navigation visible together. */
+.top{position:sticky!important;top:0!important;z-index:80!important;height:68px;min-height:68px;background:rgba(250,247,241,.97)!important;backdrop-filter:blur(16px);}
+.guide-nav-wrap{position:sticky!important;top:68px!important;z-index:75!important;display:flex;align-items:center;justify-content:space-between;gap:18px;margin:0 -32px;padding:10px 32px!important;background:rgba(247,244,238,.97)!important;backdrop-filter:blur(16px);border-bottom:1px solid rgba(211,204,193,.95);box-shadow:0 7px 18px rgba(45,36,27,.035)}
+.guide-breadcrumb{display:flex;align-items:center;gap:10px;flex:0 0 auto;white-space:nowrap;font-size:11px;letter-spacing:.015em;color:var(--muted)}
+.guide-breadcrumb a{text-decoration:none;transition:color .2s ease}
+.guide-breadcrumb a:hover{color:var(--ink);text-decoration:underline;text-underline-offset:4px}
+.guide-breadcrumb span{color:#b2a99c;font-size:15px}
+.guide-breadcrumb .current{color:var(--ink);font-weight:500}
+.guide-nav-wrap .toc{position:static!important;display:flex;align-items:center;justify-content:flex-end;gap:7px;min-width:0;padding:0!important;margin:0!important;background:transparent!important;border:0!important;overflow:visible}
+.guide-nav-wrap .toc a{white-space:nowrap;flex:0 0 auto}
+.entry,[id="city"],[id="taste"],[id="slow"],[id="night"]{scroll-margin-top:126px!important}
+@media(max-width:1100px){.guide-nav-wrap{gap:12px}.guide-breadcrumb{font-size:10px;gap:7px}.guide-nav-wrap .toc a{padding:8px 9px;font-size:8px;letter-spacing:.08em}}
+@media(max-width:760px){.top{top:0!important;height:auto;min-height:62px;grid-template-columns:1fr auto;padding:8px 12px}.guide-nav-wrap{top:62px!important;display:flex;flex-direction:column;align-items:stretch;gap:8px;margin:0 -18px;padding:8px 18px!important;overflow:hidden}.guide-breadcrumb{font-size:10px;gap:7px}.guide-nav-wrap .toc{width:100%;justify-content:flex-start;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap;padding-bottom:2px!important;scrollbar-width:thin}.guide-nav-wrap .toc a{font-size:8px;padding:8px 10px}.entry,[id="city"],[id="taste"],[id="slow"],[id="night"]{scroll-margin-top:142px!important}}
+@media(max-width:430px){.guide-mark{display:none}.top{grid-template-columns:1fr auto}.guide-breadcrumb{font-size:9px}.guide-nav-wrap .toc a{font-size:7px;letter-spacing:.06em}}
+</style>
+</head><body><main class="wrap">
+<div class="top"><div class="brand">KAS HOTEL COLLECTION</div><div class="guide-mark">CITY GUIDEBOOK · SAIGON</div><div class="top-actions"><div class="lang-switch"><a class="active" data-kas-lang="en" href="city-guidebook.html">EN</a><a data-kas-lang="vi" href="city-guidebook-vi.html">VI</a></div></div></div>
+<div class="guide-nav-wrap"><nav class="guide-breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a><span>›</span><a href="city-guide.html">City Guide</a><span>›</span><a class="current" href="#ben-thanh-market" aria-current="page">Ben Thanh</a></nav></div>
 <div id="city" style="scroll-margin-top:90px"></div>
 <div id="city" style="scroll-margin-top:20px"></div>
 <article class="entry" id="ben-thanh-market">

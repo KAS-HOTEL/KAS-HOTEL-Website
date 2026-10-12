@@ -50,7 +50,8 @@
   <a href="#secCollection"><span class="sideIcon">02</span><span><b>KAS Collection</b><small>Ảnh đại diện theo chi nhánh</small></span></a>
   <a href="#secHome"><span class="sideIcon">03</span><span><b>Trang chủ · Nội dung</b><small>A Day in Saigon & Bốn câu chuyện khu phố</small></span></a>
   <div class="sideLabel">TRANG NỘI DUNG</div>
-  <a href="#secPageHero"><span class="sideIcon">03</span><span><b>Ảnh Hero các trang</b><small>Trải nghiệm · Ưu đãi · My KAS · Khách sạn · Về KAS · Hỗ trợ</small></span></a>
+  <a href="#secPageHero"><span class="sideIcon">03</span><span><b>Ảnh Hero các trang</b><small>Trải nghiệm · Ưu đãi · My KAS · Về KAS · Hỗ trợ</small></span></a>
+  <a href="#secFindZero"><span class="sideIcon">03B</span><span><b>Find Your KAS · Ảnh Zero</b><small>Ảnh chính & ảnh nổi trên Hero</small></span></a>
   <a href="#secWelcomePopup"><span class="sideIcon">03A</span><span><b>Welcome Popup</b><small>Chỉnh ảnh cửa sổ chào mừng</small></span></a>
   <div class="sideLabel">LƯU TRÚ</div>
   <a href="#secHotels"><span class="sideIcon">04</span><span><b>Khách sạn · Gallery</b><small>Ảnh & danh mục theo khách sạn</small></span></a>
@@ -68,6 +69,7 @@
   <div class="sectionTop"><div><div class="sectionEyebrow">WEBSITE STRUCTURE · PAGE MAP</div><h2>Section thực tế trên website</h2><div class="note">Đối chiếu theo các trang HTML và nguồn ảnh đang được gọi trong bản hiện tại. “Đã kết nối” là có luồng Admin/API hiện hữu; “Theo dõi nguồn” chỉ cung cấp đường dẫn chính xác, chưa tự tạo chức năng ghi dữ liệu.</div></div></div>
   <div class="pageMap">
     <article class="pageMapCard"><h3>Trang chủ</h3><p>Hero slideshow, Neighborhoods và A day in Saigon.</p><a href="index.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>homeHero.* · home.* · assets/home/a-day-in-saigon.jpg</code></article>
+    <article class="pageMapCard"><h3>Find Your KAS</h3><p>Hero Zero gồm ảnh nền lớn và ảnh nổi; thay từng ảnh riêng trong Admin.</p><a href="find-your-kas.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>find.zero.main · find.zero.card</code></article>
     <article class="pageMapCard"><h3>Khách sạn</h3><p>Danh sách khách sạn, ảnh Collection, gallery chi tiết và hạng phòng.</p><a href="hotels.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Đã kết nối Admin</span><code>collection[hotelId] · property[hotelId] · rooms[roomKey] · page.hero.hotels</code></article>
     <article class="pageMapCard"><h3>Trải nghiệm</h3><p>Các khối Dining, Rooftop, Wellness, Local experiences và Transfer.</p><a href="experiences.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
     <article class="pageMapCard"><h3>Ưu đãi</h3><p>Trang Offers & Member Benefits.</p><a href="offers.html" target="_blank" rel="noopener">Mở trang ↗</a><span class="mapState">Theo dõi nguồn · chưa có API nội dung riêng</span><code>css/components.css → ../assets/home/a-day-in-saigon.jpg</code></article>
@@ -84,8 +86,13 @@
 </section>
 
 <section class="panel adminSection" id="secPageHero">
-  <div class="sectionTop"><div><div class="sectionEyebrow">CONTENT PAGES · HERO MEDIA</div><h2>Ảnh Hero các trang</h2><div class="note">Quản lý riêng ảnh đầu trang của Trải nghiệm, Ưu đãi, My KAS, Khách sạn, Về KAS và Hỗ trợ. Mỗi vị trí có key độc lập; không tác động dữ liệu booking, giá hoặc gallery khách sạn.</div></div><span class="galleryCount">6 vị trí</span></div>
+  <div class="sectionTop"><div><div class="sectionEyebrow">CONTENT PAGES · HERO MEDIA</div><h2>Ảnh Hero các trang</h2><div class="note">Quản lý riêng ảnh đầu trang của Trải nghiệm, Ưu đãi, My KAS, Khách sạn, Về KAS và Hỗ trợ. Mỗi vị trí có key độc lập; không tác động dữ liệu booking, giá hoặc gallery khách sạn.</div></div><span class="galleryCount">5 vị trí</span></div>
   <div class="siteGrid" id="pageHeroImages"></div>
+</section>
+
+<section class="panel adminSection" id="secFindZero">
+  <div class="sectionTop"><div><div class="sectionEyebrow">FIND YOUR KAS · ZERO HERO</div><h2>Find Your KAS · Ảnh Zero</h2><div class="note">Quản lý độc lập cả hai ảnh Zero trên trang Find Your KAS: (1) ảnh nền lớn, (2) ảnh nhỏ nổi ở góc. Có xem trước ảnh mặc định, upload JPG/PNG/WEBP hoặc thêm URL HTTPS. Xóa ảnh ghi đè để quay lại ảnh mặc định. Chỉ tác động hai vị trí này, không thay đổi Hero trang chủ hay ảnh khách sạn.</div></div><span class="galleryCount">2 vị trí</span></div>
+  <div class="siteGrid" id="findYourKasImages"></div>
 </section>
 
 <section class="panel adminSection" id="secWelcomePopup">

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0E0D0B"><title>KAS — City Guide</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/city-guide.css"><script src="js/kas-guide-language.js" defer></script><script src="js/site-images.js" defer></script></head><body id="top"><div class="cg-shell"><header class="cg-top"><div class="cg-top__in"><a class="cg-brand" href="index.html">KAS HOTEL COLLECTION</a><div class="cg-top__right"><a class="cg-back" href="index.html">Back to KAS</a><div class="cg-lang"><a class="active" data-kas-lang="en" href="city-guide.html">EN</a><span> / </span><a data-kas-lang="vi" href="city-guide-vi.html">VI</a></div></div></div></header><main class="cg-main"><nav aria-label="Guide sections" class="cg-nav"><a href="#city">Start with the city</a><a href="#taste">Eat your way through the city</a><a href="#slow">Leave room for wandering</a><a href="#night">After dark</a></nav><section class="cg-section" id="city">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0E0D0B"><title>KAS — City Guide</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/city-guide.css"><script src="js/kas-guide-language.js" defer></script><script src="js/site-images.js" defer></script></head><body id="top"><div class="cg-shell"><header class="cg-top"><div class="cg-top__in"><a class="cg-brand" href="index.html">KAS HOTEL COLLECTION</a><div class="cg-top__right"><a class="cg-back" href="index.html">Back to KAS</a><div class="cg-lang"><a class="active" data-kas-lang="en" href="city-guide.html">EN</a><span> / </span><a data-kas-lang="vi" href="city-guide-vi.html">VI</a></div></div></div></header><main class="cg-main"><div class="cg-breadcrumbbar"><nav aria-label="Breadcrumb" class="cg-breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">›</span><span aria-current="page">City Guide</span></nav><nav aria-label="City Guide sections" class="cg-nav"><a href="#city">Central Saigon</a><a href="#taste">Food &amp; Everyday Life</a><a href="#slow">Walks &amp; Discovery</a><a href="#night">After Dark</a></nav></div><section class="cg-section" id="city">
 <div class="cg-section__head"><div><div class="cg-eyebrow">01 / Central Saigon</div><h2>Start with the city.</h2><p>For guests who want the classic centre of Ho Chi Minh City: history, architecture, parks, markets and the main civic landmarks.</p></div>
 <div class="cg-stay"><div class="cg-eyebrow">Stay nearby</div>
 <div class="cg-hotel"><strong>KAS Passion Boutique</strong>05 Trương Định</div>
@@ -106,4 +106,32 @@
 <a aria-label="Open guide: Late-night Vietnamese Food" class="cg-card" href="city-guidebook.html#late-night-food" style="--cg-bg:url('https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82')">
 <span class="cg-card__num">10</span><span class="cg-card__arrow">↗</span><div class="cg-card__copy"><h3>Late-night Vietnamese Food</h3><p>Finish the night with something simple, local and close to the streets you have just walked.</p></div></a>
 </div><div class="cg-note">Distances are approximate walking distances from the two KAS hotels shown above. Route distance and travel time can vary with traffic, crossings and the exact entrance used.</div></section>
-<footer class="cg-footer"><a href="index.html">KAS HOTEL COLLECTION</a><a href="#top">Back to top ↑</a></footer></main></div></body></html>
+<footer class="cg-footer"><a href="index.html">KAS HOTEL COLLECTION</a><a href="#top">Back to top ↑</a></footer></main></div><script>
+/* V28 — keep the selected City Guide section tag in sync with navigation and scrolling. */
+(function(){
+  var bar=document.querySelector('.cg-breadcrumbbar');
+  if(!bar)return;
+  var links=Array.prototype.slice.call(bar.querySelectorAll('.cg-nav a[href^="#"]'));
+  if(!links.length)return;
+  function setActive(id){
+    links.forEach(function(link){
+      var active=link.getAttribute('href')==='#'+id;
+      link.classList.toggle('active',active);
+      if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current');
+    });
+  }
+  links.forEach(function(link){link.addEventListener('click',function(){setActive(link.getAttribute('href').slice(1));});});
+  function syncHash(){var id=(window.location.hash||'#city').slice(1);if(links.some(function(link){return link.getAttribute('href')==='#'+id;}))setActive(id);}
+  window.addEventListener('hashchange',syncHash);
+  syncHash();
+  if('IntersectionObserver' in window){
+    var sections=links.map(function(link){return document.getElementById(link.getAttribute('href').slice(1));}).filter(Boolean);
+    var observer=new IntersectionObserver(function(entries){
+      var visible=entries.filter(function(entry){return entry.isIntersecting;}).sort(function(a,b){return a.boundingClientRect.top-b.boundingClientRect.top;});
+      if(visible.length)setActive(visible[0].target.id);
+    },{root:null,rootMargin:'-22% 0px -62% 0px',threshold:[0,0.1,0.25]});
+    sections.forEach(function(section){observer.observe(section);});
+  }
+})();
+</script>
+</body></html>

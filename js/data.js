@@ -753,14 +753,19 @@
        widget reads from here. No component may hard-code a number or link.
        ------------------------------------------------------------------ */
     contact: {
-      phone:        '+84 968 694 864',
+      phone:        '0968694864',
       displayPhone: '+84 968 694 864',
-      tel:          'tel:+84869768885',
+      tel:          'tel:+84968694864',
       zalo:         'https://zalo.me/0869768885',
       whatsapp:     'https://wa.me/84869768885',
       email:        'kashotelpremium@gmail.com',
       hqAddress:    '170–174 Nguyen Thai Binh, District 1, Ho Chi Minh City',
       hours:        '24/7',
+      reservationPhones: [
+        { displayPhone: '+84 774 714 892', tel: 'tel:+84774714892' },
+        { displayPhone: '+84 869 768 885', tel: 'tel:+84869768885' },
+        { displayPhone: '+84 979 656 791', tel: 'tel:+84979656791' }
+      ],
       travelTrade: {
         displayPhone: '+84 968 694 864',
         tel: 'tel:+84968694864',

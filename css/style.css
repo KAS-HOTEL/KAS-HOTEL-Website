@@ -375,6 +375,7 @@ h1,h2,h3,h4,h5,h6,.hero h1{
   white-space:nowrap;
 }
 .ftr--dark .ftr-contact-row svg{color:#c2a25c;flex:0 0 auto}
+.ftr--dark .ftr-contact-address{display:flex;align-items:flex-start;gap:10px;margin:12px 0 0;color:rgba(245,239,227,.72);font-size:.76rem;line-height:1.55;white-space:normal}.ftr--dark .ftr-contact-address svg{color:#c2a25c;flex:0 0 auto;margin-top:2px}
 .ftr--dark .ftr__news p{
   margin:0;
   color:rgba(245,239,227,.72);
@@ -399,3 +400,53 @@ h1,h2,h3,h4,h5,h6,.hero h1{
 }
 .ftr--dark .ftr__btm a{color:rgba(194,162,92,.65)}
 .ftr--dark .ftr__btm a:hover{color:#f5efe3}
+
+/* Booking-flow pages: keep the shared navigation in document flow so it cannot
+   cover the breadcrumb or the five-step booking progress bar. Other pages retain
+   their existing transparent/overlay navigation behaviour. */
+body:has(#steps) #hdr.hdr--float {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  z-index: 900;
+  background: #0d0d0d;
+  border-bottom-color: rgba(194,162,92,.16);
+  box-shadow: 0 2px 24px rgba(0,0,0,.18);
+}
+body:has(#steps) #hdr.hdr--float.header--transparent {
+  background: #0d0d0d;
+}
+
+
+/* Booking flow: keep the five-step progress bar accessible while scrolling.
+   The main site navigation stays in normal flow on booking pages, so this
+   sticky bar takes over only after the navigation/breadcrumb scroll away. */
+body:has(#steps) #steps.steps {
+  position: sticky;
+  top: 0;
+  z-index: 850;
+  background: var(--surface, #f5f0e7);
+  box-shadow: 0 5px 16px rgba(25, 22, 16, .07);
+}
+
+/* Plain text back link, matching the hotel detail breadcrumb treatment. */
+.booking-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tx-2);
+  font-size: .92rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color var(--t);
+}
+.booking-back-link:hover {
+  color: var(--gold-dk);
+}
+.booking-back-link svg {
+  flex: 0 0 auto;
+}

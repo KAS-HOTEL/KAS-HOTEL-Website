@@ -6,7 +6,7 @@
    hard-coded in a component.
 
    Official contact:
-     phone     0869 768 885   ->  tel:84968694864
+     phone     0869 768 885   ->  tel:+84869768885
      Zalo      https://zalo.me/0869768885
      WhatsApp  https://wa.me/84869768885
    ========================================================================= */
@@ -68,9 +68,20 @@
 
   /** Compact row for the site header. */
   function headerBlock() {
-    return '<a class="hdr__tel" href="' + C.tel + '" aria-label="Call KAS on ' +
-      C.displayPhone + '">' + U.icon('phone', 15) +
-      '<span>' + U.esc(C.displayPhone) + '</span></a>';
+    return '<div class="contact-control"><button class="hdr__tel contact-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="kasContactPopover">' +
+      U.icon('phone', 15) + '<span>CONTACT</span></button>' +
+      '<div class="contact-popover" id="kasContactPopover" role="dialog" aria-label="Contact KAS" hidden>' +
+        '<section class="contact-popover__card"><div class="contact-popover__icon">' + U.icon('users', 21) + '</div>' +
+          '<div class="contact-popover__body"><h3 data-contact-label="partners">Travel Partners<br>and Corporate Partners</h3>' +
+            '<a href="tel:+84968694864">' + U.icon('phone', 13) + '<span>+84 968 694 864</span></a></div>' +
+          '<span class="contact-popover__arrow">›</span></section>' +
+        '<section class="contact-popover__card"><div class="contact-popover__icon">' + U.icon('bed-double', 21) + '</div>' +
+          '<div class="contact-popover__body"><h3 data-contact-label="reservations">Room Reservations / Sales</h3>' +
+            '<a href="tel:+84774714892">' + U.icon('phone', 13) + '<span>+84 774 714 892</span></a>' +
+            '<a href="tel:+84869768885">' + U.icon('phone', 13) + '<span>+84 869 768 885</span></a>' +
+            '<a href="tel:+84979656791">' + U.icon('phone', 13) + '<span>+84 979 656 791</span></a></div>' +
+          '<span class="contact-popover__arrow">›</span></section>' +
+      '</div></div>';
   }
 
   /** Three-channel support block — used in booking sidebars and panels. */

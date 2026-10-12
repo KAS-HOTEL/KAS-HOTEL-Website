@@ -36,6 +36,7 @@
     'Sign in / Join':'Đăng nhập / Tham gia','Find your stay':'Tìm nơi lưu trú',
     'Manage booking':'Quản lý đặt phòng','Manage a booking':'Quản lý đặt phòng',
     'Contact & support':'Liên hệ & hỗ trợ','Travel Trade':'Đối tác du lịch',
+    'Travel Partners & Corporate Partners':'Đối tác du lịch & doanh nghiệp','Room Reservations / Sales':'Đặt phòng / Kinh doanh',
     'For travel agencies, tour operators and trade enquiries.':'Dành cho đại lý du lịch, công ty lữ hành và các yêu cầu hợp tác.',
     'Chat on Zalo':'Chat trên Zalo','Chat on WhatsApp':'Chat trên WhatsApp',
     'Stay in the know':'Đừng bỏ lỡ thông tin','Exclusive offers and updates, delivered to you.':'Ưu đãi và thông tin mới nhất được gửi đến bạn.',

@@ -1304,3 +1304,423 @@ body.home-redesign{overflow-x:hidden}
   .split__side #assist .ct-ch b{font-size:.74rem}
   .split__side #assist .ct-ch small{font-size:.66rem}
 }
+
+
+/* KAS header: Vietnamese desktop layout stays on one line.
+   Keep the change scoped to wide screens; mobile/tablet navigation is unchanged. */
+@media (min-width:1200px){
+  .hdr__in{
+    gap:14px;
+    flex-wrap:nowrap;
+  }
+  .hdr__in > .logo{
+    flex:0 0 auto;
+  }
+  .hdr__in > .nav{
+    flex:1 1 auto;
+    min-width:0;
+    justify-content:space-evenly;
+    gap:clamp(8px, .85vw, 16px);
+  }
+  .hdr__in > .nav a{
+    white-space:nowrap;
+    font-size:.64rem;
+    letter-spacing:.09em;
+  }
+  .hdr__right{
+    flex:0 0 auto;
+    gap:8px;
+  }
+  .hdr__tel{
+    gap:5px;
+    padding:7px 9px;
+    font-size:.74rem;
+  }
+  .lang-button{
+    padding-inline:10px;
+  }
+  .hdr__right > .btn--gold{
+    padding:9px 14px;
+    font-size:.62rem;
+    letter-spacing:.09em;
+    white-space:nowrap;
+  }
+}
+
+/* Compact desktop widths: reduce spacing before the layout reaches tablet mode. */
+@media (min-width:1025px) and (max-width:1199px){
+  .hdr__in{gap:10px}
+  .hdr__in > .nav{gap:10px}
+  .hdr__in > .nav a{
+    white-space:nowrap;
+    font-size:.59rem;
+    letter-spacing:.06em;
+  }
+  .hdr__right{gap:6px}
+  .hdr__tel{padding:7px;font-size:.69rem}
+  .hdr__right > .btn--gold{
+    padding:8px 10px;
+    font-size:.57rem;
+    letter-spacing:.05em;
+    white-space:nowrap;
+  }
+}
+
+
+/* Shared homepage navigation scale across all site pages */
+@media (min-width:1200px){
+  .hdr.hdr--float .hdr__in{width:min(1320px,calc(100vw - 64px));max-width:1320px;gap:24px}
+  .hdr.hdr--float .logo img{width:180px!important;max-width:42vw!important;height:auto!important}
+  .hdr.hdr--float .nav{gap:26px}
+  .hdr.hdr--float .nav a{font-size:.71rem;letter-spacing:.15em}
+  .hdr.hdr--float .hdr__right{gap:16px}
+}
+.hdr.hdr--float .hdr__right .contact-trigger{background:rgba(20,18,15,.72);border-color:rgba(194,162,92,.48);font-size:.71rem;padding-inline:16px}
+@media (max-width:700px){
+  .hdr.hdr--float .hdr__right .contact-trigger{min-height:36px;padding:0 9px;gap:5px;font-size:.6rem}
+  .contact-popover{right:0;top:calc(100% + 8px);width:min(480px,calc(100vw - 20px))}
+  .contact-popover:before{right:22px}
+}
+
+
+/* Contact popup: compact to its content and viewport-safe on every header layout. */
+.contact-popover{width:min(390px,calc(100vw - 28px));max-height:calc(100vh - 110px);overflow-y:auto;overscroll-behavior:contain}
+.contact-popover:before{right:24px}
+@media(max-width:700px){.contact-popover{width:min(350px,calc(100vw - 20px));padding:7px}.contact-popover__card{grid-template-columns:32px minmax(0,1fr) 10px;gap:8px;padding:10px 8px}.contact-popover__icon{width:30px;height:30px}.contact-popover__body h3{font-size:.7rem}.contact-popover__body a{font-size:.7rem}}
+
+
+/* Contact popover — compact, viewport-safe mobile layout. Position is calculated
+   from the trigger button by app.js so the panel cannot be clipped off-screen. */
+.contact-popover{width:min(360px,calc(100vw - 28px));max-width:calc(100vw - 24px);box-sizing:border-box}
+.contact-popover:before{right:24px;left:auto}
+@media(max-width:700px){
+  .contact-popover{width:276px;max-width:calc(100vw - 24px);padding:6px;max-height:calc(100dvh - 96px);overflow-y:auto}
+  .contact-popover:before{right:auto;left:var(--contact-arrow-left, calc(100% - 24px))}
+  .contact-popover__card{grid-template-columns:28px minmax(0,1fr) 9px;gap:7px;padding:9px 7px}
+  .contact-popover__card+.contact-popover__card{margin-top:6px}
+  .contact-popover__icon{width:27px;height:27px}
+  .contact-popover__icon svg{width:17px;height:17px}
+  .contact-popover__body h3{font-size:.67rem;line-height:1.35;margin:0 0 6px}
+  .contact-popover__body a{font-size:.67rem;gap:5px;margin-top:5px;white-space:normal;overflow-wrap:anywhere}
+  .contact-popover__body a svg{width:12px;height:12px}
+  .contact-popover__arrow{font-size:1.1rem}
+}
+@media(max-width:360px){
+  .contact-popover{width:calc(100vw - 24px);padding:5px}
+  .contact-popover__card{grid-template-columns:25px minmax(0,1fr) 8px;gap:6px;padding:8px 6px}
+  .contact-popover__body h3,.contact-popover__body a{font-size:.63rem}
+}
+
+
+/* Contact popup: use the available viewport width with a 5px side gutter. */
+@media (max-width:700px){
+  .contact-popover{
+    width:calc(100vw - 10px);
+    max-width:calc(100vw - 10px);
+    box-sizing:border-box;
+  }
+  .contact-popover:before{left:var(--contact-arrow-left,50%);right:auto}
+}
+@media (max-width:360px){
+  .contact-popover__card{grid-template-columns:25px minmax(0,1fr) 8px}
+  .contact-popover__body a{white-space:normal;overflow-wrap:anywhere}
+}
+
+
+/* KAS desktop navigation refinement — intentionally scoped away from mobile.
+   Keeps the account slot stable across signed-out / signed-in states and
+   preserves the existing Contact/language popup interaction in app.js. */
+@media (min-width:1200px){
+  .hdr.hdr--float .hdr__in{
+    width:min(1240px,calc(100vw - 48px));
+    max-width:1240px;
+    gap:14px;
+  }
+  .hdr.hdr--float .hdr__in > .logo{flex:0 0 auto}
+  .hdr.hdr--float .hdr__in > .logo img{
+    width:150px!important;
+    max-width:34vw!important;
+    height:auto!important;
+  }
+  .hdr.hdr--float .nav{
+    flex:1 1 auto;
+    min-width:0;
+    justify-content:space-between;
+    gap:clamp(10px,1.05vw,17px);
+  }
+  .hdr.hdr--float .nav a{
+    font-size:.65rem;
+    letter-spacing:.095em;
+    white-space:nowrap;
+  }
+  .hdr.hdr--float .hdr__right{
+    flex:0 0 auto;
+    gap:7px;
+  }
+  .hdr.hdr--float .hdr__right .contact-trigger{
+    min-height:40px;
+    padding-inline:9px;
+    gap:5px;
+    font-size:.64rem;
+    letter-spacing:.055em;
+  }
+  .hdr.hdr--float .lang-button{
+    min-height:38px;
+    padding-inline:7px;
+    gap:5px;
+  }
+  #hdr .hdr__right > .js-kas-auth,
+  #hdr .hdr__right > .kas-user-menu{
+    flex:0 0 148px;
+    width:148px;
+    min-width:148px;
+    box-sizing:border-box;
+  }
+  #hdr .hdr__right > .js-kas-auth{
+    padding:7px 9px;
+    font-size:.57rem;
+    letter-spacing:.055em;
+    white-space:nowrap;
+  }
+  #hdr .kas-user-menu{width:148px;justify-content:flex-end}
+  #hdr .kas-member-trigger{gap:7px}
+  #hdr .kas-member-trigger .kas-avatar{flex-basis:36px}
+  #hdr .kas-member-trigger__name{max-width:105px;font-size:.72rem}
+}
+@media (min-width:1025px) and (max-width:1199px){
+  .hdr.hdr--float .hdr__in{gap:9px}
+  .hdr.hdr--float .hdr__in > .logo img{
+    width:132px!important;
+    max-width:28vw!important;
+    height:auto!important;
+  }
+  .hdr.hdr--float .nav{gap:clamp(7px,.8vw,11px)}
+  .hdr.hdr--float .nav a{font-size:.57rem;letter-spacing:.045em}
+  .hdr.hdr--float .hdr__right{gap:5px}
+  .hdr.hdr--float .hdr__right .contact-trigger{
+    min-height:36px;padding-inline:7px;gap:4px;font-size:.59rem;letter-spacing:.035em
+  }
+  .hdr.hdr--float .lang-button{min-height:34px;padding-inline:5px;gap:4px}
+  #hdr .hdr__right > .js-kas-auth,
+  #hdr .hdr__right > .kas-user-menu{
+    flex:0 0 132px;width:132px;min-width:132px;box-sizing:border-box
+  }
+  #hdr .hdr__right > .js-kas-auth{padding:7px 7px;font-size:.53rem;letter-spacing:.035em;white-space:nowrap}
+  #hdr .kas-user-menu{width:132px;justify-content:flex-end}
+  #hdr .kas-member-trigger{gap:5px}
+  #hdr .kas-member-trigger .kas-avatar{flex-basis:32px}
+  #hdr .kas-member-trigger__name{max-width:94px;font-size:.68rem}
+}
+
+
+/* KAS desktop header: prevent CONTACT, language and member avatar from shrinking. */
+@media (min-width:1025px){
+  .hdr.hdr--float .hdr__right{
+    display:flex;
+    align-items:center;
+    flex-shrink:0;
+    min-width:max-content;
+    gap:10px;
+  }
+  .hdr.hdr--float .hdr__right .contact-trigger{
+    flex:0 0 auto;
+    width:auto;
+    min-width:142px;
+    min-height:44px;
+    padding:0 14px;
+    white-space:nowrap;
+    justify-content:center;
+  }
+  .hdr.hdr--float .hdr__right .lang-button{
+    flex:0 0 auto;
+    width:auto;
+    min-width:96px;
+    min-height:42px;
+    padding:0 12px;
+    white-space:nowrap;
+    justify-content:center;
+  }
+  #hdr .hdr__right > .kas-user-menu{
+    flex:0 0 174px;
+    width:174px;
+    min-width:174px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+  }
+  #hdr .kas-user-menu .kas-member-trigger{
+    display:flex;
+    align-items:center;
+    flex:0 0 auto;
+    min-width:0;
+    gap:9px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger .kas-avatar{
+    flex:0 0 54px;
+    width:54px;
+    height:54px;
+    min-width:54px;
+    border-radius:50%;
+  }
+  #hdr .kas-user-menu .kas-member-trigger__name{
+    display:block;
+    flex:0 1 auto;
+    min-width:0;
+    max-width:110px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:.75rem;
+  }
+}
+@media (min-width:1025px) and (max-width:1199px){
+  .hdr.hdr--float .hdr__right{gap:6px}
+  .hdr.hdr--float .hdr__right .contact-trigger{min-width:118px;padding:0 8px}
+  .hdr.hdr--float .hdr__right .lang-button{min-width:76px;padding:0 7px}
+  #hdr .hdr__right > .kas-user-menu{flex-basis:140px;width:140px;min-width:140px}
+  #hdr .kas-user-menu .kas-member-trigger .kas-avatar{flex-basis:44px;width:44px;height:44px;min-width:44px}
+  #hdr .kas-user-menu .kas-member-trigger__name{max-width:86px;font-size:.67rem}
+}
+
+
+/* KAS desktop final refinement: compact CONTACT and preserve a true circular avatar.
+   Scoped to the shared desktop header; mobile navigation remains unchanged. */
+@media (min-width: 1025px) {
+  #hdr .hdr__right .contact-control {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+  }
+  #hdr .hdr__right .contact-trigger {
+    flex: 0 0 auto;
+    width: 164px;
+    min-width: 164px;
+    max-width: 164px;
+    min-height: 42px;
+    height: 42px;
+    padding: 0 10px;
+    gap: 7px;
+    font-size: .78rem;
+    letter-spacing: .025em;
+    box-sizing: border-box;
+  }
+  #hdr .hdr__right .contact-trigger svg {
+    width: 17px;
+    height: 17px;
+    flex: 0 0 17px;
+  }
+  #hdr .kas-user-menu {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    max-width: 184px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger {
+    display: inline-flex;
+    align-items: center;
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    gap: 9px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger .kas-avatar {
+    display: grid;
+    flex: 0 0 52px;
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    height: 52px;
+    min-height: 52px;
+    max-height: 52px;
+    aspect-ratio: 1 / 1;
+    box-sizing: border-box;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+}
+
+
+/* KAS desktop final balance — smaller CONTACT/language controls and avatar.
+   Shared header only; mobile navigation rules are intentionally untouched. */
+@media (min-width: 1025px) {
+  #hdr .hdr__right {
+    gap: 7px;
+  }
+  #hdr .hdr__right .contact-trigger {
+    width: 138px;
+    min-width: 138px;
+    max-width: 138px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 8px;
+    gap: 6px;
+    font-size: .70rem;
+    letter-spacing: .015em;
+  }
+  #hdr .hdr__right .contact-trigger svg {
+    width: 15px;
+    height: 15px;
+    flex-basis: 15px;
+  }
+  #hdr .hdr__right .lang-button {
+    min-width: 82px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0 8px;
+    gap: 5px;
+    font-size: .66rem;
+    letter-spacing: .04em;
+  }
+  #hdr .hdr__right .lang-current-flag,
+  #hdr .hdr__right .lang-flag-svg {
+    width: 16px;
+    height: 11px;
+    flex-basis: 16px;
+  }
+  #hdr .kas-user-menu {
+    max-width: 170px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger {
+    gap: 7px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger .kas-avatar {
+    flex: 0 0 42px;
+    width: 42px;
+    min-width: 42px;
+    max-width: 42px;
+    height: 42px;
+    min-height: 42px;
+    max-height: 42px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+  }
+  #hdr .kas-user-menu .kas-member-trigger__name {
+    max-width: 105px;
+    font-size: .68rem;
+    letter-spacing: 0;
+  }
+}
+@media (min-width: 1025px) and (max-width: 1199px) {
+  #hdr .hdr__right { gap: 5px; }
+  #hdr .hdr__right .contact-trigger {
+    width: 124px;
+    min-width: 124px;
+    max-width: 124px;
+    font-size: .64rem;
+  }
+  #hdr .hdr__right .lang-button {
+    min-width: 74px;
+    padding-inline: 6px;
+  }
+  #hdr .kas-user-menu .kas-member-trigger .kas-avatar {
+    flex-basis: 38px;
+    width: 38px;
+    min-width: 38px;
+    max-width: 38px;
+    height: 38px;
+    min-height: 38px;
+    max-height: 38px;
+  }
+}

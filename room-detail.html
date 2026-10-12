@@ -19,7 +19,7 @@
 
 <section class="section section--tight">
   <div class="container">
-    <a href="#" class="btn btn--link" id="backRooms" style="margin-bottom:16px;display:inline-flex;align-items:center;gap:6px"></a>
+    <a href="#" class="booking-back-link" id="backRooms"></a>
 
     <div class="split split--sidefirst">
       <!-- ============ MAIN ============ -->
@@ -141,7 +141,7 @@
     '<a href="' + backHref + '">' + U.esc(hotel.name) + '</a><span class="sep">›</span>' +
     '<span class="cur">' + U.esc(room.name) + '</span>';
   var back = U.$('#backRooms');
-  back.innerHTML = U.icon('arrL', 13) + ' Back to rooms';
+  back.innerHTML = U.icon('arrL', 13) + '<span>' + U.esc((window.KAS_I18N && window.KAS_I18N.getLanguage() === 'vi') ? 'Quay lại danh sách phòng' : 'Back to rooms') + '</span>';
   back.href = backHref;
 
   U.$('#rName').textContent = room.name;

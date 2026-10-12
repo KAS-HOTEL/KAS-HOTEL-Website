@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saved Hotels — KAS Hotel Collection</title>
+<meta name="description" content="Your saved hotels from KAS Hotel Collection.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/saved-hotels.css">
+</head>
+<body class="saved-hotels-page">
+<header id="hdr"></header>
+<main class="saved-page container">
+  <nav class="saved-breadcrumb" aria-label="Breadcrumb">
+    <a href="index.html" data-saved-home>Trang chủ</a><span aria-hidden="true">›</span>
+    <a href="manage-booking.html" data-saved-mykas>My KAS</a><span aria-hidden="true">›</span>
+    <span aria-current="page" data-saved-current>Khách sạn đã lưu</span>
+  </nav>
+  <section class="saved-intro">
+    <p class="saved-eyebrow">KAS COLLECTION</p>
+    <h1 data-saved-title>Saved hotels</h1>
+    <span class="saved-rule" aria-hidden="true"></span>
+  </section>
+  <section class="saved-toolbar" aria-label="Danh sách khách sạn đã lưu">
+    <div class="saved-count" id="savedCount">Tất cả (0)</div>
+    <label class="saved-sort-label" for="savedSort"><span data-saved-sort-label>Sắp xếp:</span>
+      <select id="savedSort" class="select">
+        <option value="recent">Mới lưu gần đây</option>
+        <option value="rating">Đánh giá cao nhất</option>
+        <option value="name">Tên khách sạn A–Z</option>
+      </select>
+    </label>
+  </section>
+  <section id="savedGrid" class="saved-grid" aria-live="polite"></section>
+  <section id="savedEmpty" class="saved-empty" hidden>
+    <div class="saved-empty-icon" aria-hidden="true">♡</div>
+    <h2 data-saved-empty-title>Chưa có khách sạn nào được lưu</h2>
+    <p data-saved-empty-copy>Khám phá bộ sưu tập KAS và lưu những nơi bạn muốn trải nghiệm.</p>
+    <a class="saved-primary-link" href="hotels.html" data-saved-explore>Khám phá khách sạn <span aria-hidden="true">→</span></a>
+  </section>
+</main>
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/live.js"></script>
+<script src="js/saved-hotels.js"></script>
+</body>
+</html>
