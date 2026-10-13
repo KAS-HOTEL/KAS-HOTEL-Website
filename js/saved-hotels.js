@@ -16,7 +16,24 @@
     var paths={heart:'<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.5 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/>',pin:'<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/>',star:'<path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.5-5.8-3.1-5.8 3.1 1.1-6.5-4.7-4.6 6.5-.9Z"/>',bed:'<path d="M3 20V5m0 10h18v5M3 12h18v3M6 12V8h5a3 3 0 0 1 3 3v1M14 12V9h4a3 3 0 0 1 3 3"/>',leaf:'<path d="M20 4c-9 0-14 4-14 11a5 5 0 0 0 5 5c7 0 11-7 9-16Z"/><path d="M4 21c3-5 7-8 12-11"/>',food:'<path d="M4 3v7a3 3 0 0 0 6 0V3M7 3v18M17 3v18M17 3c4 2 4 7 0 9"/>',pool:'<path d="M3 17c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 3-2M3 21c2 0 2-2 4-2s2 2 4 2 2-2 4-2 2 2 4 2 2-2 3-2M6 12V4h5v8m0-4h5V4h-5"/>'};
     return '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'+(paths[name]||paths.leaf)+'</svg>';
   }
-  function setCopy(){var t=copy[lang];document.documentElement.lang=lang;document.title=t.title+' — KAS Hotel Collection';document.querySelector('[data-saved-home]').textContent=t.home;document.querySelector('[data-saved-mykas]').textContent=t.mykas;document.querySelector('[data-saved-current]').textContent=t.current;document.querySelector('[data-saved-title]').textContent=t.title;document.querySelector('[data-saved-subtitle]').textContent=t.subtitle;document.querySelector('[data-saved-sort-label]').textContent=t.sort;document.querySelector('[data-saved-empty-title]').textContent=t.emptyTitle;document.querySelector('[data-saved-empty-copy]').textContent=t.emptyCopy;document.querySelector('[data-saved-explore]').innerHTML=esc(t.explore)+' <span aria-hidden="true">→</span>';sort.options[0].textContent=t.recent;sort.options[1].textContent=t.rating;sort.options[2].textContent=t.name;}
+  function setCopy(){
+    var t=copy[lang];
+    document.documentElement.lang=lang;
+    document.title=t.title+' — KAS Hotel Collection';
+    function setText(selector,value){var el=document.querySelector(selector);if(el)el.textContent=value;}
+    setText('[data-saved-home]',t.home);
+    setText('[data-saved-mykas]',t.mykas);
+    setText('[data-saved-current]',t.current);
+    setText('[data-saved-title]',t.title);
+    /* Subtitle is intentionally omitted from the compact Saved Hotels design. */
+    setText('[data-saved-subtitle]',t.subtitle);
+    setText('[data-saved-sort-label]',t.sort);
+    setText('[data-saved-empty-title]',t.emptyTitle);
+    setText('[data-saved-empty-copy]',t.emptyCopy);
+    var explore=document.querySelector('[data-saved-explore]');
+    if(explore)explore.innerHTML=esc(t.explore)+' <span aria-hidden="true">→</span>';
+    if(sort&&sort.options.length>=3){sort.options[0].textContent=t.recent;sort.options[1].textContent=t.rating;sort.options[2].textContent=t.name;}
+  }
   function hotelPhoto(h){return h.images && (h.images[1] || h.images[0]) || '';}
   function render(){
     var ids=Store.getSavedHotels();

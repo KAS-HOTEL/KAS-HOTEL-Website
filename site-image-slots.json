@@ -111,12 +111,6 @@
       "default": ""
     },
     {
-      "key": "guidebook.entry.ben-thanh-street-food",
-      "label": "Guidebook · ben-thanh-street-food",
-      "selector": ".entry#ben-thanh-street-food .photo",
-      "default": ""
-    },
-    {
       "key": "guidebook.entry.pham-ngu-lao",
       "label": "Guidebook · pham-ngu-lao",
       "selector": ".entry#pham-ngu-lao .photo",
@@ -159,21 +153,9 @@
       "default": ""
     },
     {
-      "key": "guidebook.entry.ben-thanh-market-food",
-      "label": "Guidebook · ben-thanh-market-food",
-      "selector": ".entry#ben-thanh-market-food .photo",
-      "default": ""
-    },
-    {
       "key": "guidebook.entry.saigon-street-food",
       "label": "Guidebook · saigon-street-food",
       "selector": ".entry#saigon-street-food .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.ben-thanh-market-walk",
-      "label": "Guidebook · ben-thanh-market-walk",
-      "selector": ".entry#ben-thanh-market-walk .photo",
       "default": ""
     },
     {
@@ -189,42 +171,6 @@
       "default": ""
     },
     {
-      "key": "guidebook.entry.saigon-opera-house-walk",
-      "label": "Guidebook · saigon-opera-house-walk",
-      "selector": ".entry#saigon-opera-house-walk .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.central-post-office-walk",
-      "label": "Guidebook · central-post-office-walk",
-      "selector": ".entry#central-post-office-walk .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.notre-dame-cathedral-walk",
-      "label": "Guidebook · notre-dame-cathedral-walk",
-      "selector": ".entry#notre-dame-cathedral-walk .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.saigon-square-walk",
-      "label": "Guidebook · saigon-square-walk",
-      "selector": ".entry#saigon-square-walk .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.nguyen-hue-walk",
-      "label": "Guidebook · nguyen-hue-walk",
-      "selector": ".entry#nguyen-hue-walk .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.bitexco-walk",
-      "label": "Guidebook · bitexco-walk",
-      "selector": ".entry#bitexco-walk .photo",
-      "default": ""
-    },
-    {
       "key": "guidebook.entry.saigon-zoo",
       "label": "Guidebook · saigon-zoo",
       "selector": ".entry#saigon-zoo .photo",
@@ -237,51 +183,15 @@
       "default": ""
     },
     {
-      "key": "guidebook.entry.pham-ngu-lao-night",
-      "label": "Guidebook · pham-ngu-lao-night",
-      "selector": ".entry#pham-ngu-lao-night .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.bui-vien-night",
-      "label": "Guidebook · bui-vien-night",
-      "selector": ".entry#bui-vien-night .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.ben-thanh-night",
-      "label": "Guidebook · ben-thanh-night",
-      "selector": ".entry#ben-thanh-night .photo",
-      "default": ""
-    },
-    {
       "key": "guidebook.entry.september-23-park",
       "label": "Guidebook · september-23-park",
       "selector": ".entry#september-23-park .photo",
       "default": ""
     },
     {
-      "key": "guidebook.entry.saigon-opera-house-night",
-      "label": "Guidebook · saigon-opera-house-night",
-      "selector": ".entry#saigon-opera-house-night .photo",
-      "default": ""
-    },
-    {
       "key": "guidebook.entry.ao-show",
       "label": "Guidebook · ao-show",
       "selector": ".entry#ao-show .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.nguyen-hue-night",
-      "label": "Guidebook · nguyen-hue-night",
-      "selector": ".entry#nguyen-hue-night .photo",
-      "default": ""
-    },
-    {
-      "key": "guidebook.entry.bitexco-night",
-      "label": "Guidebook · bitexco-night",
-      "selector": ".entry#bitexco-night .photo",
       "default": ""
     },
     {
