@@ -9,14 +9,23 @@ const crypto = require('crypto');
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
 const UPLOAD_DIR = process.env.UPLOAD_DIR || path.join(ROOT, 'uploads');
+/* Optional read-only locations used when an existing persistent directory is
+   readable but no longer writable by the current service user. New files are
+   written to UPLOAD_DIR; old files remain available through this fallback. */
+const LEGACY_UPLOAD_DIR = String(process.env.LEGACY_UPLOAD_DIR || '').trim();
 const CONFIG_DIR = process.env.KAS_CONFIG_DIR || (process.env.UPLOAD_DIR
   ? path.join(path.dirname(process.env.UPLOAD_DIR), 'kas-config')
   : path.join(DATA_DIR, 'runtime'));
+const LEGACY_CONFIG_DIR = String(process.env.LEGACY_CONFIG_DIR || '').trim();
 const RATE_FILE = path.join(DATA_DIR, 'rate-sheet.json');
 const UPLOAD_FILE = path.join(UPLOAD_DIR, 'manifest.json');
 const RATE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'rate-overrides.json');
 const COLLECTION_FILE = path.join(CONFIG_DIR, 'collection-images.json');
 const IMAGE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'image-overrides.json');
+const LEGACY_UPLOAD_FILE = LEGACY_UPLOAD_DIR ? path.join(LEGACY_UPLOAD_DIR, 'manifest.json') : '';
+const LEGACY_RATE_OVERRIDE_FILE = LEGACY_CONFIG_DIR ? path.join(LEGACY_CONFIG_DIR, 'rate-overrides.json') : '';
+const LEGACY_COLLECTION_FILE = LEGACY_CONFIG_DIR ? path.join(LEGACY_CONFIG_DIR, 'collection-images.json') : '';
+const LEGACY_IMAGE_OVERRIDE_FILE = LEGACY_CONFIG_DIR ? path.join(LEGACY_CONFIG_DIR, 'image-overrides.json') : '';
 const PORT = Number(process.env.PORT || 3000);
 const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
 /* Production always requires ADMIN_KEY. Local development may run without one;
@@ -42,6 +51,10 @@ function readJson(file, fallback) {
   try { return JSON.parse(fs.readFileSync(file, 'utf8')); }
   catch (_) { return fallback; }
 }
+function readJsonWithLegacy(file, legacyFile, fallback) {
+  if (fs.existsSync(file)) return readJson(file, fallback);
+  return legacyFile ? readJson(legacyFile, fallback) : fallback;
+}
 function writeJsonAtomic(file, value) {
   const tmp = file + '.tmp';
   fs.writeFileSync(tmp, JSON.stringify(value, null, 2));
@@ -60,13 +73,13 @@ function normalizePair(pair) {
 }
 
 const rateData = readJson(RATE_FILE, { branches: {}, seasons: [], policy: {} });
-let uploads = readJson(UPLOAD_FILE, { version: 1, rooms: {} });
-let rateOverrides = readJson(RATE_OVERRIDE_FILE, { version: 1, rooms: {} });
-let imageOverrides = readJson(IMAGE_OVERRIDE_FILE, { version: 2, collection: {}, property: {}, rooms: {}, site: {} });
+let uploads = readJsonWithLegacy(UPLOAD_FILE, LEGACY_UPLOAD_FILE, { version: 1, rooms: {} });
+let rateOverrides = readJsonWithLegacy(RATE_OVERRIDE_FILE, LEGACY_RATE_OVERRIDE_FILE, { version: 1, rooms: {} });
+let imageOverrides = readJsonWithLegacy(IMAGE_OVERRIDE_FILE, LEGACY_IMAGE_OVERRIDE_FILE, { version: 2, collection: {}, property: {}, rooms: {}, site: {} });
 if (!imageOverrides.site || typeof imageOverrides.site !== 'object') imageOverrides.site = {};
 if (!imageOverrides.property || typeof imageOverrides.property !== 'object') imageOverrides.property = {};
 
-let collectionImages = readJson(COLLECTION_FILE, { version: 1, hotels: {} });
+let collectionImages = readJsonWithLegacy(COLLECTION_FILE, LEGACY_COLLECTION_FILE, { version: 1, hotels: {} });
 
 function allRooms() {
   const out = [];
@@ -136,14 +149,18 @@ function safeExtension(originalname) {
   const ext = path.extname(originalname || '').toLowerCase();
   return IMAGE_EXT.includes(ext) ? ext : '.jpg';
 }
-/* Resolve a stored "/uploads/..." URL to a file path that is guaranteed to be
-   inside UPLOAD_DIR. Returns null for anything that would escape it. */
+/* Resolve a stored "/uploads/..." URL to a file path inside the active upload
+   directory or its explicitly configured legacy read location. */
 function uploadPathFromUrl(url) {
   const rel = String(url || '').replace(/^\/uploads\//, '');
   if (!rel || rel.includes('\0')) return null;
-  const file = path.resolve(UPLOAD_DIR, rel);
-  const root = path.resolve(UPLOAD_DIR) + path.sep;
-  return file.startsWith(root) ? file : null;
+  const roots = [UPLOAD_DIR, LEGACY_UPLOAD_DIR].filter(Boolean);
+  for (const dir of roots) {
+    const root = path.resolve(dir) + path.sep;
+    const file = path.resolve(dir, rel);
+    if (file.startsWith(root) && fs.existsSync(file)) return file;
+  }
+  return null;
 }
 function removeUploadedFile(file) {
   if (!file) return;
@@ -287,6 +304,9 @@ app.use(express.urlencoded({ extended: true }));
    server and deploy configuration, package files, dotfiles) returns 404. */
 const PUBLIC_PAGES = new Set(fs.readdirSync(ROOT).filter(f => /^[a-z0-9-]+\.html$/.test(f)));
 const staticOpts = { dotfiles: 'deny', index: false, redirect: false };
+const uploadStaticRoots = [UPLOAD_DIR, LEGACY_UPLOAD_DIR]
+  .filter((dir, index, dirs) => dir && dirs.findIndex(other => path.resolve(other) === path.resolve(dir)) === index)
+  .map(dir => express.static(dir, Object.assign({ maxAge: '1h' }, staticOpts)));
 app.use('/css', express.static(path.join(ROOT, 'css'), staticOpts));
 app.use('/js', express.static(path.join(ROOT, 'js'), staticOpts));
 app.get('/site-image-slots.json', (req, res) => res.sendFile(path.join(ROOT, 'site-image-slots.json')));
@@ -295,7 +315,7 @@ app.use('/assets', express.static(path.join(ROOT, 'assets'), staticOpts));
 app.use('/uploads', function(req, res, next) {
   if (!/\.(?:jpe?g|png|webp)$/i.test(req.path)) return res.sendStatus(404);
   next();
-}, express.static(UPLOAD_DIR, Object.assign({ maxAge: '1h' }, staticOpts)));
+}, ...uploadStaticRoots);
 app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'index.html')));
 /* No favicon file exists; answer quietly instead of a 404 on every page view. */
 app.get('/favicon.ico', (req, res) => res.status(204).end());
@@ -664,7 +684,9 @@ app.use((err, req, res, next) => {
 app.listen(PORT, IS_PRODUCTION || ADMIN_KEY ? '0.0.0.0' : '127.0.0.1', () => {
   console.log('KAS server running on http://localhost:' + PORT);
   console.log('Upload directory: ' + UPLOAD_DIR);
+  if (LEGACY_UPLOAD_DIR) console.log('Legacy upload read directory: ' + LEGACY_UPLOAD_DIR);
   console.log('Config directory: ' + CONFIG_DIR);
+  if (LEGACY_CONFIG_DIR) console.log('Legacy config read directory: ' + LEGACY_CONFIG_DIR);
   console.log('Public reference: http://localhost:' + PORT + '/reference');
   console.log('Admin upload:     http://localhost:' + PORT + '/admin');
 });
