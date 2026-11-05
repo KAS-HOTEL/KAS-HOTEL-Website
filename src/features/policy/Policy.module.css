@@ -1,0 +1,171 @@
+/**
+ * Property policies.
+ *
+ * A compact extranet list, not a CMS. One row per frozen type; the editor is a
+ * drawer so the page never becomes eleven expanded forms.
+ */
+
+.manager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--density-gap);
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr) auto;
+  gap: var(--space-4);
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  .row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    align-items: stretch;
+  }
+}
+
+.rowIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* The name of the policy is the heading of its row, and now the only thing
+   in the identity column — the raw type constant that sat under it is gone. */
+.rowTitle {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.rowState {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.timing,
+.meta {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.locales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.unconfigured {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.rowActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* ---- drawer ------------------------------------------------------------- */
+
+.drawerBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--density-gap);
+}
+
+.localeBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: flex-start;
+}
+
+/*
+ * Status, version and effective date, on one line.
+ *
+ * Replaces the three-row definition list the drawer opened with. `.statusActions`
+ * went with the buttons it held: they are in the Dialog's own footer now, pinned
+ * below the scroll instead of drifting down as the policy text grows.
+ */
+.drawerState {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.drawerMeta {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.gateNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * The guidance shown while no policy has been drafted yet. A paragraph above
+ * the list rather than a card inside it: the list itself is the affordance.
+ */
+.lead {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * A link-looking button inside an empty state.
+ *
+ * A button rather than an anchor because it changes local filter state and goes
+ * nowhere — the status filter lives in React, not in the URL. Styled as a link
+ * because that is what "Xem tất cả" reads as, and given the 44px minimum height
+ * every other tappable control on this page has.
+ */
+.inlineAction {
+  padding: 0;
+  min-block-size: 44px;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: var(--text-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.inlineAction:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}

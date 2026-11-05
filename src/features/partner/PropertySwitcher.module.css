@@ -1,0 +1,43 @@
+.switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  max-width: 360px;
+}
+
+.icon { flex-shrink: 0; color: var(--text-muted); }
+
+.single, .message {
+  overflow: hidden;
+  font-size: var(--text-nav);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message { font-weight: 400; color: var(--text-muted); }
+
+/* The label is present for assistive technology but visually redundant beside
+   the building icon in a 56px header bar. */
+.selectSlot { flex: 1; min-width: 0; }
+
+/*
+ * A native `select` has an intrinsic minimum width and will happily draw past
+ * its flex container rather than shrink — which is how it ended up painted over
+ * the sign-out button in a 375px header. `min-width: 0` on the flex items is
+ * necessary but not sufficient; the control itself has to be told it may be
+ * narrower than its content, and the truncation then falls to the option text.
+ */
+.selectSlot select {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+.selectSlot label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.selectSlot > div > div:first-child { display: none; }
+
+@media (max-width: 767px) {
+  .switcher { max-width: 200px; }
+}

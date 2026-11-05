@@ -97,7 +97,6 @@ gracefully when a booking reference is unknown.
 ├── tools/
 │   └── fetch-images.js        Vendor remote photos into /assets (see below)
 │
-├── DATA_AUDIT.md              Field-by-field source audit — read this
 └── README.md
 ```
 
@@ -125,7 +124,7 @@ Room inventory comes from the operator's own site (kashotelpremium.com) and Trip
 ratings, review counts and price ranges from Tripadvisor. Fields that no source publishes
 are `null` and render as *"Not published by source"* — nothing is invented.
 
-**`DATA_AUDIT.md` documents every field, every source, and every gap.** Read it before
+**[DATA_AUDIT.md](../docs/legacy-frontend/DATA_AUDIT.md) documents every field, every source, and every gap.** Read it before
 trusting any number on the page.
 
 ### Two things to know
@@ -141,7 +140,7 @@ trusting any number on the page.
    *room type* a photo depicts: no source publishes that. Every room is flagged
    `NEEDS_REVIEW` on that dimension and the UI says so. Branches 01, 06 and 07 await category
    verification and show an amber chip instead of a green one.
-   See `VERIFIED_ROOM_IMAGE_MATRIX.md` for the per-room record.
+   See [VERIFIED_ROOM_IMAGE_MATRIX.md](../docs/legacy-frontend/VERIFIED_ROOM_IMAGE_MATRIX.md) for the per-room record.
 
 ---
 
@@ -295,8 +294,8 @@ The suite drives a real headless browser through the whole product:
 - **Admin uploads use the included server.** Room/property photos can be uploaded through the
   admin UI and stored under `uploads/`; on Render, `uploads/` is intended to live on the
   configured persistent disk and is excluded from Git.
-- **Live rates unavailable** — see above and `DATA_AUDIT.md` §5.
-- **Room-level photo attribution unverified** — see `DATA_AUDIT.md` §4.
+- **Live rates unavailable** — see above and [DATA_AUDIT.md](../docs/legacy-frontend/DATA_AUDIT.md) §5.
+- **Room-level photo attribution unverified** — see [DATA_AUDIT.md](../docs/legacy-frontend/DATA_AUDIT.md) §4.
 - **Branch 05 mapping** (`tuyet-lan-corner` → KAS Zody) is by elimination rather than a direct
   indexed title; it is the one mapping of the eight carrying residual uncertainty.
 - Language switcher, sign-in and newsletter are UI only.
@@ -305,3 +304,7 @@ The suite drives a real headless browser through the whole product:
 ## V22.6 — Collection card names
 - Collection card display names remove the trailing “Hotel” suffix.
 - Hotel names are white, bold, and kept on one line to match the editorial reference layout.
+
+
+Archived frontend release notes and logs: [docs/legacy-frontend](../docs/legacy-frontend/README.md).
+Current admin migration: [implementation checklist](../docs/kas/155-admin-console-migration.md).

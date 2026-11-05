@@ -1,0 +1,42 @@
+.section {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.title {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin: 0 0 .45rem;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: .9rem;
+  line-height: 1.55;
+  margin: 0 0 1rem;
+  max-width: 46rem;
+}
+
+.form { display: grid; gap: 1rem; max-width: 46rem; }
+.field { display: grid; gap: .4rem; color: var(--text-primary); font-size: .9rem; }
+.field input,
+.field textarea {
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: .2rem;
+  color: var(--text-primary);
+  font: inherit;
+  padding: .75rem;
+  width: 100%;
+}
+.field input:focus-visible,
+.field textarea:focus-visible { outline: 2px solid var(--accent-600); outline-offset: 2px; }
+.field small { color: var(--text-muted); font-size: .8rem; line-height: 1.45; }
+.qrPreview { border: 1px solid var(--border-subtle); max-height: 12rem; object-fit: contain; width: 12rem; }
+.actions { align-items: center; display: flex; flex-wrap: wrap; gap: .85rem; }
+.status, .error { font-size: .9rem; margin: 0; }
+.status { color: var(--text-muted); }
+.error { color: var(--error-500); }

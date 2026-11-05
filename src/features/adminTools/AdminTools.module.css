@@ -1,0 +1,124 @@
+.page { display: grid; gap: 20px; width: 100%; max-width: 1280px; margin: 0 auto; min-width: 0; font-size: 14px; }
+.page h1 { margin: 0; font-size: 24px; line-height: 1.35; font-weight: 600; letter-spacing: -0.025em; }
+.page h2 { margin: 0; font-size: 17px; font-weight: 600; }
+.page p { line-height: 1.65; }
+.page > header p { margin: 6px 0 0; color: var(--text-secondary); font-size: 13px; }
+.page > header .eyebrow { margin: 0 0 6px; color: var(--text-muted); font-size: 11px; font-weight: 500; }
+.pageHeader { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+.form { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); align-items: end; }
+.form label, .filterField { display: grid; gap: 6px; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.form input, .form select, .form textarea, .page > label input,
+.actions input, .actions select, .filters input:not([type='checkbox']), .filters select {
+  box-sizing: border-box;
+  width: 100%; min-height: 36px; padding: 7px 10px;
+  color: var(--text-primary); background: var(--surface);
+  border: 1px solid var(--border-default, #ccc); border-radius: 6px;
+  font: inherit; font-size: 13px; font-weight: 400;
+}
+.form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible,
+.filters input:focus-visible, .filters select:focus-visible, .page > label input:focus-visible {
+  outline: 2px solid var(--accent-600); outline-offset: 2px;
+}
+.form textarea { min-height: 100px; resize: vertical; }
+.form input:disabled, .form select:disabled, .form textarea:disabled { background: var(--surface-disabled); }
+.filters {
+  display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; padding: 16px;
+  border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface);
+}
+.filters > label:not(.checkboxField) { display: grid; gap: 6px; flex: 1 1 200px; max-width: 360px; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.filterField { flex: 1 1 220px; max-width: 340px; }
+.checkboxField { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; font-size: 12px; color: var(--text-secondary); cursor: pointer; }
+.checkboxField input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent-600); }
+.filterActions { display: flex; gap: 8px; margin-left: auto; }
+.filters button { min-height: 36px; }
+.actions, .actionGroup { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.actions { margin: 8px 0; }
+.actions input[type='checkbox'] { width: auto; min-height: auto; }
+.results { display: grid; gap: 12px; min-width: 0; }
+.resultHeader { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.resultHeader h2 { font-size: 14px; }
+.resultHeader > span { font-size: 12px; color: var(--text-muted); }
+.list { display: grid; gap: 12px; }
+.stateBox, .loadingBox { border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface); }
+.stateBox { display: grid; justify-items: center; align-content: center; gap: 10px; min-height: 200px; padding: 28px 20px; text-align: center; }
+.stateBox h3 { margin: 0; color: var(--text-primary); font-size: 15px; font-weight: 600; }
+.stateBox p { max-width: 460px; margin: 0 0 4px; color: var(--text-secondary); font-size: 13px; }
+.stateIcon { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; margin-bottom: 2px; border-radius: 50%; background: var(--surface-sunken); color: var(--text-muted); font-size: 19px; font-weight: 500; }
+.stateIconError { background: #fff4e7; color: #9c641c; }
+.loadingBox { display: grid; gap: 16px; padding: 24px; }
+.pagination { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-top: 4px; font-size: 12px; color: var(--text-secondary); }
+.reviewCard { min-width: 0; padding: 18px 20px 12px; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface); }
+.reviewHead, .reviewActions { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.reviewIdentity { display: flex; align-items: center; gap: 12px; }
+.reviewIdentity strong { font-size: 13px; font-weight: 600; }
+.rating { display: inline-flex; align-items: baseline; gap: 2px; padding: 7px 9px; border-radius: 7px; background: var(--surface-sunken); color: var(--text-primary); font-size: 19px; font-weight: 600; }
+.rating small { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+.reviewMeta { margin: 3px 0 0; color: var(--text-muted); font-size: 11px; }
+.reviewTitle { margin: 16px 0 6px; font-size: 14px; font-weight: 600; }
+.reviewBody { margin: 12px 0 16px; color: var(--text-secondary); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.reviewActions { border-top: 1px solid var(--border-subtle); padding-top: 10px; }
+.editor { grid-template-columns: 1fr; }
+.editor > p { margin: 0; }
+.dialogActions { display: flex; justify-content: flex-end; gap: 8px; }
+.table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+.table th, .table td { padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); vertical-align: top; }
+.table th { background: var(--surface-sunken); color: var(--text-secondary); font-size: 11px; font-weight: 500; }
+.table tbody tr:last-child td { border-bottom: 0; }
+.scroll { min-width: 0; overflow-x: auto; border: 1px solid var(--border-subtle); border-radius: 10px; background: var(--surface); }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 16px; }
+.image { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; background: var(--surface-sunken); }
+.muted { color: var(--text-muted); font-size: 12px; }
+.body { white-space: pre-wrap; overflow-wrap: anywhere; }
+.error { padding: 12px 14px; border: 1px solid #edd4ce; border-radius: 6px; color: #a32929; background: #fff9f7; font-size: 13px; }
+@media (max-width: 600px) {
+  .page { gap: 16px; }
+  .page h1 { font-size: 21px; }
+  .pageHeader { flex-direction: column; }
+  .filters { align-items: stretch; padding: 14px; }
+  .filters > label:not(.checkboxField), .filterField { max-width: none; flex-basis: 100%; }
+  .filterActions { width: 100%; margin-left: 0; }
+  .filterActions button { flex: 1; }
+  .reviewCard { padding-inline: 14px; }
+  .resultHeader { align-items: flex-start; }
+  .pagination { flex-wrap: wrap; }
+}
+@media (pointer: coarse) {
+  .filters button, .form input, .form select, .filters input:not([type='checkbox']), .filters select { min-height: 44px; }
+}
+
+/* Shared admin list details: codes, compact cells, avatars, clickable rows. */
+.code { font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace); font-size: 12px; letter-spacing: 0.02em; white-space: nowrap; }
+.stackCell { display: flex; flex-direction: column; gap: 2px; }
+.inlineSelect { min-height: 32px; padding: 0 8px; border: 1px solid var(--border-default); border-radius: var(--radius-md); background: var(--surface); font: inherit; font-size: 13px; }
+.notice { margin: 0; padding: 10px 14px; border: 1px solid var(--border-subtle); border-left: 3px solid var(--gold-500, #c2a25c); border-radius: var(--radius-md); background: var(--surface); font-size: 13px; }
+.formNote { grid-column: 1 / -1; margin: 0; color: var(--text-secondary); font-size: 13px; }
+.avatar { display: block; border-radius: 50%; object-fit: cover; border: 1px solid var(--border-subtle); }
+.avatarFallback { display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--accent-700, #1f3a33); color: var(--gold-500, #c2a25c); font-family: var(--font-display); font-weight: 600; }
+.rowLink { font-weight: 600; color: var(--accent-700, var(--text-primary)); text-decoration: none; }
+.rowLink:hover { text-decoration: underline; }
+.clickableRows tbody tr { cursor: pointer; }
+.clickableRows tbody tr:hover td { background: var(--surface-muted, #f7f4ee); }
+
+/* Customer page. */
+.breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-secondary); }
+.breadcrumb a { color: var(--text-secondary); }
+.profileHeader { display: flex; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border-subtle); }
+.profileHeader > div { flex: 1; min-width: 0; display: grid; gap: 4px; justify-items: start; }
+.profileHeader .eyebrow { margin: 0; color: var(--text-muted); font-size: 12px; letter-spacing: 0.06em; }
+.detailGrid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); }
+.facts { display: grid; grid-template-columns: minmax(110px, auto) 1fr; gap: 8px 16px; margin: 0; font-size: 13px; }
+.facts dt { color: var(--text-secondary); }
+.facts dd { margin: 0; color: var(--text-primary); overflow-wrap: anywhere; }
+
+/* Voucher: which hotels it applies to. */
+.hotelScope { grid-column: 1 / -1; display: grid; gap: 8px; margin: 0; padding: 12px 14px; border: 1px solid var(--border-subtle); border-radius: var(--radius-md); }
+.hotelScope legend { padding: 0 4px; font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.hotelChoices { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px 16px; padding: 4px 0 0 24px; }
+.form .hotelScope .checkboxField { display: inline-flex; align-items: center; gap: 8px; font-weight: 400; font-size: 13px; color: var(--text-primary); }
+.form .hotelScope input[type='radio'], .form .hotelScope input[type='checkbox'] { width: 16px; height: 16px; min-height: 0; margin: 0; padding: 0; accent-color: var(--accent-700, #1f3a33); }
+
+/* Console redesign: links inside cards and page actions read as actions, not body text. */
+.cardLink { font-size: var(--text-label, 13px); font-weight: 600; color: var(--accent-700, var(--text-primary)); text-decoration: none; }
+.cardLink:hover, .cardLink:focus-visible { text-decoration: underline; }
+.searchField { display: grid; gap: 6px; max-width: 28rem; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
+.searchField input { min-height: 38px; padding: 0 12px; border: 1px solid var(--border-default); border-radius: var(--radius-md); background: var(--surface); font: inherit; font-size: 14px; color: var(--text-primary); }

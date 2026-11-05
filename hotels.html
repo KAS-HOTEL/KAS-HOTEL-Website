@@ -93,7 +93,7 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
@@ -181,11 +181,10 @@
 
   function paintSearch() {
     window.Search.render(searchHost, {
-      solid: true, cta: 'Search', values: search, externalHotelPicker: true, lockHotel: true,
+      solid: true, cta: 'Search', values: search, externalHotelPicker: true,
       destinationLabel: getQuickDestinationLabel(),
-      onPopupOpen: function (type) { if (type === 'date') setQuickSearchOpen(false); },
+      onPopupOpen: function (type) { setQuickSearchOpen(false); },
       onSearch: function (s) {
-        s.hotelId = '';
         B.saveSearch(s);
         search = s;
         paintSearch();
@@ -208,7 +207,15 @@
     return activeQuickTags.indexOf(id) > -1;
   }
   var QUICK_TAGS = [
-    { group: 'Điểm đến', items: [
+    /* Ways to stay — the four homepage "Find your rhythm" cards land here
+       (hotels.html?stay=family|slow|business|long). Hotel tags in data.js. */
+    { group: 'Cách lưu trú', items: [
+      { id: 'stay-family', label: 'Du lịch cùng gia đình' },
+      { id: 'stay-slow', label: 'Du lịch thong thả' },
+      { id: 'stay-business', label: 'Công tác' },
+      { id: 'stay-long', label: 'Lưu trú dài ngày' }
+    ]},
+    { group: 'Địa điểm', items: [
       { id: 'district1', label: 'Quận 1' },
       { id: 'ben-thanh', label: 'Bến Thành' },
       { id: 'bui-thi-xuan', label: 'Bùi Thị Xuân' },
@@ -216,7 +223,7 @@
       { id: 'le-thanh-ton', label: 'Lê Thánh Tôn' },
       { id: 'nguyen-thai-binh', label: 'Nguyễn Thái Bình' }
     ]},
-    { group: 'Phong cách lưu trú', items: [
+    { group: 'Kế hoạch chuyến đi', items: [
       { id: 'boutique', label: 'Boutique' },
       { id: 'rooftop', label: 'Rooftop' },
       { id: 'spa', label: 'Spa' },
@@ -228,10 +235,18 @@
       { id: 'ben-thanh-market', label: 'Gần Chợ Bến Thành' },
       { id: 'central', label: 'Trung tâm Quận 1' },
       { id: 'walkable', label: 'Dễ đi bộ khám phá' },
-      { id: 'food', label: 'Gần phố ẩm thực' },
-      { id: 'park', label: 'Gần công viên' }
+      { id: 'food', label: 'Gần phố ẩm thực' }
     ]}
   ];
+
+  /* ?stay=family|slow|business|long preselects the matching "Cách lưu trú" tag. */
+  (function applyStayFromUrl(){
+    var stay = new URLSearchParams(window.location.search).get('stay');
+    var tag = { family: 'stay-family', slow: 'stay-slow', business: 'stay-business', long: 'stay-long' }[stay];
+    if (!tag) return;
+    activeQuickTags = [tag];
+    paintSearch();
+  })();
 
 
   function hotelThumb(h) {
@@ -246,11 +261,7 @@
     var items = D.hotels.filter(function(h){
       return !q || (h.name + ' ' + (h.district || '') + ' ' + (h.address || '')).toLowerCase().indexOf(q) > -1;
     });
-    listHost.innerHTML =
-      '<button type="button" class="kas-quick-hotel kas-quick-hotel--all' + (!search.hotelId ? ' is-active' : '') + '" data-quick-hotel-id="">' +
-        '<span class="kas-quick-hotel__all-icon">⌘</span><span><strong>Tất cả khách sạn KAS</strong><small>Toàn bộ bộ sưu tập tại TP. Hồ Chí Minh</small></span>' +
-      '</button>' +
-      items.map(function(h){
+    listHost.innerHTML = items.map(function(h){
         return '<button type="button" class="kas-quick-hotel' + (search.hotelId === h.id ? ' is-active' : '') + '" data-quick-hotel-id="' + U.esc(h.id) + '">' +
           hotelThumb(h) + '<span><strong>' + U.esc(h.name) + '</strong><small>' + U.esc(h.district || h.address || 'Ho Chi Minh City') + '</small></span>' +
         '</button>';
@@ -273,13 +284,9 @@
     var host = U.$('#kasQuickSearch');
     if (!host) return;
     host.innerHTML =
+      '<div class="kas-quick-search__head"><div><div class="kas-quick-search__title">KAS QUICK SEARCH · ' + D.hotels.length + ' KHÁCH SẠN</div></div><button type="button" class="kas-quick-search__close" id="kasQuickClose" aria-label="Đóng">×</button></div>' +
       '<div class="kas-quick-search__inner">' +
-        '<aside class="kas-quick-search__hotels">' +
-          '<div class="kas-quick-search__search"><span aria-hidden="true">⌕</span><input id="kasQuickHotelInput" type="search" autocomplete="off" placeholder="Tìm kiếm khách sạn..." aria-label="Tìm kiếm khách sạn"></div>' +
-          '<div class="kas-quick-hotel-list" id="kasQuickHotelList"></div>' +
-        '</aside>' +
         '<section class="kas-quick-search__content">' +
-          '<div class="kas-quick-search__head"><div><div class="kas-quick-search__title">KAS QUICK SEARCH</div><p>Khám phá những lựa chọn phù hợp tại Thành phố Hồ Chí Minh.</p></div><button type="button" class="kas-quick-search__close" id="kasQuickClose" aria-label="Đóng">×</button></div>' +
           QUICK_TAGS.map(function(group){
             return '<div class="kas-quick-search__group"><h4>' + U.esc(group.group) + '</h4><div class="kas-quick-search__tags">' +
               group.items.map(function(tag){
@@ -288,6 +295,11 @@
             '</div></div>';
           }).join('') +
         '</section>' +
+        '<aside class="kas-quick-search__hotels">' +
+          '<h3 class="kas-quick-search__popular">Khách sạn phổ biến</h3>' +
+          '<div class="kas-quick-search__search"><span aria-hidden="true">⌕</span><input id="kasQuickHotelInput" type="search" autocomplete="off" placeholder="Tìm theo tên khách sạn..." aria-label="Tìm theo tên khách sạn"></div>' +
+          '<div class="kas-quick-hotel-list" id="kasQuickHotelList"></div>' +
+        '</aside>' +
       '</div>';
 
     var input = U.$('#kasQuickHotelInput');
@@ -319,9 +331,13 @@
 
   function quickTagMatch(h) {
     if (!activeQuickTags.length) return true;
-    if (!Array.isArray(h.quickSearchTags)) return false;
     return activeQuickTags.every(function(tagId){
-      return h.quickSearchTags.indexOf(tagId) > -1;
+      /* "Cách lưu trú" tags follow the trip groups the console publishes (h.tripIntents,
+         set by js/catalog-sync.js); the stay-* tags in data.js are the offline fallback. */
+      if (tagId.indexOf('stay-') === 0 && Array.isArray(h.tripIntents) && h.tripIntents.length) {
+        return h.tripIntents.indexOf(tagId.slice(5)) > -1;
+      }
+      return Array.isArray(h.quickSearchTags) && h.quickSearchTags.indexOf(tagId) > -1;
     });
   }
 
@@ -372,7 +388,7 @@
     ['le-thanh-ton','Lê Thánh Tôn'],
     ['nguyen-thai-binh','Nguyễn Thái Bình']
   ];
-  var STYLES = [['boutique','Boutique'],['rooftop','Rooftop'],['spa','Spa'],['staycation','Staycation'],['breakfast','Bữa sáng']];
+  var STYLES = [['boutique','Boutique'],['rooftop','Rooftop'],['spa','Spa'],['balcony','Có ban công'],['breakfast','Bữa sáng'],['staycation','Staycation']];
   var PRIORITIES = [['ben-thanh-market','Gần Chợ Bến Thành'],['walkable','Dễ đi bộ khám phá'],['food','Gần phố ẩm thực'],['central','Trung tâm Quận 1']];
   var AMEN  = [['wifi','Wi-Fi miễn phí'],['restaurant','Nhà hàng'],['gym','Phòng gym'],['airport','Đưa đón sân bay'],['parking','Bãi đỗ xe'],['spa','Spa']];
   var STARS = [['4','Khách sạn 4 sao'],['3','Khách sạn 3 sao']];
@@ -468,6 +484,9 @@
         '$1' + U.priceHTML(h._from) + '$2');
     }).join('');
     U.$$('.hcard__media').forEach(App.miniCarousel);
+    /* New cards start as "not saved"; paint the account's saved hotels onto them
+       (QA 2026-11-05: hearts reverted after the live catalogue or a filter repainted the list). */
+    if (App.paintSaveButtons) App.paintSaveButtons(host);
     App.reveal();
   }
   paint();

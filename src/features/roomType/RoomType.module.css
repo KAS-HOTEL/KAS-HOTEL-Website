@@ -1,0 +1,305 @@
+/**
+ * Room-type list and detail.
+ *
+ * Layout is shared with the property screens (`Property.module.css`) — the same
+ * page frame, detail grid and definition list — so only what is specific to a
+ * room type lives here.
+ */
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.identity:hover .identityName,
+.identity:focus-visible .identityName {
+  text-decoration: underline;
+}
+
+.identityName {
+  color: var(--text-accent);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+}
+
+.identitySlug {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.unnamed {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.none {
+  color: var(--text-muted);
+}
+
+/* ---- occupancy ---------------------------------------------------------- */
+
+.occupancy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.occupancyBreakdown {
+  font-size: 0.8em;
+  color: var(--text-muted);
+}
+
+/* ---- beds & amenities --------------------------------------------------- */
+
+.bedList,
+.amenityList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.amenityList {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.bedItem {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.amenityItem {
+  padding: var(--space-1) var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* ---- detail ------------------------------------------------------------- */
+
+.shortDescription {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.publishNote {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---- authoring form ----------------------------------------------------- */
+
+.bedRow {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: end;
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.bedRow:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .bedRow {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+}
+
+.bedActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.amenityGroup {
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  border: 0;
+}
+
+.amenityLegend {
+  padding: 0;
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.amenityChoices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.amenityChoice {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--density-control-height);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  cursor: pointer;
+}
+
+.amenityChoice:hover {
+  background: var(--surface-sunken);
+}
+
+.amenityError {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--error-500);
+}
+
+/* ---------------------------------------------------------------------------
+   Room types at narrow widths.
+
+   The table has six columns; below 768px it is replaced by these cards rather
+   than left to scroll sideways, so one room can be read without dragging.
+   Exactly one of the two renders — `display: none` keeps the other out of the
+   accessibility tree as well.
+   --------------------------------------------------------------------------- */
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  color: inherit;
+  text-decoration: none;
+}
+
+.card:hover {
+  border-color: var(--border-default);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.cardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.cardName {
+  font-size: var(--text-body-lg);
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.cardSlug {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+/* Two facts per row at 375px — each is short — stacking their own label above
+   the value so nothing is truncated. */
+.cardFacts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: var(--space-1) 0 0;
+  padding-top: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.cardFact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cardFact dt {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.cardFact dd {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.cardFactNote {
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+.cardUnset,
+.cardUnnamed {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* The table takes over once there is room for six columns. */
+@media (min-width: 768px) {
+  .cardList {
+    display: none;
+  }
+}
+
+.tableOnly {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .tableOnly {
+    display: block;
+  }
+}

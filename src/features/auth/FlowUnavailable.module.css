@@ -1,0 +1,40 @@
+/*
+ * The "no backend behind this yet" notice.
+ *
+ * Deliberately not an error: nothing has failed and the operator did nothing
+ * wrong. It uses the warning ground the sign-in shell already uses for its own
+ * notice, with the same left rule, so the two read as one family.
+ */
+
+.notice {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border-default);
+  border-left: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  background: var(--gold-100);
+}
+
+.title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+
+.body {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.body:last-child {
+  margin-bottom: 0;
+}
+
+.link {
+  color: var(--text-accent);
+}

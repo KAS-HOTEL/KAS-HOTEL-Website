@@ -1,0 +1,354 @@
+.shell { display: flex; flex-direction: column; min-height: 100vh; background: var(--background); }
+.navGroups { min-width: 0; }
+
+.skipLink {
+  position: absolute; left: var(--space-4); top: -60px; z-index: var(--z-toast);
+  display: inline-flex; align-items: center;
+  min-height: var(--density-control-height);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-md);
+  background: var(--surface-elevated); color: var(--text-primary); box-shadow: var(--shadow-md);
+}
+.skipLink:focus { top: var(--space-2); }
+
+/*
+ * The console header. Taller and quieter than a default admin bar: 64px gives
+ * the property selector room to breathe beside the wordmark, and the hairline is
+ * the only boundary — no shadow, because the sidebar beside it carries the
+ * weight.
+ */
+.header {
+  position: sticky; top: 0; z-index: var(--z-sticky);
+  display: flex; align-items: center; gap: var(--space-4);
+  height: 64px; padding: 0 var(--space-6);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle); background: var(--surface);
+}
+
+.wordmark {
+  display: inline-flex; align-items: baseline; gap: 6px;
+  font-family: var(--font-display); font-size: var(--text-heading-md); font-weight: 600;
+  letter-spacing: -0.01em; white-space: nowrap; color: var(--text-primary);
+}
+
+/* On the deep-green rail the primary half has to be light, not ink. */
+.wordmarkInverse { color: var(--text-inverse); }
+
+/* "Partner" in gold beside "KAS" — the one accent the lockup carries. */
+.wordmarkSuffix {
+  font-size: var(--text-body); font-weight: 400; letter-spacing: 0.02em;
+  color: var(--gold-600);
+}
+
+.wordmarkInverse .wordmarkSuffix { color: var(--gold-500); }
+
+/*
+ * The brand at the head of the navigation rail, as in the reference. It is a
+ * link home rather than a decoration, and it is separated by a hairline so the
+ * nav below reads as a list rather than as a continuation of the logo.
+ */
+.sidebarBrand {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-5);
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid rgb(255 255 255 / 12%);
+  text-decoration: none;
+}
+
+/* Below 1024 the rail is a drawer that starts closed, so the header carries the
+   brand instead and this one would be a duplicate. */
+.headerBrand { display: none; }
+
+.headerSlot { flex: 1; min-width: 0; }
+.accountSlot { display: flex; align-items: center; gap: var(--space-2); }
+
+.navToggle {
+  display: none; align-items: center; justify-content: center;
+  /* The token, not a fixed 36px: it is 34px for a mouse and 44px under
+     @media (pointer: coarse), which is the doc 82 §7 / doc 71 §6 minimum. This
+     button only renders below 1024px — precisely where touch is likeliest. */
+  width: var(--density-control-height); height: var(--density-control-height);
+  min-width: var(--density-control-height); padding: 0;
+  border: var(--border-width) solid var(--border-default); border-radius: var(--radius-md);
+  background: var(--surface); color: var(--text-secondary); cursor: pointer;
+}
+
+.body { display: flex; flex: 1; min-height: 0; }
+
+/*
+ * The navigation rail — deep green rather than the grey a default admin template
+ * would use. It is the one large field of brand colour in the console and it is
+ * what makes the workspace read as KAS rather than as a generic dashboard.
+ */
+.sidebar {
+  flex-shrink: 0; width: 264px; padding: var(--space-5) var(--space-4);
+  border-right: 0; background: var(--accent-700); color: var(--stone-300);
+  overflow-y: auto;
+  /* A column, so the foot of the rail can be pushed to the bottom. */
+  display: flex; flex-direction: column;
+}
+
+/*
+ * The console's own control under the brand — Partner's hotel switcher.
+ *
+ * It sits on the deep-green field, so its label has to be light and its own
+ * control has to read as a control against that ground rather than against the
+ * page. The switcher keeps its own markup; this only places and re-tints it.
+ */
+.railSlot {
+  margin-bottom: var(--space-5); padding: 0 var(--space-3);
+}
+
+.railSlot label,
+.railSlot :global(label) {
+  color: var(--stone-300);
+}
+
+.railSlot select {
+  width: 100%;
+  min-height: max(44px, var(--density-control-height));
+  border-color: rgb(255 255 255 / 28%);
+  background-color: rgb(255 255 255 / 8%);
+  color: var(--text-inverse);
+}
+
+/* The menu itself is drawn by the OS on the page's ground, not the rail's. */
+.railSlot select option { color: var(--text-primary); background-color: var(--surface); }
+
+.railSlot select:focus-visible { outline: 2px solid var(--gold-500); outline-offset: 2px; }
+
+/* A switcher that failed to load says so on the rail, legibly against green. */
+.railSlot p { color: var(--gold-500); }
+
+/*
+ * Sign out: last, ruled off, and deliberately quieter than the navigation.
+ * `margin-top: auto` puts it at the foot on a tall screen and directly after
+ * the nav on a short one, rather than stranding it off-screen.
+ */
+.railFooter {
+  margin-top: auto; padding: var(--space-4) var(--space-3) 0;
+  border-top: 1px solid rgb(255 255 255 / 12%);
+}
+
+.railFooter button {
+  width: 100%;
+  min-height: max(44px, var(--density-control-height));
+  border-color: rgb(255 255 255 / 28%);
+  background-color: transparent;
+  color: var(--stone-300);
+}
+
+.railFooter button:hover:not(:disabled) {
+  background-color: rgb(255 255 255 / 8%);
+  color: var(--text-inverse);
+}
+
+.navSection { margin-bottom: var(--space-5); }
+
+.navHeading {
+  margin: 0 0 var(--space-3); padding: 0 var(--space-3);
+  font-size: var(--text-caption); font-weight: 600; letter-spacing: 0.1em;
+  color: var(--gold-500); text-transform: uppercase;
+}
+
+.navList { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
+
+.navItem {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+  transition: none;
+  /* 40px was below the doc 82 §7 / doc 71 §6 44px minimum on a coarse pointer,
+     which is exactly where this list becomes a drawer. The token is 34px for a
+     mouse and 44px for touch, and the max() keeps the comfortable 40px on
+     desktop where the extra height reads as deliberate rather than cramped. */
+  min-height: max(44px, var(--density-control-height)); padding: 0 var(--space-3);
+  border-radius: var(--radius-md); color: var(--stone-300);
+  font-size: var(--text-nav); text-decoration: none;
+}
+.navItem:hover { background: rgb(255 255 255 / 8%); color: var(--text-inverse); }
+.navLabel { display: inline-flex; align-items: center; gap: var(--space-3); }
+
+/* Doc 80 §1: active is surface + a 3px accent left rail + primary text — a shape
+   change as well as a colour change, so it survives greyscale. */
+/*
+ * Active is a filled panel plus a gold rail — a shape change as well as a colour
+ * one, so it survives greyscale. On the dark rail the fill is the light surface,
+ * which inverts the item and makes the current section unmistakable.
+ */
+.navActive {
+  background: var(--surface); color: var(--text-primary); font-weight: 600;
+  box-shadow: inset 3px 0 0 0 var(--gold-500);
+}
+.navActive:hover { background: var(--surface); color: var(--text-primary); }
+
+.navDisabled { color: rgb(255 255 255 / 38%); cursor: not-allowed; }
+
+/* The work surface. A wider gutter than the density default, and a measure cap
+   so a 1440px screen does not stretch a form to the full width. */
+.main { flex: 1; min-width: 0; padding: var(--space-7) var(--space-7) var(--space-9); }
+
+@media (min-width: 1440px) {
+  .main { padding-inline: var(--space-8); }
+}
+
+/*
+ * The gutter has to shrink with the screen, and it was not shrinking at all.
+ *
+ * `--space-7` is 48px, and every page container inside adds its own
+ * `--density-page-padding` on top. Measured at a 375px viewport that came to
+ * 144px of padding — 38% of the screen — leaving the sales queue's table a
+ * 231px window and the forms beneath it barely wider. The desktop gutter is
+ * right for a desktop; on a phone it is the single biggest thing standing
+ * between an operator and their own data.
+ *
+ * The vertical rhythm is kept: only the inline padding changes, so nothing
+ * about the page's spacing scale moves with it.
+ */
+@media (max-width: 1023px) {
+  .main { padding-inline: var(--space-5); }
+}
+
+@media (max-width: 767px) {
+  .main { padding-inline: var(--space-4); padding-block-end: var(--space-7); }
+}
+
+.scrim {
+  position: fixed; inset: 0; z-index: var(--z-drawer);
+  border: 0; background: rgb(26 23 21 / 45%); cursor: pointer;
+  display: none;
+}
+
+/* Doc 82 — below 1024px the sidebar becomes an overlay drawer. Same tree, no
+   duplicated mobile components. */
+@media (max-width: 1023px) {
+  .navToggle { display: inline-flex; }
+  .sidebar {
+    position: fixed; top: 64px; bottom: 0; left: 0; z-index: calc(var(--z-drawer) + 1);
+    transform: translateX(-100%); transition: transform 160ms ease;
+  }
+  .sidebarOpen { transform: translateX(0); box-shadow: var(--shadow-lg); }
+  .scrim { display: block; top: 64px; }
+
+  /* The drawer starts closed, so the brand moves into the header where it is
+     always visible; showing it in both places would be a duplicate. */
+  .headerBrand { display: inline-flex; }
+  .sidebarBrand { display: none; }
+}
+
+/*
+ * Phone widths — the header has four things and room for three.
+ *
+ * At 375px the toggle (44), wordmark (98), three 16px gaps and the sign-out
+ * button (105) consume 295px, leaving the property switcher 32px. A native
+ * `select` will not shrink that far: it overflowed its slot and drew on top of
+ * "Đăng xuất", clipping it.
+ *
+ * The wordmark is the one of the four that does no work. The toggle opens
+ * navigation, the switcher chooses which hotel every screen is about, and
+ * sign-out is sign-out; "KAS Partner" only says where you already know you are,
+ * and the page beneath it says so too. Dropping it returns ~114px to the
+ * switcher — the control an operator actually uses.
+ */
+@media (max-width: 767px) {
+  .header {
+    gap: var(--space-3);
+    padding: 0 var(--space-4);
+  }
+
+  /* Dropping it returns ~114px to the switcher — the control an operator
+     actually uses. */
+  .headerBrand { display: none; }
+}
+
+/* ---------------------------------------------------------------------------
+ * A console whose controls all live on the rail
+ *
+ * `data-bar="chrome-only"` means both header slots are empty, so the bar holds
+ * nothing but the drawer toggle and the mobile brand.
+ * ------------------------------------------------------------------------ */
+
+/*
+ * Above 1024 neither of those exists — the rail is permanent and carries the
+ * brand — so the bar is 64px of empty surface with a rule under it, sitting
+ * between the browser chrome and the work. Removed, and the page starts at the
+ * top edge.
+ */
+@media (min-width: 1024px) {
+  .shell[data-bar='chrome-only'] .header { display: none; }
+}
+
+/*
+ * Below 768 the brand comes back.
+ *
+ * It was dropped because the bar had to fit a toggle, a wordmark, the property
+ * switcher and a sign-out button in 375px, and the wordmark was the one doing
+ * no work. With the switcher and sign-out now on the rail, the bar holds two
+ * things and there is room for the brand again.
+ */
+@media (max-width: 767px) {
+  .shell[data-bar='chrome-only'] .headerBrand { display: inline-flex; }
+}
+
+/* The admin workspace has one page gutter and a rail that scrolls independently. */
+.compact {
+  --density-page-padding: 0px;
+  --density-card-padding: var(--space-5);
+  --text-body: 14px;
+  --text-button: 13px;
+  --text-nav: 14px;
+}
+.compact .body { align-items: flex-start; }
+.compact .sidebar {
+  width: 232px;
+  height: 100dvh;
+  padding: 20px 12px 14px;
+  overflow: hidden;
+}
+.compact .sidebarBrand {
+  flex-shrink: 0;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding: 0 10px 18px;
+}
+.compact .wordmark { font-size: 20px; }
+.compact .wordmarkSuffix { font-size: 13px; }
+.compact .navGroups {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 22%) transparent;
+}
+.compact .navSection { margin-bottom: 18px; }
+.compact .navHeading {
+  margin-bottom: 7px;
+  padding-inline: 10px;
+  font-size: 10px;
+  letter-spacing: 0.07em;
+  line-height: 1.5;
+}
+.compact .navItem {
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  line-height: 1.4;
+}
+.compact .navLabel { gap: 10px; }
+.compact .navLabel svg { width: 16px; height: 16px; flex-shrink: 0; }
+.compact .railFooter { flex-shrink: 0; margin-top: 12px; padding: 12px 4px 0; }
+.compact .railFooter button { min-height: 36px; }
+.compact .main { padding: 28px 32px 40px; }
+
+@media (min-width: 1024px) {
+  .compact .sidebar { position: sticky; top: 0; }
+}
+@media (max-width: 1023px) {
+  .compact .header { height: 56px; }
+  .compact .sidebar { top: 56px; height: calc(100dvh - 56px); }
+  .compact .scrim { top: 56px; }
+  .compact .main { padding: 24px; }
+}
+@media (max-width: 767px) {
+  .compact .main { padding: 20px 16px 32px; }
+}
+@media (pointer: coarse) {
+  .compact .navItem, .compact .railFooter button { min-height: 44px; }
+}

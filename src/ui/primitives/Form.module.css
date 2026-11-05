@@ -1,0 +1,172 @@
+.control {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.labelRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.required {
+  color: var(--error-500);
+}
+
+.optional {
+  font-size: var(--text-caption);
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--text-caption);
+  color: var(--error-500);
+}
+
+.field {
+  width: 100%;
+  min-height: var(--density-control-height);
+  padding: 0 var(--space-3);
+  border: var(--border-width-strong) solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+}
+
+.field:disabled {
+  background: var(--surface-disabled);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.textarea {
+  min-height: calc(var(--density-control-height) * 2.5);
+  padding: var(--space-3);
+  line-height: var(--leading-body);
+  resize: vertical;
+}
+
+.invalid {
+  border-color: var(--error-500);
+}
+
+.selectWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.select {
+  appearance: none;
+  padding-right: var(--space-7);
+}
+
+.selectIcon {
+  position: absolute;
+  right: var(--space-3);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.busy {
+  position: absolute;
+  right: var(--space-7);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   A field with a leading glyph.
+   The wrapper is what positions the icon; the input keeps its own box so the
+   focus ring still traces the control rather than the wrapper.
+   --------------------------------------------------------------------------- */
+
+.fieldWrap {
+  position: relative;
+  display: block;
+}
+
+.fieldIcon {
+  position: absolute;
+  inset-inline-start: var(--space-3);
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+/* Room for the glyph, in the writing direction rather than on a fixed side. */
+.withIcon {
+  padding-inline-start: calc(var(--space-3) * 2 + 1em);
+}
+
+/* ---------------------------------------------------------------------------
+   File inputs.
+
+   `Input type="file"` already gets the shared box, but the widget *inside* it is
+   the browser's own — an unstyled "Choose File / No file chosen" that reads as
+   unfinished next to every other control. `::file-selector-button` is the one
+   part of it a page may style, so it is given the secondary button's shape and
+   the field is given room to hold it.
+
+   Behaviour is untouched: this is the same input, posting to the same flow.
+   --------------------------------------------------------------------------- */
+
+.field[type='file'] {
+  padding-block: 0;
+  padding-inline: var(--space-2);
+  /* The native widget sets its own line box; centring keeps the text on the
+     same baseline as a text field's value. */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: var(--text-body-sm);
+}
+
+.field[type='file']::file-selector-button {
+  margin-inline-end: var(--space-3);
+  padding: 0 var(--space-4);
+  /* Sits inside a control that is already at the density height, so it takes
+     the inner height rather than the full one. */
+  min-height: calc(var(--density-control-height) - 10px);
+  border: var(--border-width-strong) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+.field[type='file']::file-selector-button:hover {
+  background: var(--surface-sunken);
+}
+
+.field[type='file']:disabled,
+.field[type='file']:disabled::file-selector-button {
+  cursor: not-allowed;
+}

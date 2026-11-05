@@ -1,0 +1,158 @@
+.card {
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--density-card-padding, var(--density-page-padding));
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  font-weight: 600;
+}
+
+.cardActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.cardBody {
+  /* Its own token where a shell zeroes the page gutter (the admin rail), so a
+     card never loses its inner padding with it. */
+  padding: var(--density-card-padding, var(--density-page-padding));
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--space-2);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.neutral {
+  border-color: var(--border-default);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+}
+
+.success {
+  border-color: var(--success-500);
+  background: var(--success-100);
+  color: var(--success-500);
+}
+
+.warning {
+  border-color: var(--warning-500);
+  background: var(--warning-100);
+  color: var(--warning-500);
+}
+
+.danger {
+  border-color: var(--danger-500);
+  background: var(--danger-100);
+  color: var(--danger-500);
+}
+
+.info {
+  border-color: var(--info-500);
+  background: var(--info-100);
+  color: var(--info-500);
+}
+
+.accent {
+  border-color: var(--accent-500);
+  background: var(--accent-100);
+  color: var(--accent-700);
+}
+
+.tabs {
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.tabList {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  overflow-x: auto;
+  list-style: none;
+}
+
+.tab {
+  display: inline-block;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 2px solid transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-nav);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tabActive {
+  border-bottom-color: var(--accent-500);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.tabDisabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.breadcrumb {
+  font-size: var(--text-body-sm);
+}
+
+/*
+ * A breadcrumb is a navigation control, not a link inside a sentence, so the
+ * WCAG 2.5.8 inline-text exemption does not cover it. On a coarse pointer each
+ * crumb gets the full target height; on a mouse it stays as compact as the
+ * operational density intends.
+ */
+@media (pointer: coarse) {
+  .crumb > a,
+  .crumb > span {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--density-control-height);
+  }
+}
+
+.crumbList {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.crumb {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--text-secondary);
+}
+
+.crumbSeparator {
+  color: var(--text-muted);
+}

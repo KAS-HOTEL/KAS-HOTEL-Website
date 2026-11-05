@@ -1,13 +1,3 @@
-services:
-  - type: web
-    name: kas-hotel-reference
-    runtime: docker
-    plan: starter
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: ADMIN_KEY
-        sync: false
-    disk:
-      name: kas-room-uploads
-      mountPath: /app/uploads
-      sizeGB: 1
+# Render deploys from the repository-root Blueprint at ../render.yaml. That
+# Blueprint keeps this HTML website on server.js and runs Spring Boot as its API.
+services: []

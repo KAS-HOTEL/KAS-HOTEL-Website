@@ -10,6 +10,13 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<style>
+#assist .ct-channels{grid-template-columns:minmax(0,1fr);gap:6px}
+#assist .ct-ch{box-sizing:border-box;width:100%;min-width:0;min-height:40px;flex-direction:row;justify-content:flex-start;align-items:center;gap:9px;padding:8px 10px;text-align:left}
+#assist .ct-ch span{width:auto;min-width:0;flex:1}
+#assist .ct-ch b{font-size:.7rem;white-space:normal;overflow-wrap:anywhere}
+#assist .ct-ch small{font-size:.62rem;line-height:1.25}
+</style>
 </head>
 <body>
 
@@ -29,7 +36,7 @@
           <a class="btn btn--ghost" id="backEdit"></a>
           <div style="text-align:right">
             <button class="btn btn--gold btn--lg" id="confirmBtn"></button>
-            <p class="tiny muted" style="margin:8px 0 0">You won't be charged — this is a demo.</p>
+            <p class="tiny muted" style="margin:8px 0 0" data-i18n="This sends a request. The hotel will check availability and follow up by email.">This sends a request. The hotel will check availability and follow up by email.</p>
           </div>
         </div>
       </div>
@@ -63,19 +70,19 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
 <script src="js/room.js"></script>
 <script>
-(function () {
+(async function () {
   var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking;
   App.boot({ active: 'my kas' });
 
   var c = B.requireGuest();
   if (!c) return;
-  c = B.reprice();
+  c = await B.refreshQuote();
   var hotel = D.getHotel(c.hotelId), room = D.getRoom(c.hotelId, c.roomId), g = c.guest;
 
   App.renderSteps(U.$('#steps'), 3, [
@@ -91,10 +98,8 @@
   var be = U.$('#backEdit');
   be.innerHTML = U.icon('arrL', 13) + ' Back to edit';
   be.href = 'guest-details.html';
-  U.$('#confirmBtn').innerHTML = U.icon('lock', 14) + ' Confirm booking';
-
-  var PAY_LABEL = { 'pay-later': 'Pay later — at the hotel', card: 'Credit / debit card',
-                    zalopay: 'ZaloPay', bank: 'Bank transfer' };
+  function tr(s) { return window.KAS_I18N ? window.KAS_I18N.t(s) : s; }
+  U.$('#confirmBtn').innerHTML = U.icon('lock', 14) + ' ' + tr('Send booking request');
 
   function card(icon, title, editHref, bodyHTML) {
     return '<div class="card"><div class="card__hd">' + U.icon(icon, 18) + '<h4>' + title + '</h4>' +
@@ -109,18 +114,22 @@
   }
 
   var guestName = g.checkInGuest === 'different'
-    ? g.guestFirstName + ' ' + g.guestLastName
-    : 'Same as contact information';
+    ? (g.guestFullName || [g.guestFirstName, g.guestLastName].filter(Boolean).join(' '))
+    : (g.fullName || [g.firstName, g.lastName].filter(Boolean).join(' '));
+  function displayNationality(code) {
+    if (code === 'ZZ') return window.KAS_I18N && window.KAS_I18N.getLanguage() === 'vi' ? 'Khác' : 'Other';
+    try { return new Intl.DisplayNames([window.KAS_I18N && window.KAS_I18N.getLanguage() === 'vi' ? 'vi' : 'en'], { type: 'region' }).of(code) || code; }
+    catch (_) { return code; }
+  }
 
   U.$('#cards').innerHTML =
     card('user', 'Contact information', 'guest-details.html',
-      dl([['Name', g.title + ' ' + g.firstName + ' ' + g.lastName],
+      dl([['Name', g.fullName || [g.firstName, g.lastName].filter(Boolean).join(' ')],
           ['Email', g.email], ['Phone', g.phoneFull]])) +
 
     card('users', 'Guest information', 'guest-details.html',
       dl([['Check-in guest', guestName],
-          ['Nationality', g.nationality],
-          ['Date of birth', g.dob ? U.fmtDate(g.dob) : 'Not provided']])) +
+          ['Nationality', displayNationality(g.nationality)]])) +
 
     card('cal', 'Your stay', 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id,
       dl([['Hotel', hotel.name, hotel.address],
@@ -150,12 +159,7 @@
       '<p style="font-size:.9rem;color:var(--tx-2);margin:0">' +
         (g.specialRequests ? U.esc(g.specialRequests) : '<span class="muted">No special requests added.</span>') + '</p>' +
       '<div class="divider" style="margin-block:16px"></div>' +
-      dl([['Estimated arrival', g.arrivalTime], ['Purpose of trip', g.purpose], ['Heard about us', g.heardFrom]])) +
-
-    card('card', 'Payment method', 'guest-details.html',
-      '<div style="display:flex;align-items:center;gap:11px">' + U.icon('wallet', 20) +
-        '<div><b style="font-size:.92rem;display:block">' + U.esc(PAY_LABEL[g.paymentMethod] || g.paymentMethod) + '</b>' +
-        '<span class="tiny muted">No payment is processed in this demo.</span></div></div>') +
+      dl([['Estimated arrival', g.arrivalTime]])) +
 
     card('shield', 'Cancellation policy', null,
       '<div class="alert alert--ok">' + U.icon('checkC', 18) +
@@ -168,7 +172,7 @@
          'A valid ID or passport is required at check-in.',
          'Special requests are subject to availability and cannot be guaranteed.',
          'Taxes and fees are included in the total price shown.',
-         'This is a demonstration booking. No payment is taken and no real reservation is created.'
+         tr('This sends a booking request. The hotel will check availability and email you with next steps.')
         ].map(function (t) { return '<li>' + U.esc(t) + '</li>'; }).join('') + '</ul>');
 
   function sp(ic, t) { return '<span class="spec">' + U.icon(ic, 14) + U.esc(t) + '</span>'; }
@@ -199,24 +203,26 @@
   var btn = U.$('#confirmBtn');
   btn.addEventListener('click', function () {
     btn.disabled = true;
-    btn.innerHTML = U.icon('rot', 14) + ' Confirming…';
-    setTimeout(function () {
-      var res = B.confirmBooking();
+    btn.innerHTML = U.icon('rot', 14) + ' ' + tr('Confirming…');
+      B.confirmBooking().then(function (res) {
       if (!res.ok) {
         btn.disabled = false;
-        btn.innerHTML = U.icon('lock', 14) + ' Confirm booking';
+        btn.innerHTML = U.icon('lock', 14) + ' ' + tr('Send booking request');
         var msgs = Object.keys(res.errors).map(function (k) { return res.errors[k]; });
+        /* A reason the guest can fix sends them back to their details; one on the
+           hotel/system side says so and offers a retry instead. */
+        var fixable = res.customerFixable !== false;
         App.modal({
-          icon: 'alert', tone: 'err', title: 'We couldn\'t confirm this booking',
+          icon: 'alert', tone: 'err', title: tr('We couldn\'t send this booking request'),
           body: '<ul style="margin:8px 0 0;padding-left:18px;text-align:left">' +
-                msgs.map(function (m) { return '<li>' + U.esc(m) + '</li>'; }).join('') + '</ul>',
-          ok: 'Fix details', cancel: 'Close',
-          onOk: function () { location.href = 'guest-details.html'; }
+                msgs.map(function (m) { return '<li>' + U.esc(tr(m)) + '</li>'; }).join('') + '</ul>',
+          ok: fixable ? tr('Fix details') : tr('Try again'), cancel: tr('Close'),
+          onOk: function () { if (fixable) location.href = 'guest-details.html'; else btn.click(); }
         });
         return;
       }
       location.href = 'booking-confirmed.html?ref=' + encodeURIComponent(res.booking.bookingNumber);
-    }, 700);
+      });
   });
 })();
 </script>

@@ -65,7 +65,7 @@
       tagline: 'Boutique calm, one block from Ben Thanh.',
       address: '05 Truong Dinh, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','boutique','breakfast','staycation','ben-thanh-market','walkable','food','central'],
+      quickSearchTags: ['district1','ben-thanh','boutique','breakfast','staycation','ben-thanh-market','walkable','food','central','stay-family','stay-slow'],
       starRating: 3, rating: 9.4, ratingScale: 10, reviews: 423, ratingSource: 'Google',
       altScore: { value: 9.1, scale: 10, count: 96, source: 'Planet of Hotels' },
       description: 'A boutique address in the heart of District 1, minutes from Ben Thanh Market. KAS Passion blends a quiet, relaxing atmosphere with modern, generously sized rooms — a comfortable retreat for travellers who want the centre of Saigon on their doorstep.',
@@ -114,7 +114,7 @@
       tagline: 'Ly Tu Trong elegance, steps from the opera quarter.',
       address: '260 Ly Tu Trong, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','boutique','rooftop','breakfast','walkable','food','central'],
+      quickSearchTags: ['district1','ben-thanh','boutique','rooftop','breakfast','walkable','food','central','stay-family','stay-business'],
       starRating: 3, rating: 9.2, ratingScale: 10, reviews: 369, ratingSource: 'Google',
       altScore: { value: 8.6, scale: 10, count: 91, source: 'Trip.com' },
       description: 'Set in the heart of District 1, a few minutes on foot from the city\'s most iconic addresses. KAS Premium offers a broad range of rooms suited to couples, families and groups, with continental breakfast served daily and a rooftop bar above the street.',
@@ -177,7 +177,7 @@
       tagline: 'A rooftop bar above Nguyen Trai.',
       address: '47A Nguyen Trai, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','nguyen-trai','boutique','rooftop','breakfast','staycation','walkable','food','central'],
+      quickSearchTags: ['district1','ben-thanh','nguyen-trai','boutique','rooftop','breakfast','staycation','walkable','food','central','stay-family','stay-slow','stay-long'],
       starRating: 3, rating: 9.6, ratingScale: 10, reviews: 518, ratingSource: 'Google',
       altScore: { value: 8.1, scale: 10, count: 109, source: 'Trip.com' },
       description: 'A recently renovated boutique address on Nguyen Trai, with a rooftop bar, a ground-floor café and a prime walkable position in District 1. Rooms run from compact city bolt-holes to a 42 m² family layout.',
@@ -224,7 +224,7 @@
       tagline: 'The flagship. Rooftop bar, gym, and a 50 m² suite.',
       address: '170–174 Nguyen Thai Binh, Nguyen Thai Binh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Nguyen Thai Binh',
-      quickSearchTags: ['district1','nguyen-thai-binh','rooftop','balcony','breakfast','central','food'],
+      quickSearchTags: ['district1','nguyen-thai-binh','rooftop','balcony','breakfast','central','food','stay-family','stay-business'],
       starRating: 4, rating: 8.5, ratingScale: 10, reviews: 95, ratingSource: 'Trip.com',
       altScore: { value: 8.7, scale: 10, count: 94, source: 'Trip.com' },
       description: 'The collection\'s flagship: a four-star house opened in 2023 with 41 rooms, a rooftop bar over District 1, a fitness centre, an all-day restaurant serving Vietnamese and international menus, and a breakfast guests write home about.',
@@ -275,7 +275,7 @@
       tagline: 'Quiet rooms on Le Thanh Ton.',
       address: '278 Le Thanh Ton, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','le-thanh-ton','boutique','spa','breakfast','walkable','food','central'],
+      quickSearchTags: ['district1','ben-thanh','le-thanh-ton','boutique','spa','breakfast','walkable','food','central','stay-slow','stay-long'],
       starRating: 3, rating: 8.8, ratingScale: 10, reviews: 86, ratingSource: 'Trip.com',
       altScore: { value: 8.8, scale: 10, count: 78, source: 'Trip.com' },
       description: 'Nestled in the heart of the city on Le Thanh Ton, with convenience stores, restaurants and cafés a short walk in every direction. Guests single out how quiet the rooms are — a rare thing this close to the centre.',
@@ -334,7 +334,7 @@
       tagline: 'Thai kitchen downstairs, the comfiest bed in Vietnam upstairs.',
       address: '40–42 Bui Thi Xuan, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','breakfast','food','central'],
+      quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','breakfast','food','central','stay-slow','stay-business','stay-long'],
       starRating: 3, rating: 9.1, ratingScale: 10, reviews: 81, ratingSource: 'Trip.com',
       altScore: { value: 9.1, scale: 10, count: 90, source: 'Trip.com' },
       description: 'Opened in 2022 on Bui Thi Xuan, with an in-house Thai restaurant, free luggage storage and a room mix that runs from a 15 m² city single up to a 45 m² family suite. Guests repeatedly call the beds the most comfortable of their trip.',
@@ -392,7 +392,7 @@
       tagline: 'Balconies over Bui Thi Xuan.',
       address: '13 Bui Thi Xuan, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central'],
+      quickSearchTags: ['district1','ben-thanh','bui-thi-xuan','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central','stay-business','stay-long','stay-slow'],
       starRating: 3, rating: 8.7, ratingScale: 10, reviews: 96, ratingSource: 'Trip.com',
       altScore: { value: 8.7, scale: 10, count: 88, source: 'Trip.com' },
       description: 'A romantic, newly renovated address in the heart of District 1 — modern design, balconies in selected rooms, and a 45 m² Premium Suite. Ben Thanh Market, Independence Palace and Pham Ngu Lao are all within a few minutes\' walk.',
@@ -442,7 +442,7 @@
       tagline: 'Forty rooms and a spa, a block from Ben Thanh.',
       address: '191 Le Thanh Ton, Ben Thanh Ward, District 1, Ho Chi Minh City',
       district: 'District 1', area: 'Ben Thanh',
-      quickSearchTags: ['district1','ben-thanh','le-thanh-ton','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central'],
+      quickSearchTags: ['district1','ben-thanh','le-thanh-ton','spa','balcony','breakfast','staycation','ben-thanh-market','walkable','central','stay-slow','stay-long','stay-business'],
       starRating: 3, rating: 9.6, ratingScale: 10, reviews: 476, ratingSource: 'Google',
       altScore: { value: 9.2, scale: 10, count: 67, source: 'Trip.com' },
       description: 'Elegant yet warm, renovated through 2025, with 40 rooms, a spa, express check-in and a position a single block from Ben Thanh Market. The Premium King adds a 37 m² footprint and a private balcony.',
@@ -715,13 +715,13 @@
                             '). Weekday (Mon–Thu) and weekend (Fri–Sun) rates differ, and rates ' +
                             'are seasonal. ' + RT.POLICY.breakfastNote;
       } else {
-        r.rateSource     = 'DEMO';
+        r.rateSource     = 'UNAVAILABLE';
+        r.pricePerNight = null;
         r.rateConfidence = (RT && RT.mappingFor(r.id)) ? RT.mappingFor(r.id).confidence : 'NO_SHEET_TAB';
         r.rateMatchReason = (RT && RT.mappingFor(r.id))
           ? RT.mappingFor(r.id).why
           : 'No rate-sheet tab has been supplied for this branch yet.';
-        r.priceBasis = 'DEMO RATE — derived from the published price range for this property. ' +
-                       'Not from the operator rate sheet and not a live Agoda rate.';
+        r.priceBasis = 'Contact the hotel for a current price.';
       }
     });
 
@@ -730,6 +730,9 @@
     h.rateSource = h.rooms.every(function (r) { return r.rateSource === 'SHEET'; }) ? 'SHEET'
                  : (h.rooms.some(function (r) { return r.rateSource === 'SHEET'; }) ? 'MIXED' : 'DEMO');
   });
+
+  hotels.forEach(function(h){h.startingPrice=null;h.rooms.forEach(function(r){r.pricePerNight=null;r.rateSource='UNAVAILABLE';});});
+  if(global.KAS_RATES) global.KAS_RATES.hasSheetRate=function(){return false;};
 
   /* ---- config --------------------------------------------------------- */
   /* Default stay = today through tomorrow, relative to today (a fixed
@@ -740,8 +743,8 @@
   }
   var CONFIG = {
     currency: 'VND',
-    serviceChargeRate: 0.05,
-    vatRate: 0.08,
+    serviceChargeRate: 0,
+    vatRate: 0,
     defaultCheckIn: isoFromToday(0),
     defaultCheckOut: isoFromToday(1),
     defaultAdults: 2,

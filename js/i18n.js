@@ -204,6 +204,9 @@
     'Remember me on this device':'Ghi nhớ trên thiết bị này',
     'CREATE ACCOUNT':'TẠO TÀI KHOẢN',
     'SIGN IN':'ĐĂNG NHẬP',
+    'Sign in':'Đăng nhập',
+    'Your password':'Mật khẩu của bạn',
+    'Forgot password?':'Quên mật khẩu?',
     'New to KAS?':'Chưa có tài khoản KAS?',
     'Already a member?':'Đã là thành viên?',
     'Create an account':'Tạo tài khoản',
@@ -310,19 +313,28 @@
     'Email address':'Địa chỉ email','Find my booking':'Tìm đặt phòng',
 
     /* guest details / review */
-    'Guest Details':'Thông tin khách','Please enter your details to continue. We\'ll send your confirmation here.':'Vui lòng nhập thông tin để tiếp tục. Chúng tôi sẽ gửi xác nhận đến đây.',
-    'Contact information':'Thông tin liên hệ','Required fields':'Trường bắt buộc','Title':'Danh xưng','Mr':'Ông','Ms':'Bà','Mrs':'Bà','Dr':'TS.',
-    'First name':'Tên','Last name':'Họ','Phone number':'Số điện thoại','Create a KAS account for faster booking next time':'Tạo tài khoản KAS để đặt phòng nhanh hơn lần sau',
-    'Guest information':'Thông tin khách lưu trú','Check-in guest':'Khách nhận phòng','Same as contact information':'Giống thông tin liên hệ','Different guest':'Khách khác',
-    'Guest first name':'Tên khách','Guest last name':'Họ khách','Nationality':'Quốc tịch','Date of birth':'Ngày sinh',
+    'Guest Details':'Thông tin khách','Enter your details':'Nhập thông tin của bạn','Add your contact details and review your stay before sending a booking request.':'Nhập thông tin liên hệ và kiểm tra kỳ nghỉ trước khi gửi yêu cầu đặt phòng.',
+    'Contact information':'Thông tin liên hệ','Required fields':'Trường bắt buộc',
+    'First name':'Tên','Last name':'Họ','Phone number':'Số điện thoại','Country/Region':'Quốc gia/Khu vực','Who will check in?':'Ai sẽ nhận phòng?',
+    'I will check in':'Tôi sẽ nhận phòng','Someone else will check in':'Người khác sẽ nhận phòng','Create a KAS account for faster booking next time':'Tạo tài khoản KAS để đặt phòng nhanh hơn lần sau',
+    'Guest first name':'Tên khách','Guest last name':'Họ khách','Guest full name':'Họ và tên khách','Nationality':'Quốc tịch',
+    'Good to know':'Thông tin cần biết','This is a booking request. The hotel will check room availability and contact you by email. If the room is available, the hotel will send payment instructions; your reservation is confirmed after the hotel verifies payment.':'Đây là yêu cầu đặt phòng. Khách sạn sẽ kiểm tra tình trạng phòng và liên hệ bạn qua email. Nếu còn phòng, khách sạn sẽ gửi thông tin thanh toán; đặt phòng được xác nhận sau khi khách sạn kiểm tra khoản thanh toán.',
+    'Room details & guests':'Thông tin phòng và khách',
     'Additional requests (optional)':'Yêu cầu thêm (không bắt buộc)','Special requests':'Yêu cầu đặc biệt','Requests are subject to availability and cannot be guaranteed.':'Yêu cầu tùy thuộc tình trạng cung cấp và không được đảm bảo.',
-    'Arrival details':'Thông tin đến','Estimated arrival time':'Thời gian đến dự kiến','Purpose of trip':'Mục đích chuyến đi','Leisure':'Nghỉ dưỡng','Business':'Công tác',
+    'Arrival details':'Thông tin đến','Estimated arrival time':'Thời gian đến dự kiến','Leisure':'Nghỉ dưỡng','Business':'Công tác',
     'Family visit':'Thăm gia đình','Event or conference':'Sự kiện hoặc hội nghị','Other':'Khác','How did you hear about us?':'Bạn biết đến chúng tôi từ đâu?',
     'Friend or family':'Bạn bè hoặc gia đình','Social media':'Mạng xã hội','Returning guest':'Khách quay lại','Room guests':'Khách trong phòng',
     'Payment method':'Phương thức thanh toán','This is a demonstration. No payment is processed and no card details are collected or stored.':'Đây là bản demo. Không có thanh toán nào được xử lý và không thu thập hoặc lưu thông tin thẻ.',
     'Continue to review':'Tiếp tục kiểm tra','Price summary':'Tóm tắt giá','Edit':'Chỉnh sửa',
     'Review & Confirm':'Kiểm tra & xác nhận','Please review your booking details before confirming. You won\'t be charged — this is a demo.':'Vui lòng kiểm tra thông tin đặt phòng trước khi xác nhận. Bạn sẽ không bị tính phí — đây là bản demo.',
     'Booking summary':'Tóm tắt đặt phòng','Price breakdown':'Chi tiết giá',
+    'Send booking request':'Gửi yêu cầu đặt phòng','Confirming…':'Đang gửi yêu cầu…',
+    'We couldn\'t send this booking request':'Chưa thể gửi yêu cầu đặt phòng',
+    'Fix details':'Kiểm tra lại thông tin','Try again':'Thử lại','Close':'Đóng',
+    'There are not enough rooms of one type for the whole stay.':'Không đủ phòng cùng loại cho toàn bộ thời gian lưu trú.',
+    'This sends a request. The hotel will check availability and follow up by email.':'Yêu cầu sẽ được gửi đến khách sạn để kiểm tra tình trạng phòng. Khách sạn sẽ phản hồi qua email.',
+    'This sends a booking request. The hotel will check availability and email you with next steps.':'Yêu cầu đặt phòng sẽ được gửi đến khách sạn để kiểm tra tình trạng phòng. Khách sạn sẽ hướng dẫn các bước tiếp theo qua email.',
+    'Required configuration \'SALES_FIRST_CONTACT_SLA\' has not been supplied. This value is a business input and is never defaulted.':'Hệ thống chưa được thiết lập thời hạn phản hồi yêu cầu đặt phòng (SALES_FIRST_CONTACT_SLA). Vui lòng liên hệ quản trị viên để bổ sung cấu hình này.',
     'Booking Confirmed':'Đặt phòng đã xác nhận',
 
     /* reference */
@@ -641,6 +653,15 @@
     'Back to top':'Lên đầu trang', 'Call KAS':'Gọi KAS', 'KAS member':'Thành viên KAS',
     'KAS Hotel Collection — home':'KAS Hotel Collection — trang chủ',
     'Previous properties':'Khách sạn trước', 'Next properties':'Khách sạn tiếp theo',
+    /* homepage V3 */
+    'Find Your Rhythm':'Tìm nhịp lưu trú của bạn', 'Why book direct with KAS':'Lý do đặt trực tiếp với KAS',
+    'Direct Booking Benefits':'Quyền lợi đặt trực tiếp', 'Member Offers':'Ưu đãi thành viên',
+    'A City of Contrasts':'Thành phố của những tương phản', 'View the City Guide':'Xem cẩm nang thành phố',
+    'Discover rooms':'Khám phá phòng', 'Our Stays':'Nơi lưu trú', 'Our Properties':'Các khách sạn của chúng tôi',
+    'Rooms & Suites':'Phòng & Suite', 'Discover KAS':'Khám phá KAS', 'Member Benefits':'Quyền lợi thành viên',
+    'My Booking':'Đặt phòng của tôi', 'Contact Us':'Liên hệ', 'Member Policy':'Chính sách thành viên',
+    'FAQ & Cancellation':'Câu hỏi thường gặp & hủy phòng', 'Booking Partners':'Đối tác đặt phòng',
+    'Follow KAS':'Theo dõi KAS', 'Booking Policy':'Chính sách đặt phòng',
     'Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.':
       'Những điểm lưu trú khác biệt giữa lòng Thành phố Hồ Chí Minh, được chăm chút với dịch vụ tận tâm và những trải nghiệm đáng nhớ.',
     'More KAS Hotels':'Các khách sạn KAS khác', 'Discover':'Khám phá', 'Meetings & Events':'Hội họp & Sự kiện',
@@ -682,6 +703,7 @@
     'Save for later':'Lưu để xem sau', 'Until 12:00':'Đến 12:00',
     /* guest details */
     'First name is required.':'Vui lòng nhập tên.', 'Last name is required.':'Vui lòng nhập họ.',
+    'Full name is required.':'Vui lòng nhập họ và tên.', 'Guest full name is required.':'Vui lòng nhập họ và tên khách nhận phòng.',
     'Email address is required.':'Vui lòng nhập địa chỉ email.', 'Please enter a valid email address.':'Vui lòng nhập địa chỉ email hợp lệ.',
     'Phone number is required.':'Vui lòng nhập số điện thoại.', 'Please enter a valid phone number.':'Vui lòng nhập số điện thoại hợp lệ.',
     'Guest first name is required.':'Vui lòng nhập tên khách lưu trú.', 'Guest last name is required.':'Vui lòng nhập họ khách lưu trú.',
@@ -1048,6 +1070,7 @@
       'Room — KAS Hotel Collection':'Phòng — KAS Hotel Collection',
       'Destinations — KAS Hotel Collection':'Điểm đến — KAS Hotel Collection',
       'KAS Hotel Collection — Stay in the heart of Ho Chi Minh City.':'KAS Hotel Collection — Lưu trú giữa lòng Thành phố Hồ Chí Minh.',
+      'KAS City Guide — Saigon Guide Book | KAS Hotel Collection':'Cẩm nang KAS — Sài Gòn | KAS Hotel Collection',
 };
     applyTitle(titleMap);
     persistLanguageLinks();

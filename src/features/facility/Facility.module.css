@@ -1,0 +1,139 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken, var(--surface));
+}
+
+.editorTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .editorGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.editorHint {
+  margin: 0;
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.fixedType {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  justify-content: center;
+}
+
+.fixedTypeLabel {
+  font-size: var(--text-label);
+  color: var(--text-muted);
+}
+
+.fixedTypeValue {
+  font-size: var(--text-body);
+  color: var(--text-primary);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .list {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+}
+
+.item,
+.itemArchived {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+
+/* A withdrawn block stays legible — it is still the Partner's content — but
+   reads as inactive without relying on colour alone: the "Đã gỡ" badge carries
+   the meaning in words. */
+.itemArchived {
+  background: var(--surface-sunken, var(--surface));
+  border-style: dashed;
+}
+
+.itemHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.itemType {
+  font-size: var(--text-label);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+.itemName {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.itemLocales {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-3);
+}
+
+.itemLocales dt {
+  margin: 0;
+  font-size: var(--text-label);
+  color: var(--text-muted);
+}
+
+.itemLocales dd {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  overflow-wrap: anywhere;
+}
+
+.missing {
+  color: var(--text-muted);
+}
+
+.itemActions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: auto;
+}

@@ -1,0 +1,359 @@
+/*
+ * The partner authentication chrome.
+ *
+ * Comfortable density, not operational: these screens are used once, by someone
+ * who may be on a phone, so every control is 48px and the type is a step larger
+ * than the console's. The `--density-*` override is scoped to this page so the
+ * authenticated shell keeps its 34px rows.
+ */
+
+.page {
+  --density-control-height: 48px;
+
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--text-primary);
+}
+
+/* ---- Brand bar --------------------------------------------------------- */
+
+/*
+ * Across the top of all five screens, above both columns. It is the single
+ * strongest reason the recovery screens now read as the same product as
+ * sign-in: whatever the body does, the page opens the same way.
+ */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--space-6);
+  flex: none;
+}
+
+.brandLockup {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.wordmarkSuffix {
+  font-weight: 400;
+  color: var(--gold-700);
+}
+
+/* ---- Body -------------------------------------------------------------- */
+
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-block-size: 0;
+}
+
+/*
+ * The split appears only when there is genuinely room for two columns. Below
+ * this the panel is removed rather than squeezed — see `.panel`.
+ */
+@media (min-width: 1024px) {
+  .page[data-variant='split'][data-width='regular'] .body {
+    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .page[data-variant='split'] .body {
+    grid-template-columns: minmax(0, 46fr) minmax(0, 54fr);
+  }
+}
+
+/* ---- Editorial panel --------------------------------------------------- */
+
+/*
+ * Full bleed to the left and bottom edges rather than floated as a rounded
+ * card. An inset panel reads as a decorative tile; one that runs off the page
+ * reads as the ground the form is standing on, which is what the reference does
+ * and what stopped the two columns from looking like two unrelated boxes.
+ */
+.panel {
+  display: none;
+  position: relative;
+  overflow: hidden;
+  background: var(--accent-700);
+  background-image:
+    radial-gradient(120% 90% at 12% 8%, rgb(255 255 255 / 8%) 0%, transparent 55%),
+    linear-gradient(155deg, var(--accent-600) 0%, var(--accent-700) 58%, #1d2e2a 100%);
+  color: var(--text-inverse);
+}
+
+@media (min-width: 1024px) {
+  .page[data-variant='split'][data-width='regular'] .panel {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+@media (min-width: 1280px) {
+  .page[data-variant='split'] .panel {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+/*
+ * A gold bracket in the upper right, inset far enough to read as composition
+ * rather than as a border. The same figure marks an empty hotel cover on the
+ * dashboard, which is what ties the two surfaces together.
+ */
+.panel::before {
+  content: '';
+  position: absolute;
+  inset-block-start: var(--space-7);
+  inset-inline-end: var(--space-7);
+  inline-size: 104px;
+  block-size: 104px;
+  border-block-start: 1px solid var(--gold-500);
+  border-inline-end: 1px solid var(--gold-500);
+  opacity: 0.55;
+}
+
+/* A second, much larger arc low in the panel: depth without a photograph. */
+.panel::after {
+  content: '';
+  position: absolute;
+  inset-block-end: -32%;
+  inset-inline-start: -18%;
+  inline-size: 78%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 9%);
+  pointer-events: none;
+}
+
+.panelInner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-8) var(--space-7);
+  max-inline-size: 34rem;
+}
+
+.panelEyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-500);
+}
+
+.panelHeadline {
+  margin: 0;
+  font-family: var(--font-display);
+  /* Fluid so 1024 and 1440 both get a headline in proportion to the panel. */
+  font-size: clamp(var(--text-display-sm), 3.2vw, var(--text-display-lg));
+  font-weight: 400;
+  line-height: 1.14;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.panelSupporting {
+  margin: 0;
+  max-inline-size: 42ch;
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-editorial);
+  color: rgb(255 255 255 / 78%);
+}
+
+.panelQuote {
+  margin: var(--space-4) 0 0;
+  max-inline-size: 40ch;
+  font-style: italic;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: rgb(255 255 255 / 68%);
+}
+
+.panelRule {
+  display: block;
+  inline-size: 56px;
+  border-block-start: 2px solid var(--gold-500);
+  margin-block-end: var(--space-4);
+}
+
+/* ---- The card ---------------------------------------------------------- */
+
+.stage {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-4) var(--space-5) var(--space-8);
+}
+
+/*
+ * A narrower gutter on a phone. 24px of page padding plus 24px of card padding
+ * put 96px of inset on a 375px screen, which is what pushed the six code boxes
+ * to 43px — a pixel under the touch floor — and squeezed every other field with
+ * them. The card still has its own padding; this only stops the page from
+ * taking width the content needs.
+ */
+@media (max-width: 420px) {
+  .stage {
+    padding-inline: var(--space-3);
+  }
+}
+
+@media (min-width: 1024px) {
+  .stage {
+    /* Centred against the panel rather than pinned to the top, which is what
+       stopped the card from looking vertically lost. */
+    align-items: center;
+    padding: var(--space-5);
+  }
+}
+
+@media (min-width: 1280px) {
+  .stage {
+    padding: var(--space-7);
+  }
+}
+
+/*
+ * `width` rather than `max-width`: the old card was allowed to collapse to its
+ * content and ended up a narrow strip on a wide screen. It now claims a size and
+ * shrinks only when the viewport is actually smaller.
+ */
+.card {
+  inline-size: min(100%, 34rem);
+  min-inline-size: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-5);
+  background: var(--surface);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.card[data-width='wide'] {
+  inline-size: min(100%, 40rem);
+}
+
+@media (min-width: 768px) {
+  .card {
+    padding: var(--space-7) var(--space-6);
+  }
+}
+
+/* ---- Focused medallion ------------------------------------------------- */
+
+/*
+ * The soft disc the recovery screens lead with. It carries the step's meaning
+ * before the heading does — an envelope, a shield, a padlock — and gives those
+ * pages a centre of gravity the old ones lacked.
+ */
+.medallion {
+  display: grid;
+  place-items: center;
+  inline-size: 72px;
+  block-size: 72px;
+  margin-inline: auto;
+  border-radius: 50%;
+  background: var(--accent-100);
+  color: var(--accent-700);
+}
+
+.page[data-variant='focused'] .card {
+  text-align: center;
+}
+
+/*
+ * Form controls stay left-aligned inside a centred card: centred labels and
+ * centred error text are markedly harder to scan.
+ */
+.page[data-variant='focused'] .card form,
+.page[data-variant='focused'] .card label {
+  text-align: start;
+}
+
+/* ---- Card typography --------------------------------------------------- */
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: var(--text-display-sm);
+  }
+}
+
+.subtitle {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * A hairline above the closing links, so the card ends deliberately instead of
+ * trailing off after its last control.
+ */
+.foot {
+  margin-block-start: var(--space-1);
+  padding-block-start: var(--space-5);
+  border-block-start: var(--border-width-subtle) solid var(--border-subtle);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+/*
+ * 44px, because these are the only way off the page.
+ *
+ * At a 375px viewport "Quay lại đăng nhập" was a 22px target — half the doc 82
+ * §7 / doc 71 §6 minimum — and on the recovery screen it is the single control
+ * the operator has. Inline-flex with a min-height rather than padding, so the
+ * row's alignment and the split variant are unchanged.
+ */
+.foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-accent);
+  font-weight: 600;
+}
+
+/* A row with a link at each end — "forgot password" beside "create account". */
+.footSplit {
+  justify-content: space-between;
+}

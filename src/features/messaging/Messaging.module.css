@@ -1,0 +1,1092 @@
+/*
+  The Partner messaging workspace.
+
+  Two columns on a wide screen — list beside conversation — and one column below
+  1024px, where opening a conversation replaces the list and a back link returns
+  to it. Reuses the console's density tokens so the screen sits inside the
+  existing partner shell rather than beside it. Interactive controls are at least
+  44px tall, which is the touch target the 375px layout needs.
+*/
+
+/*
+ * No page padding of its own.
+ *
+ * `AppShell`'s `.main` already pads by `--space-7` (48px, 64px above 1440),
+ * and this page added `--density-page-padding` on top of it — 72px of inset
+ * before the first pixel of content, and the same again taken off the width
+ * the conversation had to work with. The shell's padding is the console's
+ * rhythm; a second one was just margin.
+ */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+/*
+ * The workspace takes back most of the shell's gutter.
+ *
+ * `AppShell`'s `.main` pads every page by `--space-7` (48px), and `--space-8`
+ * (64px) from 1440 up. That is right for a form or a table, and wrong for
+ * this screen: at 1440 it left 1048px of content for a 300px rail plus a
+ * conversation, so the chat itself was about 700px — a column of text in the
+ * middle of a wide empty page.
+ *
+ * Written as "leave `--space-5` of gutter" rather than "pull back 40px", for
+ * a reason worth keeping: a negative margin larger than the parent's padding
+ * overflows the page. Subtracting the shell's own token means the two cannot
+ * drift apart, and if that padding were ever reduced below `--space-5` the
+ * calc turns positive and adds margin instead of overflowing. The breakpoints
+ * are deliberately the same two AppShell uses.
+ */
+@media (min-width: 1024px) {
+  .page {
+    margin-inline: calc(var(--space-5) - var(--space-7));
+  }
+}
+
+@media (min-width: 1440px) {
+  .page {
+    margin-inline: calc(var(--space-5) - var(--space-8));
+  }
+}
+
+/* The heading of the screen, and weighted like one. */
+.pageTitle {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+/*
+ * One orienting line, and it no longer restates the delivery position.
+ *
+ * It used to carry the whole "stored in KAS, no email/SMS channel, the guest
+ * has not received it" explanation — the same claim the composer makes, three
+ * clicks away from where it matters. Said once, next to the box you type in.
+ */
+.pageIntro {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.tab[data-active] {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------- filters */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.searchField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 0 1 12rem;
+}
+
+.searchField label,
+.filterField label {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.searchInput,
+.control {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background: var(--surface-base);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.submit {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-on-accent, #fff);
+  background: var(--accent-600, var(--text-primary));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.clear {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ----------------------------------------------------------- the split */
+
+/*
+  One column by default. At 1024px the list and the conversation sit side by
+  side, which is the width where a 22rem list still leaves a comfortable reading
+  measure for the messages.
+*/
+/*
+ * The workspace: a fixed inbox rail and a conversation that takes the rest.
+ *
+ * The inbox was 22rem (352px) and the conversation was capped at 60rem, so on
+ * a 1440 screen the pane ran out of content before it ran out of page and left
+ * a broad band of empty ivory down the right. A messaging workspace should
+ * fill its content area.
+ *
+ * 300px for the rail: enough for a name, a booking line and a preview, and
+ * narrow enough that the conversation gets the width. `minmax(0, 1fr)` on the
+ * right so a long unbroken string in a message cannot widen the grid track.
+ *
+ * `align-items: stretch` rather than `start` — both panes now share one
+ * height, which is what makes the two columns read as one workspace instead of
+ * two floating cards of different lengths.
+ */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/*
+ * At desktop the workspace is a pane of a settled height, not a page that
+ * grows with whichever column happens to be longest.
+ *
+ * `--workspace-height` is the one number both columns obey: `.split` takes it
+ * as a floor and both panes take it as a ceiling, so the row is exactly that
+ * tall. The rail scrolls its own overflow, the thread scrolls its own, and
+ * the composer stays where it was put. Without it the row was as tall as the
+ * inbox list — a twenty-row inbox stretched the conversation to 1900px and
+ * left the messages sitting in a field of empty ivory.
+ *
+ * `clamp` rather than a raw `dvh`: below 32rem the pane stops shrinking and
+ * the page scrolls instead of clipping the composer, and above 46rem it stops
+ * growing, because a 1600px-tall thread band is not more readable than a
+ * 700px one.
+ */
+@media (min-width: 1024px) {
+  .split {
+    --workspace-height: clamp(34rem, calc(100dvh - 16rem), 52rem);
+
+    /*
+      280px of rail, and every remaining pixel to the conversation.
+
+      The rail holds a name, a booking line, a date range and a preview; 280
+      fits all four and hands 20px back. With the reclaimed gutter above, the
+      conversation is ~832px at 1440 and grows from there — it is the
+      workspace, and the inbox is the index beside it.
+    */
+    grid-template-columns: 280px minmax(0, 1fr);
+    align-items: stretch;
+    min-height: var(--workspace-height);
+  }
+
+  .listPane {
+    max-height: var(--workspace-height);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
+
+/*
+  Below the split, exactly one pane is on screen: opening a conversation replaces
+  the list and the back link returns to it. `display: none` takes the hidden pane
+  out of the accessibility tree too, so a screen reader is not read both.
+*/
+.listPane {
+  min-width: 0;
+}
+
+.conversationPane {
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .split[data-open] .listPane {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .backLink {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------- the conversation list */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * `min-width: 0` is load-bearing here, not tidying.
+ *
+ * A grid item's default `min-width: auto` is its min-content width, and
+ * `.listPreview` below is deliberately `nowrap` so it can end in an ellipsis.
+ * Together those mean the row cannot shrink below the full length of the
+ * message: measured at a 375px viewport, one conversation whose preview was a
+ * sentence long stretched the row to 1037px and gave the whole page a
+ * horizontal scrollbar. The ellipsis never appeared, because nothing ever
+ * clipped.
+ */
+.listItem {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  background: var(--surface-raised, var(--surface-base));
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg, var(--radius-md));
+  color: var(--text-primary);
+  /*
+   * The row is one link, so every line inside it — guest, reference, hotel,
+   * dates, the message preview, the phone number — was carrying the browser's
+   * default underline. Five underlined lines per row read as five separate
+   * links rather than as one tappable row. The row is still a link and still
+   * the whole target; it just stops pretending its contents are each an action.
+   */
+  text-decoration: none;
+}
+
+/* Hover is where a row admits it is clickable, rather than at rest. */
+.listItem:hover {
+  border-color: var(--border-default);
+  background: var(--surface);
+}
+
+/* Border and weight, never colour alone — doc 82. */
+/*
+ * The open conversation: a gold rail and a tinted ground, not a black outline.
+ *
+ * `--text-primary` on all four sides read as a heavy box drawn around one row.
+ * The accent rail is the same device the navigation rail uses for its current
+ * item, so "this is the one you are in" looks the same everywhere in the
+ * console — and it is shape plus tint, never colour alone (doc 82).
+ */
+.listItem[data-active] {
+  border-color: var(--border-default);
+  border-left: 3px solid var(--gold-500);
+  background: var(--accent-100);
+}
+
+/* The name leads. It is what the operator is scanning for. */
+.listGuest {
+  font-size: var(--text-body);
+  line-height: var(--leading-tight);
+  font-weight: 650;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Which booking, and where. One line, no labels: "KAS-260908-CA9W" is
+ * self-evidently a reference and "Kas Elegance Hotel" is self-evidently a
+ * hotel, so "Đặt phòng:" and "Khách sạn:" were spending a line each to say
+ * what the values already said.
+ */
+.listContext {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* The reference is an identifier the operator reads back to a guest, so it is
+   the one part of the context line given weight and figure spacing. */
+.listReference {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* When they stay — the third tier, quietest of the three facts. */
+.listStay {
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Same reason as `.listItem`: a flex item's `min-width: auto` would let the
+   nowrap preview inside push this row past its container. */
+.listPreviewRow {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+/* One line, with the ellipsis the server's truncation did not need to add. */
+.listPreview {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.listTime {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * `.listMeta`, `.listCount`, `.listPhone`, `.listProperty` and `.listStay` are
+ * gone with the rows they styled — the channel badge, the message count, the
+ * guest's phone number and the hotel and stay on lines of their own. What they
+ * said is either on the context line now or in the conversation's own header.
+ */
+
+/* ------------------------------------------------------ the conversation */
+
+/*
+ * One surface, three bands: header, thread, composer.
+ *
+ * These used to be two bordered cards with a gap between them — a header box,
+ * then a thread-and-composer box — which read as two unrelated panels rather
+ * than as one conversation. Now a single bounded panel holds all three, with
+ * hairlines between the bands instead of gaps around them.
+ *
+ * The surface fills its pane. An earlier version capped it at 60rem, which
+ * traded one empty area for another: the cap is on the *thread's* reading
+ * measure now (see `.thread`), so the panel, its header and its composer use
+ * the full width while a line of message text stays readable.
+ */
+.conversation {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg, var(--radius-md));
+  background: var(--surface);
+  overflow: hidden;
+}
+
+/*
+ * Compact, and the guest's name is the loudest thing on it. Ruled off from the
+ * thread rather than boxed: inside one surface a hairline is enough to separate
+ * two bands, and a second border would draw a card inside a card.
+ */
+.conversationHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+  background: var(--surface);
+}
+
+/* A step of air under the name, so the three tiers read as name / booking /
+   stay rather than as four lines of the same paragraph. */
+.conversationTitleRow + .conversationContext {
+  margin-top: var(--space-1);
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.conversationTitleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/*
+ * The strongest thing on the screen, which is the point of the header: an
+ * operator opening a thread is confirming who they are about to write to.
+ * Everything under it is deliberately a step quieter.
+ */
+.conversationGuest {
+  margin: 0;
+  font-size: var(--text-heading-md, var(--text-body));
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * One dotted line of context: reference · hotel · dates · nights · rooms.
+ *
+ * This replaced a five-row definition list whose labels — "Đặt phòng",
+ * "Khách sạn", "Kỳ nghỉ" — said nothing the values did not, in a header the
+ * operator reaches by clicking a row that already showed all of it.
+ */
+.conversationContext {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* The stay line is the quietest of the three tiers, and its figures line up. */
+.conversationStay {
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * The one underlined thing in the header, and it earns it: this is a link to
+ * the reservation. Everything else on these lines is plain text and is styled
+ * as plain text — that is the whole distinction the underline is carrying.
+ */
+.contextLink {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--stone-400);
+}
+
+.contextLink:hover {
+  text-decoration-color: currentcolor;
+}
+
+/* The two values that are controls, as chips rather than labelled rows. */
+.conversationContacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-2) 0 0;
+}
+
+.contactChip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.contactChip:hover {
+  background: var(--surface-sunken);
+}
+
+
+/*
+ * The middle band, and the only one that scrolls.
+ *
+ * A tall conversation scrolls here instead of pushing the composer off the
+ * page, so the composer is always reachable without scrolling the document.
+ * `dvh` rather than `vh` so a phone's retracting address bar cannot leave it
+ * underneath the browser chrome.
+ *
+ * The ground is one step back from the surface, which is what makes the band
+ * read as the conversation rather than as more page.
+ */
+.threadScroll {
+  min-width: 0;
+  /* Taller than before: the thread is the point of the screen, and 58dvh left
+     the panel looking like a preview strip on a desktop. */
+  min-height: 18rem;
+  max-height: min(64dvh, 40rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--background);
+}
+
+/*
+ * The thread fills the band. Nothing here is capped or centred.
+ *
+ * It used to be `max-width: 52rem; margin: 0 auto`, which on a wide screen
+ * drew exactly the thing this screen was criticised for: a column of chat
+ * floating in the middle of a surface, with dead gutters on both sides of it
+ * *inside* the panel.
+ *
+ * The reading measure did not disappear — it moved onto `.bubble`, where it
+ * belongs. Bubbles are right-aligned, so capping them keeps a line of text
+ * readable while the slack collects on the left, which in a chat is simply
+ * where the other side's messages would be rather than a gutter.
+ */
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-5);
+  list-style: none;
+}
+
+/*
+ * Every bubble sits on the right, because every message was written by this
+ * side. There is no left-hand column: the model has no inbound message, and an
+ * empty opposite side would promise guest replies this product cannot receive.
+ */
+.message {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 100%;
+}
+
+/*
+ * Room to read, and the only cap left in the thread.
+ *
+ * `min(80%, 44rem)`: the percentage keeps a bubble from spanning a narrow
+ * pane edge to edge, and the 44rem (704px) ceiling keeps a line of Vietnamese
+ * inside a comfortable measure however wide the workspace gets — which is
+ * what the thread's own cap used to do, before it started drawing gutters
+ * instead.
+ *
+ * Generous padding and body type rather than the small size a log table would
+ * use: the message is the content of this screen and should be the most
+ * legible thing on it.
+ */
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: min(80%, 44rem);
+  padding: var(--space-4) var(--space-5) var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  /* Square on the sending corner, the shape that says which side sent it. */
+  border-radius: var(--radius-lg, var(--radius-md));
+  border-bottom-right-radius: var(--radius-sm);
+  background: var(--accent-100);
+  min-width: 0;
+}
+
+/*
+ * Automation is outbound too, so it stays on the right; it is the quieter of
+ * the two — plain surface instead of the accent tint, and a dashed edge —
+ * because a template that fired is not the same act as a person writing.
+ *
+ * The distinction is the bubble, not a label: no "AUTOMATION MESSAGE" caption,
+ * only the template's own name in the footer where a sender would go.
+ */
+.message[data-author='automation'] .bubble {
+  background: var(--surface);
+  border-style: dashed;
+}
+
+.messageMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: var(--space-2);
+}
+
+/*
+ * The footer line — "Nhân viên · 17:42", or the template's name in its place.
+ * Quiet and small: it is provenance, not content, and it sits under the
+ * message rather than above it so the words come first.
+ */
+.messageAuthor {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/*
+ * The composer, attached: ruled off from the thread, on the panel's own ground,
+ * and never scrolling away with the messages.
+ */
+.composerBar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-5);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  background: var(--surface);
+}
+
+/*
+ * The honesty line, kept and demoted.
+ *
+ * It still says what it always said — the message is filed against the booking
+ * and the guest will not receive it — because an operator writing into a box
+ * has to know that. It is a caption under the composer now rather than a
+ * ruled notice above the thread: same claim, a fraction of the weight.
+ */
+.composerNote {
+  margin: 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+  max-width: 68ch;
+}
+
+/*
+ * Matches the author line it sits beside — both are the bubble's footer.
+ *
+ * Raised from caption/muted to body-sm/secondary: the time is the one piece
+ * of provenance an operator actually reads back ("we told them at 17:42"),
+ * and at 13px in the lowest-contrast ink on the ramp it was decoration.
+ */
+.messageTemplate,
+.messageTime {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.messageTime {
+  font-variant-numeric: tabular-nums;
+}
+
+/* The operator's own line breaks are part of the message. */
+.messageBody {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.threadEmpty {
+  margin: 0;
+  padding: var(--space-5) var(--space-4);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * The conversation fills the workspace pane.
+ *
+ * Placed after the base rules rather than beside them because these override
+ * `.threadScroll`'s own `max-height`, and two rules of equal specificity are
+ * settled by document order.
+ *
+ * `height: 100%` makes the surface as tall as the row; the ceiling keeps the
+ * row from being dragged taller by a long thread. Between them the thread
+ * band is whatever is left over, which is what puts the composer at the
+ * bottom of the pane instead of wherever the messages happened to end.
+ */
+@media (min-width: 1024px) {
+  .conversation {
+    height: 100%;
+    max-height: var(--workspace-height);
+  }
+
+  .threadScroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+}
+
+/*
+ * The right-hand pane before a conversation is chosen.
+ *
+ * On the inbox route nothing was rendered here at all, so two thirds of a
+ * 1440px screen was empty ivory — the "small card floating in a huge empty
+ * page". A prompt holds the space the conversation will occupy, so choosing
+ * one changes the contents of the pane rather than the shape of the page.
+ *
+ * Desktop only: below 1024 the panes stack, and a placeholder under the
+ * inbox would be a second screenful of nothing to scroll past.
+ */
+.conversationEmpty {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .conversationEmpty {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-height: var(--workspace-height);
+    padding: var(--space-6);
+    text-align: center;
+    border: var(--border-width-subtle) dashed var(--border-subtle);
+    border-radius: var(--radius-lg, var(--radius-md));
+    background: var(--surface);
+  }
+
+  .conversationEmptyTitle {
+    margin: 0;
+    font-size: var(--text-body);
+    line-height: var(--leading-tight);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .conversationEmptyBody {
+    margin: 0;
+    max-width: 32ch;
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-body);
+    color: var(--text-secondary);
+  }
+}
+
+/* ------------------------------------------------------------ composer */
+
+/* The foot of a chat, not a form on a card: textarea, then controls, tight. */
+.composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.composerTemplates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 24rem;
+}
+
+.composerTemplates label {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* Right-aligned, where a send button lives in every chat application. */
+.composerActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/*
+ * `.composerNote` is deliberately absent from this group.
+ *
+ * It appeared here too, and then again below with a 3px left rule, so the two
+ * declarations fought and the later one won: the honesty line was being drawn
+ * as a ruled notice block, which is exactly the weight the caption above was
+ * written to remove. Its single definition is in the conversation section.
+ */
+.composerPending,
+.composerPreviewed,
+.composerProblem {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+.composerPending {
+  color: var(--warning-700, var(--text-primary));
+}
+
+.composerPreviewed {
+  color: var(--success-700, var(--text-secondary));
+}
+
+.composerProblem {
+  color: var(--danger-700, var(--text-primary));
+}
+
+/* ------------------------------------------------------------ templates */
+
+.templates {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.templateActions,
+.templateFormActions,
+.templateRowActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.templateList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .templateList {
+    grid-template-columns: repeat(auto-fit, minmax(22rem, 1fr));
+  }
+}
+
+.templateMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.templateLead,
+.templateLocale,
+.templateScope,
+.templateVariables,
+.templateNote,
+.templateEmpty {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.templateNote,
+.templateVariables,
+.templateEmpty {
+  margin: 0;
+  max-width: 68ch;
+}
+
+.templateBody {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.templateForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.templateFormRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+}
+
+.variablePalette {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.variableHint {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.variableChip {
+  min-height: 32px;
+  padding: 0 var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background: var(--surface-base);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------- automation log */
+
+.automationLog {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .automationLog {
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+  }
+}
+
+.automationEntry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-3);
+  background: var(--surface-raised, var(--surface-base));
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.automationEntryTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.automationReference {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+}
+
+.automationTemplate {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.automationMeta,
+.automationTime {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.automationMeta {
+  margin: 0;
+}
+
+.automationTime {
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------------- pager */
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.pagerSummary {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.pagerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pagerLink,
+.pagerDisabled {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.pagerLink {
+  color: var(--text-primary);
+}
+
+.pagerDisabled {
+  color: var(--text-disabled, var(--text-secondary));
+  opacity: 0.5;
+}
+
+/*
+ * The bubble at 375.
+ *
+ * 78% of a 295px column is 230px, which wraps a Vietnamese sentence every three
+ * or four words. On a phone the thread is the whole screen and there is no
+ * second column to leave room for, so the bubble takes almost all of it and
+ * the right-hand offset alone carries the "sent by us" reading.
+ */
+@media (max-width: 767px) {
+  .bubble { max-width: 92%; padding: var(--space-3) var(--space-4); }
+  .thread { padding: var(--space-3); gap: var(--space-2); }
+
+  /* The header and the composer drop back to the thread's inset, so the three
+     bands line up down the left edge on a screen that has no room to spare. */
+  .conversationHeader { padding: var(--space-3) var(--space-4); }
+  .composerBar { padding: var(--space-3) var(--space-4); }
+}

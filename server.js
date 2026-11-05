@@ -5,6 +5,8 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const http = require('http');
+const https = require('https');
 
 const ROOT = __dirname;
 const DATA_DIR = path.join(ROOT, 'data');
@@ -19,6 +21,26 @@ const COLLECTION_FILE = path.join(CONFIG_DIR, 'collection-images.json');
 const IMAGE_OVERRIDE_FILE = path.join(CONFIG_DIR, 'image-overrides.json');
 const PORT = Number(process.env.PORT || 3000);
 const IS_PRODUCTION = process.env.NODE_ENV === 'production' || process.env.RENDER === 'true';
+const API_ORIGIN = String(process.env.KAS_API_ORIGIN || '').trim();
+if (IS_PRODUCTION && !API_ORIGIN) {
+  console.error('KAS_API_ORIGIN is required in production so the website can reach Spring Boot.');
+  process.exit(1);
+}
+/* Where the Admin/Partner console lives, e.g. https://admin.kasluxuryhotel.com.
+   The console runs on its own host so its session cookies are never shared with
+   the public website. Only an absolute http(s) origin is accepted. */
+const CONSOLE_URL = (function () {
+  const raw = String(process.env.KAS_CONSOLE_URL || '').trim();
+  if (!raw) return '';
+  try {
+    const url = new URL(raw);
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') throw new Error('protocol');
+    return url.origin;
+  } catch (_) {
+    console.error('KAS_CONSOLE_URL must be an absolute http(s) URL; the console link stays hidden.');
+    return '';
+  }
+})();
 /* Production always requires ADMIN_KEY. Local development may run without one;
    in that case the server binds to loopback and admin routes are local-only. */
 const ADMIN_KEY = String(process.env.ADMIN_KEY || '').trim();
@@ -278,6 +300,60 @@ app.use(function(req, res, next) {
   res.set('X-Frame-Options', 'SAMEORIGIN');
   next();
 });
+
+/* The old image/rate admin (admin.html, reference.html, /api/admin/*) is closed: hotels,
+   rooms, prices and images are managed in the console. The code stays; set
+   KAS_LEGACY_ADMIN_ENABLED=true only to open it again temporarily. /api/catalog (read only)
+   and /uploads stay public because the website still shows images uploaded there. */
+const LEGACY_ADMIN_ENABLED = /^(1|true|yes)$/i.test(String(process.env.KAS_LEGACY_ADMIN_ENABLED || '').trim());
+const LEGACY_ADMIN_PATHS = new Set(['/admin', '/admin.html', '/reference', '/reference.html', '/js/admin.js', '/js/reference.js']);
+if (!LEGACY_ADMIN_ENABLED) {
+  app.use(function(req, res, next) {
+    const p = req.path.replace(/\/+$/, '') || '/';
+    if (LEGACY_ADMIN_PATHS.has(p) || p === '/api/admin' || p.startsWith('/api/admin/')) {
+      return res.status(404).type('text').send('Not found');
+    }
+    next();
+  });
+}
+
+/* Keep the original HTML site on one origin while forwarding its Spring API
+   calls. This preserves HttpOnly session cookies and the CSRF cookie/header
+   pair without requiring browser CORS access to the backend service. */
+if (API_ORIGIN) {
+  const proxyToSpring = (req, res) => {
+    let target;
+    try { target = new URL(req.originalUrl, API_ORIGIN); }
+    catch (_) { return res.status(500).json({ error: 'Invalid KAS_API_ORIGIN.' }); }
+    const transport = target.protocol === 'https:' ? https : http;
+    /* The client address the trusted proxy reported ('trust proxy' 1), not a header the
+       browser typed: the backend rate-limits and audits by it. */
+    const headers = Object.assign({}, req.headers, {
+      host: target.host,
+      'x-forwarded-host': req.get('host'),
+      'x-forwarded-proto': req.protocol,
+      'x-forwarded-for': req.ip,
+      'x-real-ip': req.ip
+    });
+    delete headers.connection;
+    const upstream = transport.request(target, { method: req.method, headers }, (response) => {
+      res.writeHead(response.statusCode || 502, response.headers);
+      response.pipe(res);
+    });
+    upstream.setTimeout(30000, () => upstream.destroy(new Error('Spring API request timed out.')));
+    upstream.on('error', (error) => {
+      if (res.headersSent) return res.destroy(error);
+      res.status(502).json({ error: 'Spring API is unavailable.' });
+    });
+    req.pipe(upstream);
+  };
+  app.use('/api/v1', proxyToSpring);
+  /* The legacy HTML API client primes Spring's CSRF cookie through this
+     side-effect-free health read before its first mutation. */
+  app.use('/actuator/health', proxyToSpring);
+}
+
+/* Registered after the proxy so that Spring receives the original request bytes. */
 app.use(express.json({ limit: '2mb' }));
 app.use(express.urlencoded({ extended: true }));
 
@@ -290,6 +366,8 @@ const staticOpts = { dotfiles: 'deny', index: false, redirect: false };
 app.use('/css', express.static(path.join(ROOT, 'css'), staticOpts));
 app.use('/js', express.static(path.join(ROOT, 'js'), staticOpts));
 app.get('/site-image-slots.json', (req, res) => res.sendFile(path.join(ROOT, 'site-image-slots.json')));
+/* Public, non-secret settings the browser needs (js/app.js reads it). */
+app.get('/site-config.json', (req, res) => res.set('Cache-Control', 'no-cache').json({ consoleUrl: CONSOLE_URL }));
 app.use('/assets', express.static(path.join(ROOT, 'assets'), staticOpts));
 /* Uploaded photos only; manifest.json and any non-image file stay private. */
 app.use('/uploads', function(req, res, next) {
@@ -299,6 +377,22 @@ app.use('/uploads', function(req, res, next) {
 app.get('/', (req, res) => res.sendFile(path.join(ROOT, 'index.html')));
 /* No favicon file exists; answer quietly instead of a 404 on every page view. */
 app.get('/favicon.ico', (req, res) => res.status(204).end());
+/* Customer emails link to the Next.js account paths. On this website those
+   pages are served by the HTML flows, so the same links must land there. */
+function accountRedirect(target) {
+  return (req, res, next) => {
+    const locale = req.params.locale;
+    if (locale !== 'vi' && locale !== 'en') return next();
+    const query = new URLSearchParams({ lang: locale });
+    const token = typeof req.query.token === 'string' ? req.query.token : '';
+    if (token) query.set('resetToken', token);
+    res.set('Referrer-Policy', 'no-referrer');
+    res.redirect(302, '/' + target + '?' + query);
+  };
+}
+app.get('/:locale/account/reset-password', accountRedirect('manage-booking.html'));
+app.get('/:locale/account/stays', accountRedirect('manage-booking.html'));
+app.get('/:locale/account/verify-email', accountRedirect('verify-email.html'));
 app.get('/:page', (req, res, next) => {
   const raw = req.params.page;
   const file = /\.html$/.test(raw) ? raw : raw + '.html';   /* clean URLs: /hotels -> hotels.html */
@@ -661,10 +755,17 @@ app.use((err, req, res, next) => {
   res.status(status).json({ error: status === 400 ? 'Yêu cầu không hợp lệ.' : 'Request error' });
 });
 
-app.listen(PORT, IS_PRODUCTION || ADMIN_KEY ? '0.0.0.0' : '127.0.0.1', () => {
+app.listen(PORT, IS_PRODUCTION || ADMIN_KEY ? '0.0.0.0' : '127.0.0.1', (error) => {
+  /* Express 5 hands a listen failure (e.g. port in use) to this callback.
+     Fail loudly instead of logging "running" and exiting with code 0. */
+  if (error) {
+    console.error('KAS server could not listen on port ' + PORT + ': ' + (error.code || error.message));
+    process.exit(1);
+  }
   console.log('KAS server running on http://localhost:' + PORT);
   console.log('Upload directory: ' + UPLOAD_DIR);
   console.log('Config directory: ' + CONFIG_DIR);
-  console.log('Public reference: http://localhost:' + PORT + '/reference');
-  console.log('Admin upload:     http://localhost:' + PORT + '/admin');
+  console.log(LEGACY_ADMIN_ENABLED
+    ? 'Legacy admin OPEN (KAS_LEGACY_ADMIN_ENABLED): http://localhost:' + PORT + '/admin'
+    : 'Legacy admin closed: images, rooms and prices are managed in the console.');
 });

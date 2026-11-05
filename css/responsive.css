@@ -1260,8 +1260,8 @@ body.home-redesign{overflow-x:hidden}
     min-height:0;
   }
   .kas-quick-search__hotels{
-    border-right:0;
-    border-bottom:1px solid rgba(120,96,55,.12);
+    border-left:0;
+    border-top:1px solid rgba(120,96,55,.12);
   }
   .kas-quick-hotel-list{
     max-height:220px;
@@ -1723,4 +1723,141 @@ body.home-redesign{overflow-x:hidden}
     min-height: 38px;
     max-height: 38px;
   }
+}
+
+/* Hotels page: the floating header is position:fixed and takes no room, so the
+   small hero starts its content below the header's own height instead of under
+   it ("Back to home" was covered and unclickable). Pages whose header sits in
+   the flow (#steps pages) are untouched. */
+#hdr.hdr--float + .hero.hero--sm .hero__in{padding-top:var(--nav-h)}
+
+/* ==========================================================================
+   A Day in Saigon ("Theo nhịp sống của thành phố") — two-column editorial.
+   Left: eyebrow, title, intro and the day's timeline; right: the photograph.
+   The section sizes to its content (no fixed height, nothing clipped), and the
+   title is sized for its column rather than the viewport, with a line-height
+   that leaves room for Vietnamese diacritics. Placed last so it settles the
+   earlier stacked overrides for this section in one place.
+   ========================================================================== */
+.home-redesign .home-page-grid__content .home-day{
+  height:auto !important;
+  min-height:0 !important;
+  overflow:visible !important;
+  padding:clamp(56px,7vw,104px) 0 !important;
+}
+.home-redesign .home-page-grid__content .home-day__grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr) !important;
+  gap:clamp(36px,5vw,88px) !important;
+  align-items:center !important;
+  width:min(calc(100% - 48px), var(--home-content, 1200px)) !important;
+  max-width:var(--home-content, 1200px) !important;
+  height:auto !important;
+  min-height:0 !important;
+  margin-inline:auto !important;
+}
+.home-redesign .home-page-grid__content .home-day__copy{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  height:auto !important;
+  min-height:0 !important;
+  padding:0 !important;
+  overflow:visible !important;
+  background:transparent !important;
+}
+.home-redesign .home-page-grid__content .home-day__copy h2{
+  font-size:clamp(2.6rem,4vw,4.1rem) !important;
+  line-height:1.06 !important;
+  margin:.55em 0 0 !important;
+  max-width:13ch !important;
+}
+.home-redesign .home-page-grid__content .home-day__copy > p{
+  max-width:34rem !important;
+  margin:22px 0 0 !important;
+  font-size:1rem !important;
+  line-height:1.65 !important;
+}
+.home-redesign .home-page-grid__content .home-day__timeline{
+  max-width:34rem !important;
+  margin-top:30px !important;
+}
+.home-redesign .home-page-grid__content .home-day__timeline > div{
+  display:grid !important;
+  grid-template-columns:64px minmax(0,1fr) !important;
+  gap:12px !important;
+  align-items:baseline !important;
+  padding:12px 0 !important;
+}
+.home-redesign .home-page-grid__content .home-day__timeline span{
+  font-size:.78rem !important;
+  font-weight:600;
+  letter-spacing:.06em !important;
+  font-variant-numeric:tabular-nums;
+}
+.home-redesign .home-page-grid__content .home-day__timeline p{
+  font-size:.95rem !important;
+  line-height:1.45 !important;
+}
+.home-redesign .home-page-grid__content .home-day__image{
+  width:100% !important;
+  height:auto !important;
+  min-height:0 !important;
+  aspect-ratio:4/5;
+  max-height:min(78vh,680px);
+  overflow:hidden !important;
+}
+.home-redesign .home-page-grid__content .home-day__image img{
+  width:100% !important;
+  height:100% !important;
+  object-fit:cover !important;
+  transition:transform 1.2s cubic-bezier(.2,.7,.2,1);
+}
+.home-redesign .home-page-grid__content .home-day:hover .home-day__image img{transform:scale(1.03)}
+@media (prefers-reduced-motion:reduce){
+  .home-redesign .home-page-grid__content .home-day__image img{transition:none}
+  .home-redesign .home-page-grid__content .home-day:hover .home-day__image img{transform:none}
+}
+@media (max-width:900px){
+  .home-redesign .home-page-grid__content .home-day{padding:52px 0 0 !important}
+  .home-redesign .home-page-grid__content .home-day__grid{
+    grid-template-columns:minmax(0,1fr) !important;
+    gap:36px !important;
+    width:100% !important;
+  }
+  .home-redesign .home-page-grid__content .home-day__copy{padding:0 24px !important}
+  .home-redesign .home-page-grid__content .home-day__copy h2{max-width:none !important;font-size:clamp(2.3rem,7vw,3.2rem) !important}
+  .home-redesign .home-page-grid__content .home-day__image{aspect-ratio:16/10;max-height:none;height:auto !important;min-height:0 !important}
+}
+@media (max-width:560px){
+  .home-redesign .home-page-grid__content .home-day__copy{padding:0 20px !important}
+  .home-redesign .home-page-grid__content .home-day__copy h2{font-size:clamp(2.1rem,9vw,2.6rem) !important;line-height:1.1 !important}
+  .home-redesign .home-page-grid__content .home-day__copy > p{font-size:.92rem !important}
+  .home-redesign .home-page-grid__content .home-day__timeline > div{grid-template-columns:54px minmax(0,1fr) !important;padding:10px 0 !important}
+  .home-redesign .home-page-grid__content .home-day__timeline p{font-size:.9rem !important}
+  .home-redesign .home-page-grid__content .home-day__image{aspect-ratio:4/3}
+}
+
+/* QA 2026-11-05: on phones the signed-in header (logo + contact + language +
+   avatar + menu) was wider than the screen and pushed the menu button off the
+   right edge (390px: 16px hidden, 360px: 33px). Let the logo shrink and tighten
+   the gaps so every control stays visible. Phones only; desktop is unchanged. */
+@media (max-width:480px){
+  #hdr .hdr__in,
+  .home-redesign #hdr.hdr--float .hdr__in{gap:8px}
+  #hdr .hdr__in > .logo,
+  .home-redesign #hdr.hdr--float .hdr__in > .logo{flex:0 1 auto;min-width:0}
+  #hdr .hdr__in > .logo img,
+  .home-redesign #hdr.hdr--float .hdr__in > .logo img{width:clamp(104px,34vw,150px)!important;max-width:100%!important;height:auto!important}
+  #hdr .hdr__right,
+  .home-redesign #hdr.hdr--float .hdr__right{gap:4px;min-width:0}
+}
+
+/* QA 2026-11-05: between 768px and 1024px the hero search bar kept its five
+   fixed desktop columns (868px) because `.hero .searchbar` outranks the tablet
+   `.searchbar` rule, so the page scrolled sideways (hotels.html at 768px: 140px).
+   Two columns here; the search button already spans the full row. */
+@media (min-width:768px) and (max-width:1024px){
+  .hero--sm .hero__in .searchbar,
+  .hero .searchbar{grid-template-columns:repeat(2,minmax(0,1fr))}
 }

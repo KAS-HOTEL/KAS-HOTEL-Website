@@ -1,0 +1,1586 @@
+/**
+ * The hotel page — customer, not console.
+ *
+ * No `data-density="operational"` anywhere in this tree, so it inherits the
+ * editorial defaults `tokens.css` declares on `:root`: 44px controls, `space-5`
+ * rhythm, the display face for headlines. Doc 80 §1's split.
+ *
+ * Mobile-first throughout: every rule below is the phone layout, and the
+ * breakpoints add width rather than a desktop grid being squeezed down.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+/* ---- identity ----------------------------------------------------------- */
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Longhand, and every rule in this file now is.
+   `font: var(--text-display-sm)` resolves to `font: 30px`, which is not a valid
+   shorthand — it needs a family — so the whole declaration was dropped and the
+   text rendered at browser defaults. Reported in Step 16A.40 and fixed here for
+   the page headings; the remaining 93 declarations across the property, hotel,
+   inventory, policy, rate, room-type and sales modules were converted in STEP G,
+   which is why those screens finally render at their intended type scale. */
+.name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.location {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.identityBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+.notice {
+  margin: 0;
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-left: 3px solid var(--warning-500, var(--border-strong, currentColor));
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+/* ---- search ------------------------------------------------------------- */
+
+.search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.searchTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+}
+
+.searchFields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* Two dates side by side, then the button, once there is room for it. */
+@media (min-width: 640px) {
+  .searchFields {
+    grid-template-columns: 1fr 1fr auto;
+    align-items: end;
+  }
+}
+
+.searchAction {
+  display: flex;
+}
+
+.searchAction > * {
+  width: 100%;
+}
+
+.searchProblem {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--danger-700, var(--text-primary));
+}
+
+/* ---- results ------------------------------------------------------------ */
+
+.results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.resultsTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+}
+
+.resultsSummary,
+.priceNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.roomList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * Stacked on a phone with the price directly under the room, so it is visible
+ * without scrolling sideways; side by side once the row is wide enough to
+ * compare two rooms at a glance.
+ */
+.roomCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+@media (min-width: 720px) {
+  .roomCard {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-6);
+  }
+}
+
+.roomBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.roomName {
+  margin: 0;
+  font-size: var(--text-heading-xs, var(--text-body));
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.roomFacts,
+.roomNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.roomState {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+/* The price is the thing a guest scans for, so it leads on every breakpoint. */
+.roomPrice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: none;
+}
+
+@media (min-width: 720px) {
+  .roomPrice {
+    align-items: flex-end;
+    text-align: right;
+  }
+}
+
+.priceLabel,
+.priceUnit {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.priceValue {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* ---- quote --------------------------------------------------------------- */
+
+.quote {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.quoteFields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 720px) {
+  .quoteFields {
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  }
+}
+
+.quoteActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.quoteNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.quoteResult {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+
+.quoteLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Stacked on a phone so a long room name never squeezes the amount out of view. */
+.quoteLine {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+@media (min-width: 640px) {
+  .quoteLine {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: var(--space-4);
+  }
+
+  .quoteLineAmount {
+    grid-row: 1 / span 2;
+    grid-column: 2;
+    text-align: right;
+  }
+}
+
+.quoteLineName {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.quoteLineDetail {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.quoteLineAmount {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.quoteTotal {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+}
+
+/* ---- hotel list ---------------------------------------------------------- */
+
+.hotelList {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Two up once a card can hold a hotel name without squeezing it, three at
+   desktop. Not a fixed count — the grid decides from the available width. */
+@media (min-width: 640px) {
+  .hotelList {
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  }
+}
+
+.hotelCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  /* Grid items default to min-width: auto, so one unbreakable string sets the
+     width of the whole track and every card in it. Measured at 375px: without
+     this the track resolved to 388.8px inside a 343px list. */
+  min-width: 0;
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.hotelName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * The link fills the card's inline space so the tap target is the width of the
+ * card rather than the width of the words, and clears 44px on a coarse pointer
+ * even for a one-word hotel name.
+ */
+.hotelLink {
+  display: block;
+  min-height: 44px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hotelLink:hover,
+.hotelLink:focus-visible {
+  text-decoration: underline;
+}
+
+.hotelLocation {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+/* The not-bookable sentence. Prose, so it wraps — the same treatment the
+   detail page gives the identical string in .notice, at card scale. */
+.hotelNotice {
+  margin: 0;
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--border-strong, currentColor);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.hotelBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+/* ---------------------------------------------------------------------------
+   Reservation request — the step that creates a reservation and a 24h hold.
+   Sits inside the quote panel, so it inherits its spacing rhythm and reads as
+   the continuation of a priced selection rather than a separate page.
+--------------------------------------------------------------------------- */
+
+.request {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  padding: var(--space-5);
+  border: var(--border-width-strong) solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.requestTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+/* One column on a phone; two only where a label and its field both still fit. */
+.requestFields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 720px) {
+  .requestFields {
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  }
+}
+
+.requestSummary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+
+/*
+  Stacked by default so a long hotel name cannot push its value off a 320px
+  screen; side by side once there is room for both columns.
+*/
+.summaryRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.summaryRow dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.summaryRow dd {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  /* A room list or a hotel name must wrap, never overflow the card. */
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .summaryRow {
+    grid-template-columns: 10rem 1fr;
+    align-items: baseline;
+    column-gap: var(--space-4);
+  }
+}
+
+.requestConsents {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/*
+  The whole row is the label, so the tap target is the sentence and not just the
+  box — doc 82's minimum touch target, met by the line height on a phone.
+*/
+.checkboxRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--space-3);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.checkboxRow input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--accent-600, currentColor);
+}
+
+.required {
+  color: var(--danger-700, var(--text-primary));
+}
+
+.requestActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/* ---------------------------------------------------------------------------
+   Confirmation — only the six public keys of the 201.
+--------------------------------------------------------------------------- */
+
+.confirmation {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+  padding: var(--space-5);
+  border: 1px solid var(--success-500, var(--border-strong));
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.confirmationTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.confirmationReference {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+/*
+  The one value a guest may need to read aloud or copy down. Tabular figures
+  keep it legible, and it wraps rather than overflowing a narrow screen.
+*/
+.referenceValue {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Hotel policies — doc 58 §3.1. Plain disclosure: no tint, no emphasis ranking,
+ * nothing that would make one policy look more binding than another.
+ */
+.policies {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.policyIntro,
+.policyEmpty {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.policyList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.policy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.policyType {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-size: var(--text-body-strong, var(--text-body));
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.policyVersion {
+  font-size: var(--text-caption, var(--text-body-sm));
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.policyBody {
+  margin: 0;
+  max-width: 68ch;
+}
+
+.policyBody p {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+}
+
+.policySummary {
+  color: var(--text-primary);
+}
+
+/*
+ * Amenities — doc 03 §6's taxonomy, grouped by its own categories. Plain text,
+ * no icons: the contract defines no icon set, and inventing artwork per code is
+ * the guess a controlled vocabulary exists to prevent.
+ */
+.amenities {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.amenityEmpty {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.amenityGroups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .amenityGroups {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+}
+
+.amenityGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.amenityCategory {
+  margin: 0;
+  font-size: var(--text-body-strong, var(--text-body));
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.amenityList {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* The property's own flag, not the catalogue's. Weight only — no colour, so it
+   reads as emphasis rather than as a status. */
+.amenityHighlight {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/*
+ * Room types — what the hotel offers, not what is free. No price and no count
+ * appear here by design: this endpoint carries no inventory field, and a row
+ * that looked like an availability row would be a promise the page cannot keep.
+ */
+.roomTypes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.roomTypeNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.roomTypeList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .roomTypeList {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+}
+
+.roomType {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  border-radius: var(--radius-md, 10px);
+  background: var(--surface-raised, transparent);
+}
+
+.roomTypeName {
+  margin: 0;
+  font-size: var(--text-body-strong, var(--text-body));
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.roomTypeFacts {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.roomTypeFact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+.roomTypeFact dt {
+  color: var(--text-secondary);
+  min-width: 7ch;
+}
+
+.roomTypeFact dd {
+  margin: 0;
+  color: var(--text-primary);
+}
+
+/* The link back to a receipt. A real link, so it can be copied and bookmarked. */
+.receiptLink {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/* ---------------------------------------------------------------------------
+   Section headings
+
+   `sectionTitle` is used by the policies, amenities and facilities sections and
+   was never defined, so those headings rendered at browser defaults. Written
+   with longhand properties, as every rule in this file now is:
+   `font: var(--text-heading-lg)` resolves to `font: 28px`, which is not a valid
+   shorthand — it needs a family — so the whole declaration was dropped. See the
+   step 16A.40 report; the rest were converted in STEP G.
+   --------------------------------------------------------------------------- */
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+   Facilities — doc 23 §5's typed content blocks
+   --------------------------------------------------------------------------- */
+.facilities {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.facilityIntro {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.facilityList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  /* One column on a phone. `minmax(0, 1fr)` rather than `1fr` so a long
+     unbroken word cannot push the track wider than the viewport. */
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .facilityList {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+}
+
+.facility {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.facilityType {
+  margin: 0;
+  font-size: var(--text-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+.facilityName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.facilityDescription {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-editorial);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.facilityNote {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-caption);
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Landmarks — doc 23 §3.3's nearbyLandmarks
+   --------------------------------------------------------------------------- */
+.landmarks {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.landmarkIntro {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.landmarkList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .landmarkList {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+}
+
+.landmark {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-bottom: var(--space-3);
+  /* A rule rather than a card: a landmark is a line in a list of what is
+     nearby, and boxing each one would give it the weight of a facility. */
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+  min-width: 0;
+}
+
+.landmarkHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.landmarkName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-body-lg);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.landmarkDistance {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.landmarkDescription {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-editorial);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* ---------------------------------------------------------------------------
+   Portfolio filters — doc 58 §3.1's district narrowing
+   --------------------------------------------------------------------------- */
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.filtersTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Side by side once there is room; stacked on a phone, where a control squeezed
+   beside another is the first thing to become unusable. */
+@media (min-width: 768px) {
+  .filterRow {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+  }
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+@media (min-width: 768px) {
+  .filterField {
+    max-width: 22rem;
+  }
+}
+
+.filterLabel {
+  font-size: var(--text-label);
+  color: var(--text-secondary);
+}
+
+.filterSelect {
+  /* 44px, so the control clears the touch-target floor on a phone. */
+  min-height: 44px;
+  width: 100%;
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  background: var(--surface);
+  border: var(--border-width-strong) solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.filterSubmit {
+  min-height: 44px;
+  padding: 0 var(--space-5);
+  font-size: var(--text-button);
+  color: var(--text-inverse);
+  background: var(--accent-600);
+  border: 1px solid var(--accent-600);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.filterSubmit:hover {
+  background: var(--accent-700);
+  border-color: var(--accent-700);
+}
+
+.filterClear {
+  /* A link, because clearing is a navigation. Padded to the same touch height
+     so it is not a hairline target beside a full-size button. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-body-sm);
+  color: var(--text-accent);
+}
+
+.resultCount {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Signature experiences — doc 67 §1's section 5
+
+   The one content block a property cannot publish without (doc 67 §2), and doc
+   66 §7 puts the flagship's restaurant and rooftop here rather than in an
+   amenity list. So it is given more room than the landmarks below it: a
+   restrained card with real padding, a serif title, and editorial line-height on
+   the body.
+
+   Cards rather than the landmarks' rule-lines, and no image well — Step 16A.47
+   made V1 text-only, so this is typography that was designed to be typography,
+   not a photo layout with the photo missing.
+   --------------------------------------------------------------------------- */
+.experiences {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.experienceIntro {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 68ch;
+}
+
+.experienceList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .experienceList {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  }
+}
+
+.experience {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.experienceName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.experienceDescription {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-editorial);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/*
+  Doc 67 §1's hero line. Serif and set at display scale because it is the
+  hotel's own sentence about itself, not a label — the one piece of copy on this
+  page the operator wrote to be read first. Bounded to a readable measure so it
+  keeps its shape on a 1440px viewport.
+*/
+.signature {
+  margin: var(--space-2) 0 0;
+  max-width: 34ch;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+/*
+  The short description, below the location: the paragraph a card would carry,
+  reading here as the hotel's introduction.
+*/
+.lead {
+  margin: var(--space-3) 0 0;
+  max-width: 62ch;
+  color: var(--text-secondary);
+  line-height: var(--leading-body);
+}
+
+/* ---- STEP H: the guest-facing room gallery ------------------------------ */
+
+.roomGallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-block-end: var(--space-4);
+}
+
+.roomGalleryMain {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+}
+
+/*
+ * 3:2, so a row of room cards keeps its rhythm whatever aspect ratio the
+ * Partner's photographs happen to be. `object-fit: cover` crops rather than
+ * distorts — a stretched bedroom is worse than a cropped one.
+ */
+.roomGalleryImage {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.roomGalleryCaption {
+  padding: var(--space-2) 0 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+/*
+ * The strip scrolls inside itself, so a room with nine photographs never makes
+ * the page scroll sideways on a phone.
+ */
+.roomGalleryThumbs {
+  display: flex;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.roomGalleryThumb {
+  display: block;
+  inline-size: 84px;
+  block-size: 64px;
+  flex: none;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  scroll-snap-align: start;
+  cursor: pointer;
+}
+
+/* 84×64 exceeds the 44px touch floor in both axes. */
+.roomGalleryThumb[data-active] {
+  border-color: var(--accent-700);
+}
+
+.roomGalleryThumb:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.roomGalleryThumb img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* ---- STEP I: the property gallery --------------------------------------- */
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/*
+ * One lead image with up to three beside it — the arrangement every hotel
+ * booking site converged on. Below the tablet breakpoint it collapses to a
+ * single column: three 90px tiles beside a lead image on a phone show nothing.
+ */
+.galleryMosaic {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .galleryMosaic[data-count='2'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .galleryMosaic[data-count='3'],
+  .galleryMosaic[data-count='4'] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    block-size: 26rem;
+  }
+
+  /* The lead spans every row of the supporting column. */
+  .galleryMosaic[data-count='3'] .galleryTile[data-lead],
+  .galleryMosaic[data-count='4'] .galleryTile[data-lead] {
+    grid-row: 1 / -1;
+  }
+
+  .galleryMosaic[data-count='3'] .galleryTile[data-lead] {
+    grid-row: 1 / 4;
+  }
+}
+
+.galleryTile {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  background: var(--surface-sunken);
+  cursor: pointer;
+}
+
+.galleryTile:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+
+.galleryImage {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+@media (min-width: 768px) {
+  .galleryMosaic[data-count='3'] .galleryImage,
+  .galleryMosaic[data-count='4'] .galleryImage {
+    aspect-ratio: auto;
+  }
+}
+
+.galleryTile:hover .galleryImage {
+  transform: scale(1.03);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galleryImage,
+  .galleryTile:hover .galleryImage {
+    transition: none;
+    transform: none;
+  }
+}
+
+/* "+12" over the last tile, so the set admits how much more there is. */
+.galleryMore {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgb(26 23 21 / 52%);
+  color: #ffffff;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+}
+
+.galleryViewAll {
+  align-self: flex-start;
+  min-block-size: 44px;
+  padding-inline: var(--space-5);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.galleryViewAll:hover {
+  border-color: var(--accent-600);
+  color: var(--accent-700);
+}
+
+/* ---- The lightbox -------------------------------------------------------- */
+
+/*
+ * A real `dialog`, so the platform supplies inertness, focus trapping and
+ * Escape. The backdrop is styled rather than built.
+ */
+.lightbox {
+  inline-size: min(100vw, 100%);
+  max-inline-size: 100vw;
+  block-size: 100dvh;
+  max-block-size: 100dvh;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #14201d;
+  color: #ffffff;
+}
+
+.lightbox::backdrop {
+  background: rgb(10 14 13 / 88%);
+}
+
+.lightboxInner {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  block-size: 100%;
+  padding: var(--space-4);
+  gap: var(--space-3);
+}
+
+.lightboxBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.lightboxCounter {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  color: rgb(255 255 255 / 78%);
+}
+
+.lightboxClose,
+.lightboxArrow {
+  min-block-size: 44px;
+  min-inline-size: 44px;
+  padding-inline: var(--space-4);
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: #ffffff;
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  cursor: pointer;
+}
+
+.lightboxClose:hover,
+.lightboxArrow:hover {
+  border-color: var(--gold-500);
+  color: var(--gold-500);
+}
+
+.lightboxFigure {
+  margin: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  place-items: center;
+  min-block-size: 0;
+}
+
+.lightboxImage {
+  inline-size: auto;
+  max-inline-size: 100%;
+  block-size: auto;
+  max-block-size: 100%;
+  object-fit: contain;
+}
+
+.lightboxCaption {
+  padding-block-start: var(--space-3);
+  text-align: center;
+  color: rgb(255 255 255 / 72%);
+  font-size: var(--text-body-sm);
+}
+
+.lightboxNav {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Hotel cards, with photographs -------------------------------------- */
+
+.hotelMedia {
+  display: block;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+}
+
+.hotelImage {
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  transition: transform 300ms ease;
+}
+
+.hotelCard:hover .hotelImage {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotelImage,
+  .hotelCard:hover .hotelImage {
+    transition: none;
+    transform: none;
+  }
+}
+
+.hotelBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* ---- Room card additions ------------------------------------------------- */
+
+.roomTypeBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.roomTypeLead {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* Several arrangements read as a list, not as one run-on sentence. */
+.roomTypeBed {
+  display: block;
+}
+
+.roomTypeChoose {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 44px;
+  padding-inline: var(--space-6);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-size: var(--text-button);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.roomTypeChoose:hover {
+  background: var(--accent-600);
+}
+
+/* The search form is a scroll target for every room's "Chọn phòng". */
+.searchAnchor {
+  scroll-margin-block-start: var(--space-6);
+}
+
+/* The room gallery's main image is a button now, so it needs the reset. */
+.roomGalleryMain {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  cursor: pointer;
+}
+
+.roomGalleryMain:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.roomGalleryCount {
+  position: absolute;
+  inset-block-end: var(--space-3);
+  inset-inline-end: var(--space-3);
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-full);
+  background: rgb(26 23 21 / 62%);
+  color: #ffffff;
+  font-size: var(--text-caption);
+}

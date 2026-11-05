@@ -1,0 +1,17 @@
+.page { display: grid; gap: 1.5rem; }
+.head { display: grid; gap: .45rem; }
+.eyebrow { color: var(--color-accent, #98652f); font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; }
+.title { margin: 0; font-family: var(--font-display, Georgia, serif); font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 400; }
+.lead { max-width: 62rem; color: #716b64; line-height: 1.65; }
+.group { display: grid; gap: .8rem; }
+.groupTitle { margin: 0; padding-bottom: .6rem; border-bottom: 1px solid #ddd5ca; font: 400 1.5rem var(--font-display, Georgia, serif); }
+.slot { display: grid; grid-template-columns: minmax(12rem, 1fr) minmax(15rem, 2fr) auto; align-items: end; gap: .8rem; border-bottom: 1px solid #e8e2d9; padding: .9rem 0; }
+.label { display: grid; gap: .3rem; font-size: .9rem; }
+.key { color: #847d74; font: .72rem ui-monospace, monospace; overflow-wrap: anywhere; }
+.input { width: 100%; min-width: 0; padding: .7rem; border: 1px solid #d9d1c7; background: #fffdfa; color: #292724; }
+.actions { display: flex; align-items: center; gap: .65rem; }
+.button { padding: .72rem .95rem; border: 1px solid #282621; background: #282621; color: white; cursor: pointer; }
+.button:disabled { opacity: .55; cursor: wait; }
+.toggle { white-space: nowrap; color: #57524c; font-size: .82rem; }
+.message { color: #605b53; }
+@media (max-width: 780px) { .slot { grid-template-columns: 1fr; align-items: start; } .actions { justify-content: space-between; } }

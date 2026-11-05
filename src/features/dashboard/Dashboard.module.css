@@ -1,0 +1,530 @@
+/*
+ * The partner overview.
+ *
+ * Operational density (the partner shell sets `data-density`), so 34px controls
+ * on a mouse and 44px under a coarse pointer come from the tokens rather than
+ * from anything written here. Mobile-first: one column, widening at breakpoints.
+ */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+/* ---- Greeting ---------------------------------------------------------- */
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.greetingEyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.lead {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---- Stat row ---------------------------------------------------------- */
+
+.stats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+/*
+ * A measurement, presented as one. The top rule is gold when the figure is real
+ * and disappears when it is not, so a row of four reads at a glance as "two of
+ * these are measured".
+ */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-top: 2px solid var(--gold-500);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.stat[data-unavailable] {
+  border-top-color: var(--border-subtle);
+  background: transparent;
+}
+
+/* Label and glyph on one line, as in the reference: the figure below then has
+   the card's full width and stays the largest thing on it. */
+.statHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.statLabel {
+  margin: 0;
+  font-size: var(--text-label);
+  color: var(--text-secondary);
+}
+
+/* A tinted tile rather than a bare glyph — it gives the card a fixed anchor at
+   the top right whatever the label's length. */
+.statIcon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  background: var(--accent-100);
+  color: var(--accent-700);
+  font-size: 18px;
+}
+
+/* An unavailable figure keeps its tile, quietly: removing it would make the row
+   of four cards ragged for the sake of a metric that is merely absent. */
+.stat[data-unavailable] .statIcon {
+  background: var(--surface-sunken);
+  color: var(--text-disabled);
+}
+
+.statValue {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-display-md);
+  font-weight: 400;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+
+.statNote {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/* A card with no source reads as quieter, and its dash is never mistaken for a
+   measured zero. */
+.stat[data-unavailable] .statValue {
+  color: var(--text-disabled);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---- Hotels ------------------------------------------------------------ */
+
+.hotels {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+.sectionCount {
+  color: var(--text-muted);
+  font-size: var(--text-heading-sm);
+}
+
+.sectionLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--density-control-height);
+  color: var(--text-accent);
+  font-size: var(--text-body-sm);
+}
+
+.hotelGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hotelCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  transition: box-shadow 140ms ease, transform 140ms ease, border-color 140ms ease;
+  height: 100%;
+  /* No padding at the top: the media band runs to the card's edges, as the
+     reference's photograph does. The body below re-inserts its own. */
+  padding: 0 var(--space-5) var(--space-5);
+  overflow: hidden;
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: inherit;
+  text-decoration: none;
+}
+
+/* A lift on hover, so a grid of cards reads as a set of things you can open. */
+.hotelCard:hover {
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hotelCard:hover {
+    transform: none;
+  }
+}
+
+.hotelCard:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* The cover slot. A 16:9 band so the grid's rows stay even whatever the name
+   length, tinted rather than grey so an empty card still reads as KAS. */
+/*
+ * The cover slot. No photograph exists, so this is a designed empty state rather
+ * than a grey box: the deep-green field with a hairline gold frame is the same
+ * language as the sign-in brand panel, and it stays legible as the place a real
+ * photograph will go.
+ */
+.hotelMedia {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 3 / 2;
+  margin: 0 calc(var(--space-5) * -1) var(--space-5);
+  overflow: hidden;
+  background: var(--accent-700);
+  background-image:
+    linear-gradient(160deg, var(--accent-600) 0%, var(--accent-700) 70%);
+  color: rgb(255 255 255 / 62%);
+}
+
+/*
+ * The same gold corner bracket the sign-in brand panel carries, so an empty
+ * cover reads as part of the product's own furniture rather than as a frame
+ * waiting for a file that failed to load.
+ */
+.hotelMedia::after {
+  content: '';
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-start: var(--space-3);
+  inline-size: 40px;
+  block-size: 40px;
+  border-block-start: 1px solid var(--gold-500);
+  border-inline-start: 1px solid var(--gold-500);
+  pointer-events: none;
+}
+
+.hotelMediaLabel {
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/*
+ * The cover fills the band it was measured for.
+ *
+ * `object-fit: cover` because a hotel photograph is not 3:2 and letterboxing one
+ * inside a card grid reads as a mistake. Absolute rather than a grid child so it
+ * sits under the gold bracket and the lifecycle badge, both of which are already
+ * positioned against this band — and so a slow or failed image leaves the
+ * composed background visible rather than collapsing the card's height.
+ */
+.hotelMediaImage {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.hotelHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* The badge sits over the media band's lower-left, clear of the gold bracket. */
+.hotelBadge {
+  position: absolute;
+  inset-block-end: var(--space-3);
+  inset-inline-start: var(--space-3);
+}
+
+.hotelName {
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/*
+ * Completeness, stated rather than drawn as a bar: the endpoint reports which
+ * fields are missing, not a percentage, and a bar would be inventing one.
+ */
+.hotelProgress {
+  margin-block-start: var(--space-2);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--gold-700);
+}
+
+.hotelProgress[data-complete] {
+  color: var(--accent-700);
+}
+
+/* The card's closing line — a quiet call to action, so the card ends on a verb
+   rather than trailing off after its metadata. */
+.hotelCta {
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  color: var(--text-accent);
+}
+
+.hotelCard:hover .hotelCta { text-decoration: underline; }
+
+.unnamed {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.hotelMeta {
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+/* ---- The two-column body ------------------------------------------------ */
+
+/*
+ * One column until there is genuinely room for two. The rail is a companion to
+ * the portfolio, not a peer: at 1280 it takes a fixed 22rem so the hotel cards
+ * keep enough width to stay cards rather than becoming strips.
+ */
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-6);
+  align-items: start;
+}
+
+/* ---- Request rail -------------------------------------------------------- */
+
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  min-inline-size: 0;
+}
+
+.railHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.railTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.railList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.railRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  color: inherit;
+  text-decoration: none;
+}
+
+.railRow:hover {
+  background: var(--surface-sunken);
+}
+
+.railRowTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.railReference {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  color: var(--text-primary);
+}
+
+/* The frozen sales status, shown as the server's own value. */
+.railStatus {
+  flex: none;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--accent-100);
+  color: var(--accent-700);
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.railProperty {
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.railMeta {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.railMore {
+  margin: 0;
+  padding-block-start: var(--space-3);
+  border-block-start: var(--border-width-subtle) solid var(--border-subtle);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/*
+ * The empty state is the one this rail shows today, so it is designed rather
+ * than left as a bare sentence.
+ */
+.railEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  text-align: center;
+}
+
+.railEmptyIcon {
+  display: grid;
+  place-items: center;
+  inline-size: 44px;
+  block-size: 44px;
+  border-radius: 50%;
+  background: var(--accent-100);
+  color: var(--accent-700);
+}
+
+.railEmptyTitle {
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.railEmptyBody {
+  margin: 0;
+  max-inline-size: 32ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* ---- Wider ------------------------------------------------------------- */
+
+@media (min-width: 768px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hotelGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .columns {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+  }
+
+  /* Two across, not three: the rail has taken the width a third would need. */
+  .hotelGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1600px) {
+  .hotelGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

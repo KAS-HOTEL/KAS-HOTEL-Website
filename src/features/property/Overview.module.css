@@ -1,0 +1,466 @@
+/*
+ * The Partner hotel overview.
+ *
+ * Replaces a six-card grid whose cards had no relationship to each other and no
+ * order — one of which listed a UUID, a slug, an enum value and a sort order.
+ * This is a hierarchy instead: the hotel, its numbers, what is left to do, where
+ * to go and do it.
+ *
+ * Stronger borders than the rest of the console on purpose. The old surface read
+ * as a field of floating panels because every edge was `--border-subtle` on a
+ * near-white ground; sections here are bounded by `--border-default` so an
+ * operator can see where one thing ends and the next begins.
+ *
+ * No `font:` shorthand anywhere — it resets `font-family` to the initial value
+ * unless restated, which silently drops the brand typeface.
+ */
+
+.overview {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+/* ---------------------------------------------------------------------------
+ * The hero
+ * ------------------------------------------------------------------------ */
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 768px) {
+  .hero {
+    grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero {
+    grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+  }
+}
+
+.heroImageWrap {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-sunken);
+  aspect-ratio: 16 / 10;
+}
+
+.heroImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Not a grey rectangle pretending to be a photograph — a control that fixes it. */
+.heroEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  aspect-ratio: 16 / 10;
+  background: var(--surface-sunken);
+  border-right: var(--border-width-subtle) solid var(--border-subtle);
+  text-decoration: none;
+}
+
+.heroEmptyTitle {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.heroEmptyHint {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-accent);
+}
+
+.heroBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  min-width: 0;
+}
+
+.heroName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.heroPlace,
+.heroPlaceUnset {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.heroPlace {
+  color: var(--text-secondary);
+}
+
+.heroPlaceUnset {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.heroLine {
+  margin: var(--space-1) 0 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-top: auto;
+  padding-top: var(--space-4);
+}
+
+.heroPrimary,
+.heroSecondary {
+  display: inline-flex;
+  align-items: center;
+  height: var(--density-control-height);
+  padding: 0 var(--space-5);
+  border-radius: var(--radius-md);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.heroPrimary {
+  background: var(--accent-700);
+  border: 1px solid var(--accent-700);
+  color: var(--text-inverse);
+}
+
+.heroPrimary:hover {
+  background: var(--accent-600);
+}
+
+.heroSecondary {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  color: var(--text-primary);
+}
+
+.heroSecondary:hover {
+  border-color: var(--accent-600);
+  color: var(--text-accent);
+}
+
+.heroPrimary:focus-visible,
+.heroSecondary:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* ---------------------------------------------------------------------------
+ * Metrics — four, and never more
+ * ------------------------------------------------------------------------ */
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .metrics {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  min-width: 0;
+}
+
+a.metric:hover {
+  border-color: var(--accent-600);
+}
+
+a.metric:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.metricValue {
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.metricLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.metricHint {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * Tasks — one list, not six cards
+ * ------------------------------------------------------------------------ */
+
+.tasks {
+  padding: var(--space-5);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.tasksHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.tasksCount {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.tasksDone {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--success-500);
+}
+
+.taskList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.task {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.taskLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  min-width: 0;
+}
+
+.taskAction {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-accent);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+ * Quick actions
+ * ------------------------------------------------------------------------ */
+
+.quickActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+@media (min-width: 1024px) {
+  .quickActions {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.quickAction {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-left: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  min-width: 0;
+}
+
+.quickAction:hover {
+  border-color: var(--accent-600);
+  border-left-color: var(--gold-600);
+}
+
+.quickAction:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.quickActionTitle {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.quickActionHint {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * Lifecycle panels
+ * ------------------------------------------------------------------------ */
+
+/*
+ * One column, because there is one panel. This was a two-column grid while the
+ * publish panel sat beside "Gửi duyệt"; with the publish step taken out of the
+ * overview, the second column was empty and left the remaining panel stranded
+ * at half width on a desktop.
+ */
+.lifecycle {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/* ---------------------------------------------------------------------------
+ * Form sections — grouping for the authoring screens
+ * ------------------------------------------------------------------------ */
+
+.formSection {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/*
+ * The header sits on the sunken tone with a hard rule beneath it, so the eye can
+ * find the start of a group while scrolling a long form. The old treatment was a
+ * bold line of text on the same white as the fields, which disappeared.
+ */
+.formSectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-5);
+  background: var(--surface-sunken);
+  border-bottom: var(--border-width) solid var(--border-default);
+}
+
+.formSectionHeadText {
+  min-width: 0;
+}
+
+.formSectionActions {
+  flex-shrink: 0;
+}
+
+.formSectionTitle {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--text-primary);
+}
+
+.formSectionNote {
+  margin: 2px 0 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.formSectionBody {
+  padding: var(--space-5);
+}
+
+/*
+ * Two columns from tablet up, one below. Fields that hold a sentence — a
+ * description, a full address line — opt out with `.formFieldWide` and span the
+ * row, because a 220-character textarea in a half-width column is unusable.
+ */
+.formFields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .formFields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .formFieldWide {
+    grid-column: 1 / -1;
+  }
+}

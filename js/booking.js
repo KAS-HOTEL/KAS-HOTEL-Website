@@ -9,16 +9,32 @@
 
   /**
    * Per-night rates from the operator rate sheet for this stay, or null when
-   * the room has no mapped sheet row (the flat demo rate is then used).
+   * prices are loaded from the backend for the selected dates.
    * A blank cell in the sheet makes the quote incomplete -> we fall back
    * rather than invent a figure for that night.
    */
-  function sheetNightly(room, checkIn, checkOut) {
-    var RT = global.KAS_RATES;
-    if (!RT || !room || !RT.hasSheetRate(room.id)) return null;
-    var q = RT.quote(room.id, checkIn, checkOut);
-    if (!q || !q.complete) return null;
-    return q.nights.map(function (x) { return x.rate; });
+  function sheetNightly() { return null; }
+
+  async function refreshQuote() {
+    var c = draft();
+    var mapped = global.KAS_API_MAP && global.KAS_API_MAP[c.roomId];
+    try {
+      if (!mapped || !global.KAS_API) throw new Error('Price is not configured for this room.');
+      var quote = await global.KAS_API.request('/api/v1/public/request-pricing/quote', { method: 'POST', body: {
+        propertySlug: mapped.propertySlug, checkIn: c.checkIn, checkOut: c.checkOut,
+        adults: +c.adults || 1, children: +c.children || 0, childAges: [],
+        lines: [{ roomTypeSlug: mapped.roomTypeSlug, quantity: +c.rooms || 1 }]
+      }});
+      var line = quote.lines && quote.lines[0];
+      var price = { nightly: line && line.nightlyFrom ? line.nightlyFrom.amountMinor : null,
+        nights: quote.nights, rooms: +c.rooms || 1, subtotal: quote.roomsSubtotal.amountMinor,
+        total: quote.estimatedTotal ? quote.estimatedTotal.amountMinor : quote.total.amountMinor,
+        serviceCharge: 0, vat: 0, serviceChargeRate: 0, vatRate: 0, source: 'BACKEND' };
+      return S.patchCurrent({ price: price, quoteError: '', nights: quote.nights });
+    } catch (error) {
+      var why = describeBookingError(error);
+      return S.patchCurrent({ price: { total: null, subtotal: null, nightly: null, nights: U.nights(c.checkIn,c.checkOut), rooms: c.rooms, source: 'UNAVAILABLE' }, quoteError: why.message, quoteErrorCustomer: why.customer });
+    }
   }
 
   /* ---------- search criteria ---------- */
@@ -85,7 +101,7 @@
   /** Recompute price from whatever is currently in the draft. */
   function reprice() {
     var c = draft();
-    if (!c.hotelId || !c.roomId) return c;
+    if (!c.hotelId || !c.roomId || (c.price && c.price.source)) return c;
     var r = D.getRoom(c.hotelId, c.roomId);
     if (!r) return c;
     var n = U.nights(c.checkIn, c.checkOut);
@@ -111,7 +127,7 @@
   function requireGuest() {
     var c = requireRoom();
     if (!c) return null;
-    if (c.guest && U.notEmpty(c.guest.firstName) && U.isEmail(c.guest.email)) return c;
+    if (c.guest && U.notEmpty(c.guest.fullName || [c.guest.firstName, c.guest.lastName].filter(Boolean).join(' ')) && U.isEmail(c.guest.email)) return c;
     U.toast('Please complete your guest details first.');
     setTimeout(function () { location.href = 'guest-details.html'; }, 900);
     return null;
@@ -120,20 +136,80 @@
   /* ---------- guest details validation ---------- */
   function validateGuest(g) {
     var e = {};
-    if (!U.notEmpty(g.firstName)) e.firstName = 'First name is required.';
-    if (!U.notEmpty(g.lastName))  e.lastName  = 'Last name is required.';
+    if (!U.notEmpty(g.fullName || [g.firstName, g.lastName].filter(Boolean).join(' '))) e.fullName = 'Full name is required.';
     if (!U.notEmpty(g.email))     e.email     = 'Email address is required.';
     else if (!U.isEmail(g.email)) e.email     = 'Please enter a valid email address.';
     if (!U.notEmpty(g.phone))     e.phone     = 'Phone number is required.';
     else if (!U.isPhone(g.phone)) e.phone     = 'Please enter a valid phone number.';
     if (!U.notEmpty(g.nationality)) e.nationality = 'Please select a nationality.';
     if (g.checkInGuest === 'different') {
-      if (!U.notEmpty(g.guestFirstName)) e.guestFirstName = 'Guest first name is required.';
-      if (!U.notEmpty(g.guestLastName))  e.guestLastName  = 'Guest last name is required.';
+      if (!U.notEmpty(g.guestFullName || [g.guestFirstName, g.guestLastName].filter(Boolean).join(' '))) e.guestFullName = 'Guest full name is required.';
     }
     if (!(+g.adults >= 1)) e.adults = 'At least 1 adult is required.';
-    if (!U.notEmpty(g.paymentMethod)) e.paymentMethod = 'Please choose a payment method.';
     return { ok: Object.keys(e).length === 0, errors: e };
+  }
+
+
+  function newIdempotencyKey() {
+    return global.crypto && crypto.randomUUID ? crypto.randomUUID() : ('kas-' + Date.now() + '-' + Math.random().toString(16).slice(2));
+  }
+
+  /* The real reason a quote or booking request was refused, in the guest's
+     language. `customer: true` means the guest can fix it (dates, guests,
+     contact details); `false` means it is on the hotel/system side, so the
+     guest is told so instead of being sent back to re-check their details. */
+  function describeBookingError(error) {
+    var vi = !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi');
+    function t(v, e) { return vi ? v : e; }
+    var payload = (error && error.payload) || {};
+    var code = payload.code || '';
+    var details = Array.isArray(payload.details) ? payload.details : [];
+    var status = error && error.status;
+    var first = details[0] || {};
+    var field = String(first.field || ''), reason = String(first.code || ''), note = String(first.message || '');
+    function num(text) { var m = String(text).match(/(\d+)/g); return m ? m : []; }
+
+    if (!status) {
+      return { customer: false, message: t('Không kết nối được tới hệ thống đặt phòng. Vui lòng kiểm tra mạng và thử lại sau ít phút.', 'The booking system could not be reached. Check your connection and try again in a moment.') };
+    }
+    if (code === 'IDEMPOTENCY_KEY_REUSED') {
+      return { customer: false, message: t('Yêu cầu trước đó vẫn còn lưu trên trình duyệt. Vui lòng bấm gửi lại.', 'A previous request was still stored in this browser. Please send the request again.') };
+    }
+    /* Reasons first: the same reason can arrive under different codes
+       (OVER_CAPACITY comes as OCCUPANCY_EXCEEDED, child pricing as CONFIG_MISSING). */
+    if (reason === 'OVER_CAPACITY' || code === 'OCCUPANCY_EXCEEDED') {
+      var capacity = num(note)[0];
+      return { customer: true, message: t('Số khách vượt quá sức chứa của phòng đã chọn' + (capacity ? ' (tối đa ' + capacity + ' khách)' : '') + '. Vui lòng thêm phòng hoặc giảm số khách.', 'Too many guests for the selected rooms' + (capacity ? ' (up to ' + capacity + ')' : '') + '. Add a room or reduce the number of guests.') };
+    }
+    if (reason === 'CHILD_PRICING_UNSUPPORTED') return { customer: true, message: t('Hiện chưa nhận đặt online cho kỳ nghỉ có trẻ em. Vui lòng liên hệ khách sạn để được hỗ trợ.', 'Online booking with children is not available yet. Please contact the hotel.') };
+    if (reason === 'VOUCHER_UNSUPPORTED') return { customer: true, message: t('Mã ưu đãi chưa áp dụng được khi đặt online. Vui lòng bỏ mã ưu đãi hoặc liên hệ khách sạn.', 'Offer codes cannot be applied online yet. Remove the code or contact the hotel.') };
+    if (code === 'PROPERTY_CLOSED') return { customer: false, message: t('Khách sạn này đang tạm ngừng nhận đặt phòng. Vui lòng chọn khách sạn khác hoặc liên hệ KAS.', 'This hotel is not taking bookings at the moment. Please choose another hotel or contact KAS.') };
+    if (code === 'CONFIG_MISSING') return { customer: false, message: t('Khách sạn chưa thiết lập đủ thông tin để nhận đặt online cho lựa chọn này (lỗi phía khách sạn). Vui lòng liên hệ khách sạn.', 'The hotel has not finished setting up online booking for this choice (hotel-side). Please contact the hotel.') };
+    if (code === 'VALIDATION_FAILED') {
+      if (field === 'checkIn') return { customer: true, message: t('Ngày nhận phòng đã qua. Vui lòng chọn ngày nhận phòng từ hôm nay trở đi.', 'The check-in date has passed. Please choose today or a later date.') };
+      if (field === 'checkOut') return { customer: true, message: t('Ngày trả phòng phải sau ngày nhận phòng (tối thiểu 1 đêm).', 'Check-out must be after check-in (at least one night).') };
+      if (field === 'guest.email') return { customer: true, message: t('Email không hợp lệ. Vui lòng kiểm tra lại địa chỉ email.', 'The email address is not valid. Please check it.') };
+      if (field === 'guest.fullName') return { customer: true, message: t('Vui lòng nhập họ và tên người nhận phòng.', 'Please enter the guest\'s full name.') };
+      if (field === 'guest.phone') return { customer: true, message: t('Vui lòng nhập số điện thoại liên hệ.', 'Please enter a contact phone number.') };
+      if (field === 'guest.country') return { customer: true, message: t('Quốc tịch chưa hợp lệ. Vui lòng chọn lại quốc tịch.', 'The nationality is not valid. Please choose it again.') };
+      if (field === 'adults') return { customer: true, message: t('Cần ít nhất 1 người lớn cho mỗi đặt phòng.', 'At least one adult is required.') };
+      if (field.indexOf('lines') === 0 || reason === 'DUPLICATE_ROOM_TYPE') return { customer: false, message: t('Thông tin phòng gửi lên không hợp lệ (lỗi hệ thống). Vui lòng chọn lại phòng hoặc liên hệ khách sạn.', 'The room selection could not be read (system error). Please choose the room again or contact the hotel.') };
+    }
+    if (code === 'NO_AVAILABILITY' || status === 422) {
+      if (reason === 'NOT_PRICED') {
+        var date = (note.match(/\d{4}-\d{2}-\d{2}/) || [''])[0];
+        var shown = date ? date.split('-').reverse().join('/') : '';
+        return { customer: false, message: t('Khách sạn chưa mở giá cho ' + (shown ? 'ngày ' + shown : 'một số đêm trong kỳ nghỉ') + '. Vui lòng chọn ngày khác hoặc liên hệ khách sạn.', 'The hotel has not opened rates for ' + (shown ? date : 'some nights of this stay') + ' yet. Please choose other dates or contact the hotel.') };
+      }
+      if (reason === 'NOT_BOOKABLE') return { customer: false, message: t('Hạng phòng này hiện không nhận đặt cho ngày đã chọn. Vui lòng chọn hạng phòng hoặc ngày khác.', 'This room type cannot be booked for these dates. Please choose another room or dates.') };
+      var left = num(note)[1];
+      return { customer: true, message: t('Hạng phòng đã hết cho ngày đã chọn' + (left !== undefined ? ' (còn ' + left + ' phòng)' : '') + '. Vui lòng chọn ngày, số phòng hoặc hạng phòng khác.', 'This room is no longer available for these dates' + (left !== undefined ? ' (' + left + ' left)' : '') + '. Please choose other dates, fewer rooms or another room.') };
+    }
+    if (status === 404) return { customer: false, message: t('Khách sạn hoặc hạng phòng này hiện không nhận đặt online. Vui lòng liên hệ khách sạn.', 'This hotel or room is not open for online requests. Please contact the hotel.') };
+    if (status === 429) return { customer: false, message: t('Bạn đã gửi quá nhiều yêu cầu trong thời gian ngắn. Vui lòng thử lại sau ít phút.', 'Too many requests in a short time. Please try again in a few minutes.') };
+    if (status >= 500) return { customer: false, message: t('Hệ thống đặt phòng đang gặp sự cố, không phải do thông tin của bạn. Vui lòng thử lại sau hoặc liên hệ khách sạn.', 'The booking system had a problem — not your details. Please try again later or contact the hotel.') };
+    /* Unknown refusal: show the server's own words rather than a generic line. */
+    return { customer: true, message: payload.message ? t('Không gửi được yêu cầu: ', 'Request refused: ') + payload.message : (error.message || t('Không gửi được yêu cầu đặt phòng.', 'Could not send the booking request.')) };
   }
 
   /* ---------- confirm ---------- */
@@ -141,29 +217,84 @@
    * Final validation → mint booking number → persist.
    * @returns {{ok:boolean, booking?:Object, errors?:Object}}
    */
-  function confirmBooking() {
+  async function confirmBooking() {
+    await refreshQuote();
     var c = draft();
     var errs = {};
+    if(c.quoteError) errs.price=c.quoteError;
+    var customerFixable = c.quoteError ? c.quoteErrorCustomer !== false : true;
 
     if (!c.hotelId || !D.getHotel(c.hotelId)) errs.hotel = 'Hotel is missing.';
     if (!c.roomId  || !D.getRoom(c.hotelId, c.roomId)) errs.room = 'Room selection is missing.';
     var sv = validateSearch(c);
     if (!sv.ok) Object.assign(errs, sv.errors);
+    /* The dates themselves are wrong: say that once, not again as a price error. */
+    if (errs.checkIn || errs.checkOut) delete errs.price;
     if (!c.guest) errs.guest = 'Guest details are missing.';
     else {
       var gv = validateGuest(c.guest);
       if (!gv.ok) Object.assign(errs, gv.errors);
     }
-    if (Object.keys(errs).length) return { ok: false, errors: errs };
+    if (Object.keys(errs).length) return Promise.resolve({ ok: false, errors: errs, customerFixable: customerFixable });
 
     var h = D.getHotel(c.hotelId), r = D.getRoom(c.hotelId, c.roomId);
-    var n = U.nights(c.checkIn, c.checkOut);
-    var p = U.calcPrice(r.pricePerNight, n, c.rooms || 1, null,
-                        sheetNightly(r, c.checkIn, c.checkOut));
-    var number = S.generateBookingNumber(h.branchCode);
-
-    var booking = {
-      bookingNumber: number,
+    if (+c.children > 0) return Promise.resolve({ ok: false, errors: { children: 'Online booking for stays with children is not available yet. Please contact the hotel directly.' } });
+    var mapped = global.KAS_API_MAP && global.KAS_API_MAP[c.roomId];
+    if (!global.KAS_API || !mapped) return Promise.resolve({ ok: false, errors: { api: 'This room is not mapped to the booking system yet. Please contact the hotel.' } });
+    var guestName = String(c.guest.checkInGuest === 'different'
+      ? (c.guest.guestFullName || [c.guest.guestFirstName, c.guest.guestLastName].filter(Boolean).join(' '))
+      : (c.guest.fullName || [c.guest.firstName, c.guest.lastName].filter(Boolean).join(' '))).trim();
+    var country = String(c.guest.nationality || '').trim().toUpperCase();
+    if (!/^[A-Z]{2}$/.test(country)) country = null;
+    var locale = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi' ? 'vi' : 'en';
+    var body = {
+      propertySlug: mapped.propertySlug,
+      checkIn: c.checkIn,
+      checkOut: c.checkOut,
+      adults: +c.adults || 1,
+      children: 0,
+      childAges: [],
+      lines: [{ roomTypeSlug: mapped.roomTypeSlug, quantity: +c.rooms || 1 }],
+      guest: {
+        fullName: guestName,
+        email: c.guest.email,
+        phone: String(c.guest.phoneFull || c.guest.phone || '').trim(),
+        country: country,
+        preferredChannel: null,
+        bestTimeToContact: null
+      },
+      specialRequests: c.guest.specialRequests || null,
+      discoveryChannel: 'WEBSITE',
+      offerCode: null,
+      acceptedTermsVersion: null,
+      marketingConsent: false,
+      locale: locale
+    };
+    /* One Idempotency-Key per request content. The key only protects a retry of
+       the SAME request (double click, flaky network); it used to live in the
+       draft forever, so the next booking from this browser reused it and the
+       backend refused it (409 IDEMPOTENCY_KEY_REUSED) — or, with identical
+       details, answered with the previous booking's reference. */
+    var fingerprint = JSON.stringify(body);
+    var idempotencyKey = c.idempotencyKey && c.idempotencyFingerprint === fingerprint ? c.idempotencyKey : newIdempotencyKey();
+    S.patchCurrent({ idempotencyKey: idempotencyKey, idempotencyFingerprint: fingerprint });
+    function submit(key, retried) {
+      return global.KAS_API.submitReservation(body, key, locale).catch(function (error) {
+        /* A key left over from before this fix: start again with a fresh one. */
+        if (!retried && error && error.status === 409 && error.payload && error.payload.code === 'IDEMPOTENCY_KEY_REUSED') {
+          var fresh = newIdempotencyKey();
+          S.patchCurrent({ idempotencyKey: fresh, idempotencyFingerprint: fingerprint });
+          return submit(fresh, true);
+        }
+        throw error;
+      });
+    }
+    return submit(idempotencyKey, false).then(function (receipt) {
+      var n = U.nights(c.checkIn, c.checkOut);
+      var p = U.calcPrice(r.pricePerNight, n, c.rooms || 1, null, sheetNightly(r, c.checkIn, c.checkOut));
+      var total = receipt && receipt.estimatedTotal ? Number(receipt.estimatedTotal.amountMinor) : null;
+      var booking = {
+      bookingNumber: receipt.reference,
       branchId:   h.id,
       branchCode: h.branchCode,
       hotelId:    h.id,
@@ -190,36 +321,44 @@
       guest:      c.guest,
       specialRequests: (c.guest && c.guest.specialRequests) || '',
       arrivalTime:     (c.guest && c.guest.arrivalTime) || null,
-      purpose:         (c.guest && c.guest.purpose) || null,
-      heardFrom:       (c.guest && c.guest.heardFrom) || null,
       paymentMethod:   (c.guest && c.guest.paymentMethod) || 'pay-later',
-      roomRate:      p.subtotal,
-      nightlyRate:   r.pricePerNight,
-      serviceCharge: p.serviceCharge,
-      vat:           p.vat,
+      roomRate:      receipt.estimatedTotal ? receipt.estimatedTotal.amountMinor : null,
+      nightlyRate:   null,
+      serviceCharge: 0,
+      vat:           0,
       total:         p.total,
       currency:      'VND',
-      serviceChargeRate: p.serviceChargeRate,
-      vatRate:           p.vatRate,
+      serviceChargeRate: 0,
+      vatRate:           0,
       cancellationDeadline: U.cancelBy(c.checkIn),
       cancellationPolicy:   r.cancellation,
       priceBasis: r.priceBasis,
-      rateSource: r.rateSource || 'DEMO',
+      rateSource: 'BACKEND',
+      backend: true,
       rateConfidence: r.rateConfidence || null,
       sheetRoomName: r.sheetRoomName || null,
       nightlyRates: p.nightlyRates || null,
-      status:    'CONFIRMED',
+      status: 'REQUESTED',
+      estimatedTotal: total,
+      estimateDisclaimer: receipt && receipt.estimateDisclaimer || '',
+      responsePromise: receipt && receipt.responsePromise || '',
       createdAt: new Date().toISOString()
-    };
-
-    S.saveBooking(booking);
-    S.setGuest(c.guest);
-    S.patchCurrent({ bookingNumber: number, confirmedAt: booking.createdAt });
-    return { ok: true, booking: booking };
+      };
+      booking.total = total;
+      S.saveBooking(booking);
+      S.setGuest(c.guest);
+      /* Done: the next booking must not reuse this request's key. */
+      S.patchCurrent({ bookingNumber: receipt.reference, requestReceipt: receipt, confirmedAt: booking.createdAt,
+        idempotencyKey: null, idempotencyFingerprint: null });
+      return { ok: true, booking: booking, receipt: receipt };
+    }).catch(function (error) {
+      var why = describeBookingError(error);
+      return { ok: false, errors: { api: why.message }, customerFixable: why.customer };
+    });
   }
 
   function cancelBooking(number) {
-    return S.updateBooking(number, { status: 'CANCELLED', cancelledAt: new Date().toISOString() });
+    throw new Error('Cancellation must be requested through the server.');
   }
 
   /* ---------- shared render helpers ---------- */
@@ -265,50 +404,20 @@
 
   /**
    * @param {Object} p price object from U.calcPrice
-   * @param {Object} [opts] {demoNote:false, nights:[{date,weekend,rate}], rateSource}
+   * @param {Object} [opts] {nights:[{date,weekend,rate}], rateSource}
    *        When the operator rate sheet drives the price, each night is listed
    *        with its own figure, because weekday and weekend rates differ.
    */
-  function priceBreakdownHTML(p, opts) {
-    opts = opts || {};
-    var perNight = opts.nights && opts.nights.length && p.nightlyRates;
-    var rateRow;
-    if (perNight) {
-      rateRow = '<div class="prow"><span>Room rate<small>' +
-        opts.nights.map(function (n) {
-          return U.fmtDate(n.date) + ' · ' + (n.weekend ? 'Weekend' : 'Weekday') +
-                 ' · ' + U.vnd(n.rate);
-        }).join('<br>') +
-        (p.rooms > 1 ? '<br>× ' + p.rooms + ' rooms' : '') +
-        '</small></span><span>' + U.vnd(p.subtotal) +
-        ' <small style="display:inline;color:var(--tx-3)">VND</small></span></div>';
-    } else {
-      rateRow = '<div class="prow"><span>Room rate<small>' + U.vnd(p.nightly) + ' VND × ' + p.nights +
-        ' night' + (p.nights === 1 ? '' : 's') + (p.rooms > 1 ? ' × ' + p.rooms + ' rooms' : '') + '</small></span>' +
-        '<span>' + U.vnd(p.subtotal) + ' <small style="display:inline;color:var(--tx-3)">VND</small></span></div>';
-    }
-    return rateRow +
-      '<div class="prow"><span>Service charge (' + Math.round(p.serviceChargeRate * 100) + '%)</span>' +
-        '<span>' + U.vnd(p.serviceCharge) + ' <small style="display:inline;color:var(--tx-3)">VND</small></span></div>' +
-      '<div class="prow"><span>VAT (' + Math.round(p.vatRate * 100) + '%)</span>' +
-        '<span>' + U.vnd(p.vat) + ' <small style="display:inline;color:var(--tx-3)">VND</small></span></div>' +
-      '<div class="prow prow--total"><span>Total</span><span>' + U.vnd(p.total) + '<sup>VND</sup></span></div>' +
-      '<p class="tiny muted" style="text-align:right;margin:2px 0 0">Including taxes &amp; fees</p>' +
-      (opts.demoNote === false ? '' : rateNoteHTML(opts.rateSource));
+  function priceBreakdownHTML(p) {
+    p = p || {};
+    var vi = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi';
+    var amount = p.total == null || !Number.isFinite(Number(p.total)) ? null : Number(p.total);
+    if (amount == null) return '<p role="status" class="tiny muted">' + (vi ? 'Chưa có giá xác thực. Vui lòng liên hệ khách sạn.' : 'No current price is available. Please contact the hotel.') + '</p>';
+    return '<div class="prow"><span>' + (vi ? 'Tiền phòng' : 'Room amount') + '</span><span>' + U.vnd(p.subtotal == null ? amount : p.subtotal) + ' VND</span></div>' +
+      '<div class="prow prow--total"><span>' + (vi ? 'Tổng giá dự kiến' : 'Estimated total') + '</span><span>' + U.vnd(amount) + '<sup>VND</sup></span></div>' +
+      '<p class="tiny muted">' + (vi ? 'Khách sạn kiểm tra và xác nhận phòng, giá và điều kiện thanh toán trước khi đặt phòng được xác nhận.' : 'The hotel reviews the room, price and payment terms before the booking is confirmed.') + '</p>';
   }
-
-  /** Truthful provenance line under every price panel. */
-  function rateNoteHTML(rateSource) {
-    if (rateSource === 'SHEET') {
-      return '<div class="alert alert--ok" style="margin-top:14px;font-size:.78rem">' + U.icon('checkC', 15) +
-        '<span><b>Operator rate sheet</b>Weekday (Mon–Thu) and weekend (Fri–Sun) rates differ and are ' +
-        'seasonal. Rates <b style="display:inline">exclude breakfast</b>. Extra adult 300,000 VND and ' +
-        'extra child (3–12) 150,000 VND per person per night above room standard.</span></div>';
-    }
-    return '<div class="alert alert--demo" style="margin-top:14px">' + U.icon('info', 15) +
-      '<span><b>Demo rate</b>No rate-sheet tab has been supplied for this property yet, so this figure is ' +
-      'derived from its published price range. Not an operator rate and not a live Agoda rate.</span></div>';
-  }
+  function rateNoteHTML() { return ''; }
 
   /** Booking-support panel. All contact data comes from js/contact.js. */
   function assistHTML() {
@@ -345,6 +454,8 @@
   }
 
   global.Booking = {
+    refreshQuote: refreshQuote,
+    describeBookingError: describeBookingError,
     readSearch: readSearch, saveSearch: saveSearch, validateSearch: validateSearch,
     draft: draft, startBooking: startBooking, reprice: reprice,
     requireRoom: requireRoom, requireGuest: requireGuest,

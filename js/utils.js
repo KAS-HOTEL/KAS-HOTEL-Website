@@ -94,15 +94,15 @@
    *        prices weekdays and weekends differently.
    */
   function calcPrice(pricePerNight, nightsN, roomsN, cfg, nightlyRates) {
-    cfg = cfg || (global.KAS_DATA && global.KAS_DATA.config) || { serviceChargeRate: .05, vatRate: .08 };
+    cfg = cfg || (global.KAS_DATA && global.KAS_DATA.config) || { serviceChargeRate: 0, vatRate: 0 };
     var sub;
     if (nightlyRates && nightlyRates.length && nightlyRates.every(function (v) { return v != null; })) {
       sub = nightlyRates.reduce(function (a, b) { return a + b; }, 0) * (roomsN || 1);
     } else {
       sub = (pricePerNight || 0) * (nightsN || 0) * (roomsN || 1);
     }
-    var svc = Math.round(sub * cfg.serviceChargeRate);
-    var vat = Math.round((sub + svc) * cfg.vatRate);
+    var svc = 0;
+    var vat = 0;
     return {
       nightly: pricePerNight, nights: nightsN, rooms: roomsN,
       subtotal: sub, serviceCharge: svc, vat: vat, total: sub + svc + vat,

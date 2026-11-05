@@ -9,7 +9,9 @@
       var item=site[key], el=document.querySelector(selector);
       if(item&&item.url&&el&&el.tagName==='IMG') el.src=item.url;
     }
-    setImg('home.dayInSaigon','img[alt="A day in Saigon"]');
+    setImg('home.dayInSaigon','img[data-site-image="home.dayInSaigon"], img[alt="A day in Saigon"]');
+    /* Homepage V3 City Guide feature: one image, keyed like the first story card. */
+    setImg('home.neighborhood.city','img[data-site-image="home.neighborhood.city"]');
     /* Keep the four homepage story cards tied to their stable Admin keys.
        Match the actual anchor URL rather than relying on a brittle CSS selector. */
     ['city','taste','slow','night'].forEach(function(k){
@@ -68,8 +70,10 @@
   }
   function applyCityGuide(site){
     site=site||{};
-    document.querySelectorAll('.cg-card[href*="city-guidebook"]').forEach(function(card){
-      var href=card.getAttribute('href')||'', hash=href.split('#')[1];
+    /* Cards point at the story page (data-story) or, before the editorial
+       script runs, at the guidebook anchor; both name the same entry. */
+    document.querySelectorAll('.cg-card[data-story], .cg-card[href*="city-guidebook"]').forEach(function(card){
+      var href=card.getAttribute('href')||'', hash=card.getAttribute('data-story')||href.split('#')[1];
       if(!hash) return;
       var item=site['guidebook.entry.'+hash];
       if(item&&item.url) card.style.setProperty('--cg-bg',"url('"+String(item.url).replace(/'/g,"%27")+"')");
@@ -120,10 +124,26 @@
       el.innerHTML=fallbackSrc?'<img src="'+String(fallbackSrc).replace(/"/g,'&quot;')+'" alt="'+String((fallbackHotel&&fallbackHotel.name)||'KAS Hotels').replace(/"/g,'&quot;')+'">':'';
     }
   }
+  /* Site images are managed in the console (/admin/content/images). Its slots win over the
+     old admin's JSON; a slot switched off in the console falls back to the page default.
+     Keys the console does not have yet keep the old value. */
+  function consoleSlots(){
+    return fetch('/api/v1/public/site-image-slots',{cache:'no-store',credentials:'omit'})
+      .then(function(r){return r.ok?r.json():[];}).catch(function(){return [];});
+  }
   function load(){
-    fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(c){
-      if(!c) return;
-      var site=c.siteImages||{};
+    Promise.all([
+      fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
+      consoleSlots()
+    ]).then(function(results){
+      var c=results[0]||{}, slots=Array.isArray(results[1])?results[1]:[];
+      if(!results[0]&&!slots.length) return;
+      var site=Object.assign({}, c.siteImages||{});
+      slots.forEach(function(slot){
+        if(!slot||!slot.key) return;
+        if(slot.enabled===false){ delete site[slot.key]; return; }
+        if(slot.imageReference) site[slot.key]={url:slot.imageReference};
+      });
       applyPageHeroes(site);
       if(document.querySelector('.kas-find-page')) applyFindYourKas(site);
       var homeHero=document.querySelector('#homeHeroBg');

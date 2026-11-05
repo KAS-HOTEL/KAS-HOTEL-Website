@@ -113,7 +113,7 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
@@ -128,7 +128,15 @@
 
   var search = B.readSearch();
   var hotel = D.getHotel(search.hotelId || U.qs().hotel || 'hotel-04');
-  if (!hotel) { location.replace('hotels.html'); return; }
+  if (!hotel) {
+    /* A hotel just added in the console may not be in this browser's list yet. */
+    var wantedHotel = U.qs().hotel || search.hotelId;
+    if (wantedHotel && window.KAS_CATALOG && !window.KAS_CATALOG.isFresh()) {
+      window.KAS_CATALOG.ready.then(function () { if (D.getHotel(wantedHotel)) location.reload(); else location.replace('hotels.html'); });
+      return;
+    }
+    location.replace('hotels.html'); return;
+  }
   var liveReady = window.KAS_LIVE.load().then(function(catalog){ window.KAS_LIVE.applyToHotel(hotel, catalog); paintPropertyMedia(); return catalog; }).catch(function(){ return null; });
   search.hotelId = hotel.id;
   B.saveSearch(search);
@@ -162,13 +170,13 @@
           }).join('') +
         '</div>' +
       '</div>' +
-      '<div class="propbar__rating">' +
+      (hotel.rating ? '<div class="propbar__rating">' +
         '<div class="propbar__score">' +
-          '<span class="propbar__score-num">' + hotel.rating.toFixed(1) + '<small>/10</small></span>' +
+          '<span class="propbar__score-num">' + Number(hotel.rating).toFixed(1) + '<small>/10</small></span>' +
           '<span class="propbar__stars">' + U.stars(hotel.rating / 2, 15) + '</span>' +
         '</div>' +
         '<div class="propbar__reviews">' + hotel.reviews + ' reviews · ' + U.esc(hotel.ratingSource) + '</div>' +
-      '</div>' +
+      '</div>' : '') +
     '</div>';
 
 
@@ -207,9 +215,10 @@
     var previewThumbs=imgs.slice(1,5);
     preview.innerHTML='<button type="button" class="hotel-gallery-launch" aria-haspopup="dialog" aria-controls="hotelGalleryModal">'+U.img(imgs[0],hotel.name,'',false,false)+'<span class="hotel-gallery-launch__shade"></span><span class="hotel-gallery-launch__label">'+U.icon('image',17)+' Xem thư viện ảnh <b>'+imgs.length+'</b></span></button>'+
       (previewThumbs.length?'<div class="hotel-gallery-preview-thumbs" aria-label="Một số ảnh khách sạn">'+previewThumbs.map(function(src,i){var imageIndex=i+1;return '<button type="button" class="hotel-gallery-preview-thumb" data-preview-image="'+imageIndex+'" aria-label="Xem ảnh '+(imageIndex+1)+'">'+U.img(src,hotel.name+' · '+(imageIndex+1),'',true,false)+'</button>';}).join('')+'</div>':'');
-    var saveButton=document.createElement('button'); saveButton.type='button'; saveButton.className='hotel-save-heart'; saveButton.id='saveHotel'; saveButton.setAttribute('aria-pressed',String(Store.isHotelSaved(hotel.id)));
-    function paintSaveButton(){var saved=Store.isHotelSaved(hotel.id);saveButton.classList.toggle('is-saved',saved);saveButton.setAttribute('aria-pressed',String(saved));saveButton.innerHTML=U.icon('heart',16)+(saved?(document.documentElement.lang==='vi'?'Đã lưu':'Saved'):(document.documentElement.lang==='vi'?'Lưu khách sạn':'Save hotel'));}
-    paintSaveButton(); saveButton.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var saved=Store.toggleSavedHotel(hotel.id);paintSaveButton();U.toast(saved?(document.documentElement.lang==='vi'?'Đã lưu khách sạn vào Saved.':'Hotel added to Saved.'):(document.documentElement.lang==='vi'?'Đã bỏ lưu khách sạn.':'Hotel removed from Saved.'));}); preview.appendChild(saveButton);
+    var saveButton=document.createElement('button'); saveButton.type='button'; saveButton.className='hotel-save-heart'; saveButton.id='saveHotel';
+    /* Shared save toggle (js/app.js): account-backed, repaints with every other heart. */
+    saveButton.setAttribute('data-save-hotel',hotel.id); saveButton.setAttribute('data-save-text','hotel');
+    preview.appendChild(saveButton); if(window.App&&App.paintSaveButtons)App.paintSaveButtons(preview);
     var modal=U.$('#hotelGalleryModal'), content=U.$('#hotelGalleryModalContent');
     var lastFocus=null;
     function openGallery(){
@@ -260,7 +269,7 @@
   var facts = [
     ['Check-in', hotel.checkIn], ['Check-out', hotel.checkOut],
     ['Property rating', hotel.starRating + '-star'],
-    ['Guest rating', hotel.rating + '/10 (' + hotel.reviews + ' reviews)'],
+    ['Guest rating', hotel.rating ? hotel.rating + '/10 (' + hotel.reviews + ' reviews)' : '—'],
     ['Rooms in property', hotel.totalRooms ? hotel.totalRooms + ' rooms' : 'Not published by source'],
     ['Room types', hotel.roomCount + ' types'],
     ['Neighbourhood', hotel.area + ', ' + hotel.district],
@@ -283,15 +292,15 @@
     var list = H.sortRooms(hotel.rooms.slice(), U.$('#sortBy').value);
 
     var n = U.nights(search.checkIn, search.checkOut);
-    U.$('#roomCount').textContent = list.length + ' room type' + (list.length === 1 ? '' : 's') + ' available';
+    U.$('#roomCount').textContent = list.length + ' room type' + (list.length === 1 ? '' : 's');
     U.$('#roomSub').textContent = U.fmtDate(search.checkIn) + ' – ' + U.fmtDate(search.checkOut) +
       '  ·  ' + n + ' night' + (n === 1 ? '' : 's') + '  ·  ' + window.Search.guestText(search);
 
     var host = U.$('#roomList');
     if (!list.length) {
       host.innerHTML = '<div class="empty">' + U.icon('bed', 44) +
-        '<h3 style="margin-bottom:8px">No rooms available</h3>' +
-        '<p class="muted" style="font-size:.9rem">No room types are currently available for this stay.</p></div>';
+        '<h3 style="margin-bottom:8px">Room types not listed</h3>' +
+        '<p class="muted" style="font-size:.9rem">Contact the hotel to request a room and check availability manually.</p></div>';
       return;
     }
     host.innerHTML = list.map(function (r, i) {

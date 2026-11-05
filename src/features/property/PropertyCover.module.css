@@ -1,0 +1,57 @@
+/*
+ * The portfolio's cover thumbnail.
+ *
+ * Small on purpose. The overview's cover is a 3:2 band across the top of a card
+ * because that screen is a portfolio at a glance; the portfolio list is a working
+ * index, and a full band per row would push eight hotels onto three screens of
+ * scrolling. This is the recognition cue, not the photograph.
+ */
+
+.frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  overflow: hidden;
+  inline-size: 72px;
+  block-size: 56px;
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  background-image: linear-gradient(160deg, var(--accent-600) 0%, var(--accent-700) 70%);
+  color: rgb(255 255 255 / 62%);
+}
+
+/* The same gold corner the overview's band and the sign-in panel carry, so an
+   empty frame still reads as KAS rather than as a failed image. */
+.frame::after {
+  content: '';
+  position: absolute;
+  inset-block-start: 4px;
+  inset-inline-start: 4px;
+  inline-size: 14px;
+  block-size: 14px;
+  border-block-start: 1px solid var(--gold-500);
+  border-inline-start: 1px solid var(--gold-500);
+  pointer-events: none;
+}
+
+.placeholder {
+  padding-inline: var(--space-1);
+  font-size: 10px;
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/*
+ * Absolute, so a slow or failed image leaves the branded frame and its corner
+ * visible underneath rather than collapsing the row's height.
+ */
+.image {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
