@@ -9,7 +9,8 @@
     BOOKINGS: 'kas_bookings',
     SEARCH:   'kas_recent_search',
     CURRENT:  'kas_current_booking',
-    GUEST:    'kas_guest_info'
+    GUEST:    'kas_guest_info',
+    SAVED_HOTELS: 'kas_saved_hotels'
   };
 
   function read(key, fallback) {
@@ -29,7 +30,7 @@
   /* ---------- bookings ---------- */
   function getBookings() {
     var b = read(K.BOOKINGS, []);
-    return Array.isArray(b) ? b : [];
+    return Array.isArray(b) ? b.filter(function (row) { return row.backend === true; }) : [];
   }
   function saveBooking(booking) {
     var all = getBookings();
@@ -71,20 +72,7 @@
    * Booking number: KAS + 2-digit branch code + 5 random digits.
    * The 5-digit tail must not collide with any existing booking.
    */
-  function generateBookingNumber(branchCode) {
-    var bc = String(branchCode || '00').padStart(2, '0');
-    for (var attempt = 0; attempt < 500; attempt++) {
-      var tail = String(Math.floor(Math.random() * 100000)).padStart(5, '0');
-      var candidate = 'KAS' + bc + tail;
-      if (!numberExists(candidate)) return candidate;
-    }
-    // Exhaustive fallback: walk the space deterministically.
-    for (var i = 0; i < 100000; i++) {
-      var c2 = 'KAS' + bc + String(i).padStart(5, '0');
-      if (!numberExists(c2)) return c2;
-    }
-    return 'KAS' + bc + String(Date.now()).slice(-5);
-  }
+  function generateBookingNumber() { throw new Error('Booking references are issued by the server.'); }
 
   /* ---------- search / draft / guest ---------- */
   function getSearch() {
@@ -108,6 +96,139 @@
 
   function getGuest() { return read(K.GUEST, null); }
   function setGuest(g) { return write(K.GUEST, g); }
+  function clearGuestDetails() {
+    remove(K.GUEST);
+    var current = getCurrent();
+    if (!current || !current.guest) return;
+    var guest = Object.assign({}, current.guest);
+    ['fullName', 'firstName', 'lastName', 'email', 'phone', 'phoneFull', 'dial',
+      'nationality', 'guestFullName', 'guestFirstName', 'guestLastName'].forEach(function (key) {
+      delete guest[key];
+    });
+    patchCurrent({ guest: guest });
+  }
+
+  /* ---------- saved hotels (hotels only; room types are never saved) ----------
+     Saved hotels belong to the member's account (GET/PUT/DELETE
+     /api/v1/me/favorites), never to the browser: signed out there is nothing
+     saved, and two accounts on one browser never share a list. The list lives
+     in memory for the page; app.js announces sign-in/out with
+     `kas:member-changed`, which (re)loads it. Every change fires
+     `kas:saved-hotels-changed` so each button on the page repaints at once.
+
+     Ids are the website's hotel ids (`hotel-01`…). The server speaks property
+     slugs; the two are joined through the hotel's rooms in KAS_API_MAP — the
+     same mapping the site already prices with. */
+  var LEGACY_SAVED_KEYS = [K.SAVED_HOTELS, 'kas_savedHotels', 'kas_saved_hotels_v1', 'kas-saved-hotels'];
+  var PENDING_SAVE = 'kas_pending_saved_hotel';
+  /* The old browser-wide lists were shared by every account on the device. */
+  LEGACY_SAVED_KEYS.forEach(remove);
+
+  var savedIds = [];
+  var savedSignedIn = null; /* null until app.js has checked the session */
+
+  function hotelsList() { return (global.KAS_DATA && global.KAS_DATA.hotels) || []; }
+  function slugForHotel(id) {
+    var hotel = hotelsList().find(function (h) { return String(h.id) === String(id); });
+    /* catalog-sync.js sets the console slug on every listed hotel (and new hotels have no room map yet). */
+    if (hotel && hotel.slug) return hotel.slug;
+    var map = global.KAS_API_MAP || {};
+    var room = hotel && (hotel.rooms || []).find(function (r) { return map[r.id] && map[r.id].propertySlug; });
+    return room ? map[room.id].propertySlug : null;
+  }
+  function hotelForSlug(slug) {
+    var hit = hotelsList().find(function (h) { return slugForHotel(h.id) === slug; });
+    return hit ? String(hit.id) : null;
+  }
+  var serverSlugs = [];
+  function fromServer(payload) {
+    var seen = Object.create(null);
+    serverSlugs = ((payload && payload.propertySlugs) || []).slice();
+    /* A hotel hidden in the console is not listed, so its saved entry is not shown either. */
+    return serverSlugs.map(hotelForSlug).filter(function (id) {
+      if (!id || seen[id]) return false;
+      seen[id] = true;
+      return true;
+    });
+  }
+  function notifySavedHotels() {
+    try { global.dispatchEvent(new CustomEvent('kas:saved-hotels-changed', { detail: { ids: savedIds.slice(), signedIn: savedSignedIn } })); } catch (e) {}
+  }
+  function getSavedHotels() { return savedIds.slice(); }
+  function isHotelSaved(id) { return savedIds.indexOf(String(id)) >= 0; }
+  function savedHotelsSignedIn() { return savedSignedIn; }
+  function isVi() { return !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi'); }
+  function savedToast(text) { if (global.U && global.U.toast) global.U.toast(text); }
+
+  function setSaved(id, saved) {
+    var key = String(id), slug = slugForHotel(key);
+    if (!slug || !global.KAS_API) return Promise.resolve(isHotelSaved(key));
+    var before = savedIds.slice();
+    /* Optimistic: every button flips now; the server's answer then wins. */
+    savedIds = savedIds.filter(function (x) { return x !== key; });
+    if (saved) savedIds.unshift(key);
+    notifySavedHotels();
+    return global.KAS_API.request('/api/v1/me/favorites/' + encodeURIComponent(slug), { method: saved ? 'PUT' : 'DELETE' })
+      .then(function (payload) { savedIds = fromServer(payload); notifySavedHotels(); return isHotelSaved(key); })
+      .catch(function (error) {
+        savedIds = before;
+        notifySavedHotels();
+        if (error && (error.status === 401 || error.status === 403)) { savedSignedIn = false; askToSignIn(key); }
+        else savedToast(isVi() ? 'Chưa lưu được, vui lòng thử lại.' : 'Could not update Saved. Please try again.');
+        return isHotelSaved(key);
+      });
+  }
+  function askToSignIn(id) {
+    try { sessionStorage.setItem(PENDING_SAVE, String(id)); } catch (e) {}
+    savedToast(isVi() ? 'Đăng nhập để lưu khách sạn vào My KAS.' : 'Sign in to save hotels to My KAS.');
+    if (global.App && global.App.openAuth) global.App.openAuth('login');
+  }
+  /* Returns the intended state at once (true = saved), or null when the visitor
+     must sign in first — the sign-in dialog opens and the save completes after. */
+  function toggleSavedHotel(id) {
+    if (savedSignedIn !== true) { askToSignIn(id); return null; }
+    var next = !isHotelSaved(id);
+    setSaved(id, next);
+    return next;
+  }
+  function removeSavedHotel(id) { if (savedSignedIn === true) setSaved(id, false); }
+
+  function loadSavedHotels() {
+    if (!global.KAS_API) return Promise.resolve([]);
+    return global.KAS_API.request('/api/v1/me/favorites').then(function (payload) {
+      savedSignedIn = true;
+      savedIds = fromServer(payload);
+      notifySavedHotels();
+      var pending = null;
+      try { pending = sessionStorage.getItem(PENDING_SAVE); sessionStorage.removeItem(PENDING_SAVE); } catch (e) {}
+      if (pending && !isHotelSaved(pending)) {
+        return setSaved(pending, true).then(function (ok) {
+          if (ok) savedToast(isVi() ? 'Đã lưu khách sạn vào My KAS.' : 'Hotel saved to My KAS.');
+          return getSavedHotels();
+        });
+      }
+      return getSavedHotels();
+    }, function (error) {
+      if (error && (error.status === 401 || error.status === 403 || error.status === 404)) {
+        savedSignedIn = false;
+        savedIds = [];
+        notifySavedHotels();
+      }
+      return getSavedHotels();
+    });
+  }
+  /* The console's list arrived after the saved list: map the account's slugs again. */
+  global.addEventListener('kas:catalogue-synced', function () {
+    if (savedSignedIn !== true) return;
+    savedIds = fromServer({ propertySlugs: serverSlugs });
+    notifySavedHotels();
+  });
+  global.addEventListener('kas:member-changed', function (e) {
+    if (e.detail && e.detail.signedIn) { loadSavedHotels(); return; }
+    savedSignedIn = false;
+    savedIds = [];
+    notifySavedHotels();
+  });
 
   global.Store = {
     KEYS: K,
@@ -116,6 +237,8 @@
     generateBookingNumber: generateBookingNumber,
     getSearch: getSearch, setSearch: setSearch,
     getCurrent: getCurrent, setCurrent: setCurrent, patchCurrent: patchCurrent, clearCurrent: clearCurrent,
-    getGuest: getGuest, setGuest: setGuest
+    getGuest: getGuest, setGuest: setGuest, clearGuestDetails: clearGuestDetails,
+    getSavedHotels: getSavedHotels, isHotelSaved: isHotelSaved, toggleSavedHotel: toggleSavedHotel, removeSavedHotel: removeSavedHotel,
+    savedHotelsSignedIn: savedHotelsSignedIn, loadSavedHotels: loadSavedHotels
   };
 })(window);

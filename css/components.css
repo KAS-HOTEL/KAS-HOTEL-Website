@@ -50,6 +50,8 @@
   content:'';position:absolute;inset:0;
   background:linear-gradient(100deg,rgba(14,13,11,.94) 0%,rgba(14,13,11,.72) 38%,rgba(14,13,11,.34) 70%,rgba(14,13,11,.55) 100%);
 }
+.hero--no-overlay .hero__bg img{opacity:1}
+.hero--no-overlay .hero__bg::after{background:transparent}
 .hero__in{position:relative;z-index:2;width:100%}
 .hotel-search-wrap{position:relative;margin-top:2rem;z-index:8;overflow:visible}
 .hero--sm .hero__in .searchbar,.hero .searchbar{
@@ -167,7 +169,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   transition:max-height .28s ease,opacity .2s ease,transform .28s ease,border-color .28s ease;
 }
 .hotel-search-wrap.is-search-open .kas-quick-search{
-  max-height:620px;
+  max-height:min(78vh,800px);
   opacity:1;
   pointer-events:auto;
   border-color:rgba(194,162,92,.30);
@@ -175,13 +177,13 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 }
 .kas-quick-search__inner{
   display:grid;
-  grid-template-columns:minmax(300px,360px) minmax(0,1fr);
-  min-height:330px;
+  grid-template-columns:minmax(0,1fr) minmax(340px,.95fr);
+  min-height:420px;
 }
 .kas-quick-search__hotels{
   padding:18px;
-  border-right:1px solid rgba(120,96,55,.12);
-  background:rgba(249,245,237,.76);
+  border-left:1px solid rgba(120,96,55,.12);
+  background:transparent;
   min-width:0;
 }
 .kas-quick-search__search{
@@ -212,7 +214,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .kas-quick-hotel-list{
   display:grid;
   gap:3px;
-  max-height:300px;
+  max-height:390px;
   overflow:auto;
   margin-top:10px;
   padding-right:3px;
@@ -246,9 +248,10 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .kas-quick-hotel small{margin-top:3px;font-size:.68rem;color:var(--tx-3)}
 .kas-quick-hotel--all{padding-block:11px;margin-bottom:3px;background:#eee3d0}
 .kas-quick-hotel__all-icon{display:grid;place-items:center;width:54px;height:44px;flex:0 0 54px;border-radius:7px;background:#e4d5b9;color:var(--gold-dk);font-size:18px}
+.kas-quick-search__head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px 0}
+.kas-quick-search__title{color:var(--tx-2);font:700 .7rem/1.2 var(--sans);letter-spacing:.12em;text-transform:uppercase}
+.kas-quick-search__popular{margin:0 0 11px;color:var(--gold-dk);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase}
 .kas-quick-search__content{padding:20px 24px 22px;min-width:0}
-.kas-quick-search__head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:4px}
-.kas-quick-search__title{color:var(--gold-dk);font:500 1.55rem/1.1 var(--serif)}
 .kas-quick-search__head p{margin:5px 0 0;color:var(--tx-3);font-size:.73rem;line-height:1.45}
 .kas-quick-search__close{width:32px;height:32px;border:0;background:transparent;color:var(--tx-2);font-size:24px;line-height:1;cursor:pointer}
 .kas-quick-search__group + .kas-quick-search__group{margin-top:15px;padding-top:15px;border-top:1px solid rgba(120,96,55,.12)}
@@ -296,7 +299,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .trust__i{display:flex;align-items:center;gap:9px;font-size:.79rem;color:var(--tx-2);font-weight:500}
 .trust__i svg{color:var(--gold-dk);flex-shrink:0}
 .trust--pad{padding-block:2.6rem;border-top:1px solid var(--line);border-bottom:none;background:var(--surface-2)}
-.trust--pad .trust__in{padding:0;align-items:flex-start}
+.trust--pad .trust__in{padding:0 12px;align-items:flex-start;box-sizing:border-box}
 .trust--pad .trust__i{flex-direction:row;align-items:flex-start;gap:12px;flex:1;min-width:190px}
 .trust--pad .trust__i b{display:block;font-size:.8rem;color:var(--tx);font-weight:600;margin-bottom:2px}
 .trust--pad .trust__i span{font-size:.76rem;color:var(--tx-3);font-weight:400;line-height:1.5}
@@ -888,13 +891,40 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .kas-auth h2{text-align:center;font-family:var(--serif);font-weight:400;font-size:2rem;margin:9px 0 6px}
 .kas-auth__sub{text-align:center;color:var(--tx-2);font-size:.78rem;line-height:1.55;margin:0 0 24px}
 .kas-auth__field{margin-bottom:14px}.kas-auth__field label{display:block;font-size:.7rem;font-weight:600;margin-bottom:6px;color:var(--tx)}
-.kas-auth__field input{width:100%;height:46px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:0 13px;font:inherit;font-size:.82rem;outline:0}
-.kas-auth__field input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,162,92,.12)}
+.kas-auth__field input,.kas-auth__field select{width:100%;height:46px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:0 13px;font:inherit;font-size:.82rem;outline:0}
+.kas-auth__field input:focus,.kas-auth__field select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(194,162,92,.12)}
 .kas-auth__submit{width:100%;height:46px;border:0;border-radius:6px;background:var(--gold);color:#17130d;font-weight:700;letter-spacing:.06em;cursor:pointer;margin-top:5px}
 .kas-auth__switch{text-align:center;color:var(--tx-2);font-size:.74rem;margin:18px 0 0}.kas-auth__switch button{border:0;background:none;color:var(--gold-dk);font-weight:700;cursor:pointer;font:inherit}
 .kas-auth__message{min-height:18px;text-align:center;font-size:.72rem;margin:9px 0 0;color:var(--gold-dk)}
+.kas-auth__message.is-success{color:#386b4b}.kas-auth__message.is-error{color:#a3402e}
+/* Email verification step */
+.kas-auth__email{display:block;margin-top:4px;color:var(--tx);font-weight:600;word-break:break-all}
+.kas-auth__field--code{margin-bottom:18px}
+.kas-auth__field--code label{text-align:center;color:var(--tx-2);font-weight:500;letter-spacing:.04em}
+.kas-auth__field input.kas-auth__code{height:60px;text-align:center;font-family:var(--serif);font-size:1.9rem;letter-spacing:.5em;padding:0 0 0 .5em;color:var(--tx)}
+.kas-auth__field input.kas-auth__code::placeholder{color:#cfc5b2;letter-spacing:.5em}
+.kas-auth__hint{margin:8px 0 0;text-align:center;font-size:.68rem;color:var(--tx-2)}
+.kas-auth__resend{margin:16px 0 0;text-align:center;font-size:.74rem;color:var(--tx-2)}
+.kas-auth__resend button{border:0;background:none;padding:0;color:var(--gold-dk);font:600 .74rem var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.kas-auth__resend button:disabled{color:var(--tx-2);text-decoration:none;cursor:default}
+.kas-auth__submit:disabled{opacity:.6;cursor:default}
 .kas-auth__remember{display:flex;align-items:center;gap:8px;font-size:.7rem;color:var(--tx-2);margin:8px 0 14px}.kas-auth__remember input{accent-color:var(--gold)}
+.kas-auth__link{display:block;margin:-5px 0 14px auto;padding:0;border:0;background:none;color:var(--gold-dk);font:500 .72rem var(--sans);text-decoration:underline;cursor:pointer}
 @media (max-width:560px){.kas-auth__box{padding:30px 22px 24px}}
+
+/* ---------- KAS member avatar menu + frontend-only email verification ---------- */
+.kas-user-menu{position:relative;display:flex;align-items:center;flex:0 0 auto}
+.kas-avatar{width:42px;height:42px;border:1px solid var(--gold);border-radius:50%;display:grid;place-items:center;background:#c2a25c;color:#17130d;font-weight:700;font-size:1rem;cursor:pointer;box-shadow:0 0 0 3px rgba(194,162,92,.12)}
+.kas-user-menu__panel{position:absolute;right:0;top:calc(100% + 12px);z-index:1100;width:248px;padding:8px 0;background:#fff;color:#1d1b17;border:1px solid rgba(0,0,0,.08);border-radius:8px;box-shadow:0 12px 34px rgba(0,0,0,.2)}
+.kas-user-menu__panel[hidden]{display:none}
+.kas-user-menu__identity{display:flex;flex-direction:column;gap:4px;padding:13px 16px 15px;border-bottom:1px solid #eee;margin-bottom:5px;overflow:hidden}
+.kas-user-menu__identity strong{font-size:.9rem;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kas-user-menu__identity span{font-size:.72rem;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kas-user-menu__panel button,.kas-user-menu__panel a{width:100%;display:block;text-align:left;padding:11px 16px;border:0;background:transparent;color:inherit;text-decoration:none;font:inherit;font-size:.82rem;cursor:pointer}
+.kas-user-menu__panel button:hover,.kas-user-menu__panel a:hover{background:#f4f1eb}
+.kas-auth__demo-note{padding:10px 12px;background:#f7f2e7;border-radius:5px;font-size:.72rem;line-height:1.5;color:#5e4a25;margin:0 0 12px}
+.kas-auth__verified{font-size:.75rem;color:#386b4b;background:#edf7ef;border-radius:5px;padding:10px 12px;margin-bottom:14px}
+@media(max-width:767px){.kas-user-menu__panel{right:-4px;width:min(248px,calc(100vw - 32px))}.kas-avatar{width:38px;height:38px}}
 
 /* Homepage — horizontal KAS discovery rail */
 
@@ -992,6 +1022,11 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   box-sizing:border-box;
 }
 
+.home-redesign .home-page-grid__content .home-hero__bg.site-image-pending .home-hero__slide{
+  opacity:0 !important;
+  visibility:hidden !important;
+}
+
 .home-redesign .home-page-grid__content .home-hero__bg{
   position:absolute;
   inset:0;
@@ -1032,7 +1067,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   inset:0;
   opacity:0;
   visibility:hidden;
-  transition:opacity .5s ease,visibility .5s ease;
+  transition:opacity .3s ease,visibility .3s ease;
   z-index:0;
 }
 
@@ -1048,7 +1083,7 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   object-fit:cover;
   object-position:center;
   transform:scale(1.045);
-  transition:transform 4.5s cubic-bezier(.2,.65,.2,1),filter .5s ease;
+  transition:transform 4.5s cubic-bezier(.2,.65,.2,1),filter .3s ease;
   filter:saturate(.9) contrast(.98);
 }
 
@@ -1954,10 +1989,12 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 
 
 /* V13 — My KAS hero aligned with the shared editorial page-intro system.
-   Background image continues to be supplied by the hotel image data slot. */
+   Background image is supplied only by the Admin-managed page hero slot. */
 .hero.hero--mykas-intro{
+  height:340px;
   min-height:340px;
   background:var(--black);
+  background-image:none;
 }
 .hero.hero--mykas-intro .hero__in{
   width:min(100% - 48px,980px);
@@ -1986,17 +2023,17 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   line-height:1.75;
 }
 @media(max-width:700px){
-  .hero.hero--mykas-intro{min-height:280px}
+  .hero.hero--mykas-intro{height:250px;min-height:250px}
   .hero.hero--mykas-intro .hero__in{width:calc(100% - 32px);padding-bottom:28px}
   .hero.hero--mykas-intro .hero__ct h1{font-size:clamp(2.25rem,9vw,3.1rem)}
 }
-.hero.hero--mykas-intro .hero__bg img{opacity:.78}
-.hero.hero--mykas-intro .hero__bg::after{background:linear-gradient(100deg,rgba(14,13,11,.62) 0%,rgba(14,13,11,.40) 42%,rgba(14,13,11,.18) 72%,rgba(14,13,11,.34) 100%)}
+/* My KAS uses only the Admin-managed background image. */
+.hero.hero--mykas-intro{background-repeat:no-repeat;background-position:center;background-size:cover;}
 
 
 /* V15 — Media-only intro areas, scoped exclusively to the five requested pages.
-   The content-page pages use the existing local Saigon image; My KAS keeps its
-   existing data-driven hotel background image. */
+   The content-page pages use the existing local Saigon image; My KAS uses only
+   the Admin-managed hero image. */
 .content-page-hero.media-only-page-hero{
   position:relative;
   min-height:340px;
@@ -2004,7 +2041,9 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
   align-items:stretch;
   padding:0;
   background-color:#171613;
-  background-image:linear-gradient(90deg,rgba(15,14,12,.30),rgba(15,14,12,.10)),url('../assets/home/a-day-in-saigon.jpg');
+  /* Hero imagery is owned by Admin siteImages. Do not paint the legacy
+     static image underneath the Admin-managed image. */
+  background-image:none;
   background-position:center 48%;
   background-size:cover;
   background-repeat:no-repeat;
@@ -2062,3 +2101,226 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 @media(max-width:520px){.hotel-gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 @media(max-width:520px){.hotel-gallery-preview-thumbs{gap:6px;margin-top:7px}.hotel-gallery-preview-thumb{border-radius:6px}}
 @media(max-width:640px){.hotel-gallery-modal{padding:0}.hotel-gallery-modal__panel{width:100%;height:100%;max-height:100%;border-radius:0;padding:16px 12px}.hotel-gallery-modal .gal__main{aspect-ratio:4/3}.hotel-gallery-grid{gap:7px}.hotel-gallery-grid__item{border-radius:8px}.hotel-gallery-launch__label{right:10px;bottom:10px}}
+
+
+/* ---------- first-visit KAS welcome ---------- */
+.kas-welcome{position:fixed;inset:0;z-index:1400;display:grid;place-items:center;padding:16px;background:rgba(10,9,7,.52);backdrop-filter:blur(4px);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}
+.kas-welcome.is-open{opacity:1;visibility:visible}
+.kas-welcome__box{width:min(70vw,1120px);height:min(76vh,680px);display:grid;grid-template-columns:42% 58%;overflow:hidden;background:#f4f0e7;border:1px solid rgba(194,162,92,.24);box-shadow:0 24px 70px rgba(0,0,0,.32)}
+ .kas-welcome__visual{position:relative;overflow:hidden;background:#211b17;color:#f4f0e7}
+ .kas-welcome__visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.84) contrast(1)}
+ .kas-welcome__visual-copy{position:absolute;z-index:1;left:34px;bottom:62px;display:flex;flex-direction:column;font:600 15px/1.42 var(--sans);letter-spacing:.2em;text-shadow:0 1px 8px rgba(0,0,0,.25)}
+ .kas-welcome__visual small{position:absolute;z-index:1;left:34px;bottom:24px;font:600 7px/1 var(--sans);letter-spacing:.25em;text-shadow:0 1px 7px rgba(0,0,0,.25)}
+ .kas-welcome__content{position:relative;padding:25px 50px 16px;text-align:center;color:#51483e;overflow:hidden;display:flex;flex-direction:column;align-items:center}
+ .kas-welcome__close{position:absolute;right:16px;top:14px;width:26px;height:26px;border:0;background:transparent;color:#625a52;font-size:21px;font-weight:300;cursor:pointer}
+ .kas-welcome__logo{display:block;width:126px;height:auto;margin:0 auto 12px}
+ .kas-welcome__eyebrow,.kas-welcome__label{font:600 9px/1.4 var(--sans);letter-spacing:.28em;color:#4e463d}
+ .kas-welcome__content h2{font:400 17px/1.4 var(--serif);margin:7px 0 12px;color:#71675d}
+ .kas-welcome__label{margin-bottom:10px}
+ .kas-welcome__langs{display:grid;grid-template-columns:1fr 1fr;gap:9px;width:255px;margin:0 auto}
+ .kas-welcome__lang{height:38px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #cec6b9;background:transparent;color:#4d463f;font:500 10px/1 var(--sans);cursor:pointer}
+ .kas-welcome__lang.is-active{border-color:#3f3a34;color:#26231f}
+ .kas-welcome__lang i{font-style:normal;font-size:11px;color:#9c9184}
+ .kas-welcome__lang.is-active i{color:#2b2925}
+ .kas-welcome__rule{height:1px;background:#d7d0c4;margin:14px 0 13px;width:100%}
+ .kas-welcome__choice-title{margin-bottom:10px}
+ .kas-welcome__choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%}
+ .kas-welcome__choice{display:flex;flex-direction:column;min-height:188px;padding:16px 15px;border:1px solid #d2cabc;background:#f8f5ee;text-align:left}
+ .kas-welcome__choice--member{background:#f1ede4}
+ .kas-welcome__choice-heading{font:600 9px/1.35 var(--sans);letter-spacing:.18em;color:#4e463d;margin-bottom:8px}
+ .kas-welcome__choice-copy{font:400 11px/1.45 var(--serif);color:#625a52;margin:0 0 9px}
+ .kas-welcome__benefits{list-style:none;padding:0;margin:0 0 11px;color:#625a52;font:400 10px/1.4 var(--serif)}
+ .kas-welcome__benefits li{margin:4px 0}
+ .kas-welcome__benefits li::before{content:'◇';color:#8a7c69;margin-right:6px}
+ .kas-welcome__choice-btn{width:100%;height:38px;margin-top:auto;border:1px solid #272522;background:transparent;color:#272522;display:flex;align-items:center;justify-content:center;gap:12px;font:600 8.5px/1 var(--sans);letter-spacing:.13em;cursor:pointer}
+ .kas-welcome__choice-btn--dark{background:#272522;color:#f4f0e7}
+ .kas-welcome__choice-btn b{font-size:13px;font-weight:300;line-height:1}
+ .kas-welcome__signin{margin:10px auto 0;display:block;border:0;border-bottom:1px solid #a99e91;background:transparent;color:#514a43;font:600 9px/1.8 var(--sans);letter-spacing:.18em;cursor:pointer}
+@media(max-width:700px){
+  .kas-welcome{padding:8px}
+  .kas-welcome__box{width:min(560px,calc(100vw - 16px));height:min(760px,calc(100vh - 16px));grid-template-columns:1fr;grid-template-rows:34% 66%;overflow:auto}
+  .kas-welcome__visual-copy{left:22px;bottom:48px;font-size:12px}
+  .kas-welcome__visual small{left:22px;bottom:17px;font-size:7px}
+  .kas-welcome__content{padding:24px 24px 20px}
+  .kas-welcome__logo{width:145px;margin-bottom:17px}
+  .kas-welcome__content h2{font-size:15px;margin:10px 0 15px}
+  .kas-welcome__rule{margin:15px 0}
+  .kas-welcome__choices{grid-template-columns:1fr 1fr;gap:10px}
+  .kas-welcome__choice{min-height:176px;padding:14px 12px}
+  .kas-welcome__choice-copy{font-size:10px}
+  .kas-welcome__benefits{font-size:9px}
+}
+@media(max-width:560px){
+  .kas-welcome__choices{grid-template-columns:1fr;gap:9px}
+  .kas-welcome__choice{min-height:0}
+}
+@media(max-width:430px){
+  .kas-welcome__box{grid-template-rows:30% 70%}
+  .kas-welcome__content{padding-inline:18px}
+  .kas-welcome__eyebrow,.kas-welcome__label{font-size:8px}
+  .kas-welcome__lang{height:38px;font-size:10px}
+  .kas-welcome__benefits{font-size:9px}
+}
+
+/* Keep the header action slot stable before/after sign-in; show member avatar + name only. */
+#hdr .kas-user-menu{width:216px;justify-content:flex-end}
+#hdr .kas-member-trigger{display:flex;align-items:center;justify-content:flex-end;gap:9px;width:100%;min-width:0;padding:0;border:0;background:transparent;color:inherit;cursor:pointer;font:inherit;text-align:left}
+#hdr .kas-member-trigger .kas-avatar{flex:0 0 42px}
+#hdr .kas-member-trigger__name{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem;font-weight:600;letter-spacing:0}
+@media(max-width:767px){#hdr .kas-user-menu{width:auto}#hdr .kas-member-trigger{gap:0}#hdr .kas-member-trigger__name{display:none}#hdr .kas-member-trigger .kas-avatar{flex-basis:38px}}
+
+/* Ensure the signed-in member name is visible beside the avatar on desktop. */
+#hdr .kas-member-trigger__name{display:inline-block!important;visibility:visible;opacity:1;min-width:0;color:#f7f0e3;text-shadow:0 1px 5px rgba(0,0,0,.95);font-weight:700;letter-spacing:.015em;max-width:150px}
+@media(max-width:767px){#hdr .kas-member-trigger__name{display:none!important}}
+
+
+/* KAS shared header: contact dropdown and language picker */
+.hdr .hdr__tel.contact-trigger{font:inherit;cursor:pointer;background:rgba(20,18,15,.78);color:var(--ivory);border:1px solid rgba(194,162,92,.48);border-radius:var(--r-sm);min-height:48px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;gap:9px;letter-spacing:.08em;font-weight:700;white-space:nowrap}
+.hdr .hdr__tel.contact-trigger:hover{border-color:var(--gold);background:rgba(20,18,15,.94)}
+.hdr .contact-trigger svg{color:var(--gold)}
+.lang-chevron{display:none!important}
+.contact-control{position:relative;display:inline-flex;align-items:center;flex:0 0 auto}.contact-popover{position:absolute;z-index:1005;top:calc(100% + 8px);right:0;width:min(390px,calc(100vw - 28px));padding:8px;background:rgba(24,22,18,.97);border:1px solid var(--gold);border-radius:10px;box-shadow:0 16px 40px rgba(0,0,0,.42);color:var(--ivory)}
+.contact-popover[hidden]{display:none!important}
+.contact-popover:before{content:"";position:absolute;right:82px;top:-7px;width:12px;height:12px;background:rgba(24,22,18,.97);border-top:1px solid var(--gold);border-left:1px solid var(--gold);transform:rotate(45deg)}
+.contact-popover__card{position:relative;display:grid;grid-template-columns:38px minmax(0,1fr) 12px;align-items:start;gap:9px;padding:11px 9px;border-radius:8px;background:rgba(255,255,255,.045)}
+.contact-popover__card+.contact-popover__card{margin-top:8px}
+.contact-popover__icon{width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:rgba(194,162,92,.12);color:var(--gold)}
+.contact-popover__body h3{margin:1px 0 6px;font-family:inherit;font-size:.74rem;line-height:1.4;font-weight:500;color:#e3c17b}
+.contact-popover__body a{display:flex;align-items:center;gap:7px;margin-top:5px;color:var(--ivory);font-size:.74rem;line-height:1.3;text-decoration:none;white-space:nowrap}
+.contact-popover__body a svg{color:var(--gold);flex-shrink:0}
+.contact-popover__body a:hover{color:var(--gold)}
+.contact-popover__arrow{align-self:center;color:var(--gold);font-size:1.35rem}
+.hdr__right{position:relative}
+
+
+/* Header layout stability: reserve the same action slot before and after sign-in. */
+@media (min-width: 701px){
+  #hdr .hdr__right{display:flex;align-items:center;flex-wrap:nowrap}
+  #hdr .hdr__right > .js-kas-auth,
+  #hdr .hdr__right > .kas-user-menu{flex:0 0 176px;width:176px;min-width:176px;box-sizing:border-box}
+  #hdr .hdr__right > .js-kas-auth{white-space:nowrap;justify-content:center}
+  #hdr .hdr__right > .kas-user-menu{justify-content:flex-end}
+}
+@media (max-width:700px){
+  #hdr .hdr__right{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;min-width:0}
+  #hdr .hdr__right > .js-kas-auth,
+  #hdr .hdr__right > .kas-user-menu{flex:0 0 auto;min-width:0}
+  #hdr .contact-control,#hdr .lang-wrap--custom{flex:0 0 auto}
+}
+
+
+/* KAS desktop navigation refinement — shared header only; mobile rules remain unchanged. */
+@media (min-width: 701px) {
+  #hdr .hdr__right {
+    gap: 10px;
+    align-items: center;
+  }
+  #hdr .contact-trigger {
+    min-height: 42px;
+    padding: 0 12px;
+    gap: 7px;
+    letter-spacing: .04em;
+    font-size: .82rem;
+  }
+  #hdr .contact-control .contact-popover {
+    width: min(330px, calc(100vw - 28px));
+    padding: 6px;
+  }
+  #hdr .contact-popover__card {
+    grid-template-columns: 32px minmax(0, 1fr) 10px;
+    gap: 7px;
+    padding: 9px 7px;
+  }
+  #hdr .contact-popover__icon {
+    width: 32px;
+    height: 32px;
+  }
+  #hdr .lang-wrap {
+    margin-left: 0;
+  }
+  #hdr .lang-wrap .lang-select {
+    min-height: 42px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  #hdr .kas-user-menu {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: 2px;
+  }
+  #hdr .kas-member-trigger {
+    gap: 7px;
+    width: auto;
+    max-width: 170px;
+  }
+  #hdr .kas-member-trigger .kas-avatar {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    box-shadow: 0 0 0 2px rgba(194,162,92,.10);
+  }
+  #hdr .kas-member-trigger__name {
+    max-width: 112px;
+  }
+}
+
+
+/* Desktop header action alignment: move CONTACT, language and account group to the right.
+   Keep mobile navigation rules and all shared navigation behavior unchanged. */
+@media (min-width: 701px) {
+  #hdr .hdr__right {
+    margin-left: auto;
+    gap: 10px;
+  }
+  #hdr .hdr__right > .js-kas-auth {
+    flex: 0 0 124px;
+    width: 124px;
+    min-width: 124px;
+    padding-inline: 10px;
+    font-size: .72rem;
+    letter-spacing: .035em;
+    white-space: nowrap;
+  }
+  #hdr .hdr__right > .kas-user-menu {
+    flex: 0 0 auto;
+    width: auto;
+    min-width: 0;
+    margin-left: 2px;
+  }
+}
+
+
+/* V29 — trust strip breathing room and clearly grouped footer contact numbers. */
+.trust--pad .trust__in{padding-inline:12px}
+.trust--pad .trust__i{min-width:0}
+.ftr__contact .ftr-contact-group{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin:8px 0 12px}
+.ftr__contact .ftr-contact-group:first-of-type{margin-top:10px}
+.ftr__contact .ftr-contact-label{font-size:.62rem;line-height:1.45;letter-spacing:.035em;color:rgba(194,162,92,.95);font-weight:600}
+.ftr__contact .ftr-contact-group .ftr-contact-row{padding:3px 0;min-height:0}
+@media(max-width:767px){
+  .trust--pad .trust__in{padding-inline:10px}
+  .trust--pad .trust__i{gap:10px}
+  .ftr__contact .ftr-contact-label{font-size:.64rem}
+}
+
+/* KAS saved hotel heart — overlay on the primary property image */
+.hotel-gallery__preview{position:relative}
+.hotel-save-heart{position:absolute;z-index:5;top:14px;right:14px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:42px;padding:0 15px;border:1px solid rgba(255,255,255,.45);border-radius:999px;background:rgba(20,19,17,.78);color:#f7f0e4;font:600 12px/1 var(--sans);backdrop-filter:blur(8px);cursor:pointer;box-shadow:0 5px 18px rgba(0,0,0,.18);transition:background .2s,border-color .2s,transform .2s}
+.hotel-save-heart:hover{transform:translateY(-1px);border-color:var(--gold)}.hotel-save-heart svg{color:#c7a15d}.hotel-save-heart.is-saved{background:#c4a15d;color:#171511;border-color:#c4a15d}.hotel-save-heart.is-saved svg{fill:currentColor;color:#171511}
+@media(max-width:520px){.hotel-save-heart{top:9px;right:9px;min-height:38px;padding:0 11px;font-size:11px}}
+
+.kas-saved-hotel-list{display:grid;gap:10px;max-height:45vh;overflow:auto;margin:18px 0;text-align:left}.kas-saved-hotel-row{display:grid;grid-template-columns:minmax(0,1fr) auto 28px;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.kas-saved-hotel-row strong,.kas-saved-hotel-row span{display:block}.kas-saved-hotel-row strong{font-size:14px}.kas-saved-hotel-row span{font-size:11px;color:var(--tx-2);margin-top:4px}.kas-saved-hotel-row a{font-size:11px;color:var(--gold);white-space:nowrap}.kas-saved-hotel-row button{border:0;background:transparent;font-size:22px;color:var(--tx-2);cursor:pointer}
+/* Member photo in the header avatar circle (falls back to the initial when absent). */
+.kas-avatar.kas-avatar--photo{padding:0;overflow:hidden;background:var(--ivory,#f6f1e7)}
+.kas-avatar.kas-avatar--photo img{display:block;width:100%;height:100%;object-fit:cover;border-radius:50%}
+
+/* Shared save toggle (data-save-hotel): icon button on listing cards, labelled
+   button on the room page. The filled heart and aria-pressed carry the state. */
+.kas-save{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-2);border-radius:999px;background:transparent;color:var(--gold-dk,#9a7b3c);cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .2s}
+.kas-save:hover{border-color:var(--gold);transform:translateY(-1px)}
+.kas-save:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.kas-save.is-saved{background:#c4a15d;border-color:#c4a15d;color:#171511}
+.kas-save.is-saved svg,.find-page-save.is-saved svg{fill:currentColor}
+/* Staff accounts only: the way into the Admin/Partner console. */
+.kas-user-menu__panel a.kas-user-menu__admin{font-weight:600;color:var(--gold-dk,#9a7b3c)}

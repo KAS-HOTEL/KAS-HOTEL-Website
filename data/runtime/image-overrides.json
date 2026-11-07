@@ -89,10 +89,10 @@
       "source": "admin-url"
     },
     "home.neighborhood.city": {
-      "id": "6739163d-6871-4e72-867f-df56c86630d9",
-      "url": "https://images.unsplash.com/photo-1558722141-c57f8beded32?auto=format&fit=crop&w=2560&q=95",
+      "id": "d0630f6b-0f8a-4d73-9246-be2481bb452a",
+      "url": "https://images.unsplash.com/photo-1698996608527-0e8efb30062b?auto=format&fit=crop&q=90&w=2400",
       "name": "URL image",
-      "updatedAt": "2026-10-01T09:19:05.078Z",
+      "updatedAt": "2026-10-05T09:53:20.315Z",
       "source": "admin-url"
     },
     "guidebook.entry.ben-thanh-market": {
@@ -231,6 +231,129 @@
       "name": "URL image",
       "updatedAt": "2026-10-05T06:45:25.512Z",
       "source": "admin-url"
+    },
+    "home.neighborhood.taste": {
+      "id": "99331246-e378-4e40-a5a6-0b2e9542db3d",
+      "url": "https://images.unsplash.com/photo-1745210361904-853ad10cfb03?auto=format&fit=crop&q=100&w=3000",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T09:56:40.147Z",
+      "source": "admin-url"
+    },
+    "home.neighborhood.slow": {
+      "id": "fa35d951-1856-4712-8ec7-7820e65b4741",
+      "url": "https://images.unsplash.com/photo-1678089498025-1aa6235917e3?q=100&w=2400&auto=format&fit=crop",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T09:47:34.243Z",
+      "source": "admin-url"
+    },
+    "home.neighborhood.night": {
+      "id": "f7cde89c-f0d3-4a47-8e58-7765f460468d",
+      "url": "https://images.unsplash.com/photo-1693282814784-649be45a459b?auto=format&fit=crop&q=90&w=2000",
+      "name": "URL image",
+      "updatedAt": "2026-10-05T09:50:44.379Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.pham-ngu-lao-night": {
+      "id": "4db65a03-9cb8-45f7-be9d-bf6b50cd0609",
+      "filename": "site-guidebook_entry_pham-ngu-lao-night-1791279518365-a218b9d5.png",
+      "originalName": "Phá» ÄÃªm SÃ i GÃ²n rá»±c rá»¡ neon.png",
+      "url": "/uploads/site/site-guidebook_entry_pham-ngu-lao-night-1791279518365-a218b9d5.png",
+      "name": "Phá» ÄÃªm SÃ i GÃ²n rá»±c rá»¡ neon.png",
+      "updatedAt": "2026-10-06T09:38:38.388Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.saigon-square": {
+      "id": "88e719ed-0993-41b6-b167-42e1415315f3",
+      "filename": "site-guidebook_entry_saigon-square-1791279728892-2eac19c5.png",
+      "originalName": "3d714a70-967c-449c-bd2d-e07bc3a3c0ac.png",
+      "url": "/uploads/site/site-guidebook_entry_saigon-square-1791279728892-2eac19c5.png",
+      "name": "3d714a70-967c-449c-bd2d-e07bc3a3c0ac.png",
+      "updatedAt": "2026-10-06T09:42:08.905Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.nguyen-trai-street": {
+      "id": "12ee0d4b-78d9-48e8-aee5-9ceaac438f5c",
+      "filename": "site-guidebook_entry_nguyen-trai-street-1791279926459-e39a3e22.png",
+      "originalName": "nguyentrai.png",
+      "url": "/uploads/site/site-guidebook_entry_nguyen-trai-street-1791279926459-e39a3e22.png",
+      "name": "nguyentrai.png",
+      "updatedAt": "2026-10-06T09:45:26.473Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.saigon-centre": {
+      "id": "296a762f-6f86-4158-9ce5-bea3c05113af",
+      "filename": "site-guidebook_entry_saigon-centre-1791280013779-22c2aa06.png",
+      "originalName": "a8f640a8-d9ad-4fb0-9598-ecdf5f844a69.png",
+      "url": "/uploads/site/site-guidebook_entry_saigon-centre-1791280013779-22c2aa06.png",
+      "name": "a8f640a8-d9ad-4fb0-9598-ecdf5f844a69.png",
+      "updatedAt": "2026-10-06T09:46:53.797Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.saigon-eco-craft": {
+      "id": "d7b69772-9ea5-4e25-bde1-0fd7a0c7bbf9",
+      "filename": "site-guidebook_entry_saigon-eco-craft-1791280140123-0c61bd07.png",
+      "originalName": "b9aa99dd-4fae-4229-9e7f-e00214ca71e5.png",
+      "url": "/uploads/site/site-guidebook_entry_saigon-eco-craft-1791280140123-0c61bd07.png",
+      "name": "b9aa99dd-4fae-4229-9e7f-e00214ca71e5.png",
+      "updatedAt": "2026-10-06T09:49:00.138Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.saigon-street-food": {
+      "id": "b232dff3-ea92-42ac-b5ac-46c601c8f2fc",
+      "url": "https://images.unsplash.com/photo-1736665813752-f15663994b6f?auto=format&fit=crop&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&ixlib=rb-4.1.0&q=90&w=2048",
+      "name": "URL image",
+      "updatedAt": "2026-10-06T09:50:01.361Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.ben-thanh-market-food": {
+      "id": "c7f88d1e-f887-439d-8167-d875514739d6",
+      "filename": "site-guidebook_entry_ben-thanh-market-food-1791280306622-dce5f07f.jpg",
+      "originalName": "quinn-nguyen-Uks2RMFhPcQ-unsplash (2).jpg",
+      "url": "/uploads/site/site-guidebook_entry_ben-thanh-market-food-1791280306622-dce5f07f.jpg",
+      "name": "quinn-nguyen-Uks2RMFhPcQ-unsplash (2).jpg",
+      "updatedAt": "2026-10-06T09:51:46.629Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.vietnamese-coffee": {
+      "id": "661b1bcd-9651-43ee-a9e6-d0fdd1b6ce53",
+      "filename": "site-guidebook_entry_vietnamese-coffee-1791280340663-82b6a304.png",
+      "originalName": "8af5d795-f922-4f1f-8256-9bddfd5acb3a.png",
+      "url": "/uploads/site/site-guidebook_entry_vietnamese-coffee-1791280340663-82b6a304.png",
+      "name": "8af5d795-f922-4f1f-8256-9bddfd5acb3a.png",
+      "updatedAt": "2026-10-06T09:52:20.677Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.saigon-opera-house-walk": {
+      "id": "c7f8bd78-1eea-4ea7-a05a-6964189da240",
+      "url": "https://images.pexels.com/photos/31256134/pexels-photo-31256134.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-06T09:56:37.353Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.central-post-office-walk": {
+      "id": "db389677-be6f-4ffa-80af-346d04f08e79",
+      "filename": "site-guidebook_entry_central-post-office-walk-1791280670015-6c49dfaa.jpg",
+      "originalName": "site-guidebook_entry_ben-thanh-market-1790846455977-0250db0d.jpg",
+      "url": "/uploads/site/site-guidebook_entry_central-post-office-walk-1791280670015-6c49dfaa.jpg",
+      "name": "site-guidebook_entry_ben-thanh-market-1790846455977-0250db0d.jpg",
+      "updatedAt": "2026-10-06T09:57:50.027Z",
+      "source": "admin-upload"
+    },
+    "guidebook.entry.notre-dame-cathedral-walk": {
+      "id": "0cf2ef91-8079-4f6e-8a41-4a9afdc75217",
+      "url": "https://images.pexels.com/photos/5659452/pexels-photo-5659452.jpeg",
+      "name": "URL image",
+      "updatedAt": "2026-10-06T09:59:56.675Z",
+      "source": "admin-url"
+    },
+    "guidebook.entry.le-thanh-ton": {
+      "id": "cb8c31cb-2c3d-4189-9627-a5d868bb0abc",
+      "filename": "site-guidebook_entry_le-thanh-ton-1791280817263-95aeaae9.png",
+      "originalName": "ef3ee621-2a89-4860-a7bb-b166f072ab30.png",
+      "url": "/uploads/site/site-guidebook_entry_le-thanh-ton-1791280817263-95aeaae9.png",
+      "name": "ef3ee621-2a89-4860-a7bb-b166f072ab30.png",
+      "updatedAt": "2026-10-06T10:00:17.279Z",
+      "source": "admin-upload"
     }
   }
 }

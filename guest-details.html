@@ -10,6 +10,17 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<style>
+.guest-profile-note{margin:-4px 0 16px;padding:11px 13px;border:1px solid var(--line);background:var(--surface-2);font-size:.8rem;color:var(--tx-2)}
+.guest-room-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;margin-bottom:16px;background:var(--surface-2);border:1px solid var(--line);font-size:.86rem}
+.guest-room-summary span{color:var(--tx-2)}
+.guest-booking-note{border-left:3px solid var(--gold)}
+#assist .ct-channels{grid-template-columns:minmax(0,1fr);gap:6px}
+#assist .ct-ch{flex-direction:row;justify-content:flex-start;align-items:center;gap:9px;min-height:40px;padding:8px 10px;text-align:left}
+#assist .ct-ch span{width:auto;min-width:0;flex:1}
+#assist .ct-ch b{font-size:.7rem;white-space:normal;overflow-wrap:anywhere}
+#assist .ct-ch small{font-size:.62rem;line-height:1.25}
+</style>
 </head>
 <body>
 
@@ -22,67 +33,64 @@
     <div class="split">
       <!-- ============ FORM ============ -->
       <div class="split__main">
-        <h1 style="font-size:clamp(1.9rem,3vw,2.5rem)">Guest Details</h1>
-        <p class="muted" style="margin:.4rem 0 1.8rem;font-size:.93rem">Please enter your details to continue. We'll send your confirmation here.</p>
+        <h1 style="font-size:clamp(1.9rem,3vw,2.5rem)">Enter your details</h1>
+        <p class="muted" style="margin:.4rem 0 1.8rem;font-size:.93rem">Add your contact details and review your stay before sending a booking request.</p>
 
         <form id="gForm" novalidate class="stack" style="gap:18px">
 
           <!-- contact -->
           <div class="card">
-            <div class="card__hd">${ICON_USER}<h4>Contact information</h4>
+              <div class="card__hd">${ICON_USER}<h4>Contact information</h4>
               <span class="tiny muted" style="margin-left:auto"><span class="req" style="color:var(--err)">*</span> Required fields</span></div>
-            <div class="grid" style="grid-template-columns:170px 1fr 1fr" id="nameRow">
-              <div class="field"><label class="label" for="title">Title</label>
-                <select class="select" id="title" name="title">
-                  <option>Mr</option><option>Ms</option><option>Mrs</option><option>Dr</option>
-                </select></div>
-              <div class="field"><label class="label" for="firstName">First name <span class="req">*</span></label>
-                <input class="input" id="firstName" name="firstName" autocomplete="given-name" required>
-                <span class="err-msg"></span></div>
-              <div class="field"><label class="label" for="lastName">Last name <span class="req">*</span></label>
-                <input class="input" id="lastName" name="lastName" autocomplete="family-name" required>
+            <div id="signedInProfile" class="guest-profile-note" hidden></div>
+            <div class="grid" style="grid-template-columns:1fr" id="nameRow">
+              <div class="field"><label class="label" for="fullName">Full name <span class="req">*</span></label>
+                <input class="input" id="fullName" name="fullName" autocomplete="name" required>
                 <span class="err-msg"></span></div>
             </div>
             <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:16px" id="contactRow">
               <div class="field"><label class="label" for="email">Email address <span class="req">*</span></label>
                 <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
                 <span class="err-msg"></span></div>
-              <div class="field"><label class="label" for="phone">Phone number <span class="req">*</span></label>
-                <div style="display:flex;gap:8px">
-                  <select class="select" id="dial" aria-label="Country calling code" style="width:110px">
-                    <option value="+84">+84</option><option value="+1">+1</option><option value="+44">+44</option>
-                    <option value="+65">+65</option><option value="+61">+61</option><option value="+82">+82</option>
-                    <option value="+81">+81</option><option value="+86">+86</option>
-                  </select>
-                  <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="912 345 678" required>
-                </div><span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="nationality">Country/Region <span class="req">*</span></label>
+                <select class="select" id="nationality" required></select><span class="err-msg"></span></div>
             </div>
-            <label class="opt" style="margin-top:16px">
-              <input type="checkbox" id="createAcct"><span>Create a KAS account for faster booking next time</span></label>
-          </div>
-
-          <!-- guest -->
-          <div class="card">
-            <div class="card__hd">${ICON_USERS}<h4>Guest information</h4></div>
-            <div class="field" style="margin-bottom:16px">
-              <label class="label">Check-in guest <span class="req">*</span></label>
+            <div class="field" style="margin-top:16px;max-width:520px">
+              <label class="label" for="phone">Phone number <span class="req">*</span></label>
+              <div style="display:flex;gap:8px">
+                <select class="select" id="dial" aria-label="Country calling code" style="width:110px">
+                  <option value="+84">+84</option><option value="+1">+1</option><option value="+44">+44</option>
+                  <option value="+65">+65</option><option value="+61">+61</option><option value="+82">+82</option>
+                  <option value="+81">+81</option><option value="+86">+86</option>
+                </select>
+                <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="912 345 678" required>
+              </div><span class="err-msg"></span>
+            </div>
+            <div class="field" style="margin-top:16px">
+              <label class="label">Who will check in?</label>
               <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:4px">
-                <label class="opt"><input type="radio" name="cig" value="same" checked><span>Same as contact information</span></label>
-                <label class="opt"><input type="radio" name="cig" value="different"><span>Different guest</span></label>
+                <label class="opt"><input type="radio" name="cig" value="same" checked><span>I will check in</span></label>
+                <label class="opt"><input type="radio" name="cig" value="different"><span>Someone else will check in</span></label>
               </div>
             </div>
             <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px" id="diffGuest" hidden>
-              <div class="field"><label class="label" for="gFirst">Guest first name <span class="req">*</span></label>
-                <input class="input" id="gFirst"><span class="err-msg"></span></div>
-              <div class="field"><label class="label" for="gLast">Guest last name <span class="req">*</span></label>
-                <input class="input" id="gLast"><span class="err-msg"></span></div>
+              <div class="field" style="grid-column:1/-1"><label class="label" for="guestFullName">Guest full name <span class="req">*</span></label>
+                <input class="input" id="guestFullName" autocomplete="name"><span class="err-msg"></span></div>
             </div>
-            <div class="grid" style="grid-template-columns:1fr 1fr" id="natRow">
-              <div class="field"><label class="label" for="nationality">Nationality <span class="req">*</span></label>
-                <select class="select" id="nationality" required></select><span class="err-msg"></span></div>
-              <div class="field"><label class="label" for="dob">Date of birth</label>
-                <input class="input" type="date" id="dob" max="2026-09-12"><span class="err-msg"></span></div>
-            </div>
+          </div>
+
+          <div class="card guest-booking-note">
+            <div class="card__hd">${ICON_INFO}<h4>Good to know</h4></div>
+            <p class="muted" style="margin:0;font-size:.88rem;line-height:1.7">This is a booking request. The hotel will check room availability and contact you by email. If the room is available, the hotel will send payment instructions; your reservation is confirmed after the hotel verifies payment.</p>
+          </div>
+
+          <!-- room -->
+          <div class="card">
+            <div class="card__hd">${ICON_BED}<h4>Room details &amp; guests</h4></div>
+            <div class="guest-room-summary"><strong id="selectedRoomName"></strong><span id="selectedRoomFacts"></span></div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="guestsRow"></div>
+            <p class="hint" style="margin-top:14px" id="occNote"></p>
+            <span class="err-msg" id="occErr"></span>
           </div>
 
           <!-- requests -->
@@ -101,36 +109,10 @@
           <!-- arrival -->
           <div class="card">
             <div class="card__hd">${ICON_CLOCK}<h4>Arrival details</h4></div>
-            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="arrRow">
+            <div class="grid" style="grid-template-columns:1fr" id="arrRow">
               <div class="field"><label class="label" for="arrival">Estimated arrival time</label>
                 <select class="select" id="arrival"></select></div>
-              <div class="field"><label class="label" for="purpose">Purpose of trip</label>
-                <select class="select" id="purpose">
-                  <option>Leisure</option><option>Business</option><option>Family visit</option>
-                  <option>Event or conference</option><option>Other</option></select></div>
-              <div class="field"><label class="label" for="heard">How did you hear about us?</label>
-                <select class="select" id="heard">
-                  <option>Google</option><option>Agoda</option><option>Booking.com</option>
-                  <option>Friend or family</option><option>Social media</option>
-                  <option>Returning guest</option><option>Other</option></select></div>
             </div>
-          </div>
-
-          <!-- room guests -->
-          <div class="card">
-            <div class="card__hd">${ICON_BED}<h4>Room guests</h4></div>
-            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="guestsRow"></div>
-            <p class="hint" style="margin-top:14px" id="occNote"></p>
-            <span class="err-msg" id="occErr"></span>
-          </div>
-
-          <!-- payment -->
-          <div class="card">
-            <div class="card__hd">${ICON_CARD}<h4>Payment method</h4></div>
-            <div class="pays" id="pays"></div>
-            <span class="err-msg" id="payErr"></span>
-            <div class="alert alert--demo" style="margin-top:16px">${ICON_INFO}
-              <span>This is a demonstration. No payment is processed and no card details are collected or stored.</span></div>
           </div>
 
           <div class="between" style="margin-top:6px;flex-wrap:wrap;gap:14px">
@@ -173,13 +155,13 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
 <script src="js/room.js"></script>
 <script>
-(function () {
+(async function () {
   var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
 
   /* Swap icon placeholders BEFORE any listeners are bound, and only inside
@@ -216,17 +198,28 @@
   br.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
 
   /* ---- nationality ---- */
-  var NAT = ['Vietnam','Australia','Cambodia','Canada','China','France','Germany','Hong Kong',
-    'India','Indonesia','Italy','Japan','Laos','Malaysia','Netherlands','New Zealand','Philippines',
-    'Russia','Singapore','South Korea','Spain','Sweden','Switzerland','Taiwan','Thailand',
-    'United Kingdom','United States','Other'];
-  U.$('#nationality').innerHTML = '<option value="">Select nationality</option>' +
-    NAT.map(function (n) { return '<option' + (n === 'Vietnam' ? ' selected' : '') + '>' + n + '</option>'; }).join('');
+  var NAT = [
+    ['VN','Vietnamese','Việt Nam'],['AU','Australian','Úc'],['KH','Cambodian','Campuchia'],['CA','Canadian','Canada'],
+    ['CN','Chinese','Trung Quốc'],['FR','French','Pháp'],['DE','German','Đức'],['HK','Hong Kong','Hồng Kông'],
+    ['IN','Indian','Ấn Độ'],['ID','Indonesian','Indonesia'],['IT','Italian','Ý'],['JP','Japanese','Nhật Bản'],
+    ['LA','Lao','Lào'],['MY','Malaysian','Malaysia'],['NL','Dutch','Hà Lan'],['NZ','New Zealander','New Zealand'],
+    ['PH','Filipino','Philippines'],['RU','Russian','Nga'],['SG','Singaporean','Singapore'],['KR','South Korean','Hàn Quốc'],
+    ['ES','Spanish','Tây Ban Nha'],['SE','Swedish','Thụy Điển'],['CH','Swiss','Thụy Sĩ'],['TW','Taiwanese','Đài Loan'],
+    ['TH','Thai','Thái Lan'],['GB','British','Vương quốc Anh'],['US','American','Hoa Kỳ'],['ZZ','Other','Khác']
+  ];
+  function bookingLang() { return window.KAS_I18N && window.KAS_I18N.getLanguage && window.KAS_I18N.getLanguage() === 'vi' ? 'vi' : 'en'; }
+  function renderNationalities(selected) {
+    var vi = bookingLang() === 'vi';
+    U.$('#nationality').innerHTML = '<option value="">' + (vi ? 'Chọn quốc tịch' : 'Select nationality') + '</option>' +
+      NAT.map(function (country) { return '<option value="' + country[0] + '">' + country[vi ? 2 : 1] + '</option>'; }).join('');
+    U.$('#nationality').value = selected || '';
+  }
+  renderNationalities('VN');
 
   /* ---- arrival times ---- */
-  var times = ['I don\'t know yet'];
+  var times = [bookingLang() === 'vi' ? 'Chưa xác định' : 'I don\'t know yet'];
   for (var h = 12; h <= 23; h++) times.push(String(h).padStart(2, '0') + ':00 – ' + String(h + 1).padStart(2, '0') + ':00');
-  times.push('After 00:00');
+  times.push(bookingLang() === 'vi' ? 'Sau 00:00' : 'After 00:00');
   U.$('#arrival').innerHTML = times.map(function (t, i) {
     return '<option' + (i === 3 ? ' selected' : '') + '>' + t + '</option>';
   }).join('');
@@ -235,9 +228,9 @@
   var counts = { adults: +c.adults || 2, children: +c.children || 0, infants: 0 };
   var maxA = room.maxGuests, maxC = room.children != null ? room.children : 2;
   U.$('#guestsRow').innerHTML = [
-    ['adults', 'Adults', 'Ages 13+', 1, maxA],
-    ['children', 'Children', 'Ages 2–12', 0, maxC],
-    ['infants', 'Infants', 'Under 2', 0, 2]
+    ['adults', bookingLang() === 'vi' ? 'Người lớn' : 'Adults', bookingLang() === 'vi' ? 'Từ 13 tuổi' : 'Ages 13+', 1, maxA],
+    ['children', bookingLang() === 'vi' ? 'Trẻ em' : 'Children', bookingLang() === 'vi' ? '2–12 tuổi' : 'Ages 2–12', 0, maxC],
+    ['infants', bookingLang() === 'vi' ? 'Em bé' : 'Infants', bookingLang() === 'vi' ? 'Dưới 2 tuổi' : 'Under 2', 0, 2]
   ].map(function (g) {
     return '<div class="field"><label class="label">' + g[1] + '<span style="text-transform:none;letter-spacing:0;color:var(--tx-3);font-weight:400"> · ' + g[2] + '</span></label>' +
       '<div class="stepper" data-k="' + g[0] + '" data-min="' + g[3] + '" data-max="' + g[4] + '" ' +
@@ -246,9 +239,11 @@
       '<output>' + counts[g[0]] + '</output>' +
       '<button type="button" data-d="+" aria-label="Increase ' + g[1] + '">' + U.icon('plus', 14) + '</button></div></div>';
   }).join('');
-  U.$('#occNote').textContent = 'This room type sleeps a maximum of ' + maxA + ' guest' +
-    (maxA === 1 ? '' : 's') + (maxC ? ' and up to ' + maxC + ' child' + (maxC === 1 ? '' : 'ren') : '') +
-    '. You have booked ' + c.rooms + ' room' + (c.rooms === 1 ? '' : 's') + '.';
+  U.$('#occNote').textContent = bookingLang() === 'vi'
+    ? 'Phòng tối đa ' + maxA + ' người lớn' + (maxC ? ' và ' + maxC + ' trẻ em' : '') + '. Bạn đã chọn ' + c.rooms + ' phòng.'
+    : 'This room type sleeps a maximum of ' + maxA + ' guest' + (maxA === 1 ? '' : 's') + (maxC ? ' and up to ' + maxC + ' child' + (maxC === 1 ? '' : 'ren') : '') + '. You have booked ' + c.rooms + ' room' + (c.rooms === 1 ? '' : 's') + '.';
+  U.$('#selectedRoomName').textContent = room.name;
+  U.$('#selectedRoomFacts').textContent = hotel.name + ' · ' + c.rooms + (bookingLang() === 'vi' ? ' phòng' : (c.rooms === 1 ? ' room' : ' rooms'));
 
   U.$$('.stepper[data-k]').forEach(function (st) {
     var k = st.dataset.k, lo = +st.dataset.min, hi = +st.dataset.max, out = U.$('output', st);
@@ -270,37 +265,6 @@
     sync();
   });
 
-  /* ---- payment methods ---- */
-  var PAYS = [
-    ['pay-later', 'wallet', 'Pay later', 'Pay at the hotel. No payment needed now.', true],
-    ['card', 'card', 'Credit / debit card', 'Secure payment powered by our trusted partners.', false],
-    ['zalopay', 'phone', 'Pay with ZaloPay', 'Pay securely with your ZaloPay account.', false],
-    ['bank', 'bank', 'Bank transfer', 'Complete your booking and pay by bank transfer.', false]
-  ];
-  U.$('#pays').innerHTML = PAYS.map(function (p) {
-    return '<label class="pay' + (p[4] ? ' is-on' : '') + '" data-pay="' + p[0] + '">' +
-      '<div class="pay__hd"><input type="radio" name="pay" value="' + p[0] + '"' + (p[4] ? ' checked' : '') + ' ' +
-      'style="appearance:none;width:17px;height:17px;border:1.5px solid var(--line-2);border-radius:50%;flex-shrink:0;position:relative">' +
-      '<b>' + p[2] + '</b>' + (p[0] === 'card' ?
-        '<span class="cards">' + ['VISA','MC','JCB','AMEX'].map(function (x) {
-          return '<span style="font-size:.54rem;font-weight:700;letter-spacing:.02em;border:1px solid var(--line-2);border-radius:2px;padding:2px 4px;color:var(--tx-3)">' + x + '</span>';
-        }).join('') + '</span>' : '') +
-      '</div><p>' + p[3] + '</p></label>';
-  }).join('');
-  U.$$('.pay').forEach(function (p) {
-    p.addEventListener('click', function () {
-      U.$$('.pay').forEach(function (x) { x.classList.remove('is-on'); });
-      p.classList.add('is-on');
-      U.$('input', p).checked = true;
-      U.$('#payErr').classList.remove('show');
-    });
-  });
-  /* style the radio dot */
-  var st = document.createElement('style');
-  st.textContent = '.pay input:checked{border-color:var(--gold)!important;background:var(--gold)}' +
-    '.pay input:checked::after{content:"";position:absolute;inset:3.5px;border-radius:50%;background:var(--black)}';
-  document.head.appendChild(st);
-
   /* ---- different guest toggle ---- */
   U.$$('input[name=cig]').forEach(function (r) {
     r.addEventListener('change', function () {
@@ -314,27 +278,46 @@
 
   /* ---- prefill from saved guest ---- */
   var saved = (c.guest) || S.getGuest();
-  if (saved) {
-    setVal('title', saved.title); setVal('firstName', saved.firstName); setVal('lastName', saved.lastName);
-    setVal('email', saved.email); setVal('dial', saved.dial); setVal('phone', saved.phone);
-    setVal('nationality', saved.nationality); setVal('dob', saved.dob);
-    setVal('requests', saved.specialRequests); setVal('arrival', saved.arrivalTime);
-    setVal('purpose', saved.purpose); setVal('heard', saved.heardFrom);
-    if (saved.checkInGuest === 'different') {
+  function fillGuest(savedGuest) {
+    if (!savedGuest) return;
+    var nationality = String(savedGuest.nationality || '').toUpperCase();
+    var countryCodes = { VIETNAMESE:'VN', VIETNAM:'VN', AMERICAN:'US', 'UNITED STATES':'US', BRITISH:'GB', 'UNITED KINGDOM':'GB', AUSTRALIAN:'AU', CANADIAN:'CA', THAI:'TH', 'SOUTH KOREAN':'KR', JAPANESE:'JP', CHINESE:'CN', FRENCH:'FR', GERMAN:'DE', INDIAN:'IN' };
+    nationality = countryCodes[nationality] || nationality;
+    renderNationalities(NAT.some(function (n) { return n[0] === nationality; }) ? nationality : '');
+    setVal('requests', savedGuest.specialRequests); setVal('arrival', savedGuest.arrivalTime);
+    setVal('fullName', savedGuest.fullName || [savedGuest.firstName, savedGuest.lastName].filter(Boolean).join(' '));
+    setVal('email', savedGuest.email); setVal('dial', savedGuest.dial); setVal('phone', savedGuest.phone);
+    setVal('nationality', nationality);
+    if (savedGuest.checkInGuest === 'different') {
       U.$('input[name=cig][value=different]').checked = true;
       U.$('#diffGuest').hidden = false;
-      setVal('gFirst', saved.guestFirstName); setVal('gLast', saved.guestLastName);
+      setVal('guestFullName', savedGuest.guestFullName || [savedGuest.guestFirstName, savedGuest.guestLastName].filter(Boolean).join(' '));
     }
-    if (saved.paymentMethod) {
-      var pe = U.$('.pay[data-pay="' + saved.paymentMethod + '"]');
-      if (pe) pe.click();
-    }
-    U.$('#charN').textContent = (saved.specialRequests || '').length;
+    U.$('#charN').textContent = (savedGuest.specialRequests || '').length;
   }
+  fillGuest(saved);
+  if (window.KAS_API) window.KAS_API.profile().then(function (profile) {
+    var signedIn = U.$('#signedInProfile');
+    signedIn.textContent = bookingLang() === 'vi'
+      ? 'Thông tin liên hệ đã được điền từ hồ sơ thành viên KAS.'
+      : 'Contact details have been prefilled from your KAS member profile.';
+    signedIn.hidden = false;
+    var phone = String(profile.phone || '').trim(), dial = '+84';
+    ['+84','+1','+44','+65','+61','+82','+81','+86'].some(function (prefix) {
+      if (phone.indexOf(prefix) === 0) { dial = prefix; phone = phone.slice(prefix.length).trim(); return true; }
+      return false;
+    });
+    if (dial === '+84' && phone.charAt(0) === '0') phone = phone.slice(1);
+    var fromProfile = {
+      fullName: profile.fullName || '',
+      email: profile.email || '', dial: dial, phone: phone, nationality: profile.nationality || ''
+    };
+    fillGuest(Object.assign({}, saved || {}, fromProfile));
+  }).catch(function () {});
   function setVal(id, v) { var e = U.$('#' + id); if (e && v != null && v !== '') e.value = v; }
 
   /* ---- live validation ---- */
-  ['firstName','lastName','email','phone','nationality'].forEach(function (id) {
+  ['fullName','email','phone','nationality'].forEach(function (id) {
     var e = U.$('#' + id);
     e.addEventListener('input', function () { U.clearErr(e); });
     e.addEventListener('change', function () { U.clearErr(e); });
@@ -346,25 +329,18 @@
 
   function collect() {
     return {
-      title: U.$('#title').value,
-      firstName: U.$('#firstName').value.trim(),
-      lastName: U.$('#lastName').value.trim(),
+      fullName: U.$('#fullName').value.trim(),
       email: U.$('#email').value.trim(),
       dial: U.$('#dial').value,
       phone: U.$('#phone').value.trim(),
       phoneFull: U.$('#dial').value + ' ' + U.$('#phone').value.trim(),
       nationality: U.$('#nationality').value,
-      dob: U.$('#dob').value,
       checkInGuest: U.$('input[name=cig]:checked').value,
-      guestFirstName: U.$('#gFirst').value.trim(),
-      guestLastName: U.$('#gLast').value.trim(),
+      guestFullName: U.$('#guestFullName').value.trim(),
       specialRequests: U.$('#requests').value.trim(),
       arrivalTime: U.$('#arrival').value,
-      purpose: U.$('#purpose').value,
-      heardFrom: U.$('#heard').value,
-      createAccount: U.$('#createAcct').checked,
       adults: counts.adults, children: counts.children, infants: counts.infants,
-      paymentMethod: (U.$('input[name=pay]:checked') || {}).value || ''
+      paymentMethod: ''
     };
   }
 
@@ -383,13 +359,10 @@
     if (!v.ok) {
       var first = null;
       Object.keys(v.errors).forEach(function (k) {
-        var map = { guestFirstName: 'gFirst', guestLastName: 'gLast' };
+        var map = { guestFullName: 'guestFullName' };
         var node = U.$('#' + (map[k] || k));
         if (node) { U.setErr(node, v.errors[k]); if (!first) first = node; }
       });
-      if (v.errors.paymentMethod) {
-        var pe2 = U.$('#payErr'); pe2.textContent = v.errors.paymentMethod; pe2.classList.add('show');
-      }
       if (v.errors.adults && !U.$('#adults')) {
         var oe = U.$('#occErr'); oe.textContent = v.errors.adults; oe.classList.add('show');
         if (!first) first = U.$('#guestsRow');
@@ -435,11 +408,11 @@
 
   function collapse() {
     var w = window.innerWidth;
-    U.$('#nameRow').style.gridTemplateColumns = w < 700 ? '1fr' : '170px 1fr 1fr';
-    ['#contactRow','#natRow','#diffGuest'].forEach(function (s) {
+    U.$('#nameRow').style.gridTemplateColumns = '1fr';
+    ['#contactRow','#diffGuest'].forEach(function (s) {
       var n = U.$(s); if (n) n.style.gridTemplateColumns = w < 700 ? '1fr' : '1fr 1fr';
     });
-    U.$('#arrRow').style.gridTemplateColumns = w < 820 ? '1fr' : 'repeat(3,1fr)';
+    U.$('#arrRow').style.gridTemplateColumns = '1fr';
     U.$('#guestsRow').style.gridTemplateColumns = w < 620 ? '1fr' : 'repeat(3,1fr)';
   }
   collapse(); window.addEventListener('resize', U.debounce(collapse, 120));

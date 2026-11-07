@@ -166,6 +166,9 @@
          shared date picker. This is especially important on Hotels where
          the destination button opens KAS Quick Search instead of hotelPop. */
       closeDatePickers();
+      if (pop) pop.classList.remove('open');
+      if (btnG) btnG.setAttribute('aria-expanded', 'false');
+      if (typeof o.onPopupOpen === 'function') o.onPopupOpen('destination');
     });
 
     if (!externalHotelPicker) hotelBtn.addEventListener('click', function (e) {
@@ -200,6 +203,7 @@
     btnG.addEventListener('click', function (e) {
       e.stopPropagation();
       var open = !pop.classList.contains('open');
+      if (open && typeof o.onPopupOpen === 'function') o.onPopupOpen('guests');
       pop.classList.toggle('open', open);
       btnG.setAttribute('aria-expanded', open ? 'true' : 'false');
       if (open) { hotelPop.classList.remove('open'); closeDatePickers(); }

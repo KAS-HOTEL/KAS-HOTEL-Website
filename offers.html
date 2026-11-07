@@ -3,5 +3,30 @@
 <title>Offers & Member Benefits — KAS Hotel Collection</title><meta name="description" content="Keep your booking simple with direct-booking information, flexible options and member-focused benefits.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/responsive.css"><script src="js/site-images.js" defer></script></head><body><header id="hdr"></header>
 <section class="section content-page-hero media-only-page-hero"><div class="container content-page-hero__inner"><span class="eyebrow eyebrow--lt">KAS Offers</span><h1>Offers & Member Benefits</h1><p>Keep your booking simple with direct-booking information, flexible options and member-focused benefits.</p></div></section>
-<section class="section"><div class="container content-page-section__inner"><div class="content-page-grid content-page-grid--auto"><div class="card"><h3>Direct booking</h3><p class="muted">Compare KAS reference rates by room type and selected dates, then continue through the direct booking flow.</p></div><div class="card"><h3>Flexible options</h3><p class="muted">Cancellation and payment terms are shown during the booking flow and can vary by room and selected stay dates.</p></div><div class="card" id="member"><h3>Member benefits</h3><p class="muted">My KAS keeps booking management and member-related actions in one place.</p></div></div><div class="content-page-action content-page-cta content-page-cta--dark"><h2>Ready to find your stay?</h2><p>Search all properties and compare room types, amenities and reference rates.</p><a class="btn btn--gold" href="hotels.html">View properties</a></div></div></section><footer id="ftr"></footer>
-<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/data.js"></script><script src="js/utils.js"></script><script src="js/storage.js"></script><script src="js/contact.js"></script><script src="js/i18n.js"></script><script src="js/app.js"></script><script src="js/booking.js"></script><script src="js/search.js"></script><script>window.App.boot({active:'offers'});</script></body></html>
+<section class="section"><div class="container content-page-section__inner"><div class="content-page-grid content-page-grid--auto"><div class="card"><h3>Direct booking</h3><p class="muted">Compare KAS reference rates by room type and selected dates, then continue through the direct booking flow.</p></div><div class="card"><h3>Flexible options</h3><p class="muted">Cancellation and payment terms are shown during the booking flow and can vary by room and selected stay dates.</p></div><div class="card"><h3>Member benefits</h3><p class="muted">My KAS keeps booking management and member-related actions in one place.</p></div></div><div class="content-page-action content-page-cta content-page-cta--dark"><h2>Ready to find your stay?</h2><p>Search all properties and compare room types, amenities and reference rates.</p><a class="btn btn--gold" href="hotels.html">View properties</a></div></div></section>
+<!-- KAS Membership policy: Silver / Gold / Platinum (owner decision 2026-11-05; migrations V48, V49; docs/kas/140 §5).
+     Tier names and thresholds must match membership_tier in the database. -->
+<section class="section" id="member"><div class="container content-page-section__inner">
+<span class="eyebrow">KAS Membership</span><h2>Member policy</h2>
+<p class="muted">Every KAS account is a membership. Tiers follow completed bookings in each calendar quarter.</p>
+<div class="content-page-grid content-page-grid--auto" style="margin-top:20px">
+<div class="card"><h3>Silver</h3><p class="muted">Default tier for every new account.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 0%</li></ul></div>
+<div class="card"><h3>Gold</h3><p class="muted">15 completed bookings in a calendar quarter.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 2% in KAS points</li></ul></div>
+<div class="card"><h3>Platinum</h3><p class="muted">30 completed bookings in a calendar quarter.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 5% in KAS points</li></ul></div>
+</div>
+<div class="content-page-grid content-page-grid--two" style="margin-top:18px">
+<div class="card"><h3>Upgrading and keeping your tier</h3><ul>
+<li>A completed booking is a stay that has checked out. Cancelled bookings and no-shows do not count.</li>
+<li>You move up as soon as a checkout reaches the next threshold. New benefits apply from that moment and are not backdated.</li>
+<li>You keep your tier for the rest of the quarter. At the start of each quarter your tier is reviewed against the completed bookings of the previous quarter, never below Silver.</li>
+</ul></div>
+<div class="card"><h3>KAS points</h3><ul>
+<li>1 point = 1 VND off a future KAS booking. Points cannot be exchanged for cash.</li>
+<li>Cashback is calculated on the room amount paid after vouchers and the member discount, excluding taxes and fees, rounded down.</li>
+<li>Points are added after a completed stay that has been paid in full.</li>
+<li>Points are valid for 3 calendar months from the day they are earned.</li>
+</ul></div>
+</div>
+<p class="muted" style="margin-top:14px">Your current tier and points are shown in My KAS.</p>
+</div></section><footer id="ftr"></footer>
+<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/data.js"></script><script src="js/utils.js"></script><script src="js/storage.js"></script><script src="js/contact.js"></script><script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script><script src="js/booking.js"></script><script src="js/search.js"></script><script>window.App.boot({active:'offers'});</script></body></html>

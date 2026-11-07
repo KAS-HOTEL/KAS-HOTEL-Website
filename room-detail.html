@@ -19,7 +19,7 @@
 
 <section class="section section--tight">
   <div class="container">
-    <a href="#" class="btn btn--link" id="backRooms" style="margin-bottom:16px;display:inline-flex;align-items:center;gap:6px"></a>
+    <a href="#" class="booking-back-link" id="backRooms"></a>
 
     <div class="split split--sidefirst">
       <!-- ============ MAIN ============ -->
@@ -68,7 +68,6 @@
               <div id="sideIncl" style="display:flex;flex-direction:column;gap:7px;margin-bottom:16px"></div>
               <div id="sidePrice"></div>
               <button class="btn btn--gold btn--block" id="bookBtn" style="margin-top:18px">Book this room</button>
-              <button class="btn btn--ghost btn--block" id="saveBtn" style="margin-top:9px"></button>
             </div>
           </div>
           <div class="panel" id="assist"></div>
@@ -91,14 +90,14 @@
 <script src="js/utils.js"></script>
 <script src="js/storage.js"></script>
 <script src="js/contact.js"></script>
-<script src="js/i18n.js"></script><script src="js/app.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
 <script src="js/booking.js"></script>
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
 <script src="js/room.js"></script>
 <script src="js/live.js"></script>
 <script>
-(function () {
+(async function () {
   var U = window.U, D = window.KAS_DATA, App = window.App,
       B = window.Booking, H = window.HotelUI, R = window.RoomUI;
 
@@ -110,6 +109,11 @@
   var roomId  = q.room  || (B.draft() || {}).roomId;
   var hotel = D.getHotel(hotelId), room = D.getRoom(hotelId, roomId);
 
+  if ((!hotel || !room) && hotelId && window.KAS_CATALOG && !window.KAS_CATALOG.isFresh()) {
+    /* A hotel or room just added in the console may not be in this browser's list yet. */
+    window.KAS_CATALOG.ready.then(function () { if (D.getRoom(hotelId, roomId)) location.reload(); else location.replace(D.getHotel(hotelId) ? 'hotel-detail.html?hotel=' + encodeURIComponent(hotelId) : 'hotels.html'); });
+    return;
+  }
   if (!hotel || !room) {
     U.toast('That room is no longer available.');
     setTimeout(function () { location.replace(hotel ? 'hotel-detail.html?hotel=' + hotel.id : 'hotels.html'); }, 900);
@@ -125,6 +129,7 @@
 
   /* persist the selection into the booking draft (step 2 complete) */
   var cur = B.startBooking(hotel.id, room.id, search);
+  cur = await B.refreshQuote();
   document.title = room.name + ' · ' + hotel.name + ' — KAS';
 
   App.renderSteps(U.$('#steps'), 1, [
@@ -141,7 +146,7 @@
     '<a href="' + backHref + '">' + U.esc(hotel.name) + '</a><span class="sep">›</span>' +
     '<span class="cur">' + U.esc(room.name) + '</span>';
   var back = U.$('#backRooms');
-  back.innerHTML = U.icon('arrL', 13) + ' Back to rooms';
+  back.innerHTML = U.icon('arrL', 13) + '<span>' + U.esc((window.KAS_I18N && window.KAS_I18N.getLanguage() === 'vi') ? 'Quay lại danh sách phòng' : 'Back to rooms') + '</span>';
   back.href = backHref;
 
   U.$('#rName').textContent = room.name;
@@ -150,7 +155,7 @@
     '<span class="muted">·</span><span class="tiny muted">' + U.esc(hotel.district) + ', Ho Chi Minh City</span>' +
     '<span class="muted">·</span>' +
     '<span style="display:inline-flex;align-items:center;gap:6px;font-size:.86rem">' +
-      '<span style="color:var(--gold)">' + U.icon('star', 13) + '</span><b>' + hotel.rating.toFixed(1) + '</b>' +
+      '<span style="color:var(--gold)">' + U.icon('star', 13) + '</span><b>' + Number(hotel.rating || 0).toFixed(1) + '</b>' +
       '<span class="muted">(' + hotel.reviews + ' reviews)</span></span>' +
     (room.maxGuests >= 4 ? '<span class="chip chip--gold">' + U.icon('users', 12) + 'Best for families</span>' : '');
 
@@ -199,10 +204,7 @@
   /* ---- sidebar ---- */
   function paintSide() {
     var c = B.reprice();
-    var quote = (window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id))
-      ? window.KAS_RATES.quote(room.id, c.checkIn, c.checkOut) : null;
-    var refTotal = quote && quote.complete ? quote.total : (window.KAS_RATES ? window.KAS_RATES.rateForDate(room.id, c.checkIn) : null);
-    if(refTotal != null && quote && quote.complete) { c.price.total = quote.total; c.price.room = quote.total; }
+    var quote = null;
     U.$('#stayPanel').innerHTML = B.stayPanelHTML(Object.assign({}, c, {
       checkInTime: hotel.checkIn, checkOutTime: hotel.checkOut
     }));
@@ -211,7 +213,7 @@
     U.$('#sideIncl').innerHTML = [
       room.breakfast ? 'Breakfast for ' + Math.min(2, room.maxGuests) + ' guests' : 'Breakfast available on request',
       'Free Wi-Fi',
-      'Free cancellation until ' + U.cancelBy(c.checkIn)
+      'Cancellation terms confirmed by the hotel'
     ].map(function (t) { return '<span class="perk">' + U.icon('check', 13) + U.esc(t) + '</span>'; }).join('');
     var _q = quote;
     var nightly = _q && _q.nights && _q.nights.length ? _q.nights[0].rate : null;
@@ -234,16 +236,15 @@
      admin-edited rates into KAS_RATES. */
   liveCatalogPromise.then(function(){ paintSide(); });
 
-  U.$('#saveBtn').innerHTML = U.icon('heart', 14) + ' Save for later';
-  U.$('#saveBtn').addEventListener('click', function () { U.toast(room.name + ' saved to your list.'); });
-
   function goBook() {
-    var phone = (D.config && D.config.contact) ? D.config.contact.displayPhone : '0869 768 885';
-    var zalo = '0869768885';
-    var en = window.KAS_I18N && window.KAS_I18N.getLanguage && window.KAS_I18N.getLanguage() === 'en';
-    alert(en
-      ? 'Online booking is not available yet.\n\nPlease contact us on Zalo ' + phone + ' to book your room.\nZalo: ' + zalo
-      : 'Trang web hiện tại chưa hoạt động chính thức.\n\nVui lòng liên hệ Zalo ' + phone + ' để đặt phòng nha.\nZalo: ' + zalo);
+    var search = B.readSearch();
+    search.hotelId = hotel.id;
+    B.saveSearch(search);
+    if (!B.startBooking(hotel.id, room.id, search)) {
+      U.toast('Không thể bắt đầu yêu cầu đặt phòng. Vui lòng kiểm tra lại ngày lưu trú.');
+      return;
+    }
+    window.location.href = 'guest-details.html';
   }
   U.$('#bookBtn').addEventListener('click', goBook);
 
@@ -260,7 +261,7 @@
       onSearch: function (s) {
         s.hotelId = hotel.id; B.saveSearch(s);
         B.startBooking(hotel.id, room.id, s);
-        wrap.remove(); paintSide();
+        wrap.remove(); B.refreshQuote().then(function(){paintSide();});
         App.renderSteps(U.$('#steps'), 1, [U.fmtDate(s.checkIn) + ' – ' + U.fmtDate(s.checkOut), room.name]);
         U.toast('Your stay has been updated.');
       }

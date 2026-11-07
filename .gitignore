@@ -1,4 +1,5 @@
 node_modules/
+.next-render-check/
 .vercel/
 .env
 .env.*
@@ -10,3 +11,7 @@ npm-debug.log*
 .cache/
 tools/image-map.json
 assets/images/hotels/
+
+# Next.js build output and TypeScript incremental cache
+.next/
+*.tsbuildinfo

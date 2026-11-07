@@ -57,7 +57,7 @@
       '<div style="display:grid;grid-template-columns:300px 1fr;gap:26px;align-items:start" class="revgrid">' +
         '<div class="card">' +
           '<div style="text-align:center;padding-bottom:16px;border-bottom:1px solid var(--line)">' +
-            '<div style="font-family:var(--serif);font-size:3rem;line-height:1;color:var(--tx)">' + h.rating.toFixed(1) +
+            '<div style="font-family:var(--serif);font-size:3rem;line-height:1;color:var(--tx)">' + Number(h.rating || 0).toFixed(1) +
               '<span style="font-size:1.1rem;color:var(--tx-3)">/10</span></div>' +
             '<div style="color:var(--gold);margin:9px 0 5px;display:flex;justify-content:center">' + U.stars(h.rating / 2, 15) + '</div>' +
             '<div class="tiny muted">Based on ' + h.reviews + ' reviews</div>' +

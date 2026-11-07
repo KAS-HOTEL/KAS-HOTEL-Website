@@ -4,34 +4,46 @@
    ========================================================================== */
 
 :root{
-  /* ---- brand palette ---- */
-  --black:#24231F;
+  /* ---- KAS brand identity (Figma Q4HyxlykWfWIl1AutnQZmp · Color board) ---- */
+  --kas-charcoal:#20241F;    /* dark grounds, primary text */
+  --kas-olive:#343B33;       /* dark supporting */
+  --kas-ivory:#F7F2EA;       /* main background */
+  --kas-warm-white:#FFFCF7;  /* card surface */
+  --kas-champagne:#BDA275;   /* accent, decorative, selected CTA */
+  --kas-gold-ink:#806541;    /* small labels on light grounds */
+  --kas-sand:#E9E0D3;        /* secondary background */
+  --kas-stone:#D5CAB9;       /* light borders */
+  --kas-sage:#DCE3D8;        /* soft accent */
+  --kas-muted:#6D6B64;       /* secondary text */
+
+  /* ---- brand palette (existing names, mapped to the brand identity) ---- */
+  --black:var(--kas-charcoal);
   --black-soft:#292822;
-  --char:#3A3934;
-  --ink:#332E27;
-  --ivory:#F5F1E8;
+  --char:var(--kas-olive);
+  --ink:var(--kas-charcoal);
+  --ivory:var(--kas-ivory);
   --ivory-2:#EAE4D8;
   --beige:#EEE9DF;
-  --sand:#EAE3D8;
-  --gold:#A98955;
+  --sand:var(--kas-sand);
+  --gold:#A98955;            /* kept: used as text colour in 40 places; champagne would drop contrast */
   --gold-lt:#C5AD78;
-  --gold-dk:#80643D;
+  --gold-dk:var(--kas-gold-ink);
   --champagne:#D9C49A;
   --brown:#6A5338;
   --brown-dk:#493A2B;
 
   /* ---- text ---- */
-  --tx:#2E2A24;
-  --tx-2:#665F55;
+  --tx:var(--kas-charcoal);
+  --tx-2:var(--kas-muted);
   --tx-3:#8E8578;
   --tx-inv:#F8F4EC;
   --tx-inv-2:#D0C6B8;
 
   /* ---- lines & surfaces ---- */
-  --line:#CEC5B7;
+  --line:var(--kas-stone);
   --line-2:#C3B9A9;
   --line-dk:#4A433A;
-  --surface:#F8F4EC;
+  --surface:var(--kas-warm-white);
   --surface-2:#F0E9DE;
 
   /* ---- status ---- */
@@ -115,11 +127,11 @@ p:last-child{margin-bottom:0}
 /* Homepage header states have one source of truth. JS toggles these classes on scroll. */
 .hdr--float.header--transparent{background:transparent;border-bottom-color:rgba(194,162,92,.12);
   box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
-.hdr--float.header--scrolled{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);
+.hdr--float.header--scrolled{background:var(--kas-charcoal);border-bottom-color:rgba(194,162,92,.16);
   box-shadow:0 2px 24px rgba(0,0,0,.32);backdrop-filter:none;-webkit-backdrop-filter:none}
 .header--transparent{background:transparent}
-.header--scrolled{background:#0d0d0d}
-.hdr--solid{background:#0d0d0d;border-bottom-color:rgba(194,162,92,.16);box-shadow:0 2px 24px rgba(0,0,0,.32)}
+.header--scrolled{background:var(--kas-charcoal)}
+.hdr--solid{background:var(--kas-charcoal);border-bottom-color:rgba(194,162,92,.16);box-shadow:0 2px 24px rgba(0,0,0,.32)}
 .hdr__in{display:flex;align-items:center;justify-content:space-between;gap:24px;height:var(--nav-h)}
 /* Reserve the header's space before app.js renders it, so page content does not jump down (CLS). */
 #hdr:empty{display:block;min-height:calc(var(--nav-h) + 1px);background:var(--black)}
@@ -335,7 +347,7 @@ h1,h2,h3,h4,h5,h6,.hero h1{
 
 /* V18.6 RESTORE — dark editorial footer matching the approved KAS reference */
 .ftr--dark{
-  background:#292822;
+  background:var(--kas-charcoal);
   color:#f5efe3;
   border-top:1px solid rgba(194,162,92,.08);
   padding-top:3.5rem;
@@ -375,6 +387,7 @@ h1,h2,h3,h4,h5,h6,.hero h1{
   white-space:nowrap;
 }
 .ftr--dark .ftr-contact-row svg{color:#c2a25c;flex:0 0 auto}
+.ftr--dark .ftr-contact-address{display:flex;align-items:flex-start;gap:10px;margin:12px 0 0;color:rgba(245,239,227,.72);font-size:.76rem;line-height:1.55;white-space:normal}.ftr--dark .ftr-contact-address svg{color:#c2a25c;flex:0 0 auto;margin-top:2px}
 .ftr--dark .ftr__news p{
   margin:0;
   color:rgba(245,239,227,.72);
@@ -399,3 +412,53 @@ h1,h2,h3,h4,h5,h6,.hero h1{
 }
 .ftr--dark .ftr__btm a{color:rgba(194,162,92,.65)}
 .ftr--dark .ftr__btm a:hover{color:#f5efe3}
+
+/* Booking-flow pages: keep the shared navigation in document flow so it cannot
+   cover the breadcrumb or the five-step booking progress bar. Other pages retain
+   their existing transparent/overlay navigation behaviour. */
+body:has(#steps) #hdr.hdr--float {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  z-index: 900;
+  background: var(--kas-charcoal);
+  border-bottom-color: rgba(194,162,92,.16);
+  box-shadow: 0 2px 24px rgba(0,0,0,.18);
+}
+body:has(#steps) #hdr.hdr--float.header--transparent {
+  background: var(--kas-charcoal);
+}
+
+
+/* Booking flow: keep the five-step progress bar accessible while scrolling.
+   The main site navigation stays in normal flow on booking pages, so this
+   sticky bar takes over only after the navigation/breadcrumb scroll away. */
+body:has(#steps) #steps.steps {
+  position: sticky;
+  top: 0;
+  z-index: 850;
+  background: var(--surface, #f5f0e7);
+  box-shadow: 0 5px 16px rgba(25, 22, 16, .07);
+}
+
+/* Plain text back link, matching the hotel detail breadcrumb treatment. */
+.booking-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 16px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--tx-2);
+  font-size: .92rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: color var(--t);
+}
+.booking-back-link:hover {
+  color: var(--gold-dk);
+}
+.booking-back-link svg {
+  flex: 0 0 auto;
+}
