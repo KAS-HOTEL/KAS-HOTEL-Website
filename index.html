@@ -190,7 +190,10 @@
   var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- 3.1 Hero: 12 images, 5000 ms each, 800 ms cross-fade, endless loop.
-     No dots, no arrows, and only the background changes. Slides 1–8 are the
+     No dots, no arrows, and only the background changes. Owner decision
+     2026-11-07: it also rotates when the visitor's system asks for reduced
+     motion (then without the fade, see home-v3.css). No pause button (owner
+     decision 2026-11-07). Slides 1–8 are the
      eight KAS properties; 9–12 are further KAS property photos. Admin can
      replace any slot (home.hero.01–08, home.heroExtra1–4) via site-images.js,
      which looks the slides up by `.home-hero__slide[data-index]`. */
@@ -222,7 +225,7 @@
   }
   function startHero(){
     clearInterval(heroTimer);
-    if(reduceMotion||document.hidden) return;
+    if(document.hidden) return;
     heroTimer=setInterval(function(){showHero(heroIndex+1);},5000);
   }
   prime(1);

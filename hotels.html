@@ -123,7 +123,10 @@
         var media = U.$('.hcard__media', card);
         if (!media) return;
         var badge = h.starRating >= 4 ? '<span class="badge badge--gold">Signature Property</span>' : '';
+        /* Keep the card's save heart (and its state) while the photos are swapped. */
+        var save = U.$('.hcard__save', media);
         media.innerHTML = badge + App.miniHTML(h.propertyGalleryImages, h.name);
+        if (save) media.appendChild(save);
         var mini = U.$('.mini', media);
         if (mini) App.miniCarousel(mini);
       });

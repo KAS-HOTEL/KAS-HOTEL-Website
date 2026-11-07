@@ -402,7 +402,7 @@
     'No payment is processed':'Không thực hiện thanh toán','Thank you — you are on the list.':'Cảm ơn bạn — bạn đã được thêm vào danh sách.',
 
     /* hotel listing detail descriptions + card labels */
-    'View rooms':'Xem phòng','View Rooms':'Xem phòng','From':'Từ','per night · excl. taxes':'mỗi đêm · chưa gồm thuế','per night':'mỗi đêm',
+    'View rooms':'Xem phòng','Contact us for rates':'Liên hệ để nhận giá','View Rooms':'Xem phòng','From':'Từ','per night · excl. taxes':'mỗi đêm · chưa gồm thuế','per night':'mỗi đêm',
     'Check-in':'Nhận phòng','Check-out':'Trả phòng','reviews':'đánh giá','more':'thêm','Ben Thanh Ward':'Phường Bến Thành','Nguyen Thai Binh Ward':'Phường Nguyễn Thái Bình',
     'A boutique address in the heart of District 1, minutes from Ben Thanh Market. KAS Passion blends a quiet, relaxing atmosphere with modern, generously sized rooms — a comfortable retreat for…':'Địa chỉ boutique ngay trung tâm Quận 1, chỉ vài phút từ Chợ Bến Thành. KAS Passion kết hợp không gian yên tĩnh, thư giãn với các phòng hiện đại, rộng rãi — một nơi nghỉ ngơi thoải mái cho…',
     "Set in the heart of District 1, a few minutes on foot from the city's most iconic addresses. KAS Premium offers a broad range of rooms suited to couples, families and groups, with…":'Nằm ngay trung tâm Quận 1, chỉ vài phút đi bộ đến những địa điểm nổi tiếng nhất thành phố. KAS Premium có nhiều lựa chọn phòng phù hợp cho cặp đôi, gia đình và nhóm khách, cùng…',
@@ -888,6 +888,11 @@
     memo.set(s, res);
     return res;
   }
+  /* A sentence-length paragraph rather than a label: 12+ words and a sentence end
+     (a closing quote may follow it, as in a guest review). */
+  function isProse(text) {
+    return text.split(' ').length >= 12 && /[A-Za-z]{2,}[.!?…]["'”’)]?(\s|$)/.test(text);
+  }
   function translateStringRaw(s) {
     var lead = (s.match(/^\s*/) || [''])[0], trail = (s.match(/\s*$/) || [''])[0];
     var core = s.slice(lead.length, s.length - trail.length);
@@ -896,6 +901,10 @@
     if (T[normalized] != null) return lead + T[normalized] + trail;
     var full = applyFullRules(normalized);
     if (full != null) return lead + datesVI(full) + trail;
+    /* Prose with no full translation (e.g. a hotel description the console only
+       has in English) is left whole: the word rules below are for short UI
+       labels, and on a paragraph they produced "a few minutes on foot từ the city's…". */
+    if (isProse(normalized)) return s;
     var out = core;
     CHAIN_RULES.forEach(function (r) { out = out.replace(r[0], r[1]); });
     /* common generated fragments */

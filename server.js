@@ -5,6 +5,7 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const apiBoundary = require('./api-boundary');
 const http = require('http');
 const https = require('https');
 
@@ -321,6 +322,13 @@ if (!LEGACY_ADMIN_ENABLED) {
    calls. This preserves HttpOnly session cookies and the CSRF cookie/header
    pair without requiring browser CORS access to the backend service. */
 if (API_ORIGIN) {
+  /* Server separation (doc 156): only the customer API is forwarded from this host.
+     /api/v1/admin/** and any other tree answer a JSON 404 here (api-boundary.js). */
+  const customerApiOnly = (req, res, next) => {
+    if (apiBoundary.isCustomerApiPath(req.originalUrl)) return next();
+    res.set('Cache-Control', 'no-store');
+    return res.status(404).json({ code: 'NOT_FOUND', message: 'Not found.' });
+  };
   const proxyToSpring = (req, res) => {
     let target;
     try { target = new URL(req.originalUrl, API_ORIGIN); }
@@ -333,7 +341,10 @@ if (API_ORIGIN) {
       'x-forwarded-host': req.get('host'),
       'x-forwarded-proto': req.protocol,
       'x-forwarded-for': req.ip,
-      'x-real-ip': req.ip
+      'x-real-ip': req.ip,
+      /* Always this host's own value, whatever the browser sent: the backend refuses
+         staff sign-in on the customer website (AuthenticationService.requireSurface). */
+      [apiBoundary.SURFACE_HEADER]: apiBoundary.SURFACE_VALUE
     });
     delete headers.connection;
     const upstream = transport.request(target, { method: req.method, headers }, (response) => {
@@ -347,7 +358,7 @@ if (API_ORIGIN) {
     });
     req.pipe(upstream);
   };
-  app.use('/api/v1', proxyToSpring);
+  app.use('/api/v1', customerApiOnly, proxyToSpring);
   /* The legacy HTML API client primes Spring's CSRF cookie through this
      side-effect-free health read before its first mutation. */
   app.use('/actuator/health', proxyToSpring);
@@ -398,6 +409,13 @@ app.get('/:locale/account/verify-email', accountRedirect('verify-email.html'));
 app.get(['/find-your-kas', '/find-your-kas.html'], (req, res) => {
   const q = req.originalUrl.indexOf('?');
   res.redirect(301, '/hotels.html' + (q >= 0 ? req.originalUrl.slice(q) : ''));
+});
+/* Saved hotels moved into My KAS (2026-11-07): manage-booking.html?view=saved.
+   Old links keep working; their query (e.g. lang) is carried over. */
+app.get(['/saved-hotels', '/saved-hotels.html'], (req, res) => {
+  const q = req.originalUrl.indexOf('?');
+  const rest = q >= 0 ? req.originalUrl.slice(q + 1).split('&').filter((p) => p && !/^view=/.test(p)) : [];
+  res.redirect(301, '/manage-booking.html?' + ['view=saved'].concat(rest).join('&'));
 });
 app.get('/:page', (req, res, next) => {
   const raw = req.params.page;

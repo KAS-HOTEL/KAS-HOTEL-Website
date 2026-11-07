@@ -105,6 +105,7 @@
 .home-v3 .hv3-hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 .home-v3 .hv3-hero__actions .hv3-btn{min-height:44px;padding:0 24px;font-size:12px}
 @media (prefers-reduced-motion:reduce){
+  /* Still rotates (owner decision 2026-11-07), but switches without the fade. */
   .home-v3 .hv3-hero__slide{transition:none}
 }
 
