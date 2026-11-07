@@ -705,11 +705,11 @@
       '<div class="kas-user-menu__panel" role="menu" hidden>' +
       '<div class="kas-user-menu__identity"><strong>' + name.replace(/[&<>"']/g, '') + '</strong><span>' + String(session.email || '').replace(/[&<>"']/g, '') + '</span></div>' +
       (session.staffRole
-        ? (session.consoleUrl ? '<a role="menuitem" class="kas-user-menu__admin" href="' + session.consoleUrl.replace(/"/g, '%22') + '">Trang quản trị</a>' : '')
+        ? (session.consoleUrl ? '<a role="menuitem" class="kas-user-menu__admin" href="' + session.consoleUrl.replace(/"/g, '%22') + '">Admin console</a>' : '')
         : '<button type="button" role="menuitem" data-member-action="account">My account</button>' +
-          '<a role="menuitem" href="offers.html#member">Chính sách thành viên</a>' +
-          '<button type="button" role="menuitem" data-member-action="saved">Saved</button>') +
-      '<button type="button" role="menuitem" data-member-action="logout">Đăng xuất</button></div>';
+          '<a role="menuitem" href="offers.html#member">Member policy</a>' +
+          '<button type="button" role="menuitem" data-member-action="saved">Saved hotels</button>') +
+      '<button type="button" role="menuitem" data-member-action="logout">Sign out</button></div>';
     old.replaceWith(wrap);
     renderMemberAvatar(U.$('.kas-avatar', wrap), name, session.avatar);
     var toggle = U.$('.kas-member-trigger', wrap), panel = U.$('.kas-user-menu__panel', wrap);
@@ -938,7 +938,7 @@
       global.KAS_API.login(emailLogin,password).then(function(){return global.KAS_API.profile()}).then(function(profile){
         persistSession(sessionFromProfile(profile));
         msg.textContent='Signed in successfully.';syncAuthHeader();finishAuth(400);
-      }).catch(function(error){if(error.status===404){/* Signed in, but not a customer: a staff account. */resolveStaffSession(emailLogin).then(function(staff){var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(!staff){msg.textContent=vi?'Tài khoản này không có hồ sơ khách hàng.':'This account has no guest profile.';submitButton.disabled=false;return;}persistSession(staff);msg.textContent=vi?'Đã đăng nhập. Mở "Trang quản trị" trong menu tài khoản.':'Signed in. Open "Trang quản trị" from the account menu.';syncAuthHeader();finishAuth(900);});return;}var needsVerification=error.payload && (error.payload.details || []).some(function(item){return item.code==='EMAIL_NOT_VERIFIED';});var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(needsVerification){showVerification(emailLogin,password,false);m.querySelector('#kasAuthMessage').textContent=vi?'Email chưa được xác thực. Nhập mã đã gửi sau khi đăng ký, hoặc bấm gửi lại mã.':'Your email is not verified yet. Enter the code sent after registration, or resend a code.';m.querySelector('#kasAuthCode').focus();return;}msg.textContent=error.message;submitButton.disabled=false;});
+      }).catch(function(error){if(error.status===404){/* Signed in, but not a customer: a staff account. */resolveStaffSession(emailLogin).then(function(staff){var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(!staff){msg.textContent=vi?'Tài khoản này không có hồ sơ khách hàng.':'This account has no guest profile.';submitButton.disabled=false;return;}persistSession(staff);msg.textContent=vi?'Đã đăng nhập. Mở "Trang quản trị" trong menu tài khoản.':'Signed in. Open "Admin console" from the account menu.';syncAuthHeader();finishAuth(900);});return;}var needsVerification=error.payload && (error.payload.details || []).some(function(item){return item.code==='EMAIL_NOT_VERIFIED';});var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(needsVerification){showVerification(emailLogin,password,false);m.querySelector('#kasAuthMessage').textContent=vi?'Email chưa được xác thực. Nhập mã đã gửi sau khi đăng ký, hoặc bấm gửi lại mã.':'Your email is not verified yet. Enter the code sent after registration, or resend a code.';m.querySelector('#kasAuthCode').focus();return;}msg.textContent=error.message;submitButton.disabled=false;});
     }
     document.body.appendChild(m); document.body.style.overflow='hidden';
     closeOnBackdropPress(m, close);
@@ -991,7 +991,7 @@
               '<div class="kas-welcome__choice-heading" data-welcome="memberEyebrow">BECOME A KAS MEMBER</div>' +
               '<p class="kas-welcome__choice-copy" data-welcome="memberCopy">Enjoy exclusive benefits while keeping the freedom to book as usual.</p>' +
               '<ul class="kas-welcome__benefits">' +
-                '<li data-welcome="benefit1">10–20% member offers</li>' +
+                '<li data-welcome="benefit1">10% member discount on room rates</li>' +
                 '<li data-welcome="benefit2">Early check-in / late check-out up to 2 hours</li>' +
                 '<li data-welcome="benefit4">Easier booking management</li>' +
                 '<li data-welcome="benefit3">Free cancellation until 12:00 on check-in day</li>' +
@@ -1012,7 +1012,7 @@
         guestCopy:'Explore KAS and make a reservation without becoming a member.',
         memberEyebrow:'BECOME A KAS MEMBER',
         memberCopy:'Enjoy exclusive benefits while keeping the freedom to book as usual.',
-        benefit1:'10–20% member offers', benefit2:'Early check-in / late check-out up to 2 hours', benefit3:'Free cancellation until 12:00 on check-in day', benefit4:'Easier booking management', join:'JOIN KAS MEMBER', signin:'SIGN IN', guest:'CONTINUE AS GUEST'
+        benefit1:'10% member discount on room rates', benefit2:'Early check-in / late check-out up to 2 hours', benefit3:'Free cancellation until 12:00 on check-in day', benefit4:'Easier booking management', join:'JOIN KAS MEMBER', signin:'SIGN IN', guest:'CONTINUE AS GUEST'
       },
       vi: {
         eyebrow:'CHÀO MỪNG ĐẾN VỚI KAS', title:'Chọn ngôn ngữ và khám phá<br>trải nghiệm KAS.', language:'NGÔN NGỮ',
@@ -1020,7 +1020,7 @@
         guestCopy:'Khám phá KAS và đặt phòng mà không cần trở thành thành viên.',
         memberEyebrow:'TRỞ THÀNH THÀNH VIÊN KAS',
         memberCopy:'Tận hưởng quyền lợi riêng mà vẫn tự do đặt phòng theo cách bạn muốn.',
-        benefit1:'Ưu đãi 10–20%', benefit2:'Check-in sớm / check-out muộn tối đa 2 giờ', benefit3:'Hủy phòng miễn phí đến 12:00 cùng ngày check-in', benefit4:'Quản lý đặt phòng dễ dàng', join:'THAM GIA KAS MEMBER', signin:'ĐĂNG NHẬP', guest:'TIẾP TỤC VỚI TƯ CÁCH KHÁCH'
+        benefit1:'Giảm 10% giá phòng cho thành viên', benefit2:'Check-in sớm / check-out muộn tối đa 2 giờ', benefit3:'Hủy phòng miễn phí đến 12:00 cùng ngày check-in', benefit4:'Quản lý đặt phòng dễ dàng', join:'THAM GIA KAS MEMBER', signin:'ĐĂNG NHẬP', guest:'TIẾP TỤC VỚI TƯ CÁCH KHÁCH'
       }
     };
 

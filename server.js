@@ -393,6 +393,12 @@ function accountRedirect(target) {
 app.get('/:locale/account/reset-password', accountRedirect('manage-booking.html'));
 app.get('/:locale/account/stays', accountRedirect('manage-booking.html'));
 app.get('/:locale/account/verify-email', accountRedirect('verify-email.html'));
+/* find-your-kas.html was removed with Homepage V3 (2026-11-05); its stay search now
+   lives on hotels.html (?stay=...). Old links and bookmarks keep working. */
+app.get(['/find-your-kas', '/find-your-kas.html'], (req, res) => {
+  const q = req.originalUrl.indexOf('?');
+  res.redirect(301, '/hotels.html' + (q >= 0 ? req.originalUrl.slice(q) : ''));
+});
 app.get('/:page', (req, res, next) => {
   const raw = req.params.page;
   const file = /\.html$/.test(raw) ? raw : raw + '.html';   /* clean URLs: /hotels -> hotels.html */
