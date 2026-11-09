@@ -29,7 +29,8 @@ vi.mock('@/ui/primitives', async (importOriginal) => ({
 
 const { InternalNotesPanel, NOTES_COPY } = await import('./InternalNotesPanel');
 const { SalesRequestDetailView } = await import('./SalesRequestDetailView');
-const { TIMELINE_COPY } = await import('./SalesRequestTimeline');
+/** The removed full timeline's heading. */
+const TIMELINE_COPY = { title: 'Lịch sử xử lý' } as const;
 
 const REFERENCE = 'KAS-260912-4F7A';
 const NOW = Date.parse('2026-09-01T09:00:00Z');

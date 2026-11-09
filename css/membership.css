@@ -1,258 +1,289 @@
 /* KAS Membership page (offers.html).
-   Layout: the approved demo KAS_Member_Policy_2026.html. Look: KAS Brand Identity 2026, through the
-   tokens in css/style.css — charcoal and deep olive for dark grounds, ivory and warm white for content,
-   champagne as a measured accent, Gold Ink for small labels, Stone/Sand for lines, Muted for secondary
-   copy; Cormorant Garamond for headings, Inter for everything functional. No gradients beyond the
-   image scrim, no heavy shadows. Scoped to .mship* so no other page is affected. */
+   Layout and look: the approved demo KAS_Membership_Interactive_2026_v2_UPDATED.html (owner, 2026-11-09),
+   its two style blocks merged (the second block's KAS brand palette and fonts win). Every rule is scoped
+   to main.mship and every class carries the ms- prefix, so nothing here reaches the shared header,
+   footer or other pages. The site header and footer stay the shared ones. */
 
-.mship{background:var(--kas-ivory);color:var(--kas-charcoal);font-family:var(--sans)}
-.mship-wrap{width:min(1210px,calc(100% - 48px));margin-inline:auto}
-/* Anchors land below the sticky header. */
-.mship [id]{scroll-margin-top:calc(var(--nav-h,76px) + 12px)}
-.mship h2,.mship h3,.mship h4{font-family:var(--serif);font-weight:400;color:inherit;letter-spacing:-.01em}
-.mship em{font-style:italic;color:var(--kas-gold-ink)}
-
-.mship-eyebrow{display:flex;align-items:center;gap:12px;margin:0;font:600 11px/17px var(--sans);letter-spacing:.18em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-eyebrow::before{content:"";flex:none;width:24px;height:1px;background:currentColor}
-.mship-kicker{display:block;margin-bottom:10px;font:600 11px/17px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--kas-gold-ink)}
-
-.mship-btn{display:inline-flex;align-items:center;justify-content:space-between;gap:24px;min-height:48px;padding:14px 22px;border:1px solid var(--kas-charcoal);background:var(--kas-charcoal);color:var(--kas-warm-white);font:600 12px/1 var(--sans);letter-spacing:.06em;text-decoration:none;transition:background .18s,border-color .18s}
-.mship-btn:hover{background:var(--kas-olive);border-color:var(--kas-olive)}
-.mship-btn--light{background:transparent;border-color:rgba(255,252,247,.6);color:var(--kas-warm-white)}
-.mship-btn--light:hover{background:rgba(255,252,247,.08);border-color:var(--kas-warm-white)}
-.mship-link{display:inline-flex;align-items:center;gap:10px;min-height:44px;padding-bottom:2px;border-bottom:1px solid var(--kas-champagne);color:var(--kas-charcoal);font:600 12px/1 var(--sans);letter-spacing:.04em;text-decoration:none}
-.mship a:focus-visible,.mship summary:focus-visible{outline:2px solid var(--kas-gold-ink);outline-offset:4px}
-.mship-dark a:focus-visible,.mship-cta a:focus-visible{outline-color:var(--kas-champagne)}
-
-.mship-section{padding-block:104px 96px}
-.mship-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:44px}
-.mship-head h2{margin:14px 0 0;font-size:clamp(34px,4vw,52px);line-height:1.15}
-.mship-head p{max-width:380px;margin:0;font-size:14px;line-height:1.85;color:var(--kas-muted)}
-.mship-copy{font-size:14px;line-height:1.85;color:var(--kas-muted)}
-
-/* Hero */
-.mship-intro{padding-top:32px}
-.mship-hero{display:grid;grid-template-columns:1fr .94fr;min-height:540px;background:var(--kas-sand);overflow:hidden}
-.mship-hero__copy{display:flex;flex-direction:column;justify-content:center;padding:64px 66px}
-.mship-hero__title{margin:22px 0;font:400 clamp(44px,5vw,70px)/1.12 var(--serif);letter-spacing:-.02em}
-.mship-hero__copy p{max-width:440px;margin:0 0 30px;font-size:15px;line-height:1.85;color:var(--kas-muted)}
-.mship-hero__actions{display:flex;flex-wrap:wrap;align-items:center;gap:22px}
-.mship-hero__visual{position:relative;min-height:540px;background-color:var(--kas-olive);background-size:cover;background-position:center;color:var(--kas-warm-white)}
-.mship-hero__visual::after{content:"";position:absolute;inset:22px;border:1px solid rgba(255,252,247,.45);pointer-events:none}
-.mship-hero__kicker{position:absolute;top:48px;left:52px;right:52px;font:600 11px/17px var(--sans);letter-spacing:.16em;text-transform:uppercase}
-.mship-hero__caption{position:absolute;left:52px;right:52px;bottom:50px;max-width:320px;margin:0;font:400 30px/1.3 var(--serif);color:var(--kas-warm-white)}
-
-.mship-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin:0;padding:34px 0;background:var(--kas-warm-white);border-bottom:1px solid var(--kas-stone)}
-.mship-metric{display:flex;flex-direction:column-reverse;justify-content:flex-end;padding:2px 26px;border-right:1px solid var(--kas-stone)}
-.mship-metric:last-child{border-right:0}
-.mship-metric dd{margin:0;font:400 38px/1.15 var(--serif)}
-.mship-metric dd small{margin-left:6px;font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-metric dt{margin-top:8px;font-size:12px;font-weight:500;color:var(--kas-muted)}
-
-/* Tier cards */
-.mship-tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.mship-tier{display:flex;flex-direction:column;min-height:400px;padding:32px 30px;background:var(--kas-warm-white);border:1px solid var(--kas-stone);transition:border-color .18s}
-.mship-tier:hover{border-color:var(--kas-champagne)}
-.mship-tier__index{font:600 11px/17px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-tier h3{margin:32px 0 6px;font-size:40px;line-height:1.15}
-.mship-tier__cond{min-height:48px;margin:0;padding-bottom:20px;border-bottom:1px solid var(--kas-stone);font-size:14px;line-height:1.7;color:var(--kas-muted)}
-.mship-tier__figure{display:flex;align-items:baseline;gap:12px;margin:22px 0 24px;font:400 52px/1 var(--serif)}
-.mship-tier__figure span{font:600 11px/1.4 var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--kas-muted)}
-.mship-tier ul,.mship-cards ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
-.mship-tier ul{margin-top:auto}
-.mship-tier li{position:relative;padding-left:22px;font-size:13.5px;line-height:1.6;color:var(--kas-charcoal)}
-.mship-tier li::before{content:"";position:absolute;left:2px;top:.45em;width:9px;height:5px;border-left:1.5px solid var(--kas-gold-ink);border-bottom:1.5px solid var(--kas-gold-ink);transform:rotate(-45deg)}
-.mship-tier--gold{border-top:3px solid var(--kas-champagne)}
-.mship-tier--platinum{background:var(--kas-charcoal);border-color:var(--kas-charcoal);color:var(--kas-warm-white)}
-.mship-tier--platinum .mship-tier__index{color:var(--kas-champagne)}
-.mship-tier--platinum .mship-tier__cond,.mship-tier--platinum .mship-tier__figure span{color:#D6CFC2;border-bottom-color:#4A5048}
-.mship-tier--platinum li{color:#E9E3D8}
-.mship-tier--platinum li::before{border-color:var(--kas-champagne)}
-.mship-note{margin-top:24px;padding:20px 24px;border-left:2px solid var(--kas-champagne);background:var(--kas-sand)}
-.mship-note strong{display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--kas-charcoal)}
-.mship-note p{margin:0;font-size:13.5px;line-height:1.75;color:var(--kas-muted)}
-.mship-note p+p{margin-top:6px}
-
-/* Sand band: joining, KAS points */
-.mship-band{background:var(--kas-sand);border-block:1px solid var(--kas-stone)}
-.mship-join{display:grid;grid-template-columns:.85fr 1.15fr;gap:90px;align-items:start;padding-block:100px}
-.mship-join h2{margin:16px 0 18px;font-size:clamp(34px,4vw,52px);line-height:1.2}
-.mship-stamp{display:inline-flex;flex-direction:column;gap:8px;margin-top:36px;padding:22px 26px;background:var(--kas-warm-white);border:1px solid var(--kas-stone)}
-.mship-stamp span{font:600 11px/17px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-stamp strong{font:400 24px/1.3 var(--serif);letter-spacing:.04em}
-.mship-stamp small{font-size:12px;color:var(--kas-muted)}
-.mship-rules{list-style:none;margin:0;padding:0}
-.mship-rules li{display:grid;grid-template-columns:42px 1fr;gap:18px;padding:26px 0;border-bottom:1px solid var(--kas-stone)}
-.mship-rules li:first-child{padding-top:0}
-.mship-rules__no{margin-top:4px;font:600 12px/1 var(--sans);letter-spacing:.12em;color:var(--kas-gold-ink)}
-.mship-rules h3{margin:0 0 8px;font-size:26px;line-height:1.25}
-.mship-rules p{margin:0;font-size:14px;line-height:1.8;color:var(--kas-muted)}
-
-/* Tier review */
-.mship-panel{padding:38px 44px 42px;background:var(--kas-warm-white);border:1px solid var(--kas-stone)}
-.mship-panel__top{display:grid;grid-template-columns:1fr 1fr;gap:52px;padding-bottom:36px;border-bottom:1px solid var(--kas-stone)}
-.mship-panel__top h3{margin:0;font-size:30px;line-height:1.3}
-.mship-panel__top p{margin:0;font-size:14px;line-height:1.8;color:var(--kas-muted)}
-.mship-panel__top p+p{margin-top:12px}
-.mship-panel__top b{font-weight:600;color:var(--kas-charcoal)}
-.mship-track{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin:0;padding:32px 0 0}
-.mship-track li{position:relative;padding-top:22px;border-top:1px solid var(--kas-stone)}
-.mship-track li::before{content:"";position:absolute;top:-5px;left:0;width:9px;height:9px;border-radius:50%;background:var(--kas-champagne)}
-.mship-track small{font:600 11px/17px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-track h4{margin:10px 0 8px;font-size:24px}
-.mship-track p{margin:0;font-size:13.5px;line-height:1.75;color:var(--kas-muted)}
-
-/* Stay privileges — dark */
-.mship-dark{padding-block:104px 110px;background:var(--kas-olive);color:var(--kas-warm-white)}
-.mship-dark .mship-eyebrow{color:var(--kas-champagne)}
-.mship-dark .mship-head p{color:#D6D2C6}
-.mship-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:#566055;border:1px solid #566055}
-.mship-benefits article{display:flex;flex-direction:column;min-height:300px;padding:38px 32px 34px;background:var(--kas-olive)}
-.mship-benefits__figure{font:400 54px/1 var(--serif);color:#EADCC3}
-.mship-benefits__figure small{margin-left:6px;font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--kas-champagne)}
-.mship-benefits h3{margin:30px 0 10px;font-size:27px}
-.mship-benefits p{max-width:300px;margin:0;font-size:14px;line-height:1.8;color:#D6D2C6}
-.mship-benefits__fine{margin-top:auto;padding-top:28px;font:600 11px/17px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--kas-champagne)}
-
-/* Member rate */
-.mship-discount{padding:44px 48px;background:var(--kas-sand);border:1px solid var(--kas-stone)}
-.mship-discount__title{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
-.mship-discount__title h3{margin:10px 0 0;font-size:34px;line-height:1.25}
-.mship-discount__badge{flex:none;font:400 70px/.9 var(--serif);color:var(--kas-gold-ink)}
-.mship-discount__badge small{display:block;margin-top:8px;font:600 11px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--kas-muted)}
-.mship-flow{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:34px 0 0;padding:0}
-.mship-flow li{padding:24px 22px;background:var(--kas-warm-white);border:1px solid var(--kas-stone)}
-.mship-flow small{font:600 11px/17px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-flow h4{margin:12px 0 6px;font-size:24px}
-.mship-flow p{margin:0;font-size:13.5px;line-height:1.7;color:var(--kas-muted)}
-.mship-discount__foot{margin:24px 0 0;font-size:13.5px;line-height:1.75;color:var(--kas-muted)}
-.mship-discount__foot b{font-weight:600;color:var(--kas-charcoal)}
-
-/* KAS points */
-.mship-points{display:grid;grid-template-columns:.86fr 1.14fr;gap:22px;margin-bottom:20px}
-.mship-points__main{display:flex;flex-direction:column;justify-content:space-between;gap:24px;min-height:290px;padding:42px 44px;background:var(--kas-charcoal);color:var(--kas-warm-white)}
-.mship-points__main .mship-kicker{color:var(--kas-champagne)}
-.mship-points__big{font:400 54px/1.1 var(--serif)}
-.mship-points__big em{color:var(--kas-champagne)}
-.mship-points__main p{max-width:340px;margin:0;font-size:14px;line-height:1.75;color:#D6D2C6}
-.mship-points__side{display:flex;flex-direction:column;justify-content:space-between;gap:20px;padding:42px 46px;background:var(--kas-warm-white);border:1px solid var(--kas-stone)}
-.mship-points__side h3{margin:0;font-size:32px;line-height:1.3}
-.mship-points__side p{margin:0;font-size:14px;line-height:1.8;color:var(--kas-muted)}
-.mship-points__highlight{font:600 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.mship-cards article{padding:30px 28px;background:var(--kas-warm-white);border:1px solid var(--kas-stone)}
-.mship-cards__no{font:600 11px/17px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--kas-gold-ink)}
-.mship-cards h3{margin:18px 0 16px;font-size:27px;line-height:1.25}
-.mship-cards li{position:relative;padding-left:16px;font-size:13.5px;line-height:1.75;color:var(--kas-muted)}
-.mship-cards li::before{content:"";position:absolute;left:0;top:.72em;width:5px;height:5px;border-radius:50%;background:var(--kas-champagne)}
-.mship-callout{margin:20px 0 0;padding:20px 24px;border-left:2px solid var(--kas-champagne);background:var(--kas-warm-white);font-size:13.5px;line-height:1.75;color:var(--kas-muted)}
-.mship-callout b{font-weight:600;color:var(--kas-charcoal)}
-
-/* Terms */
-.mship-policy{display:grid;grid-template-columns:290px 1fr;gap:72px;align-items:start}
-.mship-policy__side{position:sticky;top:calc(var(--nav-h,76px) + 24px)}
-.mship-policy__side h2{margin:16px 0 14px;font-size:42px;line-height:1.15}
-.mship-policy__side p{margin:0 0 30px;font-size:14px;line-height:1.8;color:var(--kas-muted)}
-.mship-policy__nav{display:grid;border-top:1px solid var(--kas-stone)}
-.mship-policy__nav a{display:flex;gap:14px;min-height:44px;align-items:center;padding:8px 0;border-bottom:1px solid var(--kas-stone);font-size:13px;font-weight:500;color:var(--kas-charcoal);text-decoration:none}
-.mship-policy__nav a:hover{color:var(--kas-gold-ink)}
-.mship-policy__nav span{color:var(--kas-gold-ink)}
-.mship-policy__content>h2{margin:12px 0 30px;font-size:40px}
-.mship-policy__content article{display:grid;grid-template-columns:46px 1fr;gap:18px;padding:24px 0 28px;border-top:1px solid var(--kas-stone);scroll-margin-top:calc(var(--nav-h,76px) + 24px)}
-.mship-policy__content article:last-child{border-bottom:1px solid var(--kas-stone)}
-.mship-policy__no{margin-top:6px;font:600 12px/1 var(--sans);color:var(--kas-gold-ink)}
-.mship-policy__content h3{margin:0 0 10px;font-size:24px}
-.mship-policy__content p{margin:0 0 10px;font-size:14px;line-height:1.85;color:var(--kas-muted)}
-.mship-policy__content p:last-child{margin-bottom:0}
-
-/* FAQ */
-.mship-faq{padding-block:100px 108px;border-top:1px solid var(--kas-stone)}
-.mship-faq__layout{display:grid;grid-template-columns:36% 1fr;gap:72px}
-.mship-faq h2{margin:16px 0;font-size:clamp(34px,4vw,48px);line-height:1.2}
-.mship-faq__layout>div>p{max-width:320px;margin:0;font-size:14px;line-height:1.8;color:var(--kas-muted)}
-.mship-faq__list details{border-bottom:1px solid var(--kas-stone)}
-.mship-faq__list details:first-child{border-top:1px solid var(--kas-stone)}
-.mship-faq__list summary{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:56px;padding:18px 0;font:600 14px/1.5 var(--sans);color:var(--kas-charcoal);cursor:pointer;list-style:none}
-.mship-faq__list summary::-webkit-details-marker{display:none}
-.mship-faq__list summary::after{content:"+";flex:none;font:300 24px/1 var(--sans);color:var(--kas-gold-ink);transition:transform .18s}
-.mship-faq__list details[open] summary::after{transform:rotate(45deg)}
-.mship-faq__list p{margin:0;padding:0 40px 20px 0;font-size:14px;line-height:1.85;color:var(--kas-muted)}
-
-/* Closing call to action — dark */
-.mship-cta{background:var(--kas-charcoal);color:var(--kas-warm-white)}
-.mship-cta__inner{display:flex;align-items:center;justify-content:space-between;gap:44px;padding-block:76px}
-.mship-cta .mship-eyebrow{color:var(--kas-champagne)}
-.mship-cta h2{max-width:600px;margin:14px 0 0;font-size:clamp(34px,4vw,54px);line-height:1.2}
-.mship-cta__inner>div:not(:first-child){max-width:360px}
-.mship-cta p{margin:0 0 22px;font-size:14px;line-height:1.8;color:#D6D2C6}
-
-@media (prefers-reduced-motion:reduce){.mship *{transition:none}}
-
-@media (max-width:1100px){
-  .mship-hero__copy{padding:50px 44px}
-  .mship-join{gap:54px}
-  .mship-policy{gap:44px}
+.mship {
+  --deep: #20241F; --deep2: #343B33; --ink: #20241F; --body: #6D6B64; --gold: #BDA275;
+  --cream: #F7F2EA; --paper: #FFFCF7; --sage: #DCE3D8; --mist: #E9E0D3; --line: #D5CAB9;
+  --head: 'Cormorant Garamond', Georgia, serif; --sans: 'Inter', Arial, sans-serif;
+  display: block; color: var(--ink); background: var(--cream);
+  font-family: var(--sans); font-size: 14px; line-height: 1.65; -webkit-font-smoothing: antialiased;
 }
+.mship *, .mship *::before, .mship *::after { box-sizing: border-box; }
+.mship a { color: inherit; text-decoration: none; }
+.mship button { font: inherit; cursor: pointer; }
+.mship a:focus-visible, .mship button:focus-visible, .mship summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.mship h1, .mship h2, .mship h3, .mship h4 { font-family: var(--head); font-weight: 400; color: inherit; }
+.mship section h2 { letter-spacing: -.02em; line-height: 1.08; }
+.mship section { scroll-margin-top: 100px; }
 
-/* Tablet: two-column tiers, single-column hero */
-@media (max-width:900px){
-  .mship-hero{grid-template-columns:1fr}
-  .mship-hero__copy{padding:56px 48px}
-  .mship-hero__visual{min-height:400px}
-  .mship-metrics{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:22px}
-  .mship-metric:nth-child(2){border-right:0}
-  .mship-head{display:block}
-  .mship-head p{max-width:none;margin-top:18px}
-  .mship-tiers{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .mship-tier{min-height:0}
-  .mship-join{grid-template-columns:1fr;gap:40px}
-  .mship-panel__top{grid-template-columns:1fr;gap:20px}
-  .mship-benefits,.mship-flow,.mship-cards{grid-template-columns:1fr}
-  .mship-benefits article{min-height:0}
-  .mship-points{grid-template-columns:1fr}
-  .mship-policy{grid-template-columns:1fr}
-  .mship-policy__side{position:static}
-  .mship-policy__nav{display:none}
-  .mship-faq__layout{grid-template-columns:1fr;gap:24px}
-  .mship-cta__inner{display:block}
-  .mship-cta__inner>div:not(:first-child){max-width:none;margin-top:24px}
+.ms-container { width: min(100% - 64px, 1240px); margin-inline: auto; }
+.mship .ms-serif { font-family: var(--head); font-weight: 400; letter-spacing: -.052em; }
+.ms-eyebrow { display: flex; gap: 12px; align-items: center; color: #806541; font-size: 10px; font-weight: 800; letter-spacing: .22em; text-transform: uppercase; }
+.ms-eyebrow::before { content: ''; width: 24px; height: 1px; background: currentColor; flex: none; }
+.ms-section-head { display: flex; justify-content: space-between; gap: 30px; align-items: end; margin-bottom: 44px; }
+.mship .ms-section-head h2 { font-size: clamp(36px, 4vw, 53px); margin: 14px 0 0; }
+.ms-section-head p { max-width: 365px; margin: 0; color: var(--body); font-size: 12px; line-height: 2; }
+
+/* Hero: full width, the image from the site image slot (default: the demo's design image). */
+.ms-hero { min-height: 575px; display: flex; align-items: center; position: relative; overflow: hidden;
+  background: linear-gradient(90deg, rgba(20, 31, 25, .53), transparent 68%), url('../img/heroes/offers.jpg') center / cover no-repeat; }
+.ms-hero-left { position: relative; z-index: 1; width: 100%; min-width: 0; padding: 70px max(32px, calc((100vw - 1240px) / 2)); }
+.ms-hero .ms-eyebrow { color: var(--gold); font-size: 12px; font-weight: 700; }
+.mship .ms-hero h1 { font: 400 clamp(56px, 5vw, 76px)/.96 var(--head); letter-spacing: -.015em; color: var(--paper); margin: 27px 0 22px; max-width: 820px; }
+.ms-hero h1 em { font-weight: 400; color: var(--gold); }
+.ms-hero-left > p { font: 400 16px/1.75 var(--sans); color: var(--paper); max-width: 620px; margin: 0 0 34px; }
+.ms-hero-actions { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.ms-btn-dark, .ms-btn-gold { display: inline-flex; gap: 23px; justify-content: space-between; align-items: center; min-width: 232px; padding: 16px 23px; font: 600 12px/1.3 var(--sans); border-radius: 2px; transition: transform .2s, background .2s, color .2s; }
+.mship .ms-btn-dark { color: var(--paper); background: rgba(32, 36, 31, .60); border: 1px solid var(--gold); }
+.mship .ms-btn-gold { color: var(--deep); background: var(--gold); border: 1px solid var(--gold); }
+.ms-btn-dark:hover, .ms-btn-gold:hover { transform: translateY(-2px); }
+.mship .ms-btn-dark:hover { background: var(--deep); }
+.mship .ms-btn-gold:hover { background: var(--mist); border-color: var(--mist); }
+
+/* 01 Tiers */
+.ms-tier-section { padding-block: 102px; }
+.ms-tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+.ms-tier { position: relative; min-height: 405px; background: var(--paper); border: 1px solid var(--line); padding: 33px 31px; display: flex; flex-direction: column; }
+.ms-tier:hover { border-color: #c8b693; }
+.ms-tier-index { font-size: 10px; color: #aaa38e; letter-spacing: .18em; font-weight: 700; text-transform: uppercase; }
+.ms-crest { position: absolute; right: 30px; top: 29px; width: 43px; height: 43px; border: 1px solid #d8d6ce; border-radius: 50%; display: grid; place-items: center; font: 24px var(--head); color: #b2a38a; }
+.mship .ms-tier h3 { font: 400 39px/1.2 var(--head); letter-spacing: -.055em; margin: 37px 0 4px; }
+.ms-cond { color: #788176; font-size: 12px; min-height: 51px; }
+.ms-tier-divider { height: 1px; background: var(--line); margin: 20px 0 23px; }
+.ms-percent { display: flex; align-items: baseline; gap: 11px; font: 400 52px/1 var(--head); letter-spacing: -.07em; font-variant-numeric: lining-nums; }
+.ms-percent span { font: 700 11px var(--sans); letter-spacing: 0; color: #7b8378; text-transform: uppercase; }
+.ms-tier ul { list-style: none; padding: 0; margin: auto 0 0; display: grid; gap: 12px; }
+.ms-tier li { display: flex; gap: 10px; font-size: 11px; color: #606b61; }
+.ms-tier li::before { content: '✓'; color: #ad946c; font-weight: 800; }
+.ms-tier.ms-platinum { background: var(--deep); color: #f8f8f2; border-color: var(--deep); }
+.ms-platinum .ms-crest { color: #cfb68e; border-color: #6b7969; }
+.ms-platinum .ms-cond, .ms-platinum .ms-percent span, .ms-platinum li { color: #c5cfc5; }
+.ms-platinum .ms-tier-divider { background: #526359; }
+.ms-platinum .ms-tier-index { color: #c5b28e; }
+.ms-platinum li::before { color: #dfc395; }
+.ms-tier-note { margin: 24px 0 0; display: flex; align-items: flex-start; gap: 12px; color: #70786d; font-size: 11px; line-height: 1.9; }
+.ms-tier-note strong { color: #866d46; }
+
+/* 02 Join */
+.ms-join { background: #f0eee8; border-top: 1px solid #e3e1d9; border-bottom: 1px solid #e3e1d9; }
+.ms-join-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 94px; align-items: start; padding-block: 105px; }
+.mship .ms-join h2 { font-size: clamp(36px, 4vw, 52px); line-height: 1.27; margin: 18px 0 19px; }
+.ms-copy { color: #6f766d; font-size: 12px; line-height: 2; }
+.ms-stamp { margin-top: 42px; border: 1px solid #d0cec2; display: inline-flex; flex-direction: column; gap: 8px; padding: 24px 28px; background: #f8f7f1; }
+.ms-cap { font-size: 9px; color: #9c916e; letter-spacing: .16em; text-transform: uppercase; font-weight: 800; }
+.ms-stamp strong { font: 400 25px/1.3 Georgia, serif; letter-spacing: .04em; }
+.ms-stamp small { color: #7d8176; font-size: 10px; }
+.ms-rule { display: grid; grid-template-columns: 42px 1fr; gap: 18px; padding: 28px 0; border-bottom: 1px solid #d5d5cc; }
+.ms-rule:first-child { padding-top: 0; }
+.ms-no { font-size: 11px; letter-spacing: .13em; color: #b39b75; font-weight: 700; margin-top: 2px; }
+.mship .ms-rule h3 { font: 400 25px/1.3 var(--head); margin: 0 0 8px; letter-spacing: -.04em; }
+.ms-rule p { font-size: 12px; line-height: 1.9; color: #6d766d; margin: 0; }
+.ms-rule strong { color: #32443a; }
+
+/* 03 Tier review */
+.ms-rank-section { padding-block: 111px; }
+.ms-rank-panel { background: var(--paper); border: 1px solid var(--line); padding: 37px 46px 42px; }
+.ms-rank-top { display: grid; grid-template-columns: 1.05fr .95fr; gap: 55px; padding-bottom: 39px; border-bottom: 1px solid var(--line); }
+.mship .ms-rank-top h3 { font: 400 29px/1.35 var(--head); margin: 0 0 10px; }
+.ms-rank-top p { color: var(--body); font-size: 12px; margin: 0; line-height: 1.9; }
+.ms-rank-kicker { color: #a68c63; font-size: 10px; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; }
+.ms-rank-track { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding-top: 33px; }
+.ms-rank-point { position: relative; padding-top: 24px; border-top: 1px solid #a8b2a8; }
+.ms-rank-point::before { content: ''; position: absolute; width: 9px; height: 9px; border-radius: 50%; background: var(--gold); top: -5px; left: 0; }
+.ms-rank-point small { font-size: 9px; letter-spacing: .17em; font-weight: 800; color: #a18b6a; text-transform: uppercase; }
+.mship .ms-rank-point h4 { font: 400 23px var(--head); margin: 10px 0; }
+.ms-rank-point p { margin: 0; color: #737b71; font-size: 11px; line-height: 1.9; }
+
+/* 04 Stay privileges */
+.ms-benefits { background: var(--deep2); color: var(--paper); padding-block: 106px 115px; }
+.ms-benefits .ms-section-head p { color: var(--paper); }
+.mship .ms-benefits .ms-section-head h2 { max-width: 590px; }
+.ms-benefit-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(213, 202, 185, .35); border: 1px solid rgba(213, 202, 185, .35); }
+.ms-benefit { background: var(--deep2); padding: 40px 34px 38px; min-height: 310px; }
+.ms-benefit-number { font: 400 56px/1 var(--head); letter-spacing: -.07em; color: #e1d2b9; }
+.ms-benefit-number small { font: 700 11px var(--sans); margin-left: 6px; letter-spacing: .08em; color: #c2ab87; text-transform: uppercase; }
+.mship .ms-benefit h3 { font: 400 26px var(--head); margin: 33px 0 10px; }
+.ms-benefit p { color: var(--paper); font-size: 12px; line-height: 1.95; max-width: 280px; margin: 0; }
+.ms-fine { font-size: 10px; letter-spacing: .12em; color: #b4a489; text-transform: uppercase; margin-top: 32px; font-weight: 700; }
+
+/* 05 Member rate */
+.ms-discount { padding-block: 111px 112px; }
+.ms-discount-box { background: #e9ebe5; border: 1px solid #dce0d5; padding: 46px 50px 45px; }
+.ms-discount-title { display: flex; justify-content: space-between; gap: 25px; align-items: start; }
+.mship .ms-discount-title h3 { font: 400 33px/1.28 var(--head); margin: 8px 0 0; letter-spacing: -.04em; }
+.ms-badge-10 { font: 400 71px/.9 var(--head); letter-spacing: -.07em; color: #7b8b7b; }
+.ms-badge-10 small { font: 700 11px var(--sans); color: #68776a; letter-spacing: 0; margin-left: 8px; text-transform: uppercase; }
+.ms-discount-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 36px; background: var(--sage); }
+.ms-flow-step { padding: 24px 22px; background: #fffdf8; border: 1px solid #dce0d7; position: relative; }
+.ms-flow-step:not(:last-child)::after { content: '→'; position: absolute; right: -18px; top: 35%; font-size: 25px; color: #9d8968; z-index: 1; }
+.ms-flow-n { color: #a28b68; font-size: 10px; letter-spacing: .14em; font-weight: 800; text-transform: uppercase; }
+.mship .ms-flow-step h4 { font: 400 24px var(--head); margin: 12px 0 6px; }
+.ms-flow-step p { font-size: 11px; color: #758076; line-height: 1.85; margin: 0; }
+.ms-discount-foot { margin-top: 26px; display: flex; gap: 17px; align-items: start; justify-content: space-between; font-size: 11px; color: #6c766c; }
+.ms-discount-foot b { color: #344b3c; }
+.ms-discount-foot p { margin: 0; max-width: 760px; line-height: 1.9; }
+
+/* 06 KAS points */
+.ms-points { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding-block: 110px; }
+.ms-points-hero { display: grid; grid-template-columns: .86fr 1.14fr; gap: 25px; margin-bottom: 20px; }
+.ms-points-main { background: var(--deep); color: #fff; padding: 43px 46px 47px; min-height: 295px; display: flex; flex-direction: column; justify-content: space-between; }
+.ms-overline { font-size: 10px; letter-spacing: .18em; color: #d7c2a0; font-weight: 800; text-transform: uppercase; }
+.ms-big { font: 400 55px/1.1 var(--head); letter-spacing: -.06em; }
+.ms-big em { color: #c5b294; }
+.ms-points-main p { font-size: 12px; line-height: 1.9; color: #bec8bd; max-width: 330px; margin: 0; }
+.ms-points-side { padding: 44px 48px; background: #eeeae1; display: flex; flex-direction: column; justify-content: space-between; }
+.mship .ms-points-side h3 { font: 400 32px/1.32 var(--head); margin: 0 0 17px; }
+.ms-points-side p { margin: 0; color: #6e766c; line-height: 1.95; font-size: 12px; }
+.ms-highlight { font-size: 11px; color: #967c56; font-weight: 800; margin-top: 24px; white-space: pre; }
+.ms-points-rules { display: grid; grid-template-columns: repeat(3, 1fr); gap: 17px; }
+.ms-points-card { border: 1px solid var(--line); padding: 31px 30px; background: #f9f8f4; min-height: 390px; }
+.ms-card-no { font-size: 10px; letter-spacing: .15em; color: #ad9674; font-weight: 800; text-transform: uppercase; }
+.mship .ms-points-card h3 { font: 400 27px/1.3 var(--head); margin: 22px 0 16px; }
+.ms-points-card ul { margin: 0; padding: 0 0 0 17px; display: grid; gap: 13px; color: #6f776e; font-size: 11px; line-height: 1.95; }
+.ms-points-card li::marker { color: #b39b77; }
+.ms-points-card strong { color: #304237; }
+.ms-points-note { margin-top: 20px; padding: 20px 25px; border-left: 2px solid #b7a282; background: #f0f0e9; color: #626b61; line-height: 1.85; font-size: 11px; }
+.ms-points-note strong { color: #36473d; }
+
+/* 07 Terms & Conditions */
+.ms-policy-section { padding-block: 109px; }
+.ms-policy-layout { display: grid; grid-template-columns: 285px 1fr; gap: 75px; align-items: start; }
+.ms-policy-side { position: sticky; top: 118px; }
+.mship .ms-policy-side h2 { font: 400 43px/1.2 var(--head); margin: 17px 0 14px; }
+.ms-policy-side p { font-size: 12px; color: var(--body); line-height: 1.95; margin: 0 0 34px; }
+.ms-policy-nav { display: grid; border-top: 1px solid var(--line); }
+.ms-policy-nav a { font-size: 11px; padding: 13px 0; border-bottom: 1px solid var(--line); font-weight: 700; color: #677168; display: flex; gap: 15px; }
+.ms-policy-nav a:hover { color: #947950; }
+.ms-policy-nav span { color: #af9a7b; }
+.ms-policy-content { padding-top: 3px; }
+.mship .ms-policy-content > h2 { font: 400 40px/1.2 var(--head); margin: 13px 0 34px; }
+.ms-policy-item { border-top: 1px solid var(--line); display: grid; grid-template-columns: 46px 1fr; gap: 18px; padding: 23px 0 29px; scroll-margin-top: 115px; }
+.ms-policy-item:last-child { border-bottom: 1px solid var(--line); }
+.ms-policy-no { color: #b09875; font-size: 12px; font-weight: 700; margin-top: 5px; }
+.mship .ms-policy-item h3 { font: 400 23px var(--head); margin: 0 0 9px; letter-spacing: -.04em; }
+.ms-policy-item p { font-size: 11px; color: #737c72; line-height: 2; margin: 0 0 9px; }
+.ms-policy-item p:last-child { margin-bottom: 0; }
+.ms-policy-item strong { color: #405145; }
+
+/* 08 FAQ: native disclosure, one open at a time; "Show all" / "Collapse all" (js/membership.js). */
+.ms-faq { background: var(--cream); border-top: 1px solid var(--line); padding-block: 96px 116px; }
+.ms-faq-grid { display: grid; grid-template-columns: minmax(280px, .85fr) minmax(0, 1.15fr); gap: 74px; }
+.mship .ms-faq h2 { font: 400 clamp(44px, 4.5vw, 64px)/1.07 var(--head); letter-spacing: -.025em; margin: 16px 0; }
+.ms-faq-intro { font: 400 14px/1.85 var(--sans); max-width: 380px; color: var(--body); }
+.ms-faq-tools { margin-top: 28px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.mship .ms-faq-tool { border: 1px solid var(--line); background: transparent; padding: 11px 14px; font: 600 11px/1.25 var(--sans); color: var(--deep); }
+.mship .ms-faq-tool:hover { background: var(--mist); }
+.mship .ms-faq-tool-quiet { border: none; color: #806541; }
+.ms-faq-list details { border-bottom: 1px solid var(--line); }
+.ms-faq-list details:first-child { border-top: 1px solid var(--line); }
+.ms-faq-list summary { cursor: pointer; padding: 24px 0; display: flex; align-items: center; justify-content: space-between; gap: 18px; list-style: none; font: 600 14px/1.6 var(--sans); color: var(--deep); }
+.ms-faq-list summary::-webkit-details-marker { display: none; }
+.ms-faq-list summary:hover { color: #806541; }
+.ms-plus { font: 300 25px/1 Arial, sans-serif; color: #806541; transition: transform .2s; flex: none; }
+.ms-faq-list details[open] .ms-plus { transform: rotate(45deg); }
+.ms-answer { font: 400 14px/1.8 var(--sans); color: var(--body); padding: 0 50px 26px 0; max-width: 640px; }
+
+/* Closing call to action */
+.ms-cta { background: var(--deep2); color: var(--paper); position: relative; overflow: hidden; }
+.ms-cta::after { content: 'K'; position: absolute; right: 2%; top: -175px; font: 400 510px Georgia, serif; color: #ffffff06; pointer-events: none; }
+.ms-cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 45px; padding-block: 75px; position: relative; z-index: 1; }
+.mship .ms-cta h2 { font: 400 clamp(38px, 4vw, 56px)/1.25 var(--head); max-width: 590px; margin: 14px 0 0; }
+.ms-cta p { color: #c4cec4; font-size: 12px; line-height: 1.9; max-width: 340px; margin: 0 0 23px; }
+.mship .ms-btn-outline { border: 1px solid rgba(255, 255, 255, .65); padding: 15px 24px; display: inline-flex; gap: 35px; align-items: center; font-size: 11px; font-weight: 800; color: #fff; transition: .2s; }
+.mship .ms-btn-outline:hover { background: #ffffff14; }
+
+@media (max-width: 1100px) {
+  .ms-join-grid { gap: 55px; }
+  .ms-policy-layout { gap: 44px; }
+  .ms-container { width: min(100% - 48px, 1240px); }
 }
-
-/* Phone: one column throughout */
-@media (max-width:600px){
-  .mship-wrap{width:calc(100% - 32px)}
-  .mship-intro{padding-top:20px}
-  .mship-hero__copy{padding:42px 24px 48px}
-  .mship-hero__title{font-size:44px}
-  .mship-hero__visual{min-height:320px}
-  .mship-hero__visual::after{inset:14px}
-  .mship-hero__kicker{top:32px;left:30px;right:30px}
-  .mship-hero__caption{left:30px;right:30px;bottom:32px;font-size:24px}
-  .mship-hero__actions .mship-btn{width:100%}
-  .mship-metric{padding:4px 16px}
-  .mship-metric dd{font-size:32px}
-  .mship-section{padding-block:72px}
-  .mship-head{margin-bottom:28px}
-  .mship-tiers{grid-template-columns:1fr}
-  .mship-tier{padding:28px 24px}
-  .mship-tier__cond{min-height:0}
-  .mship-tier ul{margin-top:0}
-  .mship-join{padding-block:72px}
-  .mship-stamp{display:flex;width:100%}
-  .mship-rules li{grid-template-columns:30px 1fr;gap:10px}
-  .mship-panel{padding:28px 22px}
-  .mship-track{grid-template-columns:1fr}
-  .mship-dark{padding-block:72px}
-  .mship-benefits article{padding:30px 22px}
-  .mship-discount{padding:28px 22px}
-  .mship-discount__title{flex-direction:column}
-  .mship-discount__title h3{font-size:27px}
-  .mship-discount__badge{font-size:48px}
-  .mship-points__main,.mship-points__side{padding:30px 24px}
-  .mship-points__big{font-size:44px}
-  .mship-cards article{padding:26px 22px}
-  .mship-policy__content article{grid-template-columns:28px 1fr;gap:10px}
-  .mship-faq{padding-block:72px}
-  .mship-faq__list p{padding-right:16px}
-  .mship-cta .mship-btn{width:100%}
+@media (max-width: 830px) {
+  .ms-hero { min-height: 635px; background-position: 59% center; }
+  .ms-hero-left { padding: 62px 28px 60px; }
+  .mship .ms-hero h1 { font-size: clamp(47px, 8.5vw, 66px); line-height: 1.04; }
+  .ms-hero-left > p { font-size: 14px; max-width: 520px; }
+  .ms-section-head { display: block; }
+  .ms-section-head p { margin-top: 22px; }
+  .ms-tier-grid { gap: 12px; }
+  .ms-tier { padding: 27px 21px; }
+  .mship .ms-tier h3 { font-size: 35px; }
+  .ms-percent { font-size: 45px; }
+  .ms-join-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ms-stamp { margin-top: 23px; }
+  .ms-rank-top { grid-template-columns: 1fr; gap: 24px; }
+  .ms-benefit { padding: 32px 21px; }
+  .mship .ms-benefit h3 { font-size: 23px; }
+  .ms-points-hero { grid-template-columns: 1fr 1fr; }
+  .ms-points-main, .ms-points-side { padding: 31px; }
+  .ms-big { font-size: 45px; }
+  .ms-points-card { padding: 25px 21px; }
+  .ms-policy-layout { grid-template-columns: 1fr; }
+  .ms-policy-side { position: static; }
+  .ms-policy-nav { display: none; }
+  .ms-faq-grid { grid-template-columns: 1fr; gap: 30px; }
+  .mship .ms-faq h2 { font-size: 48px; }
+}
+@media (max-width: 600px) {
+  .ms-container { width: calc(100% - 36px); }
+  .ms-tier-section, .ms-rank-section, .ms-discount, .ms-points, .ms-policy-section, .ms-faq { padding-block: 76px; }
+  .ms-section-head { margin-bottom: 30px; }
+  .mship .ms-section-head h2 { font-size: 40px; }
+  .ms-tier-grid { grid-template-columns: 1fr; }
+  .ms-tier { min-height: auto; padding: 30px; }
+  .mship .ms-tier h3 { margin-top: 27px; }
+  .ms-cond { min-height: 0; }
+  .ms-tier ul { margin-top: 22px; }
+  .ms-percent { font-size: 52px; }
+  .ms-tier-note { font-size: 10px; }
+  .ms-join-grid { padding-block: 77px; }
+  .mship .ms-join h2 { font-size: 40px; }
+  .ms-stamp { width: 100%; padding: 22px; }
+  .ms-stamp strong { font-size: 23px; }
+  .ms-rule { grid-template-columns: 30px 1fr; gap: 10px; }
+  .mship .ms-rule h3 { font-size: 24px; }
+  .ms-rank-panel { padding: 28px 24px; }
+  .ms-rank-track { grid-template-columns: 1fr; gap: 24px; }
+  .ms-rank-point { padding-top: 16px; }
+  .ms-benefits { padding-block: 75px; }
+  .ms-benefit-grid { grid-template-columns: 1fr; }
+  .ms-benefit { min-height: 0; }
+  .mship .ms-benefit h3 { margin-top: 22px; }
+  .ms-fine { margin-top: 21px; }
+  .ms-discount-box { padding: 30px 22px; }
+  .mship .ms-discount-title h3 { font-size: 27px; }
+  .ms-badge-10 { font-size: 45px; }
+  .ms-badge-10 small { display: block; font-size: 9px; margin: 4px 0; }
+  .ms-discount-flow { grid-template-columns: 1fr; gap: 11px; }
+  .ms-flow-step:not(:last-child)::after { content: '↓'; right: 18px; top: auto; bottom: -21px; }
+  .ms-discount-foot { display: block; }
+  .ms-points-hero, .ms-points-rules { grid-template-columns: 1fr; }
+  .ms-points-main { min-height: 250px; }
+  .ms-points-side { min-height: 210px; }
+  .ms-points-card { min-height: 0; }
+  .ms-points-note { font-size: 10px; }
+  .mship .ms-policy-side h2 { font-size: 40px; }
+  .mship .ms-policy-content > h2 { font-size: 37px; }
+  .ms-policy-item { grid-template-columns: 28px 1fr; gap: 10px; }
+  .mship .ms-policy-item h3 { font-size: 22px; }
+  .ms-cta-inner { display: block; padding-block: 69px; }
+  .mship .ms-cta h2 { font-size: 41px; }
+  .ms-cta p { margin: 25px 0 21px; }
+}
+@media (max-width: 520px) {
+  .ms-container { width: calc(100% - 40px); }
+  .ms-hero { min-height: 640px; background-position: 55% center; }
+  .ms-hero-left { padding: 58px 24px 56px; }
+  .mship .ms-hero h1 { font-size: clamp(43px, 11vw, 55px); }
+  .ms-hero-actions { display: grid; gap: 12px; }
+  .ms-btn-dark, .ms-btn-gold { width: 100%; min-width: 0; }
+  .ms-hero-left > p { max-width: 340px; }
+  .ms-faq-list summary { font-size: 13px; gap: 12px; }
+  .ms-answer { font-size: 13px; padding-right: 24px; }
+  .mship .ms-faq-tool { font-size: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mship *, .mship *::before, .mship *::after { transition: none; }
 }

@@ -28,7 +28,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Distances are approximate walking distances from the two KAS hotels shown above. Route distance and travel time can vary with traffic, crossings and the exact entrance used.",
-    "image": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1523731407965-2430cd12f5e4.jpg"
    },
    "taste": {
     "eyebrow": "02 / Food & Local Life",
@@ -47,7 +47,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Distances are approximate walking distances from the two KAS hotels shown above. Route distance and travel time can vary with traffic, crossings and the exact entrance used.",
-    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1517248135467-4c7edcad34c4.jpg"
    },
    "slow": {
     "eyebrow": "03 / Walk & Discover",
@@ -66,7 +66,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Distances are approximate walking distances from the two KAS hotels shown above. Route distance and travel time can vary with traffic, crossings and the exact entrance used.",
-    "image": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1528127269322-539801943592.jpg"
    },
    "night": {
     "eyebrow": "04 / After Dark",
@@ -85,7 +85,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Distances are approximate walking distances from the two KAS hotels shown above. Route distance and travel time can vary with traffic, crossings and the exact entrance used.",
-    "image": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1519046904884-53103b34b206.jpg"
    }
   },
   "vi": {
@@ -106,7 +106,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Khoảng cách là ước tính đi bộ từ hai khách sạn KAS được giới thiệu ở trên. Quãng đường và thời gian thực tế có thể thay đổi tùy giao thông, điểm sang đường và lối vào.",
-    "image": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1523731407965-2430cd12f5e4.jpg"
    },
    "taste": {
     "eyebrow": "02 / Ẩm thực & Nhịp sống địa phương",
@@ -125,7 +125,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Khoảng cách là ước tính đi bộ từ hai khách sạn KAS được giới thiệu ở trên. Quãng đường và thời gian thực tế có thể thay đổi tùy giao thông, điểm sang đường và lối vào.",
-    "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1517248135467-4c7edcad34c4.jpg"
    },
    "slow": {
     "eyebrow": "03 / Dạo bộ & Khám phá",
@@ -144,7 +144,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Khoảng cách là ước tính đi bộ từ hai khách sạn KAS được giới thiệu ở trên. Quãng đường và thời gian thực tế có thể thay đổi tùy giao thông, điểm sang đường và lối vào.",
-    "image": "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1528127269322-539801943592.jpg"
    },
    "night": {
     "eyebrow": "04 / Khi thành phố lên đèn",
@@ -163,7 +163,7 @@ window.KAS_GUIDE_DATA = {
      }
     ],
     "note": "Khoảng cách là ước tính đi bộ từ hai khách sạn KAS được giới thiệu ở trên. Quãng đường và thời gian thực tế có thể thay đổi tùy giao thông, điểm sang đường và lối vào.",
-    "image": "https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=1200&q=82"
+    "image": "/img/city-guide/1519046904884-53103b34b206.jpg"
    }
   }
  },

@@ -7,10 +7,9 @@
     /* The console's hotel/room list first (js/catalog-sync.js), so prices are fetched
        for exactly the hotels and room types the page will show. */
     var catalogueReady = global.KAS_CATALOG ? global.KAS_CATALOG.ready.catch(function(){ return null; }) : Promise.resolve(null);
-    cache = catalogueReady.then(function(){ return fetch('/api/catalog', {cache:'no-store'}); }).then(function(r){
-      if(!r.ok) throw new Error('Không tải được catalog ảnh phòng.');
-      return r.json();
-    }).catch(function(){ return {branches:[]}; }).then(async function(catalog){
+    /* The old admin's /api/catalog (photos and rate edits) was removed on 2026-11-09: photos come
+       from the console and prices from the backend's request-pricing below. */
+    cache = catalogueReady.then(function(){ return {branches:[]}; }).then(async function(catalog){
       catalog.backendPrices = {};
       var criteria = global.Booking ? global.Booking.readSearch() : global.Store.getSearch();
       await Promise.all(global.KAS_DATA.hotels.map(async function(hotel){
@@ -53,20 +52,9 @@
       hotel.propertyGalleryItems = (hotel.consoleGalleryItems || hotel.images.map(function(url){ return {url:url, category:'other'}; })).slice();
       hotel.imageSource = 'KAS console gallery';
       hotel.hasCustomPropertyGallery = true;
-    } else if (property && Array.isArray(property.propertyImages) && property.propertyImages.length) {
-      var propertyGallery = property.propertyImages.map(function(x){
-        return typeof x === 'string' ? x : x.url;
-      }).filter(Boolean);
-      /* Keep the uploaded property gallery separate so each page can choose
-         exactly what it needs: the home Collection card keeps its dedicated
-         collection image, while the Hotels listing and hotel detail use this
-         gallery. */
-      hotel.propertyGalleryItems = property.propertyImages.map(function(x){ return typeof x === 'string' ? {url:x, category:'other'} : Object.assign({}, x, {category:x.category || 'other'}); }).filter(function(x){ return x.url; });
-      hotel.propertyGalleryImages = propertyGallery.slice();
-      hotel.images = propertyGallery.slice();
-      hotel.imageSource = 'KAS admin uploaded property gallery';
-      hotel.hasCustomPropertyGallery = true;
     } else {
+      /* The old admin's photo uploads (/uploads, via /api/catalog) are no longer read
+         (2026-11-09): every photo now comes from the console. */
       hotel.propertyGalleryImages = [];
       hotel.propertyGalleryItems = [];
     }
@@ -81,11 +69,10 @@
       if(!mapping) return;
       var live = rooms[mapping.branch + ':' + mapping.stt];
       if(!live) return;
-      r.liveImages = uploadedUrls(live);
+      /* Room photos come only from the console now; the old admin's uploads are ignored. */
       r.liveRateMeta = live;
       r.liveSheetRoomName = live.name;
       r.liveEz = live.ez;
-      r.liveUploadedCount = r.liveImages.length;
 
       /* Admin-edited rates are returned by /api/catalog. Overlay them onto
          the shared KAS_RATES object so hotel-detail, room-detail, booking

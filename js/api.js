@@ -127,6 +127,8 @@
     /* An API path (such as profile.avatarUrl) as an absolute URL on the API origin. */
     url: function (path) { return path ? base + path : ''; },
     stays: function (locale) { return request('/api/v1/me/stays?locale=' + encodeURIComponent(locale || 'en')); },
+    /* The guest asks to check out; SUPER_ADMIN confirms (membership tier review, V59). */
+    requestCheckout: function (reference) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/check-out-request', { method: 'POST' }); },
     requestCancellation: function (reference) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel', { method: 'POST' }); },
     decideCancellation: function (reference, accept) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel/decision', { method: 'POST', body: { accept: !!accept } }); },
     submitReservation: function (body, key, locale) {

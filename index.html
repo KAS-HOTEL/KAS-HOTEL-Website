@@ -130,7 +130,7 @@
       </div>
     </div>
     <figure class="hv3-city__image">
-      <img src="assets/home/a-day-in-saigon.jpg" alt="A day in Saigon" data-site-image="home.dayInSaigon" width="1172" height="972" loading="lazy" decoding="async">
+      <img src="img/home/dayInSaigon.jpg" alt="A day in Saigon" data-site-image="home.dayInSaigon" width="1172" height="972" loading="lazy" decoding="async">
     </figure>
   </div>
 </section>
@@ -138,7 +138,7 @@
 <!-- 3.6 City Guide — one feature, one CTA -->
 <section class="hv3-guide" aria-labelledby="hv3-guide-title">
   <div class="hv3-guide__media" aria-hidden="true">
-    <img src="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&amp;fit=crop&amp;w=1600&amp;q=85" alt="" data-site-image="home.neighborhood.city" loading="lazy" decoding="async">
+    <img src="img/city-guide/1523731407965-2430cd12f5e4.jpg" alt="" data-site-image="home.neighborhood.city" loading="lazy" decoding="async">
   </div>
   <div class="hv3-wrap hv3-guide__inner">
     <div class="hv3-guide__copy">
@@ -285,8 +285,8 @@
   var hero=D.getHotel('hotel-04')||D.hotels[3];
   var room=(hero.rooms&&hero.rooms[0])||null;
   U.$('#roomImage').innerHTML=U.img((room&&room.images&&room.images[0])||hero.images[1]||hero.images[0],hero.name,'',true,false);
-  fetch('/api/catalog?ts='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(c){
-    var managed=c&&c.siteImages&&c.siteImages['home.roomsSuites'];var img=U.$('#roomImage img');
+  fetch('/api/v1/public/site-image-slots',{cache:'no-store',credentials:'omit'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){var m={};(Array.isArray(rows)?rows:[]).forEach(function(s){if(s&&s.key&&s.enabled!==false&&s.imageReference)m[s.key]={url:s.imageReference};});return m;}).then(function(c){
+    var managed=c['home.roomsSuites'];var img=U.$('#roomImage img');
     if(managed&&managed.url&&img){img.src=managed.url;img.removeAttribute('srcset');img.setAttribute('data-admin-site-image','home.roomsSuites');}
   }).catch(function(){});
 

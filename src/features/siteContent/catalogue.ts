@@ -216,9 +216,13 @@ export function slotState(slot: SiteImageSlot | undefined): SlotState {
 }
 
 /** The image shown for a slot: its own, else the website default, else none. */
-export function slotPreview(slot: SiteImageSlot | undefined): string | null {
+export function slotPreview(slot: SiteImageSlot | undefined, websiteBase?: string): string | null {
   if (!slot) return null;
-  return slot.currentReference || slot.defaultReference || null;
+  const reference = slot.currentReference || slot.defaultReference || null;
+  if (!reference || !websiteBase || /^(https?:|blob:|data:)/i.test(reference)) return reference;
+  // A same-site path ("/assets/…" or "assets/…") lives on the website, not on the console host.
+  if (!/^\/?[\w./-]+\.(jpe?g|png|webp|avif|gif|svg)$/i.test(reference)) return reference;
+  return `${websiteBase.replace(/\/+$/, '')}/${reference.replace(/^\/+/, '')}`;
 }
 
 /** HTTPS or a same-site path — the rule `AdminSiteImageSlotController` enforces. */

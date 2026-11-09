@@ -24,7 +24,8 @@
 
   var CACHE_PREFIX = 'kas_catalogue_v1_';
   var RELOAD_GUARD = 'kas_catalogue_reloaded_at';
-  var NEW_HOTEL_IMAGE = 'assets/home/a-day-in-saigon.jpg';
+  /* A hotel with no console photo yet shows the brand placeholder (js/images.js). */
+  var NEW_HOTEL_IMAGE = (global.KAS_IMAGES && global.KAS_IMAGES.PLACEHOLDER) || 'assets/brand/kas-photo-placeholder.svg';
   var BASE = D.hotels.slice();
   var BASE_ROOMS = {};
   var BASE_IMAGES = {};

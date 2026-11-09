@@ -270,7 +270,7 @@
             '<form class="news" onsubmit="return false"><input type="email" aria-label="Email address" placeholder="Email của bạn"><button type="submit" aria-label="Subscribe">' + U.icon('send', 15) + '</button></form>' +
           '</div>' +
         '</div>' +
-        '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="reference.html">Privacy Policy</a><a href="reference.html">Terms of Service</a><a href="support.html#contact">Contact</a></div></div>' +
+        '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="support.html#contact">Contact</a></div></div>' +
       '</div>';
   }
 
@@ -308,7 +308,7 @@
           (CT.email ? '<a href="mailto:' + U.esc(CT.email) + '">' + U.icon('mail', 15) + '<span>' + U.esc(CT.email) + '</span></a>' : '') +
         '</div>' +
         '<div class="ftr-v3__bottom"><span>© 2026 KAS Hotel Collection. All rights reserved.</span>' +
-          '<div class="ftr-v3__legal"><a href="reference.html">Privacy Policy</a><a href="reference.html">Terms &amp; Conditions</a><a href="support.html#booking">Booking Policy</a></div></div>' +
+          '<div class="ftr-v3__legal"><a href="support.html#booking">Booking Policy</a></div></div>' +
       '</div>';
   }
 
@@ -970,7 +970,7 @@
       m.innerHTML =
         '<div class="kas-welcome__box" role="dialog" aria-modal="true" aria-labelledby="kasWelcomeTitle">' +
           '<div class="kas-welcome__visual" aria-hidden="true">' +
-            '<img src="'+String(imageUrl||'https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90').replace(/"/g,'&quot;')+'" alt="">' +
+            '<img src="'+String(imageUrl||'/img/heroes/welcome.jpg').replace(/"/g,'&quot;')+'" alt="">' +
             '<div class="kas-welcome__visual-copy"><span>AMORE</span><span>MEANINGFUL</span><span>STAYS.</span></div>' +
             '<small>KAS HOTEL</small>' +
           '</div>' +
@@ -1063,11 +1063,12 @@
       setWelcomeLanguage(global.KAS_I18N ? global.KAS_I18N.getLanguage() : 'en');
     }
 
-    fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(c){
-      var item=c&&c.siteImages&&c.siteImages['page.hero.welcome'];
-      renderWelcome(item&&item.url ? item.url : 'https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90');
+    /* The welcome image is the console slot page.hero.welcome (Nội dung website); /img/ default otherwise. */
+    fetch('/api/v1/public/site-image-slots',{cache:'no-store',credentials:'omit'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){var m={};(Array.isArray(rows)?rows:[]).forEach(function(s){if(s&&s.key&&s.enabled!==false&&s.imageReference)m[s.key]={url:s.imageReference};});return m;}).then(function(c){
+      var item=c['page.hero.welcome'];
+      renderWelcome(item&&item.url ? item.url : '/img/heroes/welcome.jpg');
     }).catch(function(){
-      renderWelcome('https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90');
+      renderWelcome('/img/heroes/welcome.jpg');
     });
   }
 

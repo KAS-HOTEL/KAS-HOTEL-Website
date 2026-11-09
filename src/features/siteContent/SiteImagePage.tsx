@@ -38,6 +38,8 @@ export function SiteImagePage({ page }: { readonly page: ContentPage }) {
   // The host is known only in the browser; the server renders the production address.
   const hostname = useSyncExternalStore(noSubscribe, () => window.location.hostname, () => undefined);
   const siteHref = websiteUrl(config.websitePath, hostname);
+  // Same-site image paths are previewed from the website, not from the console host.
+  const websiteBase = websiteUrl('/', hostname);
   // Each opening gets a fresh editor, so nothing from the last image carries over.
   const [opened, setOpened] = useState(0);
 
@@ -111,7 +113,7 @@ export function SiteImagePage({ page }: { readonly page: ContentPage }) {
                 ) : null}
                 <div className={block.layout === 'compact' ? styles.gridCompact : styles.gridWide}>
                   {shown.map((entry) => (
-                    <SlotCard key={entry.key} entry={entry} slot={byKey.get(entry.key)}
+                    <SlotCard key={entry.key} entry={entry} slot={byKey.get(entry.key)} websiteBase={websiteBase}
                       onOpen={() => { setOpened((n) => n + 1); setEditing({ entry, block }); }}
                       drag={block.id === 'zero' ? {
                         dragging: dragKey === entry.key,
@@ -133,6 +135,7 @@ export function SiteImagePage({ page }: { readonly page: ContentPage }) {
       )}
       <SlotEditor
         key={opened}
+        websiteBase={websiteBase}
         open={editing !== null}
         where={editing ? `${config.title} › ${editing.block.title}` : ''}
         entry={editing?.entry ?? null}
@@ -162,14 +165,15 @@ interface SlotDrag {
   readonly drop: () => void;
 }
 
-function SlotCard({ entry, slot, onOpen, drag }: {
+function SlotCard({ entry, slot, websiteBase, onOpen, drag }: {
   readonly entry: CatalogueSlot;
   readonly slot: SiteImageSlot | undefined;
+  readonly websiteBase: string;
   readonly onOpen: () => void;
   readonly drag?: SlotDrag | undefined;
 }) {
   const state = slotState(slot);
-  const preview = slotPreview(slot);
+  const preview = slotPreview(slot, websiteBase);
   return (
     <button type="button" className={styles.card} onClick={onOpen}
       aria-label={`${entry.label}: ${SLOT_STATE_LABEL[state]}. Bấm để thay ảnh`}

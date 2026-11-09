@@ -13,7 +13,7 @@ it.each([
   ['CONFIRMED', ['Nhận phòng', 'Khách không đến']],
   ['CHECK_IN_READY', ['Nhận phòng', 'Khách không đến']],
   ['CHECKED_IN', ['Trả phòng']],
-  ['CHECKED_OUT', []],
+  ['CHECKED_OUT', ['Huỷ xác nhận trả phòng']],
   ['CANCELLED', []],
   [null, []],
 ])('offers only the transitions %s allows', (status, labels) => {

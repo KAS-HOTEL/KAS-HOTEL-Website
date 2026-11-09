@@ -1,32 +1,29 @@
-/* KAS Membership page (offers.html).
-   - The call to action follows the member's sign-in state. js/app.js owns the session and
-     announces every change with `kas:member-changed`; before that first event, the non-secret
-     sign-in hint it keeps decides the starting state.
-   - "Join" opens the site's existing sign-up dialog (App.openAuth('join')); without it the
-     link still leads to My KAS, where guests sign in or join. */
-(function (global) {
+/* KAS Membership page (offers.html), as in the approved demo
+   KAS_Membership_Interactive_2026_v2_UPDATED.html:
+   - FAQ: native <details>; opening one question closes the others.
+   - "Show all answers" opens every question and "Collapse all" closes them; they stay that way
+     until the guest clicks a question, which brings back one-at-a-time. */
+(function () {
   'use strict';
-  function show(signedIn) {
-    var blocks = document.querySelectorAll('[data-mship-cta]');
-    for (var i = 0; i < blocks.length; i++) {
-      var forMember = blocks[i].getAttribute('data-mship-cta') === 'member';
-      blocks[i].hidden = forMember ? !signedIn : signedIn;
-    }
-  }
-  var hint = null;
-  try { hint = global.localStorage.getItem('kas_session_hint'); } catch { /* storage blocked */ }
-  show(hint === '1');
-  global.addEventListener('kas:member-changed', function (event) {
-    show(!!(event.detail && event.detail.signedIn));
+  var entries = Array.prototype.slice.call(document.querySelectorAll('#faq .ms-faq-list details'));
+  if (!entries.length) return;
+  var batch = false;
+
+  entries.forEach(function (detail) {
+    var summary = detail.querySelector('summary');
+    if (summary) summary.addEventListener('click', function () { batch = false; });
+    detail.addEventListener('toggle', function () {
+      if (batch || !detail.open) return;
+      entries.forEach(function (other) { if (other !== detail && other.open) other.open = false; });
+    });
   });
 
-  var joins = document.querySelectorAll('[data-mship-join]');
-  for (var j = 0; j < joins.length; j++) {
-    joins[j].addEventListener('click', function (event) {
-      if (global.App && typeof global.App.openAuth === 'function') {
-        event.preventDefault();
-        global.App.openAuth('join');
-      }
-    });
+  function setAll(open) {
+    batch = true;
+    entries.forEach(function (item) { item.open = open; });
   }
-})(window);
+  var expand = document.getElementById('expand-faq');
+  var collapse = document.getElementById('collapse-faq');
+  if (expand) expand.addEventListener('click', function () { setAll(true); });
+  if (collapse) collapse.addEventListener('click', function () { setAll(false); });
+})();

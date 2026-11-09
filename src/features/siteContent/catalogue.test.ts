@@ -57,6 +57,10 @@ describe('website image catalogue', () => {
     expect(slotState(slot({ defaultReference: '/assets/a.jpg' }))).toBe('default');
     expect(slotState(slot({}))).toBe('missing');
     expect(slotPreview(slot({ currentReference: 'https://x/a.jpg', defaultReference: '/d.jpg' }))).toBe('https://x/a.jpg');
+    // A same-site path is previewed from the website, not from the console host.
+    expect(slotPreview(slot({ defaultReference: '/assets/m/h.jpg' }), 'https://kasluxuryhotel.com/')).toBe('https://kasluxuryhotel.com/assets/m/h.jpg');
+    expect(slotPreview(slot({ defaultReference: 'assets/home/a.jpg' }), 'http://localhost:3001/')).toBe('http://localhost:3001/assets/home/a.jpg');
+    expect(slotPreview(slot({ currentReference: 'https://x/a.jpg' }), 'https://kasluxuryhotel.com/')).toBe('https://x/a.jpg');
   });
 
   it('accepts only HTTPS or same-site paths, like the backend', () => {

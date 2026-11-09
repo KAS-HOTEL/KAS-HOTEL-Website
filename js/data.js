@@ -642,7 +642,10 @@
     var pm = IMGS.meta(h.id);
     h.photos = pm;
     h.photosVerified = pm.verified;
-    h.images = IMGS.allPool(h.id);       // property gallery, exterior first
+    /* Photos come from the console (js/catalog-sync.js); until it answers, or for a hotel
+       with none yet, the brand placeholder stands in. No third-party photo URLs. */
+    var gallery = IMGS.allPool(h.id);
+    h.images = gallery.length ? gallery : [IMGS.PLACEHOLDER];
     h.roomPhotos = IMGS.roomPool(h.id);  // VERIFIED room photos only
     h.imageSource = pm.source;
     h.imageSourceUrl = pm.sourceUrl;

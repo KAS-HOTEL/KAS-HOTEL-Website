@@ -12,6 +12,8 @@ const ACTIONS_BY_STATUS: Readonly<Record<string, readonly StayAction[]>> = {
   CONFIRMED: ['check-in', 'no-show'],
   CHECK_IN_READY: ['check-in', 'no-show'],
   CHECKED_IN: ['check-out'],
+  // A check-out confirmed by mistake (V59): the booking stops counting towards the member tier.
+  CHECKED_OUT: ['undo-check-out'],
 };
 
 const COPY: Readonly<Record<StayAction, { label: string; question: string; detail: string }>> = {
@@ -24,6 +26,11 @@ const COPY: Readonly<Record<StayAction, { label: string; question: string; detai
     label: 'Trả phòng',
     question: 'Xác nhận khách đã trả phòng?',
     detail: 'Chỉ thực hiện từ ngày trả phòng trở đi.',
+  },
+  'undo-check-out': {
+    label: 'Huỷ xác nhận trả phòng',
+    question: 'Huỷ xác nhận trả phòng của đơn này?',
+    detail: 'Đơn trở về "Đã nhận phòng" và không còn được tính vào số đơn xét hạng thành viên. Nếu số đơn trong quý rơi dưới ngưỡng, hạng của khách bị hạ ngay.',
   },
   'no-show': {
     label: 'Khách không đến',
@@ -68,7 +75,7 @@ export function StayActions({
   return (
     <div className={styles.detailActions}>
       {actions.map((action) => (
-        <Button key={action} variant={action === 'no-show' ? 'secondary' : 'primary'} disabled={busy}
+        <Button key={action} variant={action === 'no-show' || action === 'undo-check-out' ? 'secondary' : 'primary'} disabled={busy}
           onClick={() => setConfirm(action)}>
           {COPY[action].label}
         </Button>

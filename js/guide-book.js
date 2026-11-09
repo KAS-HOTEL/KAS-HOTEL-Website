@@ -254,11 +254,11 @@
      admin's /api/catalog values, the same merge js/site-images.js uses; a slot switched off in the
      console falls back to the chapter photo. On a static host the chapter photo stays. */
   Promise.all([
-    fetch('/api/catalog', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    null, // the old admin's /api/catalog photos are no longer read (2026-11-09)
     fetch('/api/v1/public/site-image-slots', { cache: 'no-store', credentials: 'omit' })
       .then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; })
   ]).then(function (results) {
-    var merged = Object.assign({}, (results[0] && results[0].siteImages) || {});
+    var merged = {};
     (Array.isArray(results[1]) ? results[1] : []).forEach(function (slot) {
       if (!slot || !slot.key) return;
       if (slot.enabled === false) { delete merged[slot.key]; return; }

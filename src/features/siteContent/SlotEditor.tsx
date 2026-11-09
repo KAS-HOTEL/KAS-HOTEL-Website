@@ -22,6 +22,7 @@ export function SlotEditor({
   where,
   entry,
   slot,
+  websiteBase,
   onClose,
   onSaved,
 }: {
@@ -29,6 +30,8 @@ export function SlotEditor({
   readonly where: string;
   readonly entry: CatalogueSlot | null;
   readonly slot: SiteImageSlot | undefined;
+  /** Where same-site image paths are previewed from (the website, not the console host). */
+  readonly websiteBase?: string;
   readonly onClose: () => void;
   readonly onSaved: (saved: SiteImageSlot, message: string) => void;
 }) {
@@ -48,7 +51,7 @@ export function SlotEditor({
   if (!entry) return null;
   const urlValid = url.trim() !== '' && isAcceptedReference(url);
   const next = tab === 'upload' ? filePreview : urlValid ? url.trim() : null;
-  const current = slotPreview(slot);
+  const current = slotPreview(slot, websiteBase);
   const state = slotState(slot);
   const changed = next !== null || (slot !== undefined && enabled !== slot.enabled);
 

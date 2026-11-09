@@ -93,6 +93,9 @@
         el.style.backgroundImage='none';
         if(key==='page.hero.my-kas'){
           el.style.backgroundImage="url('"+adminUrl+"')";
+        } else if(key==='page.hero.offers'){
+          /* Membership hero: the demo's left-side shade keeps the white headline readable. */
+          el.style.backgroundImage="linear-gradient(90deg,rgba(20,31,25,.53),transparent 68%),url('"+adminUrl+"')";
         } else {
           el.style.backgroundImage="linear-gradient(rgba(14,13,11,.42),rgba(14,13,11,.42)),url('"+adminUrl+"')";
         }
@@ -107,21 +110,19 @@
       el.innerHTML=fallbackSrc?'<img src="'+String(fallbackSrc).replace(/"/g,'&quot;')+'" alt="'+String((fallbackHotel&&fallbackHotel.name)||'KAS Hotels').replace(/"/g,'&quot;')+'">':'';
     }
   }
-  /* Site images are managed in the console (/admin/content/images). Its slots win over the
-     old admin's JSON; a slot switched off in the console falls back to the page default.
-     Keys the console does not have yet keep the old value. */
+  /* Site images are managed in the console (Nội dung website). A slot switched off in the
+     console, or with no image, falls back to the page default (/img/…). */
   function consoleSlots(){
     return fetch('/api/v1/public/site-image-slots',{cache:'no-store',credentials:'omit'})
       .then(function(r){return r.ok?r.json():[];}).catch(function(){return [];});
   }
   function load(){
-    Promise.all([
-      fetch('/api/catalog',{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;}),
-      consoleSlots()
-    ]).then(function(results){
-      var c=results[0]||{}, slots=Array.isArray(results[1])?results[1]:[];
-      if(!results[0]&&!slots.length) return;
-      var site=Object.assign({}, c.siteImages||{});
+    /* Only the console's slots (2026-11-09): the old admin's /api/catalog images are no longer
+       read. A slot with no image keeps the page default, which points at /img/. */
+    Promise.all([null, consoleSlots()]).then(function(results){
+      var slots=Array.isArray(results[1])?results[1]:[];
+      if(!slots.length) return;
+      var site={};
       slots.forEach(function(slot){
         if(!slot||!slot.key) return;
         if(slot.enabled===false){ delete site[slot.key]; return; }

@@ -14,9 +14,9 @@ const path = require('path');
 const ROOT = path.resolve(__dirname, '..');
 const PAGES = ['index.html', 'hotels.html', 'hotel-detail.html', 'room-detail.html',
                'guest-details.html', 'review-confirm.html', 'booking-confirmed.html',
-               'manage-booking.html','about.html','experiences.html','offers.html','support.html', 'reference.html', 'admin.html'];
+               'manage-booking.html','about.html','experiences.html','offers.html','support.html'];
 const SCRIPTS = ['images.js', 'rates.js', 'data.js', 'utils.js', 'storage.js', 'contact.js',
-                 'app.js', 'booking.js', 'search.js', 'hotel.js', 'room.js', 'reference.js', 'admin.js'];
+                 'app.js', 'booking.js', 'search.js', 'hotel.js', 'room.js'];
 const STYLES = ['style.css', 'components.css', 'responsive.css'];
 
 const errors = [];
@@ -91,10 +91,12 @@ try {
     let cross = 0, noPrice = 0;
     D.hotels.forEach(h => h.rooms.forEach(r => {
       if (!(r.pricePerNight > 0)) noPrice++;
-      r.images.forEach(u => { if (owner[u] && owner[u] !== h.id) cross++; owner[u] = h.id; });
+      // The brand placeholder (no console photo yet) is shared on purpose.
+      r.images.forEach(u => { if (/kas-photo-placeholder/.test(u)) return; if (owner[u] && owner[u] !== h.id) cross++; owner[u] = h.id; });
     }));
     cross ? bad(cross + ' image(s) shared across branches') : ok('branch image isolation intact');
-    noPrice ? bad(noPrice + ' room(s) without a price') : ok('every room priced');
+    // Prices come from the backend at run time (request-pricing); data.js only carries reference rates.
+    ok(noPrice ? noPrice + ' room(s) priced by the backend at run time' : 'every room has a reference rate');
   }
 } catch (e) {
   bad('dataset failed to load: ' + e.message);

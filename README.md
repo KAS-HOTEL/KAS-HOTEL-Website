@@ -2,8 +2,8 @@
 
 A fully functional hotel booking platform for the eight KAS properties in
 Ho Chi Minh City. Real hotel and room data, a complete five-step booking flow, bilingual
-EN/VI UI, and persistence via `localStorage`. The project also includes an optional Node/Express
-server for admin room-photo uploads and persistent storage on Render.
+EN/VI UI. `server.js` (Node/Express) serves the site and forwards the customer API to the
+Spring Boot backend. Hotels, rooms, prices and images are managed in the KAS console.
 
 **151 automated assertions · 0 failures.**
 
@@ -11,8 +11,8 @@ server for admin room-photo uploads and persistent storage on Render.
 
 ## Run it
 
-For the public booking UI, any static server will do. For admin photo uploads and the
-Render persistent-disk workflow, use the included Node/Express server.
+Use the included Node/Express server; it needs `KAS_API_ORIGIN` (the Spring Boot backend) to
+show live hotels, prices and bookings.
 
 ```bash
 cd kas-hotels
@@ -21,18 +21,16 @@ python3 -m http.server 8000     # → http://localhost:8000
 # or
 npx serve .
 
-# Full app with admin upload endpoint (ADMIN_KEY is required; the server
-# refuses to start without it or with a placeholder value)
+# Full app, forwarding /api/v1 to the backend
 npm install
-ADMIN_KEY="your-long-random-key" npm start          # macOS / Linux
-$env:ADMIN_KEY="your-long-random-key"; npm start     # Windows PowerShell
+KAS_API_ORIGIN=http://localhost:8080 npm start              # macOS / Linux
+$env:KAS_API_ORIGIN="http://localhost:8080"; npm start      # Windows PowerShell
 ```
 
 > Open it through a server, not `file://` — the pages share modules across files and
 > `localStorage` behaves inconsistently on the `file:` origin.
 
-The front end has no framework or bundler. The included upload server uses Node.js,
-Express, and Multer.
+The front end has no framework or bundler. The server uses Node.js and Express.
 
 ---
 
@@ -94,8 +92,8 @@ gracefully when a booking reference is unknown.
 │   ├── hotel.js               Hotel/room cards, filtering, sorting
 │   └── room.js                Room specs, policies, reviews
 │
-├── tools/
-│   └── fetch-images.js        Vendor remote photos into /assets (see below)
+├── img/                       Website photographs (hotels/<slug>/, home/, heroes/, guidebook/, city-guide/)
+├── assets/                    Brand identity only (logo, favicon, photo placeholder)
 │
 └── README.md
 ```
@@ -155,12 +153,8 @@ If an image does fail, a **branded KAS placeholder** appears — never a broken-
 never a photo from a different hotel. The loader steps down through render sizes actually
 observed on the source pages before giving up.
 
-To vendor the photos locally, from a machine with open internet:
-
-```bash
-node tools/fetch-images.js            # download into assets/images/hotels/
-node tools/fetch-images.js --rewrite  # ...and repoint js/data.js at them
-```
+Since 2026-11-09 every website photograph is stored under `img/` and chosen in the console;
+no remote photo links remain in the code.
 
 ---
 
@@ -265,8 +259,6 @@ the demo gracefully rather than throwing.
 
 ---
 
-├── server.js                    Optional Node/Express server for persistent admin uploads
-
 ## Test coverage
 
 The suite drives a real headless browser through the whole product:
@@ -291,9 +283,8 @@ The suite drives a real headless browser through the whole product:
 
 - **Booking data is demo/local.** There is no payment processing or live room inventory.
   Bookings live in the browser's `localStorage` and are not visible on another device.
-- **Admin uploads use the included server.** Room/property photos can be uploaded through the
-  admin UI and stored under `uploads/`; on Render, `uploads/` is intended to live on the
-  configured persistent disk and is excluded from Git.
+- **Photos are managed in the console.** The old admin page (admin.html, `/api/admin/*`,
+  `uploads/`) was removed on 2026-11-09.
 - **Live rates unavailable** — see above and [DATA_AUDIT.md](../docs/legacy-frontend/DATA_AUDIT.md) §5.
 - **Room-level photo attribution unverified** — see [DATA_AUDIT.md](../docs/legacy-frontend/DATA_AUDIT.md) §4.
 - **Branch 05 mapping** (`tuyet-lan-corner` → KAS Zody) is by elimination rather than a direct

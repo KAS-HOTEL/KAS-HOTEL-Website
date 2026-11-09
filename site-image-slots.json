@@ -4,13 +4,13 @@
       "key": "home.dayInSaigon",
       "label": "Trang chủ · A Day in Saigon — ảnh hành trình",
       "selector": "img[alt=\"A day in Saigon\"]",
-      "default": "assets/home/a-day-in-saigon.jpg"
+      "default": "/img/home/dayInSaigon.jpg"
     },
     {
       "key": "home.neighborhood.city",
       "label": "Trang chủ · Bốn câu chuyện khu phố / 01 · Bắt đầu từ thành phố",
       "selector": "a[href=\"city-guide.html#city\"] img",
-      "default": "https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1500&q=85"
+      "default": "/img/home/neighborhood-city.jpg"
     },
     {
       "key": "home.roomsSuites",
@@ -22,7 +22,7 @@
       "key": "page.hero.hotels",
       "label": "Trang chủ · Nội dung bên dưới Hero · Find Your Stay",
       "selector": "#heroBg",
-      "default": ""
+      "default": "/img/heroes/hotels.jpg"
     }
   ],
   "guidebook": [
@@ -36,109 +36,109 @@
       "key": "guidebook.entry.ben-thanh-market",
       "label": "Guidebook · ben-thanh-market",
       "selector": ".entry#ben-thanh-market .photo",
-      "default": ""
+      "default": "/img/guidebook/ben-thanh-market.jpg"
     },
     {
       "key": "guidebook.entry.tao-dan-park",
       "label": "Guidebook · tao-dan-park",
       "selector": ".entry#tao-dan-park .photo",
-      "default": ""
+      "default": "/img/guidebook/tao-dan-park.jpg"
     },
     {
       "key": "guidebook.entry.independence-palace",
       "label": "Guidebook · independence-palace",
       "selector": ".entry#independence-palace .photo",
-      "default": ""
+      "default": "/img/guidebook/independence-palace.jpg"
     },
     {
       "key": "guidebook.entry.war-remnants-museum",
       "label": "Guidebook · war-remnants-museum",
       "selector": ".entry#war-remnants-museum .photo",
-      "default": ""
+      "default": "/img/guidebook/war-remnants-museum.jpg"
     },
     {
       "key": "guidebook.entry.central-post-office",
       "label": "Guidebook · central-post-office",
       "selector": ".entry#central-post-office .photo",
-      "default": ""
+      "default": "/img/guidebook/central-post-office.jpg"
     },
     {
       "key": "guidebook.entry.notre-dame-cathedral",
       "label": "Guidebook · notre-dame-cathedral",
       "selector": ".entry#notre-dame-cathedral .photo",
-      "default": ""
+      "default": "/img/guidebook/notre-dame-cathedral.jpg"
     },
     {
       "key": "guidebook.entry.saigon-opera-house",
       "label": "Guidebook · saigon-opera-house",
       "selector": ".entry#saigon-opera-house .photo",
-      "default": ""
+      "default": "/img/guidebook/saigon-opera-house.jpg"
     },
     {
       "key": "guidebook.entry.nguyen-hue",
       "label": "Guidebook · nguyen-hue",
       "selector": ".entry#nguyen-hue .photo",
-      "default": ""
+      "default": "/img/guidebook/nguyen-hue.jpg"
     },
     {
       "key": "guidebook.entry.bitexco",
       "label": "Guidebook · bitexco",
       "selector": ".entry#bitexco .photo",
-      "default": ""
+      "default": "/img/guidebook/bitexco.jpg"
     },
     {
       "key": "guidebook.entry.saigon-square",
       "label": "Guidebook · saigon-square",
       "selector": ".entry#saigon-square .photo",
-      "default": ""
+      "default": "/img/guidebook/saigon-square.png"
     },
     {
       "key": "guidebook.entry.pham-ngu-lao",
       "label": "Guidebook · pham-ngu-lao",
       "selector": ".entry#pham-ngu-lao .photo",
-      "default": ""
+      "default": "/img/guidebook/pham-ngu-lao.png"
     },
     {
       "key": "guidebook.entry.bui-vien",
       "label": "Guidebook · bui-vien",
       "selector": ".entry#bui-vien .photo",
-      "default": ""
+      "default": "/img/guidebook/bui-vien.jpg"
     },
     {
       "key": "guidebook.entry.fine-arts-museum",
       "label": "Guidebook · fine-arts-museum",
       "selector": ".entry#fine-arts-museum .photo",
-      "default": ""
+      "default": "/img/guidebook/fine-arts-museum.jpg"
     },
     {
       "key": "guidebook.entry.nguyen-trai-street",
       "label": "Guidebook · nguyen-trai-street",
       "selector": ".entry#nguyen-trai-street .photo",
-      "default": ""
+      "default": "/img/guidebook/nguyen-trai-street.png"
     },
     {
       "key": "guidebook.entry.saigon-centre",
       "label": "Guidebook · saigon-centre",
       "selector": ".entry#saigon-centre .photo",
-      "default": ""
+      "default": "/img/guidebook/saigon-centre.png"
     },
     {
       "key": "guidebook.entry.saigon-eco-craft",
       "label": "Guidebook · saigon-eco-craft",
       "selector": ".entry#saigon-eco-craft .photo",
-      "default": ""
+      "default": "/img/guidebook/saigon-eco-craft.png"
     },
     {
       "key": "guidebook.entry.vietnamese-coffee",
       "label": "Guidebook · vietnamese-coffee",
       "selector": ".entry#vietnamese-coffee .photo",
-      "default": ""
+      "default": "/img/guidebook/vietnamese-coffee.png"
     },
     {
       "key": "guidebook.entry.saigon-street-food",
       "label": "Guidebook · saigon-street-food",
       "selector": ".entry#saigon-street-food .photo",
-      "default": ""
+      "default": "/img/guidebook/saigon-street-food.jpg"
     },
     {
       "key": "guidebook.entry.gia-long-palace",
@@ -150,7 +150,7 @@
       "key": "guidebook.entry.le-thanh-ton",
       "label": "Guidebook · le-thanh-ton",
       "selector": ".entry#le-thanh-ton .photo",
-      "default": ""
+      "default": "/img/guidebook/le-thanh-ton.png"
     },
     {
       "key": "guidebook.entry.saigon-zoo",
@@ -194,25 +194,25 @@
       "key": "home.hero.01",
       "label": "Home Hero · 01 · KAS Passion Boutique",
       "selector": ".home-hero__slide[data-index=\"0\"] img",
-      "default": ""
+      "default": "/img/home/hero-01.jpg"
     },
     {
       "key": "home.hero.02",
       "label": "Home Hero · 02 · KAS Premium Boutique",
       "selector": ".home-hero__slide[data-index=\"1\"] img",
-      "default": ""
+      "default": "/img/home/hero-02.jpg"
     },
     {
       "key": "home.hero.03",
       "label": "Home Hero · 03 · KAS Ancient Luxury",
       "selector": ".home-hero__slide[data-index=\"2\"] img",
-      "default": ""
+      "default": "/img/home/hero-03.jpg"
     },
     {
       "key": "home.hero.04",
       "label": "Home Hero · 04 · KAS Milestone Premium",
       "selector": ".home-hero__slide[data-index=\"3\"] img",
-      "default": ""
+      "default": "/img/home/hero-04.jpg"
     },
     {
       "key": "home.hero.05",
@@ -224,43 +224,43 @@
       "key": "home.hero.06",
       "label": "Home Hero · 06 · KAS Sonata Luxury",
       "selector": ".home-hero__slide[data-index=\"5\"] img",
-      "default": ""
+      "default": "/img/home/hero-06.jpg"
     },
     {
       "key": "home.hero.07",
       "label": "Home Hero · 07 · KAS Eliana Luxury",
       "selector": ".home-hero__slide[data-index=\"6\"] img",
-      "default": ""
+      "default": "/img/home/hero-07.jpg"
     },
     {
       "key": "home.hero.08",
       "label": "Home Hero · 08 · KAS Dilly Luxury",
       "selector": ".home-hero__slide[data-index=\"7\"] img",
-      "default": ""
+      "default": "/img/home/hero-08.jpg"
     },
     {
       "key": "home.heroExtra1",
       "label": "Home Hero · 09 · Ha Long Bay, Vietnam",
       "selector": ".home-hero__slide[data-index=\"8\"] img",
-      "default": ""
+      "default": "/img/home/heroExtra1.jpg"
     },
     {
       "key": "home.heroExtra2",
       "label": "Home Hero · 10 · Hoi An, Vietnam",
       "selector": ".home-hero__slide[data-index=\"9\"] img",
-      "default": ""
+      "default": "/img/home/heroExtra2.jpg"
     },
     {
       "key": "home.heroExtra3",
       "label": "Home Hero · 11 · Vietnam coast",
       "selector": ".home-hero__slide[data-index=\"10\"] img",
-      "default": ""
+      "default": "/img/home/heroExtra3.jpg"
     },
     {
       "key": "home.heroExtra4",
       "label": "Home Hero · 12 · Vietnam landscape",
       "selector": ".home-hero__slide[data-index=\"11\"] img",
-      "default": ""
+      "default": "/img/home/heroExtra4.jpg"
     }
   ],
   "pageHero": [
@@ -268,19 +268,19 @@
       "key": "page.hero.experiences",
       "label": "Trải nghiệm · Ảnh Hero",
       "selector": ".content-page-hero",
-      "default": ""
+      "default": "/img/heroes/experiences.jpg"
     },
     {
       "key": "page.hero.offers",
       "label": "Ưu đãi · Ảnh Hero",
       "selector": ".mship-hero__visual",
-      "default": ""
+      "default": "/img/heroes/offers.jpg"
     },
     {
       "key": "page.hero.my-kas",
       "label": "My KAS · Ảnh Hero",
       "selector": ".hero--mykas-intro",
-      "default": ""
+      "default": "/img/heroes/my-kas.jpg"
     },
     {
       "key": "page.hero.about",
@@ -292,13 +292,13 @@
       "key": "page.hero.support",
       "label": "Hỗ trợ · Ảnh Hero",
       "selector": ".content-page-hero",
-      "default": ""
+      "default": "/img/heroes/support.jpg"
     },
     {
       "key": "page.hero.welcome",
       "label": "Welcome Popup · Ảnh cửa sổ chào mừng",
       "selector": ".kas-welcome__visual img",
-      "default": "https://images.unsplash.com/photo-1503539680555-732099a55a56?auto=format&fit=crop&w=1400&q=90"
+      "default": "/img/heroes/welcome.jpg"
     }
   ]
 }

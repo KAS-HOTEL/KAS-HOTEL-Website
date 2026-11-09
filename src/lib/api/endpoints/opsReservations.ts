@@ -56,7 +56,20 @@ function definedOnly(filters: ReservationSearchFilters): Record<string, string |
   );
 }
 
-export type StayAction = 'check-in' | 'check-out' | 'no-show';
+export type StayAction = 'check-in' | 'check-out' | 'no-show' | 'undo-check-out';
+
+/** A checked-in stay whose guest asked to check out (or whose check-out time passed), V59. */
+export interface CheckoutRequest {
+  readonly reference: string;
+  readonly propertySlug: string;
+  readonly propertyName: string;
+  readonly guestName: string | null;
+  readonly checkIn: string;
+  readonly checkOut: string;
+  readonly requestedAt: string;
+  /** GUEST: the guest pressed "Trả phòng"; AUTO: the check-out time passed. */
+  readonly source: 'GUEST' | 'AUTO' | string;
+}
 
 export interface StayTransition {
   readonly reference: string;
@@ -103,7 +116,13 @@ export const opsReservationsApi = {
       { query: { locale }, ...(cookieHeader === undefined ? {} : { cookieHeader }) },
     ),
 
-  /** `POST /api/v1/admin/ops/reservations/{reference}/{check-in|check-out|no-show}` */
+  /** `GET /api/v1/admin/ops/reservations/checkout-requests` — stays waiting for check-out confirmation. */
+  checkoutRequests: (locale: string, cookieHeader?: string) =>
+    api.get<CheckoutRequest[]>('/api/v1/admin/ops/reservations/checkout-requests', {
+      query: { locale }, ...(cookieHeader === undefined ? {} : { cookieHeader }),
+    }),
+
+  /** `POST /api/v1/admin/ops/reservations/{reference}/{check-in|check-out|no-show|undo-check-out}` */
   transition: (reference: string, action: StayAction) =>
     api.post<StayTransition>(
       `/api/v1/admin/ops/reservations/${encodeURIComponent(reference)}/${action}`,

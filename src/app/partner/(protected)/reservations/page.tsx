@@ -15,6 +15,7 @@ import {
   ReservationResults,
 } from '@/features/reservation/ReservationResults';
 import { reservationSearch } from '@/features/reservation/server';
+import { CheckoutRequestsPanel } from '@/features/reservation/CheckoutRequestsPanel';
 import { serverNow } from '@/features/salesRequest/server';
 import { hotelOptions, roomOptions } from '@/features/reservation/hotelOptions';
 import { isPastEnd } from '@/lib/domain/reservation';
@@ -89,6 +90,9 @@ export default async function PartnerReservationsPage({
   return (
     <div className={styles.page}>
       <PageHeader eyebrow="Vận hành" title="Đặt phòng & khách lưu trú" description="Đặt phòng đã thanh toán và được xác nhận, cùng quá trình lưu trú của khách. Yêu cầu đang chờ xác nhận hoặc chờ thanh toán nằm ở mục Yêu cầu đặt phòng." />
+
+      {/* Stays waiting for SUPER_ADMIN to confirm the check-out (V59). */}
+      <CheckoutRequestsPanel />
 
       {/* Operational views over the same search: stay statuses only, never request statuses. */}
       <Tabs

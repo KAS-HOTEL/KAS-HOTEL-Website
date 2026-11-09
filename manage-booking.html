@@ -13,7 +13,7 @@
 <link rel="stylesheet" href="css/saved-hotels.css">
 
 <style>
-.mykas-banner{height:178px;position:relative;overflow:hidden;background:#403d34 url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=85") center 47%/cover no-repeat}
+.mykas-banner{height:178px;position:relative;overflow:hidden;background:#403d34 url("/img/city-guide/1500530855697-b586d89ba3ee.jpg") center 47%/cover no-repeat}
 .mykas-banner:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,14,12,.25),rgba(14,14,12,.04) 55%,rgba(14,14,12,.24))}
 .mykas-banner__copy{position:absolute;z-index:1;right:max(7%,calc((100vw - 1320px)/2));top:50%;transform:translateY(-50%);color:#fff;font:500 24px/1.08 "Cormorant Garamond",Georgia,serif;max-width:330px}
 .mykas-page{background:#f4f1e9;color:#25241f;padding:22px max(6.3%,calc((100vw - 1320px)/2)) 76px;min-height:50vh}
@@ -598,6 +598,23 @@
           window.KAS_API.requestCancellation(bk.bookingNumber).then(function(){return loadProfile();}).catch(function(error){U.toast(error.message);button.disabled=false;});
         }});
       };actions.appendChild(button);
+    }
+    /* Check-out (V59): the guest asks; SUPER_ADMIN confirms. After the check-out time the request is filed automatically. */
+    if(bk.status==='CHECKED_IN'){
+      if(bk.checkoutRequestedAt){
+        var sent=document.createElement('p');sent.className='mykas-note';sent.setAttribute('role','status');
+        sent.textContent=vi?'Đã gửi yêu cầu trả phòng. KAS sẽ xác nhận trong thời gian sớm nhất.':'Check-out requested. KAS will confirm it shortly.';
+        actions.appendChild(sent);
+      } else {
+        var out=document.createElement('button');out.className='btn btn--primary';out.textContent=vi?'Trả phòng':'Check out';
+        out.onclick=function(){
+          App.modal({title:vi?'Gửi yêu cầu trả phòng?':'Request check-out?',body:vi?'KAS sẽ xác nhận việc trả phòng của bạn. Đơn đặt qua website bằng tài khoản hội viên được tính vào số đơn xét hạng sau khi xác nhận.':'KAS will confirm your check-out. Website bookings made with your member account count towards your tier once confirmed.',ok:vi?'Gửi yêu cầu':'Send request',cancel:vi?'Quay lại':'Back',onOk:function(){
+            out.disabled=true;
+            window.KAS_API.requestCheckout(bk.bookingNumber).then(function(){U.toast(vi?'Đã gửi yêu cầu trả phòng.':'Check-out requested.');return loadProfile();}).catch(function(error){U.toast(error.message);out.disabled=false;});
+          }});
+        };
+        actions.insertBefore(out, actions.firstChild);
+      }
     }
     if(bk.cancellationRequestStatus==='QUOTED'){
       var note=document.createElement('p');note.textContent=(vi?'Phí hủy khách sạn đề nghị: ':'Hotel cancellation fee: ')+view.money(bk.cancellationFeeMinor,bk.cancellationFeeCurrency);actions.appendChild(note);

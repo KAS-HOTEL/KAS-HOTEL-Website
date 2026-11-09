@@ -17,7 +17,7 @@
       adults:stay.adults,children:stay.children,rooms:stay.rooms,total:stay.totalMinor,roomRate:stay.subtotalMinor,currency:stay.currency,
       salesStatus:stay.salesStatus,stayStatus:stay.stayStatus,status:stay.stayStatus || stay.salesStatus,
       createdAt:stay.createdAt,guest:{fullName:stay.guestName || profile.fullName,email:stay.guestEmail || profile.email},specialRequests:stay.specialRequests,
-      paymentVerifiedAt:stay.paymentVerifiedAt,cancellationRequestId:stay.cancellationRequestId,cancellationRequestStatus:stay.cancellationRequestStatus,
+      paymentVerifiedAt:stay.paymentVerifiedAt,cancellationRequestId:stay.cancellationRequestId,cancellationRequestStatus:stay.cancellationRequestStatus,checkoutRequestedAt:stay.checkoutRequestedAt,checkoutRequestSource:stay.checkoutRequestSource,
       cancellationFeeMinor:stay.cancellationFeeMinor,cancellationFeeCurrency:stay.cancellationFeeCurrency,cancellationFeeNote:stay.cancellationFeeNote};
   }
   function money(amount,currency){return amount==null || !Number.isFinite(Number(amount)) ? '—' : new Intl.NumberFormat('vi-VN',{style:'currency',currency:currency || 'VND'}).format(Number(amount)/(currency==='VND' || !currency?1:100));}
