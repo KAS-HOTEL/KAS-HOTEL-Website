@@ -18,6 +18,9 @@ import { useState } from 'react';
 import { messageFor } from '@/features/auth/messages';
 import { mediaApi } from '@/lib/api/endpoints';
 import { StorageUploadError, uploadToStorage } from '@/lib/api/endpoints/media';
+import { intrinsicSize } from './upload';
+import { SelectionBar } from './SelectionBar';
+import { persistOrder, useGalleryArrange } from './useGalleryArrange';
 import { ApiError } from '@/lib/api/errors';
 import {
   coverOf,
@@ -134,6 +137,25 @@ export function RoomMediaManager({
 
   const cover = coverOf(items);
   const primary = items.find((item) => item.link.id === selected) ?? cover ?? items[0];
+  const arrange = useGalleryArrange({
+    ids: items.map((item) => item.link.id),
+    canReorder: busy === null && !uploading,
+    onReorder: (next) => void run('reorder', async () => {
+      await persistOrder(items, next);
+      show('success', 'Đã sắp xếp lại ảnh.');
+    }),
+  });
+  const picked = items.filter((item) => arrange.isSelected(item.link.id));
+
+  /** Removes every selected photo except the main one, which the room keeps. */
+  function removeSelected() {
+    const targets = picked.filter((item) => !item.link.isCover);
+    return run('remove-many', async () => {
+      for (const item of targets) await mediaApi.detach(item.asset.id, item.link.id);
+      arrange.clear();
+      show('success', `Đã gỡ ${targets.length} ảnh khỏi phòng.`);
+    });
+  }
 
   async function refresh(): Promise<void> {
     await revalidateRoomGallery(propertyId, roomTypeId);
@@ -396,9 +418,29 @@ export function RoomMediaManager({
             </figure>
           ) : null}
 
-          <ul className={styles.roomThumbs}>
+          <SelectionBar
+            total={items.length}
+            selected={picked.length}
+            removable={picked.filter((item) => !item.link.isCover).length}
+            busy={busy !== null || uploading}
+            coverLabel="Ảnh chính"
+            onSelectAll={arrange.selectAll}
+            onClear={arrange.clear}
+            onRemove={() => void removeSelected()}
+          />
+          <ul className={`${styles.roomThumbs} ${styles.arrangeGrid}`} {...arrange.containerProps}>
+            {arrange.box ? <li aria-hidden="true" className={styles.marquee} style={arrange.box} /> : null}
             {items.map((item, index) => (
-              <li key={item.link.id} className={styles.roomThumb}>
+              <li key={item.link.id} className={styles.roomThumb} {...arrange.itemProps(item.link.id)}>
+                <label className={styles.pick}>
+                  <input
+                    type="checkbox"
+                    checked={arrange.isSelected(item.link.id)}
+                    onChange={() => undefined}
+                    onClick={(event) => arrange.toggle(item.link.id, event)}
+                    aria-label={`Chọn ảnh ${index + 1}`}
+                  />
+                </label>
                 <button
                   type="button"
                   className={styles.roomThumbButton}
@@ -503,16 +545,3 @@ function reasonFor(caught: unknown): string {
   return 'lỗi không xác định';
 }
 
-async function intrinsicSize(file: File): Promise<{ width?: number; height?: number }> {
-  if (typeof createImageBitmap !== 'function') {
-    return {};
-  }
-  try {
-    const bitmap = await createImageBitmap(file);
-    const size = { width: bitmap.width, height: bitmap.height };
-    bitmap.close();
-    return size;
-  } catch {
-    return {};
-  }
-}

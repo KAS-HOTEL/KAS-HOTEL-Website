@@ -99,8 +99,9 @@ describe('detail view — manual payment workflow', () => {
     expect(text).not.toMatch(/Phân công|Nhận xử lý|người phụ trách này/);
     expect(screen.queryByRole('button', { name: /Assign/i })).toBeNull();
 
-    // With the contact panel removed, no select is left on the page at all.
-    expect(screen.queryAllByRole('combobox')).toEqual([]);
+    // With the contact panel removed, the only select left is the cancel form's
+    // "who asked" (2026-11-07) — no owner / assignment picker.
+    expect(screen.queryAllByRole('combobox').map((select) => select.id)).toEqual(['cancel-reason-requested-by']);
   });
 
   it('introduces no payment control — B12 was answered pay-at-hotel', () => {

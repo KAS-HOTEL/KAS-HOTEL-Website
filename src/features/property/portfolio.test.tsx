@@ -21,6 +21,16 @@ vi.mock('./server', () => ({
 vi.mock('@/features/media/server', () => ({
   mediaCovers: (...a: unknown[]) => mediaCovers(...a),
 }));
+// The list counts each hotel's room types; none here.
+vi.mock('@/features/roomType/server', () => ({
+  roomTypeList: async () => ({ status: 'ok', roomTypes: [] }),
+}));
+// Draft rows carry a "Xoá" button (DeleteDraftButton), which uses the router and toasts.
+vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: vi.fn(), push: vi.fn() }) }));
+vi.mock('@/ui/primitives', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  useToast: () => ({ show: vi.fn() }),
+}));
 
 const PortfolioPage = await import('@/app/partner/(protected)/properties/page');
 const { PortfolioFilters } = await import('./PortfolioFilters');
@@ -343,10 +353,11 @@ describe('the portfolio on a phone', () => {
 
     render(await PortfolioPage.default({ searchParams: Promise.resolve({}) }));
 
-    // PropertyAdminView carries no room count, occupancy, rating or revenue.
-    // A card is where those would be tempting to add.
+    // The room-type count is real: it comes from the hotel's room-type list.
+    // Occupancy, rating and revenue are not returned and must not appear.
     const card = inCards().getByRole('link', { name: /Số 1/ });
-    expect(card.textContent).not.toMatch(/phòng|đánh giá|doanh thu|lấp đầy|%/i);
+    expect(card.textContent).toMatch(/0 hạng phòng/);
+    expect(card.textContent).not.toMatch(/đánh giá|doanh thu|lấp đầy|%/i);
   });
 });
 

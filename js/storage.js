@@ -160,36 +160,45 @@
   function isVi() { return !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi'); }
   function savedToast(text) { if (global.U && global.U.toast) global.U.toast(text); }
 
+  /* Hotels whose save/remove is on its way to the server: a second click on any
+     of their hearts is ignored until the answer arrives (2026-11-07). */
+  var savingIds = Object.create(null);
+  function isHotelSaving(id) { return !!savingIds[String(id)]; }
+  /* Not optimistic (owner decision 2026-11-07): the hearts change only once the
+     server has confirmed, and the server's list is what they then show. */
   function setSaved(id, saved) {
     var key = String(id), slug = slugForHotel(key);
     if (!slug || !global.KAS_API) return Promise.resolve(isHotelSaved(key));
-    var before = savedIds.slice();
-    /* Optimistic: every button flips now; the server's answer then wins. */
-    savedIds = savedIds.filter(function (x) { return x !== key; });
-    if (saved) savedIds.unshift(key);
-    notifySavedHotels();
-    return global.KAS_API.request('/api/v1/me/favorites/' + encodeURIComponent(slug), { method: saved ? 'PUT' : 'DELETE' })
-      .then(function (payload) { savedIds = fromServer(payload); notifySavedHotels(); return isHotelSaved(key); })
+    if (savingIds[key]) return savingIds[key];
+    var request = global.KAS_API.request('/api/v1/me/favorites/' + encodeURIComponent(slug), { method: saved ? 'PUT' : 'DELETE' })
+      .then(function (payload) { savedIds = fromServer(payload); return isHotelSaved(key); })
       .catch(function (error) {
-        savedIds = before;
-        notifySavedHotels();
         if (error && (error.status === 401 || error.status === 403)) { savedSignedIn = false; askToSignIn(key); }
         else savedToast(isVi() ? 'Chưa lưu được, vui lòng thử lại.' : 'Could not update Saved. Please try again.');
-        return isHotelSaved(key);
+        return null;
+      })
+      .then(function (result) {
+        delete savingIds[key];
+        notifySavedHotels();
+        return result;
       });
+    savingIds[key] = request;
+    notifySavedHotels();
+    return request;
   }
   function askToSignIn(id) {
     try { sessionStorage.setItem(PENDING_SAVE, String(id)); } catch (e) {}
     savedToast(isVi() ? 'Đăng nhập để lưu khách sạn vào My KAS.' : 'Sign in to save hotels to My KAS.');
     if (global.App && global.App.openAuth) global.App.openAuth('login');
   }
-  /* Returns the intended state at once (true = saved), or null when the visitor
-     must sign in first — the sign-in dialog opens and the save completes after. */
+  /* Returns null when the visitor must sign in first (the sign-in dialog opens and
+     the save completes after) or the hotel is already being saved; otherwise a
+     promise of the confirmed state — true saved, false not saved, null failed. */
   function toggleSavedHotel(id) {
     if (savedSignedIn !== true) { askToSignIn(id); return null; }
-    var next = !isHotelSaved(id);
-    setSaved(id, next);
-    return next;
+    if (isHotelSaving(id)) return null;
+    var wanted = !isHotelSaved(id);
+    return setSaved(id, wanted);
   }
   function removeSavedHotel(id) { if (savedSignedIn === true) setSaved(id, false); }
 
@@ -238,7 +247,7 @@
     getSearch: getSearch, setSearch: setSearch,
     getCurrent: getCurrent, setCurrent: setCurrent, patchCurrent: patchCurrent, clearCurrent: clearCurrent,
     getGuest: getGuest, setGuest: setGuest, clearGuestDetails: clearGuestDetails,
-    getSavedHotels: getSavedHotels, isHotelSaved: isHotelSaved, toggleSavedHotel: toggleSavedHotel, removeSavedHotel: removeSavedHotel,
+    getSavedHotels: getSavedHotels, isHotelSaved: isHotelSaved, isHotelSaving: isHotelSaving, toggleSavedHotel: toggleSavedHotel, removeSavedHotel: removeSavedHotel,
     savedHotelsSignedIn: savedHotelsSignedIn, loadSavedHotels: loadSavedHotels
   };
 })(window);

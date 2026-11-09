@@ -13,18 +13,21 @@
  */
 
 import { useRouter } from 'next/navigation';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { messageFor } from '@/features/auth/messages';
 import { mediaApi } from '@/lib/api/endpoints';
 import { StorageUploadError, uploadToStorage } from '@/lib/api/endpoints/media';
 import { ApiError } from '@/lib/api/errors';
 import {
   coverOf,
-  MEDIA_CATEGORIES,
+  GALLERY_GROUPS,
+  galleryGroupCounts,
+  galleryGroupOf,
   MEDIA_MIME_TYPES,
   mediaCategoryLabel,
   mediaStatusLabel,
   nextDisplayOrder,
+  type GalleryGroupKey,
   type GalleryItem,
   type MediaAssetView,
   type MediaCategory,
@@ -33,6 +36,9 @@ import {
 import { Button, EmptyState, Select, useToast } from '@/ui/primitives';
 import { revalidateGallery } from './actions';
 import { ExternalMediaForm } from './ExternalMediaForm';
+import { intrinsicSize, isSupportedImage, storageMessage } from './upload';
+import { SelectionBar } from './SelectionBar';
+import { persistOrder, useGalleryArrange } from './useGalleryArrange';
 import styles from './Media.module.css';
 import propertyStyles from '@/features/property/Property.module.css';
 
@@ -84,9 +90,11 @@ export function PropertyMediaManager({
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [category, setCategory] = useState<MediaCategory>('EXTERIOR');
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<readonly File[]>([]);
   const [attachId, setAttachId] = useState('');
   const [dragging, setDragging] = useState(false);
+  /** The gallery group shown; reordering needs the whole gallery, so only on "all". */
+  const [group, setGroup] = useState<'all' | GalleryGroupKey>('all');
   /**
    * The real `<input type="file">`, kept so its value can be cleared.
    *
@@ -96,14 +104,43 @@ export function PropertyMediaManager({
    */
   const fileInput = useRef<HTMLInputElement>(null);
 
-  /** One place to take a file, whether it was dropped or chosen. */
-  function choose(picked: File | null): void {
+  /** One place to take files, whether they were dropped or chosen. */
+  function choose(picked: readonly File[]): void {
     setError(null);
-    setFile(picked);
+    setFiles(picked);
     setDragging(false);
   }
 
+  /** Previews of the chosen files, revoked when the choice changes. */
+  const previews = useMemo(
+    () => files.map((chosen) => ({ file: chosen, url: URL.createObjectURL(chosen) })),
+    [files],
+  );
+  useEffect(() => () => previews.forEach((preview) => URL.revokeObjectURL(preview.url)), [previews]);
+
   const cover = coverOf(items);
+  const counts = useMemo(() => galleryGroupCounts(items.map((item) => item.asset.category)), [items]);
+  const shown = useMemo(
+    () => items
+      .map((item, index) => ({ item, index }))
+      .filter(({ item }) => group === 'all' || galleryGroupOf(item.asset.category) === group),
+    [items, group],
+  );
+  const arrange = useGalleryArrange({
+    ids: shown.map(({ item }) => item.link.id),
+    canReorder: group === 'all' && busy === null,
+    onReorder: (next) => void run('reorder', () => persistOrder(items, next), 'Đã sắp xếp lại ảnh.'),
+  });
+  const picked = items.filter((item) => arrange.isSelected(item.link.id));
+
+  /** Removes every selected photo except the cover, which a gallery must keep. */
+  function removeSelected() {
+    const targets = picked.filter((item) => !item.link.isCover);
+    return run('remove-many', async () => {
+      for (const item of targets) await mediaApi.detach(item.asset.id, item.link.id);
+      arrange.clear();
+    }, `Đã gỡ ${targets.length} ảnh khỏi khách sạn.`);
+  }
 
   /** Library assets not already placed on this property. */
   const attachable = useMemo(() => {
@@ -145,40 +182,52 @@ export function PropertyMediaManager({
    * before a request rather than after one.
    */
   function upload() {
-    if (file === null) {
+    if (files.length === 0) {
       return undefined;
     }
-    const chosen = file;
-    if (!isSupported(chosen.type)) {
+    const chosen = [...files];
+    if (chosen.some((one) => !isSupportedImage(one.type))) {
       setError('Định dạng ảnh không được hỗ trợ. Hãy dùng JPEG, PNG, WebP hoặc AVIF.');
       return undefined;
     }
 
+    // One URL per asset, so several photos are several uploads, one after another,
+    // each placed after the last.
     return run(
       'upload',
       async () => {
-        const dimensions = await intrinsicSize(chosen);
-        const minted = await mediaApi.uploadUrl({
-          mimeType: chosen.type as MediaMimeType,
-          category,
-          ...dimensions,
-        }, { ownerType: 'PROPERTY', ownerId: propertyId });
+        let order = nextDisplayOrder(items);
+        for (const one of chosen) {
+          const dimensions = await intrinsicSize(one);
+          const minted = await mediaApi.uploadUrl({
+            mimeType: one.type as MediaMimeType,
+            category,
+            ...dimensions,
+          }, { ownerType: 'PROPERTY', ownerId: propertyId });
 
-        await uploadToStorage(minted.uploadUrl, chosen);
-        const asset = await mediaApi.complete(minted.mediaAssetId);
+          await uploadToStorage(minted.uploadUrl, one);
+          const asset = await mediaApi.complete(minted.mediaAssetId);
 
-        await mediaApi.attach(asset.id, {
-          ownerType: 'PROPERTY',
-          ownerId: propertyId,
-          displayOrder: nextDisplayOrder(items),
-        });
-        setFile(null);
+          await mediaApi.attach(asset.id, { ownerType: 'PROPERTY', ownerId: propertyId, displayOrder: order });
+          order += 1;
+        }
+        setFiles([]);
         if (fileInput.current !== null) {
           fileInput.current.value = '';
         }
       },
-      'Đã tải ảnh lên và gắn vào khách sạn.',
+      chosen.length === 1 ? 'Đã tải ảnh lên và gắn vào khách sạn.' : `Đã tải ${chosen.length} ảnh lên khách sạn.`,
     );
+  }
+
+  /** Files a photo under another gallery group; a photo already in the group is left as it is. */
+  function regroup(item: GalleryItem, key: GalleryGroupKey) {
+    const target = GALLERY_GROUPS.find((g) => g.key === key);
+    if (!target || galleryGroupOf(item.asset.category) === key) {
+      return undefined;
+    }
+    return run(`category-${item.link.id}`, () => mediaApi.setCategory(item.asset.id, target.primary),
+      `Đã chuyển ảnh sang “${target.label}”.`);
   }
 
   function attachExisting() {
@@ -273,19 +322,64 @@ export function PropertyMediaManager({
           </p>
         ) : null}
 
+        {items.length === 0 ? null : (
+          <div className={styles.groupFilter} role="group" aria-label="Lọc ảnh theo danh mục">
+            <button type="button" className={styles.groupChip} aria-pressed={group === 'all'}
+              onClick={() => setGroup('all')}>
+              Tất cả <span>{items.length}</span>
+            </button>
+            {GALLERY_GROUPS.map((g) => (
+              <button key={g.key} type="button" className={styles.groupChip} aria-pressed={group === g.key}
+                onClick={() => setGroup(g.key)}>
+                {g.label} <span>{counts[g.key]}</span>
+              </button>
+            ))}
+          </div>
+        )}
+        {group !== 'all' && shown.length > 0 ? (
+          <p className={styles.sectionNote}>Chọn “Tất cả” để đổi thứ tự ảnh.</p>
+        ) : null}
+        {shown.length > 0 ? (
+          <SelectionBar
+            total={shown.length}
+            selected={picked.length}
+            removable={picked.filter((item) => !item.link.isCover).length}
+            busy={busy !== null}
+            coverLabel="Ảnh đại diện"
+            onSelectAll={arrange.selectAll}
+            onClear={arrange.clear}
+            onRemove={() => void removeSelected()}
+          />
+        ) : null}
+
         {items.length === 0 ? (
           <EmptyState title="Khách sạn chưa có ảnh nào">
             Tải ảnh lên bên dưới, rồi chọn một ảnh làm ảnh đại diện.
           </EmptyState>
+        ) : shown.length === 0 ? (
+          <EmptyState title="Chưa có ảnh trong danh mục này">
+            Chọn danh mục khác, hoặc đổi danh mục của một ảnh có sẵn.
+          </EmptyState>
         ) : (
-          <ul className={styles.grid}>
-            {items.map((item, index) => (
+          <ul className={`${styles.grid} ${styles.arrangeGrid}`} {...arrange.containerProps}>
+            {arrange.box ? <li aria-hidden="true" className={styles.marquee} style={arrange.box} /> : null}
+            {shown.map(({ item, index }) => (
               <li
                 key={item.link.id}
                 className={styles.tile}
                 data-cover={item.link.isCover || undefined}
+                {...arrange.itemProps(item.link.id)}
               >
                 <div className={styles.tileImageWrap}>
+                  <label className={styles.pick}>
+                    <input
+                      type="checkbox"
+                      checked={arrange.isSelected(item.link.id)}
+                      onChange={() => undefined}
+                      onClick={(event) => arrange.toggle(item.link.id, event)}
+                      aria-label={`Chọn ảnh ${index + 1}`}
+                    />
+                  </label>
                   {item.asset.url === null ? (
                     <span className={styles.tileBlank}>Không có bản xem trước</span>
                   ) : (
@@ -304,9 +398,15 @@ export function PropertyMediaManager({
                   {/* The category is what an operator recognises. The asset id was
                       here and is not any more: it identifies a row, not a
                       photograph. */}
-                  <span className={styles.tileCategory}>
-                    {mediaCategoryLabel(item.asset.category)}
-                  </span>
+                  <select
+                    className={styles.tileCategorySelect}
+                    aria-label={`Danh mục của ảnh ${index + 1}`}
+                    value={galleryGroupOf(item.asset.category)}
+                    disabled={busy !== null}
+                    onChange={(event) => void regroup(item, event.target.value as GalleryGroupKey)}
+                  >
+                    {GALLERY_GROUPS.map((g) => <option key={g.key} value={g.key}>{g.label}</option>)}
+                  </select>
                   <span className={styles.tileStatus}>{mediaStatusLabel(item.link.status)}</span>
                 </div>
 
@@ -314,7 +414,7 @@ export function PropertyMediaManager({
                   <button
                     type="button"
                     className={styles.tileAction}
-                    disabled={index === 0 || busy !== null}
+                    disabled={group !== 'all' || index === 0 || busy !== null}
                     onClick={() => void move(index, -1)}
                     aria-label={`Chuyển ảnh ${index + 1} lên trước`}
                   >
@@ -323,7 +423,7 @@ export function PropertyMediaManager({
                   <button
                     type="button"
                     className={styles.tileAction}
-                    disabled={index === items.length - 1 || busy !== null}
+                    disabled={group !== 'all' || index === items.length - 1 || busy !== null}
                     onClick={() => void move(index, 1)}
                     aria-label={`Chuyển ảnh ${index + 1} xuống sau`}
                   >
@@ -393,24 +493,21 @@ export function PropertyMediaManager({
           <div className={styles.uploadSide}>
             <Select
               id="media-category"
-              label="Hạng mục"
+              label="Danh mục"
               required
               value={category}
               onChange={(event) => setCategory(event.target.value as MediaCategory)}
-              options={MEDIA_CATEGORIES.map((value) => ({
-                value,
-                label: mediaCategoryLabel(value),
-              }))}
+              options={GALLERY_GROUPS.map((g) => ({ value: g.primary, label: g.label }))}
             />
-            <Button onClick={upload} disabled={busy !== null || file === null}>
-              {busy === 'upload' ? 'Đang tải lên…' : 'Tải ảnh lên'}
+            <Button onClick={upload} disabled={busy !== null || files.length === 0}>
+              {busy === 'upload' ? 'Đang tải lên…' : files.length > 1 ? `Tải ${files.length} ảnh lên` : 'Tải ảnh lên'}
             </Button>
           </div>
 
           <div
             className={styles.dropzone}
             data-dragging={dragging ? 'true' : undefined}
-            data-chosen={file === null ? undefined : 'true'}
+            data-chosen={files.length === 0 ? undefined : 'true'}
             onDragOver={(event) => {
               event.preventDefault();
               setDragging(true);
@@ -418,10 +515,7 @@ export function PropertyMediaManager({
             onDragLeave={() => setDragging(false)}
             onDrop={(event) => {
               event.preventDefault();
-              // One photograph at a time, as before: the upload mints a single
-              // URL per asset, so a multi-file drop takes the first and says so
-              // by simply showing which one it took.
-              choose(event.dataTransfer.files[0] ?? null);
+              choose(Array.from(event.dataTransfer.files));
             }}
           >
             {/*
@@ -436,12 +530,13 @@ export function PropertyMediaManager({
               className={styles.dropzoneInput}
               id="media-file"
               type="file"
+              multiple
               aria-label="Chọn tệp ảnh"
               accept={MEDIA_MIME_TYPES.join(',')}
-              onChange={(event) => choose(event.target.files?.[0] ?? null)}
+              onChange={(event) => choose(Array.from(event.target.files ?? []))}
             />
 
-            {file === null ? (
+            {files.length === 0 ? (
               <label className={styles.dropzoneBody} htmlFor="media-file">
                 <svg
                   className={styles.dropzoneIcon}
@@ -458,17 +553,25 @@ export function PropertyMediaManager({
                   <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
                 </svg>
                 <span className={styles.dropzoneTitle}>Chọn tệp ảnh</span>
-                <span className={styles.dropzoneHint}>Kéo thả ảnh vào đây hoặc chọn tệp</span>
+                <span className={styles.dropzoneHint}>Kéo thả một hoặc nhiều ảnh vào đây, hoặc chọn tệp</span>
                 <span className={styles.dropzoneTypes}>JPEG, PNG, WebP, AVIF</span>
               </label>
             ) : (
               <div className={styles.dropzoneChosen}>
-                <span className={styles.dropzoneFile}>{file.name}</span>
-                <span className={styles.dropzoneTypes}>{fileSize(file.size)}</span>
+                {/* Seen before saving: each chosen photo, its name and size. */}
+                <ul className={styles.previewList} aria-label="Ảnh sẽ tải lên">
+                  {previews.map((preview) => (
+                    <li key={preview.url} className={styles.previewItem}>
+                      <img className={styles.previewImage} src={preview.url} alt="" />
+                      <span className={styles.dropzoneFile}>{preview.file.name}</span>
+                      <span className={styles.dropzoneTypes}>{fileSize(preview.file.size)}</span>
+                    </li>
+                  ))}
+                </ul>
                 <Button
                   variant="secondary"
                   onClick={() => {
-                    choose(null);
+                    choose([]);
                     if (fileInput.current !== null) {
                       fileInput.current.value = '';
                     }
@@ -510,8 +613,8 @@ export function PropertyMediaManager({
         ) : null}
 
         <p className={styles.uploadNote}>
-          Ảnh được tải thẳng lên kho lưu trữ, không đi qua máy chủ KAS. Sau khi tải lên, ảnh cần mô
-          tả (alt text) ở cả hai ngôn ngữ trước khi KAS duyệt và hiển thị cho khách.
+          Ảnh tải lên hoặc gắn vào sẽ hiện ngay trên website. Mô tả ảnh (alt text) được tự đặt theo
+          tên khách sạn hoặc hạng phòng và nhóm ảnh, bằng tiếng Việt và tiếng Anh.
         </p>
       </section>
     </div>
@@ -535,59 +638,5 @@ function fileSize(bytes: number): string {
     : `${new Intl.NumberFormat('vi-VN', { maximumFractionDigits: 1 }).format(kb / 1024)} MB`;
 }
 
-/** The allowlist the backend enforces, checked here so a refusal is immediate. */
-function isSupported(mimeType: string): mimeType is MediaMimeType {
-  return (MEDIA_MIME_TYPES as readonly string[]).includes(mimeType);
-}
 
-/**
- * The image's own pixel dimensions, when the browser will say.
- *
- * Optional metadata, and honestly so: `RegisterMediaRequest` marks width and
- * height optional, and the backend records them as *declared* rather than
- * verified — deriving them server-side means decoding the whole file, which is
- * the processing stage EXIF stripping and derivatives also wait on.
- *
- * Any failure returns nothing rather than guessing. A browser without
- * `createImageBitmap`, a decoder that refuses the file, a test environment with
- * no image support — none of them should stop an upload over metadata.
- */
-async function intrinsicSize(file: File): Promise<{ width?: number; height?: number }> {
-  if (typeof createImageBitmap !== 'function') {
-    return {};
-  }
-  try {
-    const bitmap = await createImageBitmap(file);
-    const size = { width: bitmap.width, height: bitmap.height };
-    bitmap.close();
-    return size;
-  } catch {
-    return {};
-  }
-}
 
-/**
- * What to tell the Partner when the direct upload fails.
- *
- * Two genuinely different failures, and the reason they are not one message:
- *
- * - **No status.** The browser never completed the request. For a cross-origin
- *   `PUT` carrying `Content-Type` that almost always means the CORS preflight
- *   was refused — the bucket has no rule allowing this origin. Nothing a Partner
- *   can do; it is a storage configuration fix.
- * - **A status.** Storage answered and said no — an expired URL (they are
- *   short-lived), a signature that no longer matches, a file that is too large.
- *   Retrying is usually the right move, so the message says so.
- *
- * The status is included because it is the one detail that makes the difference
- * diagnosable, and it discloses nothing: it is a number, not a bucket, an
- * endpoint or a credential.
- */
-function storageMessage(error: StorageUploadError): string {
-  if (error.status === null) {
-    return 'Không gửi được ảnh tới kho lưu trữ. Kho lưu trữ chưa cho phép tải lên từ địa chỉ '
-      + 'này — cần cấu hình CORS cho bucket. Hãy báo cho quản trị hệ thống.';
-  }
-  return `Kho lưu trữ từ chối tệp (HTTP ${error.status}). Liên kết tải lên có thể đã hết hạn — `
-    + 'hãy thử tải lên lại.';
-}

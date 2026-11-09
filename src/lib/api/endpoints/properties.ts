@@ -124,6 +124,9 @@ export const propertiesApi = {
    * **Inventory and rates are not preconditions** — the OQ-101 ruling makes them
    * business inputs for sellability, not conditions of the lifecycle.
    */
+  /** `DELETE /api/v1/admin/properties/{id}` — ADMIN only; a never-published draft, else 409. */
+  remove: (propertyId: string) => api.delete<void>(`${BASE}/${encodeURIComponent(propertyId)}`),
+
   publish: (propertyId: string, body: PublishPropertyRequest) =>
     api.post<PropertyAdminView>(`${BASE}/${encodeURIComponent(propertyId)}/publish`, body),
 

@@ -15,6 +15,6 @@ import { revalidatePath } from 'next/cache';
  * rather than patched in place from the response.
  */
 export async function revalidateRates(propertyId: string): Promise<void> {
-  revalidatePath(`/partner/properties/${propertyId}/rates`, 'page');
-  revalidatePath(`/partner/properties/${propertyId}/calendar`, 'page');
+  revalidatePath(`/partner/pricing/${propertyId}`, 'page');
+  revalidatePath(`/partner/pricing/${propertyId}/advanced`, 'page');
 }

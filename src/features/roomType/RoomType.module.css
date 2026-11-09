@@ -303,3 +303,37 @@
     display: block;
   }
 }
+
+/* Room type display order (2026-11-08). */
+.orderButtons {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1, 4px);
+  flex-wrap: wrap;
+}
+
+.orderButton {
+  width: 36px;
+  height: 36px;
+  border: var(--border-width-subtle, 1px) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.orderButton:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.orderButton:focus-visible {
+  outline: 2px solid var(--accent-700);
+  outline-offset: 2px;
+}
+
+.orderError {
+  font-size: var(--text-caption);
+  color: var(--danger-700, #a6442f);
+}

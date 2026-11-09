@@ -3,7 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@/ui/icons', () => ({
-  BuildingIcon: () => null, GuestsIcon: () => null, InboxIcon: () => null, LayoutIcon: () => null, MailIcon: () => null, TagIcon: () => null,
+  BuildingIcon: () => null, CalendarIcon: () => null, GuestsIcon: () => null, InboxIcon: () => null, LayoutIcon: () => null, MailIcon: () => null, TagIcon: () => null,
 }));
 
 const { ADMIN_NAV, SUPER_ADMIN_NAV, consoleWordmark, navFor } = await import('./navigation');
@@ -33,7 +33,8 @@ describe('the two consoles', () => {
   it('keeps every SUPER_ADMIN-only screen out of the Admin menu', () => {
     const admin = hrefs(ADMIN_NAV);
     for (const href of ['/partner', '/partner/requests', '/partner/reservations', '/partner/cancellation-requests',
-      '/partner/messages', '/admin/customers', '/admin/vouchers', '/partner/payment-account']) {
+      '/partner/messages', '/admin/customers', '/admin/vouchers', '/partner/payment-account',
+      '/partner/pricing', '/partner/surcharges', '/admin/reviews']) {
       expect(admin).not.toContain(href);
     }
   });

@@ -2,8 +2,6 @@ import { cookies } from 'next/headers';
 import { cache } from 'react';
 import { loadPropertyDetail, loadPropertyList } from './load';
 import type { PropertyDetailResult, PropertyListResult } from './load';
-import { loadPublishingBoard } from './publishing';
-import type { PublishingBoardResult } from './publishing';
 
 /**
  * The Next-bound wrappers around `load.ts`.
@@ -30,7 +28,3 @@ export const propertyDetail = cache(async (propertyId: string): Promise<Property
   return loadPropertyDetail(propertyId, (await cookies()).toString());
 });
 
-/** The Admin publishing board — properties, covers, open submissions, checklists. */
-export const publishingBoard = cache(async (): Promise<PublishingBoardResult> => {
-  return loadPublishingBoard((await cookies()).toString());
-});

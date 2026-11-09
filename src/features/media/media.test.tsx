@@ -300,7 +300,7 @@ describe('adding an image', () => {
     attach.mockResolvedValue(link('new-link', 'new-asset'));
     render(<PropertyMediaManager propertyId={PROPERTY} items={[]} library={[]} />);
 
-    await userEvent.selectOptions(screen.getByLabelText(/Hạng mục/), 'ROOFTOP');
+    await userEvent.selectOptions(document.getElementById('media-category') as HTMLSelectElement, 'DINING');
     await userEvent.upload(
       screen.getByLabelText(/Chọn tệp ảnh/),
       new File([new Uint8Array([0x52, 0x49, 0x46, 0x46])], 'a.webp', { type: 'image/webp' }),
@@ -310,7 +310,7 @@ describe('adding an image', () => {
     // The type comes from the file, not a dropdown: the browser knows what was
     // picked, and the signature binds that type at storage.
     await waitFor(() => expect(uploadUrl).toHaveBeenCalled());
-    expect(uploadUrl.mock.calls[0]).toEqual([{ mimeType: 'image/webp', category: 'ROOFTOP' }, { ownerType: 'PROPERTY', ownerId: PROPERTY }]);
+    expect(uploadUrl.mock.calls[0]).toEqual([{ mimeType: 'image/webp', category: 'DINING' }, { ownerType: 'PROPERTY', ownerId: PROPERTY }]);
   });
 
   it('will not even select a type outside the allowlist', async () => {

@@ -32,6 +32,3 @@ export interface Customer {
   avatarUrl?: string | null;
 }
 export type UpdateCustomer = Pick<Customer, 'fullName' | 'phone' | 'country' | 'locale'>;
-export interface TripRating {
-  quarterStart: string; rating: number; reviewCount: number; sourceUrl: string; observedOn: string;
-}

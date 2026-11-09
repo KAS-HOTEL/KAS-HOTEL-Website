@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { formatBeds, roomTypeName, viewTypeLabel, type RoomTypeView } from '@/lib/domain/roomType';
 import { Table, type Column } from '@/ui/primitives';
+import { RoomTypeOrderButtons } from './RoomTypeOrderButtons';
 import { RoomTypeStatusBadge } from './RoomTypeStatusBadge';
 import styles from './RoomType.module.css';
 
@@ -34,7 +35,20 @@ export function RoomTypeTable({
   readonly roomTypes: readonly RoomTypeView[];
   readonly loading?: boolean;
 }) {
+  const order = roomTypes.map((roomType) => ({ id: roomType.id, sortOrder: roomType.sortOrder }));
   const columns: readonly Column<RoomTypeView>[] = [
+    {
+      key: 'order',
+      header: 'Thứ tự',
+      cell: (roomType) => (
+        <RoomTypeOrderButtons
+          propertyId={propertyId}
+          order={order}
+          index={roomTypes.findIndex((row) => row.id === roomType.id)}
+          name={roomTypeName(roomType.translations) ?? roomType.slug}
+        />
+      ),
+    },
     {
       key: 'identity',
       header: 'Loại phòng',
@@ -116,9 +130,8 @@ export function RoomTypeTable({
           // concept and the route forward rather than looking like a failure.
           <>
             Loại phòng là sản phẩm khách đặt — ví dụ “Phòng Deluxe Giường King” — gồm sức chứa, cấu
-            hình giường, hướng nhìn và tiện nghi. Mỗi khách sạn cần ít nhất một loại phòng trước
-            khi có thể gửi duyệt. Việc tạo và chỉnh sửa loại phòng sẽ có ở bước tiếp theo; màn hình
-            này hiện chỉ để xem.
+            hình giường, hướng nhìn và tiện nghi. Khách sạn cần ít nhất một loại phòng trước khi
+            công bố. Bấm “Thêm loại phòng” để tạo loại phòng đầu tiên.
           </>
         }
       />

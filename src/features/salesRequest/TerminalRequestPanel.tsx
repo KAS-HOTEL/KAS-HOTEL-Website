@@ -4,7 +4,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { messageFor as sharedMessageFor } from '@/features/auth/messages';
 import { ApiError } from '@/lib/api/errors';
-import { Button, Card, Textarea, useToast } from '@/ui/primitives';
+import type { CancelOptions } from '@/lib/api/endpoints/salesRequests';
+import { Button, Card, Select, Textarea, useToast } from '@/ui/primitives';
 import styles from './SalesRequest.module.css';
 
 /**
@@ -32,20 +33,27 @@ export function TerminalRequestPanel({
   reference,
   copy,
   submit: send,
+  cancelOptions = false,
 }: {
   readonly reference: string;
   readonly copy: TerminalCopy;
   /** The endpoint this panel drives — the only behavioural difference. */
-  readonly submit: (reference: string, reason: string) => Promise<void>;
+  readonly submit: (reference: string, reason: string, options?: CancelOptions) => Promise<void>;
+  /** The cancel panel also records who asked and, when needed, the payment check (2026-11-07). */
+  readonly cancelOptions?: boolean;
 }) {
   const router = useRouter();
   const toast = useToast();
   const [reason, setReason] = useState('');
   const [state, setState] = useState<'idle' | 'confirming' | 'submitting' | 'error'>('idle');
   const [problem, setProblem] = useState<string | null>(null);
+  const [requestedBy, setRequestedBy] = useState<'' | 'GUEST' | 'KAS'>('');
+  const [paymentReported, setPaymentReported] = useState(false);
+  const [paymentChecked, setPaymentChecked] = useState(false);
 
   const busy = state === 'submitting';
-  const ready = reason.trim() !== '';
+  const ready = reason.trim() !== '' && (!cancelOptions || requestedBy !== '')
+    && (!paymentReported || paymentChecked);
 
   async function submit(): Promise<void> {
     if (busy) {
@@ -54,7 +62,11 @@ export function TerminalRequestPanel({
     setState('submitting');
     setProblem(null);
     try {
-      await send(reference, reason.trim());
+      await (cancelOptions
+        ? send(reference, reason.trim(), requestedBy === ''
+          ? { paymentChecked }
+          : { requestedBy, paymentChecked })
+        : send(reference, reason.trim()));
       // The server owns the new state. Re-read rather than patching a local copy,
       // so the screen can never show a status the record does not have.
       router.refresh();
@@ -62,6 +74,14 @@ export function TerminalRequestPanel({
         toast.show('success', copy.success);
       }
     } catch (caught) {
+      if (cancelOptions && caught instanceof ApiError
+        && caught.details.some((detail) => detail.code === 'PAYMENT_REPORTED_CHECK_FIRST')) {
+        // The guest said they transferred: staff check the account before cancelling.
+        setPaymentReported(true);
+        setProblem(PAYMENT_REPORTED_MESSAGE);
+        setState('error');
+        return;
+      }
       setProblem(messageFor(caught, copy));
       setState('error');
     }
@@ -82,6 +102,34 @@ export function TerminalRequestPanel({
           disabled={busy}
           onChange={(event) => setReason(event.target.value)}
         />
+
+        {cancelOptions ? (
+          <Select
+            id={`${copy.fieldId}-requested-by`}
+            label="Ai yêu cầu huỷ"
+            description="Ghi vào lịch sử cùng nhân viên thực hiện."
+            required
+            value={requestedBy}
+            disabled={busy}
+            placeholder="Chọn người yêu cầu"
+            options={[
+              { value: 'GUEST', label: 'Khách yêu cầu huỷ' },
+              { value: 'KAS', label: 'KAS / khách sạn quyết định huỷ' },
+            ]}
+            onChange={(event) => setRequestedBy(event.target.value as '' | 'GUEST' | 'KAS')}
+          />
+        ) : null}
+        {cancelOptions && paymentReported ? (
+          <label className={styles.note}>
+            <input
+              type="checkbox"
+              checked={paymentChecked}
+              disabled={busy}
+              onChange={(event) => setPaymentChecked(event.target.checked)}
+            />{' '}
+            Tôi đã kiểm tra tài khoản ngân hàng và xử lý hoàn tiền (nếu khách đã chuyển khoản).
+          </label>
+        ) : null}
 
         <div className={styles.declineActions}>
           {/*
@@ -154,6 +202,9 @@ function messageFor(caught: unknown, copy: TerminalCopy): string {
   }
   return copy.errorServer;
 }
+
+const PAYMENT_REPORTED_MESSAGE =
+  'Khách đã báo đã chuyển khoản cho yêu cầu này. Hãy kiểm tra tài khoản ngân hàng và hoàn tiền nếu cần, rồi đánh dấu xác nhận bên dưới trước khi huỷ.';
 
 export interface TerminalCopy {
   /** Distinct per panel: two panels can be on screen at once. */

@@ -5,7 +5,7 @@ import type { SalesQueueCounts, SalesQueueFilters } from '@/lib/api/endpoints';
 import { Tabs } from '@/ui/primitives';
 import { activeQueueTab, queueHref, queueTabs, SALES_QUEUE_VIEWS } from './tabs';
 
-const COUNTS: SalesQueueCounts = { all: 12, awaiting: 3, expired: 2, accepted: 5 };
+const COUNTS: SalesQueueCounts = { all: 12, awaiting: 3, expired: 2, accepted: 5, alternative: 1 };
 
 /** The strip exactly as the queue page renders it. */
 function strip(filters: SalesQueueFilters = {}, counts: SalesQueueCounts | null = COUNTS) {
@@ -18,11 +18,11 @@ afterEach(cleanup);
 
 describe('the four views', () => {
   it('are All, Awaiting response, Overdue and Accepted, in that order', () => {
-    expect(SALES_QUEUE_VIEWS.map((view) => view.label)).toEqual(['Tất cả', 'Chờ phản hồi', 'Quá hạn', 'Đã chấp nhận']);
+    expect(SALES_QUEUE_VIEWS.map((view) => view.label)).toEqual(['Tất cả', 'Chờ phản hồi', 'Quá hạn', 'Đã chấp nhận', 'Đã đề xuất phương án khác']);
     strip();
     const links = within(screen.getByRole('navigation', { name: 'Nhóm yêu cầu' })).getAllByRole('link');
     expect(links.map((link) => link.textContent)).toEqual([
-      'Tất cả (12)', 'Chờ phản hồi (3)', 'Quá hạn (2)', 'Đã chấp nhận (5)',
+      'Tất cả (12)', 'Chờ phản hồi (3)', 'Quá hạn (2)', 'Đã chấp nhận (5)', 'Đã đề xuất phương án khác (1)',
     ]);
   });
 
@@ -31,6 +31,7 @@ describe('the four views', () => {
     expect(queueHref('awaiting', undefined)).toBe('/partner/requests?queue=awaiting');
     expect(queueHref('expired', undefined)).toBe('/partner/requests?queue=expired');
     expect(queueHref('accepted', undefined)).toBe('/partner/requests?queue=accepted');
+    expect(queueHref('alternative', undefined)).toBe('/partner/requests?queue=alternative');
   });
 
   it('keep the selected hotel when switching view', () => {

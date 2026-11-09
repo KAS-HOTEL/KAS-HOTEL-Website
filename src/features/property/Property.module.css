@@ -692,3 +692,7 @@
   color: var(--text-accent);
   white-space: nowrap;
 }
+
+/* "Xoá" under a draft hotel card (phone layout). Outside the card link: a button may not sit inside a link. */
+.cardActions { display: flex; justify-content: flex-end; padding-top: var(--space-2); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

@@ -65,8 +65,18 @@
   }
   function pad(n) { return String(n).padStart(2, '0'); }
   function chapterLabel(id) { return (chapter(id).eyebrow || '').replace(/^\d+\s*\/\s*/, ''); }
+  /* One photo per real place (owner decision, 2026-11-08): a place listed in several chapters has
+     its own entry id there (e.g. ben-thanh-market-walk) but shows its base place's photo. The
+     console lists the same pairs (src/features/siteContent/catalogue.ts, GUIDE_PHOTO_ALIASES). */
+  var SHARED_PHOTO = {
+    'ben-thanh-market-food': 'ben-thanh-market', 'ben-thanh-market-walk': 'ben-thanh-market', 'ben-thanh-night': 'ben-thanh-market',
+    'central-post-office-walk': 'central-post-office', 'notre-dame-cathedral-walk': 'notre-dame-cathedral',
+    'saigon-opera-house-walk': 'saigon-opera-house', 'saigon-opera-house-night': 'saigon-opera-house',
+    'nguyen-hue-walk': 'nguyen-hue', 'nguyen-hue-night': 'nguyen-hue', 'bitexco-walk': 'bitexco', 'bitexco-night': 'bitexco',
+    'saigon-square-walk': 'saigon-square', 'pham-ngu-lao-night': 'pham-ngu-lao', 'bui-vien-night': 'bui-vien'
+  };
   function photoFor(p) {
-    var item = siteImages['guidebook.entry.' + p.id];
+    var item = siteImages['guidebook.entry.' + (SHARED_PHOTO[p.id] || p.id)];
     return (item && item.url) ? String(item.url) : (chapter(p.chapter).image || '');
   }
   function hotelHref(id) { return id ? 'hotel-detail.html?hotel=' + encodeURIComponent(id) : ''; }
@@ -240,11 +250,23 @@
   render();
   if (location.search.indexOf('place=') > -1) syncHash();
 
-  /* Admin photos (Ảnh website → guidebook.entry.<id>); on a static host the chapter photo stays. */
-  fetch('/api/catalog', { cache: 'no-store' })
-    .then(function (r) { return r.ok ? r.json() : null; })
-    .then(function (c) { siteImages = (c && c.siteImages) || {}; renderSpread(); setHeroPhoto(); })
-    .catch(function () { setHeroPhoto(); });
+  /* Admin photos: the console's Guidebook slots (Nội dung website → Guidebook) win over the old
+     admin's /api/catalog values, the same merge js/site-images.js uses; a slot switched off in the
+     console falls back to the chapter photo. On a static host the chapter photo stays. */
+  Promise.all([
+    fetch('/api/catalog', { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }),
+    fetch('/api/v1/public/site-image-slots', { cache: 'no-store', credentials: 'omit' })
+      .then(function (r) { return r.ok ? r.json() : []; }).catch(function () { return []; })
+  ]).then(function (results) {
+    var merged = Object.assign({}, (results[0] && results[0].siteImages) || {});
+    (Array.isArray(results[1]) ? results[1] : []).forEach(function (slot) {
+      if (!slot || !slot.key) return;
+      if (slot.enabled === false) { delete merged[slot.key]; return; }
+      if (slot.imageReference) merged[slot.key] = { url: slot.imageReference };
+    });
+    siteImages = merged;
+    renderSpread(); setHeroPhoto();
+  });
 
   /* Hero photo: Admin "guidebook.hero", else the Opera House photo, else the first chapter photo.
      It fades in once loaded, over the dark band, so there is no flash. */

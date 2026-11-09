@@ -464,3 +464,72 @@ a.metric:focus-visible {
     grid-column: 1 / -1;
   }
 }
+
+/* Setup steps for a draft hotel (2026-11-08). */
+.setup {
+  composes: tasks;
+}
+
+.setupList {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.setupStep {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) 0;
+  border-top: var(--border-width-subtle, 1px) solid var(--border-subtle);
+}
+
+.setupStep:first-child {
+  border-top: 0;
+}
+
+.setupNo {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: var(--border-width-subtle, 1px) solid var(--border-subtle);
+  border-radius: 50%;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+.setupStep[data-done] .setupNo {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--surface);
+}
+
+.setupStep[aria-current='step'] .setupNo {
+  border-color: var(--accent-700);
+  color: var(--accent-700);
+  font-weight: 600;
+}
+
+.setupText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.setupLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.setupHint {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}

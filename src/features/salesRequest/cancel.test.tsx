@@ -79,6 +79,7 @@ function apiError(status: number, code: string, message = 'refused', details: un
 /** Fills the reason and reaches the confirm step. */
 async function armed(): Promise<void> {
   await userEvent.type(screen.getByLabelText(new RegExp(CANCEL_COPY.reasonLabel)), REASON);
+  await userEvent.selectOptions(screen.getByLabelText(/Ai yêu cầu huỷ/), 'GUEST');
   await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.action }));
 }
 
@@ -97,6 +98,10 @@ describe('cancel — the guard', () => {
     expect(button.disabled).toBe(true);
 
     await userEvent.type(screen.getByLabelText(new RegExp(CANCEL_COPY.reasonLabel)), 'Vì');
+    // 2026-11-07: who asked for the cancellation must be stated too.
+    expect((screen.getByRole('button', { name: CANCEL_COPY.action }) as HTMLButtonElement).disabled)
+      .toBe(true);
+    await userEvent.selectOptions(screen.getByLabelText(/Ai yêu cầu huỷ/), 'KAS');
     expect((screen.getByRole('button', { name: CANCEL_COPY.action }) as HTMLButtonElement).disabled)
       .toBe(false);
     expect(cancelApi).not.toHaveBeenCalled();
@@ -112,8 +117,8 @@ describe('cancel — the guard', () => {
 
     await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.confirm }));
     await waitFor(() => expect(cancelApi).toHaveBeenCalledTimes(1));
-    // The trimmed reason, and nothing else.
-    expect(cancelApi).toHaveBeenCalledWith(REFERENCE, REASON);
+    // The trimmed reason and who asked; no payment check unless the server asks for one.
+    expect(cancelApi).toHaveBeenCalledWith(REFERENCE, REASON, { requestedBy: 'GUEST', paymentChecked: false });
   });
 
   it('can be backed out of before it is confirmed', async () => {
@@ -357,6 +362,7 @@ describe('detail view — where cancel is offered', () => {
     render(<SalesRequestDetailView request={detail('REQUESTED')} now={NOW} />);
 
     await userEvent.type(screen.getByLabelText(new RegExp(CANCEL_COPY.reasonLabel)), REASON);
+    await userEvent.selectOptions(screen.getByLabelText(/Ai yêu cầu huỷ/), 'GUEST');
     await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.action }));
 
     expect(screen.getByRole('button', { name: CANCEL_COPY.confirm })).toBeTruthy();
@@ -369,6 +375,7 @@ describe('detail view — where cancel is offered', () => {
     render(<SalesRequestDetailView request={detail('REQUESTED')} now={NOW} />);
 
     await userEvent.type(screen.getByLabelText(new RegExp(CANCEL_COPY.reasonLabel)), REASON);
+    await userEvent.selectOptions(screen.getByLabelText(/Ai yêu cầu huỷ/), 'GUEST');
     await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.action }));
     await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.confirm }));
 
@@ -393,6 +400,10 @@ describe('accessibility', () => {
     field.focus();
     await userEvent.keyboard(REASON);
 
+    // 2026-11-07: the requester select sits between the reason and the action.
+    await userEvent.tab();
+    expect(document.activeElement).toBe(screen.getByLabelText(/Ai yêu cầu huỷ/));
+    await userEvent.selectOptions(screen.getByLabelText(/Ai yêu cầu huỷ/), 'GUEST');
     await userEvent.tab();
     expect(document.activeElement).toBe(
       screen.getByRole('button', { name: CANCEL_COPY.action }),
@@ -402,6 +413,26 @@ describe('accessibility', () => {
     screen.getByRole('button', { name: CANCEL_COPY.confirm }).focus();
     await userEvent.keyboard('{Enter}');
     await waitFor(() => expect(cancelApi).toHaveBeenCalledTimes(1));
+  });
+
+  it('asks staff to check the account when the guest reported a transfer, then sends the check', async () => {
+    cancelApi.mockRejectedValueOnce(apiError(409, 'ILLEGAL_TRANSITION', 'refused', [
+      { field: 'paymentChecked', code: 'PAYMENT_REPORTED_CHECK_FIRST', message: 'check first' },
+    ]));
+    cancelApi.mockResolvedValueOnce(undefined);
+    panel();
+    await armed();
+    await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.confirm }));
+    await waitFor(() => expect(screen.getByRole('alert').textContent).toMatch(/đã chuyển khoản/));
+    // Not mistaken for "someone else moved it".
+    expect(screen.getByRole('alert').textContent).not.toBe(CANCEL_COPY.errorAlreadyMoved);
+    const action = screen.getByRole('button', { name: CANCEL_COPY.action }) as HTMLButtonElement;
+    expect(action.disabled).toBe(true);
+    await userEvent.click(screen.getByLabelText(/Tôi đã kiểm tra tài khoản/));
+    await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.action }));
+    await userEvent.click(screen.getByRole('button', { name: CANCEL_COPY.confirm }));
+    await waitFor(() => expect(cancelApi).toHaveBeenCalledTimes(2));
+    expect(cancelApi).toHaveBeenLastCalledWith(REFERENCE, REASON, { requestedBy: 'GUEST', paymentChecked: true });
   });
 
   it('marks the reason as required', () => {

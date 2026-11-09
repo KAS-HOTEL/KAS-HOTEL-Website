@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="canonical" href="https://kasluxuryhotel.com/">
-<title>KAS Hotel Collection — Stay in the heart of Ho Chi Minh City.</title>
+<title>KAS Hotel Collection</title>
 <meta name="description" content="Distinctive KAS stays in the heart of Ho Chi Minh City, thoughtfully placed for city life, comfort and memorable stays.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +13,10 @@
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
 <link rel="stylesheet" href="css/home-v3.css">
+<link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
 </head>
 <!-- Homepage V3 · Booking-first luxury editorial (Figma FSrBWvp7OBsoWpyQxK3e3j, frame 42:29).
      `home-redesign` keeps the existing homepage header/footer behaviour; every new
@@ -190,7 +194,10 @@
   var reduceMotion=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- 3.1 Hero: 12 images, 5000 ms each, 800 ms cross-fade, endless loop.
-     No dots, no arrows, and only the background changes. Slides 1–8 are the
+     No dots, no arrows, and only the background changes. Owner decision
+     2026-11-07: it also rotates when the visitor's system asks for reduced
+     motion (then without the fade, see home-v3.css). No pause button (owner
+     decision 2026-11-07). Slides 1–8 are the
      eight KAS properties; 9–12 are further KAS property photos. Admin can
      replace any slot (home.hero.01–08, home.heroExtra1–4) via site-images.js,
      which looks the slides up by `.home-hero__slide[data-index]`. */
@@ -222,7 +229,7 @@
   }
   function startHero(){
     clearInterval(heroTimer);
-    if(reduceMotion||document.hidden) return;
+    if(document.hidden) return;
     heroTimer=setInterval(function(){showHero(heroIndex+1);},5000);
   }
   prime(1);
@@ -270,14 +277,9 @@
     if(e.key==='ArrowRight'){e.preventDefault();move(1);}
     if(e.key==='ArrowLeft'){e.preventDefault();move(-1);}
   });
-  /* Admin collection photos replace the default card photo (static hosts keep the defaults). */
-  if(window.KAS_LIVE) window.KAS_LIVE.load().then(function(catalog){
-    var map=(catalog&&catalog.collectionImages)||{};
-    U.$$('.hv3-card[data-hotel-id]',cards).forEach(function(card){
-      var id=card.getAttribute('data-hotel-id'),url=map[id],box=U.$('.hv3-card__img',card);
-      if(url&&box){var h=D.getHotel(id);box.innerHTML=U.img(url,h?h.name:'','',true,false);}
-    });
-  }).catch(function(){});
+  /* The card photo is h.images[0]: the hotel's Hero (cover) image from the console,
+     which js/catalog-sync.js puts first. The old admin's separate "KAS Collection"
+     photos no longer override it (2026-11-08). */
 
   /* ---- 3.7 Rooms: flagship room photo, or the Admin "home.roomsSuites" image ---- */
   var hero=D.getHotel('hotel-04')||D.hotels[3];

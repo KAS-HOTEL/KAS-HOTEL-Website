@@ -754,3 +754,193 @@
   line-height: var(--leading-body);
   color: var(--text-muted);
 }
+
+/* ---------------------------------------------------------------------------
+   Gallery groups (2026-11-08): the six groups guests see, with counts, a group
+   per photo, and several photos previewed before they are uploaded.
+   --------------------------------------------------------------------------- */
+.groupFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.groupChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.groupChip span {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.groupChip[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--surface);
+}
+
+.groupChip[aria-pressed='true'] span {
+  color: var(--surface);
+}
+
+.groupChip:focus-visible,
+.tileCategorySelect:focus-visible {
+  outline: 2px solid var(--accent-700);
+  outline-offset: 2px;
+}
+
+.tileCategorySelect {
+  min-height: 32px;
+  max-width: 100%;
+  padding: 0 var(--space-2);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.previewList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.previewItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+  min-width: 0;
+  text-align: left;
+}
+
+.previewImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--border-subtle);
+}
+
+/* ---------------------------------------------------------------------------
+   Arranging a gallery (2026-11-08): drag a photo to reorder, drag a box on the
+   empty space to select, a checkbox per photo, and one bar for the selection.
+   --------------------------------------------------------------------------- */
+.arrangeGrid {
+  position: relative;
+  padding: var(--space-2);
+  margin: calc(var(--space-2) * -1);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.roomThumb {
+  position: relative;
+}
+
+.arrangeGrid [data-arrange-id][draggable='true'] {
+  cursor: grab;
+}
+
+.arrangeGrid [data-arrange-id][data-dragging] {
+  opacity: 0.45;
+}
+
+.arrangeGrid [data-arrange-id][data-selected] {
+  outline: 2px solid var(--accent-600);
+  outline-offset: 2px;
+}
+
+.arrangeGrid [data-arrange-id][data-drop='before'] {
+  box-shadow: -4px 0 0 0 var(--accent-600);
+}
+
+.arrangeGrid [data-arrange-id][data-drop='after'] {
+  box-shadow: 4px 0 0 0 var(--accent-600);
+}
+
+.pick {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 252, 247, 0.92);
+  cursor: pointer;
+}
+
+.pick input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent-600);
+  cursor: pointer;
+}
+
+.marquee {
+  position: absolute;
+  z-index: 3;
+  border: 1px solid var(--accent-600);
+  background: rgba(128, 101, 65, 0.12);
+  pointer-events: none;
+  list-style: none;
+}
+
+.arrangeHint {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.selectionBar {
+  position: sticky;
+  top: var(--space-2);
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+.selectionBar strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrangeGrid [data-arrange-id] {
+    transition: none;
+  }
+}

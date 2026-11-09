@@ -25,7 +25,7 @@ const config = [
   {
     // These files are intentionally CommonJS: they are the legacy static-site
     // server and Node CLI scripts, not code bundled by the Next.js app.
-    files: ['server.js', 'dev-static-server.js', 'tools/build.js', 'tools/fetch-images.js'],
+    files: ['server.js', 'dev-static-server.js', 'tools/build.js', 'tools/fetch-images.js', 'tools/build-favicons.js'],
     rules: {
       '@typescript-eslint/no-require-imports': 'off',
     },

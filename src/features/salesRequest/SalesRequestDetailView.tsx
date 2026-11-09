@@ -142,6 +142,32 @@ export function SalesRequestDetailView({
             <ReservationLinesCard lines={lines} copy={RESERVATION_LINES_COPY} />
           </Card>
 
+          {/* 2026-11-07: proposing another stay ends the request. Show what was
+              suggested; there is nothing left to act on. */}
+          {request.alternativeOffer ? (
+            <Card title="Phương án đã đề xuất">
+              <dl className={styles.facts}>
+                <Fact label="Khách sạn" value={request.alternativeOffer.propertyName} />
+                <Fact label="Loại phòng" value={`${request.alternativeOffer.roomTypeName ?? '—'} × ${request.alternativeOffer.quantity}`} />
+                <Fact
+                  label="Nhận – trả phòng"
+                  value={`${viDate(request.alternativeOffer.checkIn)} – ${viDate(request.alternativeOffer.checkOut)}`}
+                />
+                <Fact
+                  label="Giá đề xuất"
+                  value={request.alternativeOffer.total === null ? '—' : formatMoney(request.alternativeOffer.total)}
+                />
+                {request.alternativeOffer.message ? (
+                  <Fact label="Lời nhắn cho khách" value={request.alternativeOffer.message} />
+                ) : null}
+              </dl>
+              <p className={styles.note}>
+                Yêu cầu này đã kết thúc. Đề xuất không giữ phòng; nếu khách muốn lưu trú theo phương án
+                này, khách tạo yêu cầu mới trên website.
+              </p>
+            </Card>
+          ) : null}
+
           {/* Only the two values you can act on — address and number — are
               links; absent fields are left out rather than printed as dashes. */}
           <Card title="Khách">

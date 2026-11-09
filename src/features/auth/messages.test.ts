@@ -39,3 +39,17 @@ describe('error mapping', () => {
     expect(messageFor(error(404, 'NOT_FOUND'))).not.toBe(AUTH_MESSAGES.forbidden);
   });
 });
+
+describe('server separation sign-in (2026-11-07)', () => {
+  it('tells a guest who signs in on the console to use the website', () => {
+    const refused = new ApiError(403, {
+      code: 'FORBIDDEN', message: 'Guest accounts sign in on the KAS website.',
+      details: [{ field: 'account', code: 'USE_CUSTOMER_SITE', message: 'x' }], correlationId: null,
+    });
+    expect(signInMessageFor(refused)).toBe('Đây là tài khoản khách hàng. Vui lòng đăng nhập trên website KAS.');
+  });
+
+  it('keeps the generic forbidden message for other 403s', () => {
+    expect(signInMessageFor(error(403, 'FORBIDDEN'))).toBe(AUTH_MESSAGES.forbidden);
+  });
+});

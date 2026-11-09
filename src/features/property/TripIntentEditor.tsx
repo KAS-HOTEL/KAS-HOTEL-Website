@@ -51,9 +51,9 @@ export function TripIntentEditor({
 
   return (
     <section className={styles.section} aria-labelledby="trip-intent-editor-title">
-      <h2 className={styles.title} id="trip-intent-editor-title">Nhóm Find Your KAS</h2>
+      <h2 className={styles.title} id="trip-intent-editor-title">Cách lưu trú</h2>
       <p className={styles.note}>
-        Chọn tất cả nhóm phù hợp. Một khách sạn có thể xuất hiện trong nhiều nhóm; thay đổi sẽ cập nhật trên trang khách hàng.
+        Chọn tất cả nhóm phù hợp. Đây là bộ lọc “Cách lưu trú” trên trang Khách sạn của website; một khách sạn có thể thuộc nhiều nhóm.
       </p>
       <form onSubmit={submit}>
         <div className={styles.options}>

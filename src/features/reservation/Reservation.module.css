@@ -538,20 +538,6 @@
   color: var(--text-secondary);
 }
 
-/*
- * The link into the messaging workspace. A 44px target because it is the one
- * way from a reservation to its conversation on a phone.
- */
-.conversationLink {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body);
-  color: var(--text-primary);
-  text-decoration: underline;
-}
-
 /* ---------------------------------------------------------------------------
    Phone tap targets.
 

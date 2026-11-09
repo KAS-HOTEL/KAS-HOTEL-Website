@@ -158,7 +158,7 @@ describe('PropertyTable', () => {
       within(table)
         .getAllByRole('columnheader')
         .map((cell) => cell.textContent),
-    ).toEqual(['Khách sạn', 'Trạng thái', 'Thông tin', 'Địa chỉ', 'Điện thoại', 'Nổi bật', 'Thứ tự']);
+    ).toEqual(['Khách sạn', 'Trạng thái', 'Hạng phòng', 'Thông tin', 'Địa chỉ', 'Điện thoại', 'Nổi bật', 'Thứ tự', 'Thao tác']);
   });
 });
 
@@ -378,13 +378,13 @@ describe('PropertyOverview', () => {
       .toBe('/vi/hotels/hotel-7');
   });
 
-  it('merges Tồn phòng and Giá into one tab', () => {
+  it('has no price tab: room prices belong to SUPER_ADMIN since 2026-11-08', () => {
     render(overview());
 
     const tabs = screen.getByRole('navigation', { name: 'Khu vực quản lý khách sạn' });
     const links = within(tabs).getAllByRole('link').map((a) => a.textContent);
     expect(links).toEqual([
-      'Tổng quan', 'Thông tin', 'Phòng', 'Hình ảnh', 'Giá', 'Chính sách',
+      'Tổng quan', 'Thông tin', 'Phòng', 'Hình ảnh', 'Chính sách',
     ]);
     expect(within(tabs).queryAllByText(/\(Bước \d+\)/)).toHaveLength(0);
   });

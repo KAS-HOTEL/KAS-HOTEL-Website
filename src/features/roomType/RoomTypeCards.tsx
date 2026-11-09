@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { formatBeds, roomTypeName, viewTypeLabel, type RoomTypeView } from '@/lib/domain/roomType';
+import { RoomTypeOrderButtons } from './RoomTypeOrderButtons';
 import { RoomTypeStatusBadge } from './RoomTypeStatusBadge';
 import styles from './RoomType.module.css';
 
@@ -30,9 +31,10 @@ export function RoomTypeCards({
   readonly propertyId: string;
   readonly roomTypes: readonly RoomTypeView[];
 }) {
+  const order = roomTypes.map((roomType) => ({ id: roomType.id, sortOrder: roomType.sortOrder }));
   return (
     <ul className={styles.cardList}>
-      {roomTypes.map((roomType) => {
+      {roomTypes.map((roomType, index) => {
         const name = roomTypeName(roomType.translations);
         const beds = formatBeds(roomType.beds);
         const view = roomType.viewType;
@@ -94,6 +96,8 @@ export function RoomTypeCards({
                 </div>
               </dl>
             </Link>
+            {/* Outside the link: a button inside an anchor is not valid. */}
+            <RoomTypeOrderButtons propertyId={propertyId} order={order} index={index} name={name ?? roomType.slug} />
           </li>
         );
       })}

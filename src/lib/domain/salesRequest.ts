@@ -60,6 +60,20 @@ export interface SalesRequestDetail {
   readonly lines: readonly SalesRequestLine[];
   readonly guest: SalesRequestGuest | null;
   readonly timeline: readonly SalesRequestEvent[];
+  /** The latest alternative stay KAS proposed (2026-11-07); absent from older servers. */
+  readonly alternativeOffer?: SalesAlternativeOffer | null;
+}
+
+/** What KAS suggested when it could not take the request. Nothing is held. */
+export interface SalesAlternativeOffer {
+  readonly propertyName: string;
+  readonly roomTypeName: string | null;
+  readonly checkIn: string;
+  readonly checkOut: string;
+  readonly quantity: number;
+  readonly total: Money | null;
+  readonly message: string | null;
+  readonly sentAt: string | null;
 }
 
 /**
@@ -273,6 +287,8 @@ export const TERMINAL_SALES_STATUSES: ReadonlySet<string> = new Set([
   'DECLINED',
   'CANCELLED',
   'EXPIRED',
+  // Owner decision 2026-11-07: proposing another stay ends the request.
+  'ALTERNATIVE_OFFERED',
 ]);
 
 /**

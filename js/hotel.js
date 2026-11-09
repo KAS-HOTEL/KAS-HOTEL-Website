@@ -5,10 +5,15 @@
   'use strict';
   var U = global.U, D = global.KAS_DATA, App = global.App;
 
-  /* ---------- hotel card (listing page) ----------
-     opts.variant === 'saved' renders the same card for My KAS › Saved hotels:
-     heart (remove) on the photo, rating under the address, and a one-row
-     summary — room types · from price · View rooms. */
+  /* ---------- hotel card ----------
+     One card for the Hotels listing and My KAS › Saved hotels (owner decision
+     2026-11-07, "layout 2"): photo left / details right, the save heart on the
+     photo's top-right corner, rating top-right of the details, and a footer in
+     three parts — room types and check-in/out · from price · View rooms.
+     The heart is the shared save toggle (data-save-hotel, app.js): on the Saved
+     page un-saving it removes the card once the server has confirmed.
+     opts.variant === 'saved' only adds the hcard--saved modifier. English copy
+     is translated by i18n.js like the rest of the listing. */
   function hotelCard(h, search, opts) {
     opts = opts || {};
     search = search || {};
@@ -21,91 +26,52 @@
     var listingImages = (h.propertyGalleryImages && h.propertyGalleryImages.length)
       ? h.propertyGalleryImages
       : h.images;
-    if (opts.variant === 'saved') return savedHotelCard(h, href, listingImages, opts);
-    return '<article class="hcard fade-up" data-hotel-id="' + U.esc(h.id) + '">' +
+    var saved = opts.variant === 'saved';
+    var id = U.esc(h.id);
+    var amenities = h.amenities || [];
+    var rating = Number(h.rating || 0);
+    var price = h.startingPrice;
+    var hasPrice = price != null && isFinite(price);
+    var roomTypes = h.roomCount != null ? h.roomCount : (h.rooms || []).length;
+    return '<article class="hcard' + (saved ? ' hcard--saved' : ' fade-up') + '" data-hotel-id="' + id + '">' +
       '<div class="hcard__media">' +
         (h.starRating >= 4 ? '<span class="badge badge--gold">Signature Property</span>' : '') +
         App.miniHTML(listingImages, h.name) +
+        '<button type="button" class="kas-save hcard__save" data-save-hotel="' + id + '" aria-pressed="false" aria-label="Save hotel" title="Save hotel">' + U.icon('heart', 18) + '</button>' +
       '</div>' +
       '<div class="hcard__b">' +
         '<div class="hcard__hd">' +
-          '<div style="min-width:0">' +
-            '<h3><a href="' + href + '">' + U.esc(h.name) + '</a></h3>' +
-            '<div class="hcard__loc">' + U.icon('pin', 14) + U.esc(h.address) + '</div>' +
+          '<div>' +
+            '<h3><a href="' + U.esc(href) + '">' + U.esc(h.name) + '</a></h3>' +
+            (h.address ? '<div class="hcard__loc">' + U.icon('pin', 14) + U.esc(h.address) + '</div>' : '') +
           '</div>' +
           /* A hotel added in the console has no score until one is entered. */
-          (h.rating ? '<div class="rate"><span class="rate__n">' + Number(h.rating).toFixed(1) + '</span>' +
-            '<div class="rate__m">' + U.stars(h.rating / 2, 11) +
-            '<small>' + h.reviews + ' reviews</small></div></div>' : '') +
+          (rating ? '<div class="rate"><span class="rate__n">' + rating.toFixed(1) + '</span>' +
+            '<div class="rate__m">' + U.stars(rating / 2, 11) +
+            '<small>' + Number(h.reviews || 0) + ' reviews</small></div></div>' : '') +
         '</div>' +
-        '<p class="hcard__desc">' + U.esc(trim(h.description, 190)) + '</p>' +
-        '<div class="hcard__am">' +
-          h.amenities.slice(0, 5).map(function (a) {
-            return '<span class="chip">' + U.icon(App.amenityIcon(a), 12) + U.esc(a) + '</span>';
-          }).join('') +
-          (h.amenities.length > 5 ? '<span class="chip">+' + (h.amenities.length - 5) + ' more</span>' : '') +
-        '</div>' +
-        '<div class="hcard__ft">' +
-          '<div><span class="tiny muted">' + h.roomCount + ' room types available</span>' +
-            '<div class="tiny muted" style="margin-top:3px">' + U.icon('clock', 11) + ' Check-in ' + U.esc(h.checkIn) + ' · Check-out ' + U.esc(h.checkOut) + '</div></div>' +
-          '<div style="display:flex;align-items:flex-end;gap:20px">' +
-            '<div class="price"><span class="price__lb">From</span>' +
-              U.priceHTML(h.startingPrice) +
-              '<div class="price__u">per night · excl. taxes</div></div>' +
-            '<button type="button" class="kas-save kas-save--ghost" data-save-hotel="' + U.esc(h.id) + '" aria-pressed="false" aria-label="Save hotel">' + U.icon('heart', 16) + '</button>' +
-            '<a class="btn btn--gold" href="' + href + '">View rooms</a>' +
-          '</div>' +
-        '</div>' +
-      '</div></article>';
-  }
-  function trim(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n).replace(/\s\S*$/, '') + '…' : s; }
-
-  var SAVED_CARD_COPY = {
-    vi: { reviews: 'đánh giá', roomTypes: 'loại phòng', from: 'Từ', perNight: '/ đêm', noPrice: 'Liên hệ để nhận giá',
-          view: 'Xem phòng', remove: 'Bỏ lưu khách sạn', more: 'khác', signature: 'Signature Property' },
-    en: { reviews: 'reviews', roomTypes: 'room types', from: 'From', perNight: '/ night', noPrice: 'Contact us for rates',
-          view: 'View rooms', remove: 'Remove from Saved', more: 'more', signature: 'Signature Property' }
-  };
-  function savedHotelCard(h, href, images, opts) {
-    var t = SAVED_CARD_COPY[opts.lang === 'vi' ? 'vi' : 'en'];
-    var id = U.esc(h.id);
-    var amenities = h.amenities || [];
-    /* Room types offered by the hotel (not inventory) and the live "from" rate. */
-    var roomTypes = h.roomCount != null ? h.roomCount : (h.rooms || []).length;
-    var price = h.startingPrice;
-    var hasPrice = price != null && isFinite(price);
-    var rating = Number(h.rating || 0);
-    var address = h.address || (opts.lang === 'vi' ? 'Thành phố Hồ Chí Minh' : 'Ho Chi Minh City');
-    return '<article class="hcard hcard--saved" data-hotel-id="' + id + '" data-saved-card="' + id + '" data-hotel-url="' + U.esc(href) + '">' +
-      '<div class="hcard__media">' +
-        (h.starRating >= 4 ? '<span class="badge badge--gold">' + t.signature + '</span>' : '') +
-        App.miniHTML(images, h.name) +
-        '<button type="button" class="kas-save is-saved hcard__save" data-remove-saved="' + id + '" aria-pressed="true" aria-label="' + U.esc(t.remove) + '" title="' + U.esc(t.remove) + '">' + U.icon('heart', 18) + '</button>' +
-      '</div>' +
-      '<div class="hcard__b">' +
-        '<div class="hcard__hd"><div>' +
-          '<h3><a href="' + U.esc(href) + '">' + U.esc(h.name) + '</a></h3>' +
-          '<div class="hcard__loc">' + U.icon('pin', 14) + '<span>' + U.esc(address) + '</span></div>' +
-        '</div></div>' +
-        (rating ? '<div class="hcard__rating"><span class="rate__n">' + rating.toFixed(1) + '</span>' +
-          U.stars(rating / 2, 11) +
-          '<span class="hcard__reviews">' + Number(h.reviews || 0) + ' ' + t.reviews + '</span></div>' : '') +
-        (h.description ? '<p class="hcard__desc">' + U.esc(trim(h.description, 190)) + '</p>' : '') +
+        /* Whole text, cut to three lines by CSS: a cut string would no longer match its translation. */
+        (h.description ? '<p class="hcard__desc">' + U.esc(h.description) + '</p>' : '') +
         (amenities.length ? '<div class="hcard__am">' +
           amenities.slice(0, 5).map(function (a) {
             return '<span class="chip">' + U.icon(App.amenityIcon(a), 12) + U.esc(a) + '</span>';
           }).join('') +
-          (amenities.length > 5 ? '<span class="chip">+' + (amenities.length - 5) + ' ' + t.more + '</span>' : '') +
+          (amenities.length > 5 ? '<span class="chip">+' + (amenities.length - 5) + ' more</span>' : '') +
         '</div>' : '') +
-        '<div class="hcard__summary">' +
-          '<span class="hcard__rooms">' + U.icon('bed', 16) + '<span>' + roomTypes + ' ' + t.roomTypes + '</span></span>' +
-          '<span class="hcard__from">' + (hasPrice
-            ? '<span class="hcard__from-lb">' + t.from + '</span>' + U.priceHTML(price) + '<span class="hcard__from-u">' + t.perNight + '</span>'
-            : '<span class="hcard__from-na">' + t.noPrice + '</span>') + '</span>' +
-          '<a class="btn btn--gold hcard__cta" href="' + U.esc(href) + '#rooms">' + t.view + '</a>' +
+        '<div class="hcard__ft">' +
+          '<div class="hcard__meta"><span class="tiny muted">' + roomTypes + ' room types available</span>' +
+            (h.checkIn || h.checkOut ? '<div class="tiny muted">' + U.icon('clock', 11) + ' Check-in ' + U.esc(h.checkIn || '—') + ' · Check-out ' + U.esc(h.checkOut || '—') + '</div>' : '') +
+          '</div>' +
+          '<div class="price hcard__price">' + (hasPrice
+            ? '<span class="price__lb">From</span>' + U.priceHTML(price) + '<div class="price__u">per night · excl. taxes</div>'
+            : '<span class="price__u">Contact us for rates</span>') +
+          '</div>' +
+          '<a class="btn btn--gold hcard__cta" href="' + U.esc(href) + '">View rooms</a>' +
         '</div>' +
       '</div></article>';
   }
+  /* Shortens text at a word boundary; exported as HotelUI.trim. */
+  function trim(s, n) { s = String(s || ''); return s.length > n ? s.slice(0, n).replace(/\s\S*$/, '') + '…' : s; }
 
   /* ---------- room card (hotel detail page) ---------- */
   function roomCard(h, r, search, badge) {

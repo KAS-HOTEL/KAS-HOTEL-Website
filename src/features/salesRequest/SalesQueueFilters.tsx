@@ -35,7 +35,7 @@ export function pageFromSearchParams(params: Record<string, string | string[] | 
 
 export const MAX_SEARCH = 100;
 
-const QUEUE_VIEWS: ReadonlySet<string> = new Set(['awaiting', 'expired', 'accepted']);
+const QUEUE_VIEWS: ReadonlySet<string> = new Set(['awaiting', 'expired', 'accepted', 'alternative']);
 
 /** A repeated parameter takes its first value; the controls only ever send one. */
 function first(value: string | string[] | undefined): string | undefined {

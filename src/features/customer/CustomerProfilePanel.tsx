@@ -46,7 +46,7 @@ export function CustomerProfilePanel({ profile, locale }: { profile: CustomerPro
     <section className={styles.panel} aria-labelledby="profile-heading">
       <div className={styles.heading}>
         <div><p className={styles.eyebrow}>MY KAS</p><h2 id="profile-heading">{vi ? 'Hồ sơ của bạn' : 'Your profile'}</h2></div>
-        <span className={styles.tier}>{profile.tier ?? 'Silver'} · {profile.points.toLocaleString(locale)} {vi ? 'điểm' : 'points'}</span>
+        <span className={styles.tier}>{profile.tier ?? 'CLASSIC'} · {profile.points.toLocaleString(locale)} {vi ? 'điểm' : 'points'}</span>
       </div>
       <div className={styles.content}>
         <div className={styles.avatarColumn}>

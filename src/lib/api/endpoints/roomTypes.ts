@@ -79,4 +79,17 @@ export const roomTypesApi = {
       body,
       { query: { version } },
     ),
+
+  /**
+   * `PATCH /api/v1/admin/properties/{propertyId}/room-types/{roomTypeId}/order?sortOrder=N`
+   *
+   * Moves the room type to a display position within its hotel (0 first). No
+   * version: the position is the only thing written, and the row's version is bumped.
+   */
+  setOrder: (propertyId: string, roomTypeId: string, sortOrder: number) =>
+    api.patch<RoomTypeView>(
+      `${base(propertyId)}/${encodeURIComponent(roomTypeId)}/order`,
+      undefined,
+      { query: { sortOrder } },
+    ),
 } as const;

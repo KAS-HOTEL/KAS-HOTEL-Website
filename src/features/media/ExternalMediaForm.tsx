@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { mediaApi } from '@/lib/api/endpoints/media';
-import { MEDIA_CATEGORIES, mediaCategoryLabel, type MediaOwnerType } from '@/lib/domain/media';
+import { GALLERY_GROUPS, type MediaOwnerType } from '@/lib/domain/media';
 import { Button, Card } from '@/ui/primitives';
 import { adminError } from '@/features/adminTools/useAdminList';
 import { revalidateGallery, revalidateRoomGallery } from './actions';
@@ -31,7 +31,7 @@ export function ExternalMediaForm({ propertyId, ownerId, ownerType, displayOrder
     }}>
       <label>URL ảnh<input name="url" type="url" required maxLength={2048} placeholder="https://…" disabled={busy || disabled} /></label>
       <label>Định dạng<select name="mimeType" disabled={busy || disabled}><option value="image/jpeg">JPEG</option><option value="image/png">PNG</option><option value="image/webp">WebP</option><option value="image/avif">AVIF</option></select></label>
-      <label>Danh mục<select name="category" defaultValue={ownerType === 'ROOM_TYPE' ? 'ROOM' : 'EXTERIOR'} disabled={busy || disabled}>{(ownerType === 'ROOM_TYPE' ? ['ROOM'] : MEDIA_CATEGORIES).map((category) => <option value={category} key={category}>{mediaCategoryLabel(category)}</option>)}</select></label>
+      <label>Danh mục<select name="category" defaultValue={ownerType === 'ROOM_TYPE' ? 'ROOM' : 'EXTERIOR'} disabled={busy || disabled}>{(ownerType === 'ROOM_TYPE' ? GALLERY_GROUPS.filter((g) => g.key === 'rooms') : GALLERY_GROUPS).map((g) => <option value={g.primary} key={g.key}>{g.label}</option>)}</select></label>
       <label>Mô tả ảnh tiếng Việt<input name="altVi" required maxLength={500} disabled={busy || disabled} /></label>
       <label>Mô tả ảnh tiếng Anh<input name="altEn" required maxLength={500} disabled={busy || disabled} /></label>
       <Button type="submit" loading={busy} disabled={disabled}>Thêm và xuất bản ảnh URL</Button>

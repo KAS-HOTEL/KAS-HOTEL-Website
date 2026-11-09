@@ -1,6 +1,9 @@
 // @vitest-environment jsdom
 import { cleanup, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+
+// The order buttons refresh the route after a move.
+vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: vi.fn() }) }));
 import type { RoomTypeView } from '@/lib/domain/roomType';
 import {
   formatBeds,
@@ -146,7 +149,7 @@ describe('RoomTypeTable', () => {
     expect(screen.getByText('Khách sạn này chưa có loại phòng nào')).toBeTruthy();
     // It has to explain the concept and the route forward, not look broken.
     expect(screen.getByText(/Loại phòng là sản phẩm khách đặt/)).toBeTruthy();
-    expect(screen.getByText(/bước tiếp theo/)).toBeTruthy();
+    expect(screen.getByText(/Thêm loại phòng/)).toBeTruthy();
     expect(screen.queryByRole('alert')).toBeNull();
     expect(screen.queryByRole('table')).toBeNull();
   });
@@ -165,7 +168,7 @@ describe('RoomTypeTable', () => {
     // The API returns no price (doc 52 §3.2 keeps it in `pricing`) and no field
     // capable of holding a room number (doc 52 §6). No column may imply either.
     expect(table.textContent).not.toMatch(/giá|price|VND|số phòng|tầng|floor/i);
-    expect(within(table).getAllByRole('columnheader')).toHaveLength(6);
+    expect(within(table).getAllByRole('columnheader')).toHaveLength(7);
   });
 });
 

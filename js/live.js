@@ -50,7 +50,7 @@
     if (hotel.consoleGallery) {
       /* Images managed in the console (js/catalog-sync.js) win over the old admin's uploads. */
       hotel.propertyGalleryImages = hotel.images.slice();
-      hotel.propertyGalleryItems = hotel.images.map(function(url){ return {url:url, category:'other'}; });
+      hotel.propertyGalleryItems = (hotel.consoleGalleryItems || hotel.images.map(function(url){ return {url:url, category:'other'}; })).slice();
       hotel.imageSource = 'KAS console gallery';
       hotel.hasCustomPropertyGallery = true;
     } else if (property && Array.isArray(property.propertyImages) && property.propertyImages.length) {

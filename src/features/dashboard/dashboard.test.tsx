@@ -18,11 +18,6 @@ vi.mock('@/features/media/server', () => ({
   mediaCovers: (...a: unknown[]) => mediaCovers(...a),
 }));
 
-vi.mock('@/features/review/server', () => ({
-  reviewQueue: async () => ({ status: 'ok', submissions: [] }),
-  serverNow: async () => Date.parse('2026-09-08T02:00:00Z'),
-}));
-
 const Dashboard = await import('@/app/partner/(protected)/page');
 const AdminOverview = await import('@/app/admin/(protected)/page');
 
@@ -128,7 +123,7 @@ describe('the Admin overview', () => {
 
     // A failed read and an empty estate are different facts.
     expect(screen.queryByText('Chưa có khách sạn nào')).toBeNull();
-    expect(screen.queryByRole('heading', { name: 'Danh sách khách sạn' })).not.toBeNull();
+    expect(screen.queryByRole('heading', { name: 'Khách sạn & Hạng phòng' })).not.toBeNull();
   });
 });
 
@@ -138,7 +133,7 @@ describe('the Super Admin overview', () => {
 
     expect(propertyList).not.toHaveBeenCalled();
     expect(mediaCovers).not.toHaveBeenCalled();
-    expect(document.body.textContent).not.toContain('Danh sách khách sạn');
+    expect(document.body.textContent).not.toContain('Khách sạn & Hạng phòng');
   });
 
   it('reports the real open-request count', async () => {

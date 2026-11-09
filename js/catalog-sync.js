@@ -112,12 +112,20 @@
   /* Console images (GET /properties/catalogue/media) win over the website's own photos;
      a hotel or room with none in the console keeps them. Photos are restored first so a
      later catalogue can take an image away again. */
+  /* The console's media_category, as the website's six gallery groups (owner decision 2026-11-08):
+     rooms · lobby · dining · amenities · exterior · other. */
+  var GALLERY_GROUP = { ROOM: 'rooms', LOBBY: 'lobby', DINING: 'dining', FACILITY: 'amenities', ROOFTOP: 'amenities', EXTERIOR: 'exterior' };
+  function galleryCategory(category) { return GALLERY_GROUP[category] || 'other'; }
+
   function applyMedia(hotel, slug, media) {
     hotel.images = BASE_IMAGES[hotel.id] ? BASE_IMAGES[hotel.id].slice() : [NEW_HOTEL_IMAGE];
     hotel.consoleGallery = false;
+    hotel.consoleGalleryItems = null;
     var entry = media && media[slug];
     var urls = entry && (entry.gallery || []).map(function (m) { return m.url; }).filter(Boolean);
-    if (urls && urls.length) { hotel.images = urls; hotel.consoleGallery = true; }
+    if (urls && urls.length) { hotel.images = urls; hotel.consoleGallery = true;
+      hotel.consoleGalleryItems = (entry.gallery || []).filter(function (m) { return m.url; })
+        .map(function (m) { return { url: m.url, category: galleryCategory(m.category) }; }); }
     var m = map();
     (hotel.rooms || []).forEach(function (room) {
       if (BASE_ROOM_IMAGES[room.id]) room.images = BASE_ROOM_IMAGES[room.id].slice();

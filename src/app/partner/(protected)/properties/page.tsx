@@ -5,6 +5,7 @@ import { PortfolioFilters } from '@/features/property/PortfolioFilters';
 import { PropertyCards } from '@/features/property/PropertyCards';
 import { PropertyTable } from '@/features/property/PropertyTable';
 import { propertyList } from '@/features/property/server';
+import { roomTypeList } from '@/features/roomType/server';
 import {
   filterProperties,
   isPortfolioFiltered,
@@ -68,6 +69,15 @@ export default async function PartnerPropertiesPage({
   }
 
   const all = result.properties;
+  // How many room types each hotel has, from the room-type list the hotel page
+  // already uses: one request per hotel, in parallel. A hotel whose list fails
+  // shows "—" rather than a wrong count.
+  const roomLists = await Promise.all(all.map((property) => roomTypeList(property.id)));
+  const roomTypeCounts = new Map<string, number>();
+  all.forEach((property, index) => {
+    const list = roomLists[index];
+    if (list?.status === 'ok') roomTypeCounts.set(property.id, list.roomTypes.length);
+  });
   const visible = filterProperties(all, filter);
   const narrowed = isPortfolioFiltered(filter);
 
@@ -82,12 +92,12 @@ export default async function PartnerPropertiesPage({
         eyebrow="Danh mục"
         title={
           <>
-            Khách sạn
+            Khách sạn &amp; Hạng phòng
             {/* The count is the backend's answer, not a number written here. */}
             {all.length === 0 ? null : <span className={styles.pageCount}> ({all.length})</span>}
           </>
         }
-        description="Quản lý khách sạn của bạn — thông tin, hình ảnh, giá và yêu cầu đặt phòng, trong cùng một nơi."
+        description="Mỗi khách sạn gồm thông tin, ảnh và ảnh Hero, hạng phòng cùng ảnh từng hạng phòng, tiện ích và chính sách — quản lý trong cùng một nơi."
         actions={
           <Link href="/partner/properties/new" className={styles.pageAction}>
             Thêm khách sạn
@@ -122,11 +132,13 @@ export default async function PartnerPropertiesPage({
           */}
           <PropertyTable
             properties={visible}
+            roomTypeCounts={roomTypeCounts}
             covers={covers.status === 'ok' ? covers.covers : undefined}
             coversUnavailable={covers.status === 'error'}
           />
           <PropertyCards
             properties={visible}
+            roomTypeCounts={roomTypeCounts}
             covers={covers.status === 'ok' ? covers.covers : undefined}
             coversUnavailable={covers.status === 'error'}
           />

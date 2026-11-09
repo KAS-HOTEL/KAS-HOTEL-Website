@@ -75,7 +75,7 @@ export function AdvancedPricing({
       <div className={styles.advancedIntro}>
         <p className={styles.advancedLead}>
           Đây là các công cụ nâng cao. Việc chỉnh giá theo ngày làm ở{' '}
-          <Link href={`/partner/properties/${propertyId}/calendar`}>Lịch giá</Link>.
+          <Link href={`/partner/pricing/${propertyId}`}>Lịch giá</Link>.
         </p>
         <div className={styles.advancedActions}>
           <Button onClick={() => setBulkOpen(true)}>Áp giá hàng loạt</Button>

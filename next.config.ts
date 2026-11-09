@@ -26,6 +26,13 @@ const nextConfig: NextConfig = {
   // real console. Errors still surface in the dev overlay and the terminal.
   devIndicators: false,
 
+  experimental: {
+    // src/proxy.ts forwards /api/v1 to the backend, and Next buffers a proxied body only up
+    // to this size (default 10 MB). Image uploads go through it to the backend's disk store
+    // and may be up to MAX_UPLOAD_BYTES (15 MB), so allow a little more than that.
+    proxyClientMaxBodySize: '16mb',
+  },
+
   async rewrites() {
     return [{ source: '/api/v1/:path*', destination: `${apiOrigin}/api/v1/:path*` }];
   },

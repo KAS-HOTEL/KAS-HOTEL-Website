@@ -31,8 +31,12 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
     inFlight.current = true;
     setBusy(true); setError('');
     try {
+      const offered = confirm === 'offer';
       await action(); setConfirm(null); setOffering(false); router.refresh();
-      toast.show('success', 'Đã lưu quyết định của khách sạn.');
+      // The email is queued, not yet delivered: its real status shows under "Trạng thái email".
+      toast.show('success', offered
+        ? 'Đã ghi nhận đề xuất và kết thúc yêu cầu. Email đề xuất đã vào hàng đợi.'
+        : 'Đã lưu quyết định của khách sạn.');
     } catch (caught) {
       setConfirm(null);
       setError(caught instanceof ApiError ? messageFor(caught) : 'Không thể kết nối. Vui lòng thử lại.');
@@ -90,13 +94,13 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
     <ConfirmDialog open={confirm !== null} title={confirm === 'paid' ? 'Xác nhận tiền đã vào tài khoản?' : confirm === 'offer' ? 'Gửi đề xuất phòng khác?' : 'Xác nhận còn phòng và gửi QR?'}
       onCancel={() => { if (!busy) setConfirm(null); }}
       onConfirm={() => { if (confirm) void run(() => confirm === 'paid' ? salesRequestsApi.confirmPayment(request.reference) : confirm === 'offer' ? salesRequestsApi.proposeAlternative(request.reference, offer) : salesRequestsApi.approvePayment(request.reference)); }}
-      confirmLabel={confirm === 'offer' ? 'Gửi đề xuất cho khách' : 'Xác nhận'} busy={busy}>
+      confirmLabel={confirm === 'offer' ? 'Gửi đề xuất và kết thúc yêu cầu' : 'Xác nhận'} busy={busy}>
       {confirm === 'offer' ? <>
         <p>{hotels.find((hotel) => hotel.slug === offer.propertySlug)?.name ?? offer.propertySlug} · {rooms.find((room) => room.slug === offer.roomTypeSlug)?.name ?? offer.roomTypeSlug}</p>
         <p>{offer.checkIn} → {offer.checkOut} · {offer.quantity} phòng</p>
         <p>Tổng giá: {formatMoney({ amountMinor: offer.totalMinor, currency: request.total?.currency ?? 'VND', exponent: request.total?.exponent ?? 0 })}</p>
         {offer.message && <p>{offer.message}</p>}
-        <p>Khách sẽ xem và quyết định. Gửi đề xuất chưa xác nhận đặt phòng hoặc thanh toán.</p>
+        <p>Yêu cầu này sẽ kết thúc ngay khi gửi đề xuất. Không giữ phòng và không tạo yêu cầu mới; nếu khách muốn lưu trú theo phương án này, khách tạo yêu cầu mới trên website.</p>
       </> : confirm === 'paid' ? 'Chỉ xác nhận sau khi đã đối chiếu giao dịch ngân hàng. Đặt phòng sẽ được xác nhận cho khách.' : 'Bạn đã kiểm tra và xác nhận còn phòng thủ công. Hệ thống chuyển yêu cầu sang chờ thanh toán và gửi QR riêng của khách sạn cho khách. Chưa xác nhận đã nhận tiền.'}
     </ConfirmDialog>
   </Card>;

@@ -1,32 +1,280 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Offers & Member Benefits — KAS Hotel Collection</title><meta name="description" content="Keep your booking simple with direct-booking information, flexible options and member-focused benefits.">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/responsive.css"><script src="js/site-images.js" defer></script></head><body><header id="hdr"></header>
-<section class="section content-page-hero media-only-page-hero"><div class="container content-page-hero__inner"><span class="eyebrow eyebrow--lt">KAS Offers</span><h1>Offers & Member Benefits</h1><p>Keep your booking simple with direct-booking information, flexible options and member-focused benefits.</p></div></section>
-<section class="section"><div class="container content-page-section__inner"><div class="content-page-grid content-page-grid--auto"><div class="card"><h3>Direct booking</h3><p class="muted">Compare KAS reference rates by room type and selected dates, then continue through the direct booking flow.</p></div><div class="card"><h3>Flexible options</h3><p class="muted">Cancellation and payment terms are shown during the booking flow and can vary by room and selected stay dates.</p></div><div class="card"><h3>Member benefits</h3><p class="muted">My KAS keeps booking management and member-related actions in one place.</p></div></div><div class="content-page-action content-page-cta content-page-cta--dark"><h2>Ready to find your stay?</h2><p>Search all properties and compare room types, amenities and reference rates.</p><a class="btn btn--gold" href="hotels.html">View properties</a></div></div></section>
-<!-- KAS Membership policy: Silver / Gold / Platinum (owner decision 2026-11-05; migrations V48, V49; docs/kas/140 §5).
-     Tier names and thresholds must match membership_tier in the database. -->
-<section class="section" id="member"><div class="container content-page-section__inner">
-<span class="eyebrow">KAS Membership</span><h2>Member policy</h2>
-<p class="muted">Every KAS account is a membership. Tiers follow completed bookings in each calendar quarter.</p>
-<div class="content-page-grid content-page-grid--auto" style="margin-top:20px">
-<div class="card"><h3>Silver</h3><p class="muted">Default tier for every new account.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 0%</li></ul></div>
-<div class="card"><h3>Gold</h3><p class="muted">15 completed bookings in a calendar quarter.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 2% in KAS points</li></ul></div>
-<div class="card"><h3>Platinum</h3><p class="muted">30 completed bookings in a calendar quarter.</p><ul><li>10% member discount on room rates</li><li>Early check-in / late check-out up to 2 hours</li><li>Free cancellation until 12:00 on check-in day</li><li>Cashback: 5% in KAS points</li></ul></div>
-</div>
-<div class="content-page-grid content-page-grid--two" style="margin-top:18px">
-<div class="card"><h3>Upgrading and keeping your tier</h3><ul>
-<li>A completed booking is a stay that has checked out. Cancelled bookings and no-shows do not count.</li>
-<li>You move up as soon as a checkout reaches the next threshold. New benefits apply from that moment and are not backdated.</li>
-<li>You keep your tier for the rest of the quarter. At the start of each quarter your tier is reviewed against the completed bookings of the previous quarter, never below Silver.</li>
-</ul></div>
-<div class="card"><h3>KAS points</h3><ul>
-<li>1 point = 1 VND off a future KAS booking. Points cannot be exchanged for cash.</li>
-<li>Cashback is calculated on the room amount paid after vouchers and the member discount, excluding taxes and fees, rounded down.</li>
-<li>Points are added after a completed stay that has been paid in full.</li>
-<li>Points are valid for 3 calendar months from the day they are earned.</li>
-</ul></div>
-</div>
-<p class="muted" style="margin-top:14px">Your current tier and points are shown in My KAS.</p>
-</div></section><footer id="ftr"></footer>
-<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/data.js"></script><script src="js/utils.js"></script><script src="js/storage.js"></script><script src="js/contact.js"></script><script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script><script src="js/booking.js"></script><script src="js/search.js"></script><script>window.App.boot({active:'offers'});</script></body></html>
+<title>Offers & Member Benefits — KAS Hotel Collection</title><meta name="description" content="KAS Membership: Classic, Gold and Platinum tiers, member benefits, quarterly tier review and KAS points.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/responsive.css"><link rel="stylesheet" href="css/membership.css"><script src="js/site-images.js" defer></script><link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+</head><body><header id="hdr"></header>
+<!-- KAS Membership policy page (the "Offers" page): Classic / Gold / Platinum (owner decisions 2026-11-05 and
+     2026-11-08; migrations V48, V49, V52; docs/kas/140 §2). Layout follows the approved demo
+     KAS_Member_Policy_2026.html, drawn with the KAS Brand Identity 2026; tier names and wording follow the
+     approved policy (Classic, no "0%" line). Vietnamese text lives in js/i18n.js. -->
+<main class="mship">
+
+  <section class="mship-wrap mship-intro" id="membership" aria-labelledby="mship-title">
+    <div class="mship-hero">
+      <div class="mship-hero__copy">
+        <span class="mship-eyebrow">KAS Membership</span>
+        <h1 class="mship-hero__title" id="mship-title">Each stay,<br><em>more value.</em></h1>
+        <p>Join KAS for member room rates, flexible stays and points earned by tier. A journey looked after from your very first booking.</p>
+        <div class="mship-hero__actions">
+          <a class="mship-btn" href="#tiers">Explore membership tiers <span aria-hidden="true">↗</span></a>
+          <a class="mship-link" href="#policy">Read the full policy <span aria-hidden="true">↗</span></a>
+        </div>
+      </div>
+      <!-- Hero image: Admin-managed (site image slot page.hero.offers, js/site-images.js). -->
+      <div class="mship-hero__visual" role="img" aria-label="A KAS guest room, for the KAS membership policy">
+        <span class="mship-hero__kicker">KAS Hotel Collection / Membership 2026</span>
+        <p class="mship-hero__caption">A warm welcome.<br>Three levels of privilege.</p>
+      </div>
+    </div>
+    <dl class="mship-metrics" aria-label="Membership at a glance">
+      <div class="mship-metric"><dt>Free to join</dt><dd>0<small>VND</small></dd></div>
+      <div class="mship-metric"><dt>Direct room discount</dt><dd>10<small>%</small></dd></div>
+      <div class="mship-metric"><dt>Maximum points back</dt><dd>05<small>%</small></dd></div>
+      <div class="mship-metric"><dt>Classic · Gold · Platinum</dt><dd>03<small>tiers</small></dd></div>
+    </dl>
+  </section>
+
+  <section class="mship-wrap mship-section" id="tiers" aria-labelledby="tiers-title">
+    <div class="mship-head">
+      <div><span class="mship-eyebrow">01 / Member tiers</span><h2 id="tiers-title">Three membership tiers.<br>Privileges for every journey.</h2></div>
+      <p>Every KAS member gets 10% off the room rate when booking direct. Completed bookings in the quarter unlock higher points back.</p>
+    </div>
+    <div class="mship-tiers">
+      <article class="mship-tier">
+        <span class="mship-tier__index">01 / Welcome</span>
+        <h3>Classic</h3>
+        <p class="mship-tier__cond">Yours as soon as you create a KAS account.</p>
+        <div class="mship-tier__figure">10% <span>off room rates</span></div>
+        <ul>
+          <li>10% off room rates when booking direct</li>
+          <li>Stay privileges for every tier</li>
+          <li>Free to join</li>
+        </ul>
+      </article>
+      <article class="mship-tier mship-tier--gold">
+        <span class="mship-tier__index">02 / Recognition</span>
+        <h3>Gold</h3>
+        <p class="mship-tier__cond">15 completed bookings in a calendar quarter.</p>
+        <div class="mship-tier__figure">2% <span>back in points</span></div>
+        <ul>
+          <li>10% off room rates when booking direct</li>
+          <li>2% back on the eligible room amount</li>
+          <li>Stay privileges for every tier</li>
+        </ul>
+      </article>
+      <article class="mship-tier mship-tier--platinum">
+        <span class="mship-tier__index">03 / Distinction</span>
+        <h3>Platinum</h3>
+        <p class="mship-tier__cond">30 completed bookings in a calendar quarter.</p>
+        <div class="mship-tier__figure">5% <span>back in points</span></div>
+        <ul>
+          <li>10% off room rates when booking direct</li>
+          <li>5% back on the eligible room amount</li>
+          <li>Stay privileges for every tier</li>
+        </ul>
+      </article>
+    </div>
+    <div class="mship-note">
+      <strong>How bookings count</strong>
+      <p>A booking counts once the guest has completed the stay and paid in full. Cancelled bookings, and bookings where the guest did not stay, do not count towards the tier review.</p>
+      <p>Each booking counts once, whatever the number of nights or rooms. Bookings made on the website or by phone with the hotel both count; the check-out date (Vietnam time) decides the quarter.</p>
+    </div>
+  </section>
+
+  <section class="mship-band" id="join" aria-labelledby="join-title">
+    <div class="mship-wrap mship-join">
+      <div>
+        <span class="mship-eyebrow">02 / Join KAS</span>
+        <h2 id="join-title">Membership,<br>simple from<br><em>the first minute.</em></h2>
+        <p class="mship-copy">No complicated steps and no sign-up fee. Your KAS account keeps your member code and follows your benefits on every trip.</p>
+        <div class="mship-stamp">
+          <span>Member code format (example)</span>
+          <strong>KAS-XXXXXXXXXXXX</strong>
+          <small>Your actual code is shown in your account profile</small>
+        </div>
+      </div>
+      <ol class="mship-rules">
+        <li><span class="mship-rules__no">01</span><div><h3>Free sign-up</h3><p>Create an account on the KAS website and you become a Classic member straight away. There is no joining fee.</p></div></li>
+        <li><span class="mship-rules__no">02</span><div><h3>Your own member code</h3><p>Each account has a member code in the form KAS-XXXXXXXXXXXX. It never changes and is never given to anyone else. You can find it in your profile.</p></div></li>
+        <li><span class="mship-rules__no">03</span><div><h3>Join before your stay</h3><p>Guests without an account book as guests. If you join later, earlier stays do not count towards the tier review and earn no points.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="mship-wrap mship-section" id="rank" aria-labelledby="rank-title">
+    <div class="mship-head">
+      <div><span class="mship-eyebrow">03 / Tier review</span><h2 id="rank-title">Every check-out.<br>A new milestone.</h2></div>
+      <p>KAS records each completed booking, moves you up when you reach a threshold and reviews your tier at the start of each quarter.</p>
+    </div>
+    <div class="mship-panel">
+      <div class="mship-panel__top">
+        <div><span class="mship-kicker">Upgrade on the spot</span><h3>Reach the threshold today,<br>enjoy your new tier from the next booking.</h3></div>
+        <div>
+          <p>A new tier applies from the moment you meet its requirement. Its benefits do not apply to bookings completed before the upgrade. The booking that takes you over the threshold earns points at your previous tier.</p>
+          <p><b>Calendar quarter</b>: Quarter I (January–March), Quarter II (April–June), Quarter III (July–September) and Quarter IV (October–December). Your tier is reviewed on the number of bookings completed in the quarter.</p>
+        </div>
+      </div>
+      <ol class="mship-track">
+        <li><small>01 / Check-out</small><h4>Booking recorded</h4><p>Each booking counts once, on its check-out date in Vietnam, whatever the number of rooms or nights.</p></li>
+        <li><small>02 / Upgrade</small><h4>Move up</h4><p>You move up as soon as your completed bookings in the quarter reach the next threshold.</p></li>
+        <li><small>03 / Quarterly review</small><h4>Reviewed each quarter</h4><p>You keep your tier for the rest of the quarter. A new quarter reviews it against the previous quarter’s completed bookings; the lowest tier is Classic.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="mship-dark" id="benefits" aria-labelledby="benefits-title">
+    <div class="mship-wrap">
+      <div class="mship-head">
+        <div><span class="mship-eyebrow">04 / Stay privileges</span><h2 id="benefits-title">Your time.<br>Valued more.</h2></div>
+        <p>Three stay privileges for every membership tier, from Classic to Platinum.</p>
+      </div>
+      <div class="mship-benefits">
+        <article><div class="mship-benefits__figure">−02<small>hours</small></div><h3>Early check-in</h3><p>Check in up to 2 hours before the standard check-in time, subject to room availability.</p><span class="mship-benefits__fine">All member tiers</span></article>
+        <article><div class="mship-benefits__figure">+02<small>hours</small></div><h3>Late check-out</h3><p>Check out up to 2 hours after the standard check-out time, subject to room availability.</p><span class="mship-benefits__fine">All member tiers</span></article>
+        <article><div class="mship-benefits__figure">12:00<small>noon</small></div><h3>Cancel free of charge</h3><p>Cancel free of charge until 12:00 noon on your check-in day, under the applicable terms.</p><span class="mship-benefits__fine">All member tiers</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="mship-wrap mship-section" id="discount" aria-labelledby="discount-title">
+    <div class="mship-head">
+      <div><span class="mship-eyebrow">05 / Member rate</span><h2 id="discount-title">A member rate.<br>Clear at every step.</h2></div>
+      <p>The member discount is calculated on the room amount before taxes and fees, in the same order on every direct booking.</p>
+    </div>
+    <div class="mship-discount">
+      <div class="mship-discount__title">
+        <div><span class="mship-eyebrow">How the offers apply</span><h3>Voucher first. Member discount next.<br>KAS points last.</h3></div>
+        <div class="mship-discount__badge">10%<small>member rate</small></div>
+      </div>
+      <ol class="mship-flow">
+        <li><small>01 / Voucher</small><h4>Apply a voucher</h4><p>Each booking can use at most one voucher.</p></li>
+        <li><small>02 / Member discount</small><h4>10% member discount</h4><p>10% off the room amount after the voucher, before taxes and fees.</p></li>
+        <li><small>03 / Redeem points</small><h4>Use KAS points</h4><p>Points can pay up to 50% of the room amount left after the offers.</p></li>
+      </ol>
+      <p class="mship-discount__foot"><b>Please note:</b> The 10% discount applies only when booking direct with KAS. Points cannot pay taxes or fees; 1 point = 1 VND.</p>
+    </div>
+  </section>
+
+  <section class="mship-band" id="points" aria-labelledby="points-title">
+    <div class="mship-wrap mship-section">
+      <div class="mship-head">
+        <div><span class="mship-eyebrow">06 / KAS points</span><h2 id="points-title">KAS points.<br>Every stay counts.</h2></div>
+        <p>Points back by tier for Gold and Platinum, used on your next booking, each earning with its own expiry date.</p>
+      </div>
+      <div class="mship-points">
+        <div class="mship-points__main">
+          <span class="mship-kicker">KAS reward currency</span>
+          <div class="mship-points__big">01 point <em>=</em><br>01 VND</div>
+          <p>Points can only be deducted from a KAS booking and cannot be exchanged for cash.</p>
+        </div>
+        <div class="mship-points__side">
+          <h3>Stay completed.<br>Paid in full.<br>Then points are added.</h3>
+          <p>Points are calculated on the room amount actually paid after vouchers and the member discount, excluding taxes and fees, and rounded down.</p>
+          <span class="mship-points__highlight">Gold 2% · Platinum 5%</span>
+        </div>
+      </div>
+      <div class="mship-cards">
+        <article><span class="mship-cards__no">01 / Earn &amp; expire</span><h3>Earning and expiry</h3><ul>
+          <li>Points are added only after check-out and payment in full.</li>
+          <li>Gold earns 2% back; Platinum earns 5% back.</li>
+          <li>Each earning is valid for 3 months from the day it is added, Vietnam time.</li>
+          <li>When you use points, those closest to expiry are used first.</li>
+        </ul></article>
+        <article><span class="mship-cards__no">02 / Use &amp; release</span><h3>Using and returning points</h3><ul>
+          <li>Each booking can use points for up to 50% of the room amount after vouchers and the member discount.</li>
+          <li>Points are held when the booking is confirmed and deducted only after check-out and payment in full.</li>
+          <li>A cancelled booking returns its points with their original expiry; points already past expiry when returned expire straight away.</li>
+        </ul></article>
+        <article><span class="mship-cards__no">03 / Refund &amp; balance</span><h3>Refunds and points owed</h3><ul>
+          <li>A refunded booking takes back the points it earned.</li>
+          <li>If those points were already used, the amount used is recorded as points owed.</li>
+          <li>Points owed are settled from your next earnings.</li>
+          <li>Your points balance is never negative.</li>
+        </ul></article>
+      </div>
+      <p class="mship-callout"><b>Held and deducted points:</b> When you confirm a booking, the points you chose to use are held. They are deducted only after the stay is completed and paid in full. If you cancel, the points come back, without any extra time added to their expiry.</p>
+    </div>
+  </section>
+
+  <section class="mship-wrap mship-section" id="policy" aria-labelledby="policy-title">
+    <div class="mship-policy">
+      <aside class="mship-policy__side">
+        <span class="mship-eyebrow">07 / Terms &amp; conditions</span>
+        <h2 id="policy-title">The policy,<br>clear from the start.</h2>
+        <p>The key rules are set out below so you can follow your benefits and manage your member points.</p>
+        <nav class="mship-policy__nav" aria-label="Policy contents">
+          <a href="#policy-join"><span>01</span>Joining &amp; member code</a>
+          <a href="#policy-orders"><span>02</span>Completed bookings</a>
+          <a href="#policy-rank"><span>03</span>Tier review &amp; upgrades</a>
+          <a href="#policy-privileges"><span>04</span>Privileges &amp; discount</a>
+          <a href="#policy-accrual"><span>05</span>Earning &amp; expiry</a>
+          <a href="#policy-redemption"><span>06</span>Using points &amp; cancellations</a>
+          <a href="#policy-refunds"><span>07</span>Refunds &amp; points owed</a>
+        </nav>
+      </aside>
+      <div class="mship-policy__content">
+        <span class="mship-eyebrow">Membership policy</span>
+        <h2>How it applies</h2>
+        <article id="policy-join"><span class="mship-policy__no">01</span><div><h3>Joining</h3>
+          <p>Create an account on the KAS website to become a Classic member, free of charge. Each member has their own code in the form KAS-XXXXXXXXXXXX, which never changes and is never reissued; you can find it in your profile.</p>
+          <p>Guests without an account book as guests. If you join later, earlier stays do not count towards the tier review and earn no points.</p></div></article>
+        <article id="policy-orders"><span class="mship-policy__no">02</span><div><h3>Identifying completed bookings</h3>
+          <p>A booking counts once the guest has completed the stay and paid in full. Cancelled bookings, and bookings where the guest did not stay, do not count towards the tier review. Each booking counts once, whatever the number of nights or rooms.</p>
+          <p>The quarter is decided by the check-out date, Vietnam time. Bookings made on the website and by phone with the hotel both count.</p></div></article>
+        <article id="policy-rank"><span class="mship-policy__no">03</span><div><h3>Tier thresholds and review</h3>
+          <p>Classic: the default tier. Gold: 15 completed bookings in a calendar quarter. Platinum: 30 completed bookings in a calendar quarter.</p>
+          <p>A new tier applies from the moment you meet its requirement. Its benefits do not apply to bookings completed before the upgrade; the booking that takes you over the threshold earns points at your previous tier. You keep your tier for the rest of the quarter. At the start of each quarter your tier is reviewed against the completed bookings of the previous quarter, never below Classic.</p></div></article>
+        <article id="policy-privileges"><span class="mship-policy__no">04</span><div><h3>Stay privileges and discount</h3>
+          <p>Every tier can check in up to 2 hours early and check out up to 2 hours late, subject to room availability, and cancel free of charge until 12:00 noon on the check-in day.</p>
+          <p>Booking direct with KAS gives 10% off the room amount before taxes and fees. The order is: voucher, then the 10% member discount, then points. Each booking can use at most one voucher.</p></div></article>
+        <article id="policy-accrual"><span class="mship-policy__no">05</span><div><h3>Earning points and expiry</h3>
+          <p>1 point = 1 VND when deducted from a booking; points cannot be exchanged for cash. Gold earns 2% back and Platinum 5% back.</p>
+          <p>Points are calculated on the room amount actually paid after vouchers and the member discount, excluding taxes and fees, and rounded down. They are added only once the stay is completed and paid in full. Each earning is valid for 3 months, Vietnam time; points closest to expiry are used first.</p></div></article>
+        <article id="policy-redemption"><span class="mship-policy__no">06</span><div><h3>Using points and cancellations</h3>
+          <p>Each booking can use points for up to 50% of the room amount after vouchers and the member discount; points cannot pay taxes or fees.</p>
+          <p>Points are held when the booking is confirmed and deducted only after the stay is completed and paid in full. If you cancel, the points come back with their original expiry; points already past expiry when returned expire straight away.</p></div></article>
+        <article id="policy-refunds"><span class="mship-policy__no">07</span><div><h3>Refunds and points owed</h3>
+          <p>When a booking is refunded, the points it earned are taken back. If you have already used those points, the amount used is recorded as points owed and settled from your next earnings.</p>
+          <p>Your points balance is never negative.</p></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="mship-faq" id="faq" aria-labelledby="faq-title">
+    <div class="mship-wrap mship-faq__layout">
+      <div>
+        <span class="mship-eyebrow">08 / Good to know</span>
+        <h2 id="faq-title">Frequently<br>asked questions.</h2>
+        <p>Quick answers to common questions about joining and using KAS points.</p>
+      </div>
+      <div class="mship-faq__list">
+        <details><summary>Is there a fee to become a KAS member?</summary><p>No. When you create an account on the KAS website, you become a Classic member free of charge and receive your own member code in your profile.</p></details>
+        <details><summary>Do bookings made by phone count towards an upgrade?</summary><p>Yes. Bookings made on the website and by phone with the hotel both count once the guest has completed the stay and paid in full. Each booking counts once, whatever the number of nights or rooms.</p></details>
+        <details><summary>I reached Gold on check-out. Does the stay I just finished earn 2%?</summary><p>No. The booking that takes you to Gold earns points at your tier before the upgrade. Gold benefits apply from your next booking.</p></details>
+        <details><summary>How long are KAS points valid?</summary><p>Each earning is valid for 3 months from the moment it is added, Vietnam time. When you use points, those closest to expiry are used first.</p></details>
+        <details><summary>What happens if I cancel after using points?</summary><p>The points held for the booking come back with their original expiry. Points that have already expired when they come back expire straight away; they are not extended.</p></details>
+        <details><summary>Can points owed make my balance negative?</summary><p>No. If points from a refunded booking were already used, KAS records them as points owed and settles them from your next earnings. Your points balance is never negative.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- The call to action follows the member's sign-in state (js/membership.js). -->
+  <section class="mship-cta" aria-labelledby="cta-title">
+    <div class="mship-wrap mship-cta__inner">
+      <div><span class="mship-eyebrow">KAS Hotel Collection</span><h2 id="cta-title">Begin your journey.<br>More value with every stay.</h2></div>
+      <div data-mship-cta="guest">
+        <p>Join free to receive the Classic tier and the direct-booking discount for KAS members.</p>
+        <a class="mship-btn mship-btn--light" href="manage-booking.html" data-mship-join>Join KAS for free <span aria-hidden="true">↗</span></a>
+      </div>
+      <div data-mship-cta="member" hidden>
+        <p>Your current tier and points are shown in My KAS.</p>
+        <a class="mship-btn mship-btn--light" href="manage-booking.html">Explore My KAS <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
+  </section>
+</main>
+<footer id="ftr"></footer>
+<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/data.js"></script><script src="js/utils.js"></script><script src="js/storage.js"></script><script src="js/contact.js"></script><script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script><script src="js/booking.js"></script><script src="js/search.js"></script><script src="js/membership.js"></script><script>window.App.boot({active:'offers', floating:false});</script></body></html>

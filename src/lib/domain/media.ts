@@ -162,6 +162,48 @@ export function mediaCategoryLabel(category: string): string {
   return CATEGORY_LABELS[category as MediaCategory] ?? category;
 }
 
+/**
+ * The six groups a hotel's gallery is shown in, to staff and to guests (owner
+ * decision, 2026-11-08). Each maps onto the frozen `media_category` enum; `primary`
+ * is what a photo filed under the group is stored as. The website groups photos the
+ * same way (js/catalog-sync.js: rooms · lobby · dining · amenities · exterior · other).
+ */
+export const GALLERY_GROUPS = [
+  { key: 'rooms', label: 'Phòng nghỉ', primary: 'ROOM', categories: ['ROOM'] },
+  { key: 'lobby', label: 'Sảnh & lễ tân', primary: 'LOBBY', categories: ['LOBBY'] },
+  { key: 'dining', label: 'Nhà hàng & ẩm thực', primary: 'DINING', categories: ['DINING'] },
+  { key: 'amenities', label: 'Tiện ích', primary: 'FACILITY', categories: ['FACILITY', 'ROOFTOP'] },
+  { key: 'exterior', label: 'Ngoại thất', primary: 'EXTERIOR', categories: ['EXTERIOR'] },
+  {
+    key: 'other',
+    label: 'Khác',
+    primary: 'DETAIL',
+    categories: ['NEIGHBOURHOOD', 'DETAIL', 'STAFF', 'EVENT', 'DOCUMENT'],
+  },
+] as const satisfies readonly {
+  readonly key: string;
+  readonly label: string;
+  readonly primary: MediaCategory;
+  readonly categories: readonly MediaCategory[];
+}[];
+
+export type GalleryGroupKey = (typeof GALLERY_GROUPS)[number]['key'];
+
+/** The group a stored category belongs to; anything unknown is "Khác". */
+export function galleryGroupOf(category: string): GalleryGroupKey {
+  const group = GALLERY_GROUPS.find((g) => (g.categories as readonly string[]).includes(category));
+  return group ? group.key : 'other';
+}
+
+/** How many items fall in each group, for the filter. */
+export function galleryGroupCounts(categories: readonly string[]): Readonly<Record<GalleryGroupKey, number>> {
+  const counts = Object.fromEntries(GALLERY_GROUPS.map((g) => [g.key, 0])) as Record<GalleryGroupKey, number>;
+  for (const category of categories) {
+    counts[galleryGroupOf(category)] += 1;
+  }
+  return counts;
+}
+
 const STATUS_LABELS: Readonly<Record<MediaStatus, string>> = {
   DRAFT: 'Nháp',
   PUBLISHED: 'Đã xuất bản',

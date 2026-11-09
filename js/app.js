@@ -641,21 +641,28 @@
       return '';
     });
   }
-  /* A staff account has no customer profile (404). The backend says which
-     console it may open — the browser never decides the role — and only then
-     does the account menu offer the way in. Customers never see it. */
-  function resolveStaffSession(email) {
-    if (!global.KAS_API) return Promise.resolve(null);
-    return global.KAS_API.request('/api/v1/me/console').then(function (view) {
-      var role = view && view.console;
-      if (role !== 'ADMIN' && role !== 'SUPER_ADMIN') return null;
-      return consoleBaseUrl().then(function (base) {
-        return {
-          name: role === 'SUPER_ADMIN' ? 'Super Admin' : 'Admin', email: email || '', staffRole: role,
-          consoleUrl: base ? base + (role === 'SUPER_ADMIN' ? '/partner' : '/admin') : ''
-        };
-      });
-    }, function () { return null; });
+  /* Server separation (doc 156): staff sign in on the console host only. The website
+     proxy marks its requests as the customer surface and the backend refuses staff
+     sign-in here (USE_ADMIN_CONSOLE). A session without a guest profile (404) - e.g.
+     an older staff session, or a local run that talks to the API directly - is ended
+     on this host instead of being kept, and the visitor is pointed to the console. */
+  function endNonCustomerSession() {
+    persistSession(null);
+    syncAuthHeader();
+    return global.KAS_API ? global.KAS_API.logout().catch(function () {}) : Promise.resolve();
+  }
+  function staffConsoleMessage(node) {
+    var vi = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi';
+    var text = vi ? 'Tài khoản nhân viên đăng nhập tại trang quản trị KAS.' : 'Staff accounts sign in on the KAS admin console.';
+    node.textContent = text;
+    consoleBaseUrl().then(function (base) {
+      if (!base) return;
+      var link = document.createElement('a');
+      link.href = base + '/admin/login';
+      link.rel = 'noopener';
+      link.textContent = vi ? ' Mở trang quản trị' : ' Open the admin console';
+      node.appendChild(link);
+    });
   }
   function hydrateMemberSession() {
     if (!global.KAS_API) return;
@@ -668,7 +675,7 @@
         persistSession(null);
         syncAuthHeader();
       } else if (error.status === 404) {
-        resolveStaffSession('').then(function (staff) { persistSession(staff); syncAuthHeader(); });
+        endNonCustomerSession();
       }
     });
   }
@@ -704,11 +711,9 @@
     wrap.innerHTML = '<button class="kas-member-trigger" type="button" aria-label="Member menu" aria-expanded="false" title="' + name.replace(/[&<>"']/g, '') + '"><span class="kas-avatar" aria-hidden="true"></span><span class="kas-member-trigger__name">' + name.replace(/[&<>"']/g, '') + '</span></button>' +
       '<div class="kas-user-menu__panel" role="menu" hidden>' +
       '<div class="kas-user-menu__identity"><strong>' + name.replace(/[&<>"']/g, '') + '</strong><span>' + String(session.email || '').replace(/[&<>"']/g, '') + '</span></div>' +
-      (session.staffRole
-        ? (session.consoleUrl ? '<a role="menuitem" class="kas-user-menu__admin" href="' + session.consoleUrl.replace(/"/g, '%22') + '">Admin console</a>' : '')
-        : '<button type="button" role="menuitem" data-member-action="account">My account</button>' +
-          '<a role="menuitem" href="offers.html#member">Member policy</a>' +
-          '<button type="button" role="menuitem" data-member-action="saved">Saved hotels</button>') +
+      '<button type="button" role="menuitem" data-member-action="account">My account</button>' +
+      '<a role="menuitem" href="offers.html#member">Member policy</a>' +
+      '<button type="button" role="menuitem" data-member-action="saved">Saved hotels</button>' +
       '<button type="button" role="menuitem" data-member-action="logout">Sign out</button></div>';
     old.replaceWith(wrap);
     renderMemberAvatar(U.$('.kas-avatar', wrap), name, session.avatar);
@@ -736,7 +741,7 @@
         } else if (action === 'account') {
           window.location.href = 'manage-booking.html?view=profile';
         } else if (action === 'saved') {
-          window.location.href = 'saved-hotels.html';
+          window.location.href = 'manage-booking.html?view=saved';
         }
       });
     });
@@ -760,7 +765,7 @@
   }
 
   function showSavedHotels() {
-    window.location.href = 'saved-hotels.html';
+    window.location.href = 'manage-booking.html?view=saved';
   }
 
   function showMemberNotice(title, message) {
@@ -938,7 +943,7 @@
       global.KAS_API.login(emailLogin,password).then(function(){return global.KAS_API.profile()}).then(function(profile){
         persistSession(sessionFromProfile(profile));
         msg.textContent='Signed in successfully.';syncAuthHeader();finishAuth(400);
-      }).catch(function(error){if(error.status===404){/* Signed in, but not a customer: a staff account. */resolveStaffSession(emailLogin).then(function(staff){var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(!staff){msg.textContent=vi?'Tài khoản này không có hồ sơ khách hàng.':'This account has no guest profile.';submitButton.disabled=false;return;}persistSession(staff);msg.textContent=vi?'Đã đăng nhập. Mở "Trang quản trị" trong menu tài khoản.':'Signed in. Open "Admin console" from the account menu.';syncAuthHeader();finishAuth(900);});return;}var needsVerification=error.payload && (error.payload.details || []).some(function(item){return item.code==='EMAIL_NOT_VERIFIED';});var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(needsVerification){showVerification(emailLogin,password,false);m.querySelector('#kasAuthMessage').textContent=vi?'Email chưa được xác thực. Nhập mã đã gửi sau khi đăng ký, hoặc bấm gửi lại mã.':'Your email is not verified yet. Enter the code sent after registration, or resend a code.';m.querySelector('#kasAuthCode').focus();return;}msg.textContent=error.message;submitButton.disabled=false;});
+      }).catch(function(error){var staffAccount=(error.payload && (error.payload.details || []).some(function(item){return item.code==='USE_ADMIN_CONSOLE';}));if(staffAccount||error.status===404){/* A staff account: refused here by the backend (customer surface), or signed in by a direct local call - end that session on this host. Staff use the console. */(error.status===404?endNonCustomerSession():Promise.resolve()).then(function(){staffConsoleMessage(msg);submitButton.disabled=false;});return;}var needsVerification=error.payload && (error.payload.details || []).some(function(item){return item.code==='EMAIL_NOT_VERIFIED';});var vi=global.KAS_I18N && global.KAS_I18N.getLanguage()==='vi';if(needsVerification){showVerification(emailLogin,password,false);m.querySelector('#kasAuthMessage').textContent=vi?'Email chưa được xác thực. Nhập mã đã gửi sau khi đăng ký, hoặc bấm gửi lại mã.':'Your email is not verified yet. Enter the code sent after registration, or resend a code.';m.querySelector('#kasAuthCode').focus();return;}msg.textContent=error.message;submitButton.disabled=false;});
     }
     document.body.appendChild(m); document.body.style.overflow='hidden';
     closeOnBackdropPress(m, close);
@@ -1102,8 +1107,11 @@
     if (!global.Store || !global.Store.isHotelSaved) return;
     var copy = SAVE_COPY[global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi' ? 'vi' : 'en'];
     U.$$('[data-save-hotel]', root || document).forEach(function (btn) {
-      var saved = global.Store.isHotelSaved(btn.getAttribute('data-save-hotel'));
+      var id = btn.getAttribute('data-save-hotel');
+      var saved = global.Store.isHotelSaved(id);
+      var busy = !!(global.Store.isHotelSaving && global.Store.isHotelSaving(id));
       btn.classList.toggle('is-saved', saved);
+      if (busy) btn.setAttribute('aria-busy', 'true'); else btn.removeAttribute('aria-busy');
       btn.setAttribute('aria-pressed', String(saved));
       btn.setAttribute('aria-label', copy.aria[saved ? 1 : 0]);
       btn.setAttribute('title', copy.aria[saved ? 1 : 0]);
@@ -1120,10 +1128,14 @@
     if (!btn || !global.Store || !global.Store.toggleSavedHotel) return;
     e.preventDefault();
     e.stopPropagation();
-    var saved = global.Store.toggleSavedHotel(btn.getAttribute('data-save-hotel'));
-    if (saved === null) return; /* signing in first; the save finishes afterwards */
-    var vi = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi';
-    U.toast(saved ? (vi ? 'Đã lưu vào My KAS.' : 'Saved to My KAS.') : (vi ? 'Đã bỏ lưu.' : 'Removed from Saved.'));
+    var pending = global.Store.toggleSavedHotel(btn.getAttribute('data-save-hotel'));
+    if (!pending) return; /* signing in first (the save finishes afterwards), or already saving */
+    /* The toast follows the server's answer; a failure has its own message from the store. */
+    pending.then(function (saved) {
+      if (saved === null) return;
+      var vi = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi';
+      U.toast(saved ? (vi ? 'Đã lưu vào My KAS.' : 'Saved to My KAS.') : (vi ? 'Đã bỏ lưu.' : 'Removed from Saved.'));
+    });
   }, true);
   global.addEventListener('kas:saved-hotels-changed', function () { paintSaveButtons(); });
   document.addEventListener('kas:language', function () { paintSaveButtons(); });

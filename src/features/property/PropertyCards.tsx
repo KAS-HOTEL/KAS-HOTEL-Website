@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { DeleteDraftButton } from './DeleteDraftButton';
 import type { MediaCoverView } from '@/lib/domain/media';
 import { displayName, missingInformation, type PropertyAdminView } from '@/lib/domain/property';
 import { Badge } from '@/ui/primitives';
@@ -41,11 +42,14 @@ export function PropertyCards({
   properties,
   covers,
   coversUnavailable = false,
+  roomTypeCounts,
 }: {
   readonly properties: readonly PropertyAdminView[];
   /** Cover per property id. A property with none is simply absent. */
   readonly covers?: ReadonlyMap<string, MediaCoverView> | undefined;
   readonly coversUnavailable?: boolean | undefined;
+  /** Room types per property id; absent when they could not be read. */
+  readonly roomTypeCounts?: ReadonlyMap<string, number> | undefined;
 }) {
   return (
     <ul className={styles.list}>
@@ -76,6 +80,9 @@ export function PropertyCards({
               {/* The slug line is gone — see PropertyTable for the reasoning.
                   On a phone it was also the widest thing on the card. */}
               <span className={styles.meta}>
+                {roomTypeCounts?.has(property.id) ? (
+                  <span className={styles.metaLine}>{roomTypeCounts.get(property.id)} hạng phòng</span>
+                ) : null}
                 {address === '' ? null : <span className={styles.metaLine}>{address}</span>}
                 {property.phone === undefined ? null : (
                   <span className={styles.metaLine}>{property.phone}</span>
@@ -96,6 +103,11 @@ export function PropertyCards({
                 </span>
               ) : null}
             </Link>
+            {property.lifecycleState === 'DRAFT' ? (
+              <div className={styles.cardActions}>
+                <DeleteDraftButton propertyId={property.id} name={name ?? property.slug} />
+              </div>
+            ) : null}
           </li>
         );
       })}

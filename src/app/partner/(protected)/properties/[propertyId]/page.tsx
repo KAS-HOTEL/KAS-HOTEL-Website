@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { propertyGallery } from '@/features/media/server';
+import { propertyGallery, roomGallery } from '@/features/media/server';
 import { PropertyOverview } from '@/features/property/PropertyOverview';
 import { TripIntentEditor } from '@/features/property/TripIntentEditor';
 import { publicTripIntents } from '@/features/hotel/server';
@@ -71,6 +71,16 @@ export default async function PartnerPropertyDetailPage({
     publicTripIntents('vi'),
   ]);
 
+  // A draft's setup steps say which room types still have no photograph. Only read
+  // while the hotel is a draft, one request per room type (a hotel has a handful).
+  let roomsWithoutPhotos: number | null = null;
+  if (result.property.lifecycleState === 'DRAFT' && rooms.status === 'ok') {
+    const galleries = await Promise.all(rooms.roomTypes.map((room) => roomGallery(room.id)));
+    roomsWithoutPhotos = galleries.some((g) => g.status !== 'ok')
+      ? null
+      : galleries.filter((g) => g.status === 'ok' && g.items.length === 0).length;
+  }
+
   return (
     <div className={styles.page}>
       <PropertyOverview
@@ -78,6 +88,7 @@ export default async function PartnerPropertyDetailPage({
         completeness={result.completeness}
         roomTypes={rooms.status === 'ok' ? rooms.roomTypes : []}
         gallery={gallery.status === 'ok' ? gallery.items : []}
+        roomsWithoutPhotos={roomsWithoutPhotos}
       />
       {tripIntents.status === 'ok' ? (
         <TripIntentEditor

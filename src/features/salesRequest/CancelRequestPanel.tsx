@@ -39,6 +39,7 @@ export function CancelRequestPanel({
       reference={reference}
       copy={copy}
       submit={salesRequestsApi.cancel}
+      cancelOptions
     />
   );
 }
@@ -69,7 +70,7 @@ export const CANCEL_COPY: CancelCopy = {
   submitting: 'Đang xử lý…',
   success: 'Đã ghi nhận việc huỷ yêu cầu. Toàn bộ phòng đang giữ đã được trả lại.',
   noNotification:
-    'Hệ thống chưa gửi email hay thông báo nào cho khách. Vui lòng xác nhận với khách trực tiếp.',
+    'Sau khi xác nhận, hệ thống đưa email báo huỷ vào hàng đợi; trạng thái gửi thực tế hiện ở mục “Trạng thái email”.',
   errorAlreadyMoved:
     'Yêu cầu này đã được xử lý bởi người khác. Vui lòng tải lại để xem trạng thái mới nhất.',
   errorNotFound: 'Không tìm thấy yêu cầu này.',

@@ -8,7 +8,8 @@ vi.mock('next/navigation', () => ({ useRouter: () => ({ push: calls.push, refres
 vi.mock('@/lib/api/endpoints/adminTools', () => ({
   ADMIN_LIST_PAGE_SIZE: 50,
   reviewsApi: { list: calls.reviews, moderate: calls.moderate },
-  customersApi: { list: calls.customers, update: vi.fn() },
+  // The list reads through search() since 2026-11-07 (server-side filters + total).
+  customersApi: { list: calls.customers, search: calls.customers, update: vi.fn() },
   vouchersApi: { list: calls.vouchers, create: calls.createVoucher, setStatus: vi.fn() },
 }));
 import { ReviewManager } from './ReviewManager';
@@ -143,4 +144,33 @@ it('applies a voucher to chosen hotels, or to every hotel by default', async () 
   await userEvent.click(dialog.querySelector('button[type="submit"]') as HTMLElement);
   await waitFor(() => expect(calls.createVoucher).toHaveBeenCalledTimes(1));
   expect(calls.createVoucher.mock.calls[0]?.[0]).toMatchObject({ propertySlugs: ['kas-riverside'] });
+});
+
+it('filters customers by tier and a registration day on the server and shows the total', async () => {
+  calls.customers.mockImplementation((_filter: unknown, onTotal?: (total: number | null) => void) => {
+    onTotal?.(3);
+    return Promise.resolve([{ id: 'c1', fullName: 'Lan Anh', email: 'lan@example.invalid', phone: '0900', locale: 'vi', createdAt: '2026-10-01T03:00:00Z', points: 0, reservedPoints: 0, customerCode: 'KAS-123ABC', accountStatus: 'ACTIVE', avatarUrl: null }]);
+  });
+  render(<CustomerManager />);
+  expect(await screen.findByText('3 khách hàng phù hợp')).toBeTruthy();
+  await userEvent.selectOptions(screen.getByLabelText('Hạng thành viên'), 'GOLD');
+  await userEvent.selectOptions(screen.getByLabelText('Ngày đăng ký'), 'day');
+  await userEvent.type(screen.getByLabelText('Chọn ngày'), '2026-10-01');
+  await userEvent.type(screen.getByLabelText('Tên, email hoặc điện thoại'), 'lan');
+  await userEvent.click(screen.getByRole('button', { name: 'Tìm kiếm' }));
+  await waitFor(() => expect(calls.customers).toHaveBeenLastCalledWith(
+    { q: 'lan', tier: 'GOLD', page: 0, registeredFrom: '2026-10-01', registeredTo: '2026-10-01' }, expect.any(Function)));
+  await userEvent.click(screen.getByRole('button', { name: 'Xoá lọc' }));
+  await waitFor(() => expect(calls.customers).toHaveBeenLastCalledWith({ q: '', tier: '', page: 0 }, expect.any(Function)));
+});
+
+it('refuses a registration range that ends before it starts, without calling the server', async () => {
+  calls.customers.mockResolvedValue([]);
+  render(<CustomerManager />);
+  await screen.findByText('Không tìm thấy khách hàng');
+  const before = calls.customers.mock.calls.length;
+  await userEvent.selectOptions(screen.getByLabelText('Ngày đăng ký'), 'range');
+  await userEvent.click(screen.getByRole('button', { name: 'Tìm kiếm' }));
+  expect(await screen.findByText('Chọn ít nhất một đầu của khoảng ngày.')).toBeTruthy();
+  expect(calls.customers.mock.calls.length).toBe(before);
 });

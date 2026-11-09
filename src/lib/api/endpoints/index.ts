@@ -33,8 +33,6 @@ export { reservationsApi } from './reservations';
 export { salesRequestsApi } from './salesRequests';
 export type { ContactLogEntry, SalesQueueCounts, SalesQueueFilters, SalesQueueView, SalesRequestNote } from './salesRequests';
 export { opsReservationsApi } from './opsReservations';
-export { conversationsApi, messageTemplatesApi } from './conversations';
-export type { ConversationFilters, MessageTemplateInput } from './conversations';
 export type { ReservationSearchFilters } from './opsReservations';
 export { mediaApi } from './media';
 export { siteImageSlotsApi } from './siteImageSlots';

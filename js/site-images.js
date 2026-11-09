@@ -10,18 +10,9 @@
       if(item&&item.url&&el&&el.tagName==='IMG') el.src=item.url;
     }
     setImg('home.dayInSaigon','img[data-site-image="home.dayInSaigon"], img[alt="A day in Saigon"]');
-    /* Homepage V3 City Guide feature: one image, keyed like the first story card. */
+    /* Homepage V3 City Guide section: one image. The old four story cards (and their
+       taste/slow/night slots, removed in V55) are gone from the homepage. */
     setImg('home.neighborhood.city','img[data-site-image="home.neighborhood.city"]');
-    /* Keep the four homepage story cards tied to their stable Admin keys.
-       Match the actual anchor URL rather than relying on a brittle CSS selector. */
-    ['city','taste','slow','night'].forEach(function(k){
-      var item=site['home.neighborhood.'+k];
-      var card=Array.prototype.find.call(document.querySelectorAll('.home-neighborhoods__card'),function(el){
-        try { return new URL(el.getAttribute('href'),location.href).hash==='#'+k; } catch (_) { return false; }
-      });
-      var img=card&&card.querySelector('img');
-      if(item&&item.url&&img&&img.getAttribute('src')!==item.url) img.setAttribute('src',item.url);
-    });
     /* Home Hero is exactly 12 slides: 8 KAS properties + 4 Vietnam destinations.
        First 8 use dedicated admin keys; slides 9-12 retain the legacy heroExtra
        keys so existing overrides remain compatible. */
@@ -50,14 +41,6 @@
     }
     return Promise.all(heroLoads);
   }
-  function applyFindYourKas(site){
-    site=site||{};
-    var main=site['find.zero.main'], card=site['find.zero.card'];
-    var mainEl=document.querySelector('.find-page-hero-main');
-    var cardEl=document.querySelector('.find-page-hero-card');
-    if(main&&main.url&&mainEl) mainEl.style.backgroundImage="url('"+String(main.url).replace(/'/g,"%27")+"')";
-    if(card&&card.url&&cardEl) cardEl.style.backgroundImage="url('"+String(card.url).replace(/'/g,"%27")+"')";
-  }
   function applyGuidebook(site){
     site=site||{};
     var hero=site['guidebook.hero'], visual=document.querySelector('.hero-visual');
@@ -84,7 +67,7 @@
     if(welcome&&site['page.hero.welcome']&&site['page.hero.welcome'].url) welcome.src=site['page.hero.welcome'].url;
     var targets={
       'page.hero.experiences':document.querySelector('.content-page-hero'),
-      'page.hero.offers':document.querySelector('.content-page-hero'),
+      'page.hero.offers':document.querySelector('.mship-hero__visual'),
       'page.hero.my-kas':document.querySelector('.hero--mykas-intro'),
       'page.hero.about':document.querySelector('.content-page-hero'),
       'page.hero.support':document.querySelector('.content-page-hero'),
@@ -145,7 +128,6 @@
         if(slot.imageReference) site[slot.key]={url:slot.imageReference};
       });
       applyPageHeroes(site);
-      if(document.querySelector('.kas-find-page')) applyFindYourKas(site);
       var homeHero=document.querySelector('#homeHeroBg');
       if(homeHero){
         applyHome(site).then(function(){

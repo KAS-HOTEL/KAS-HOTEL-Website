@@ -42,9 +42,7 @@ export function PublishPanel({
         </p>
         <p className={styles.publishNote}>
           Khách có thể xem khách sạn và gửi yêu cầu đặt phòng. Khách sạn tự kiểm tra
-          phòng và phản hồi thủ công. Hãy cập nhật{' '}
-          <Link href={`/partner/properties/${property.id}/rates`} className={styles.publishLink}>Giá</Link>
-          {' '}để khách tham khảo.
+          phòng và phản hồi thủ công. Giá phòng và phụ thu do Super Admin cập nhật.
 
         </p>
       </Card>

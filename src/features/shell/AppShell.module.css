@@ -182,10 +182,14 @@
 
 /* The work surface. A wider gutter than the density default, and a measure cap
    so a 1440px screen does not stretch a form to the full width. */
-.main { flex: 1; min-width: 0; padding: var(--space-7) var(--space-7) var(--space-9); }
+/* --shell-gutter publishes the inline padding actually in force, so a page that wants
+   to reclaim part of it (the inbox) can never take more than exists (2026-11-07 fix:
+   the inbox assumed 48/64px while the compact shell pads 32px, and slid under the
+   sidebar). Every rule that changes the inline padding below sets it too. */
+.main { --shell-gutter: var(--space-7); flex: 1; min-width: 0; padding: var(--space-7) var(--space-7) var(--space-9); }
 
 @media (min-width: 1440px) {
-  .main { padding-inline: var(--space-8); }
+  .main { --shell-gutter: var(--space-8); padding-inline: var(--space-8); }
 }
 
 /*
@@ -202,11 +206,11 @@
  * about the page's spacing scale moves with it.
  */
 @media (max-width: 1023px) {
-  .main { padding-inline: var(--space-5); }
+  .main { --shell-gutter: var(--space-5); padding-inline: var(--space-5); }
 }
 
 @media (max-width: 767px) {
-  .main { padding-inline: var(--space-4); padding-block-end: var(--space-7); }
+  .main { --shell-gutter: var(--space-4); padding-inline: var(--space-4); padding-block-end: var(--space-7); }
 }
 
 .scrim {
@@ -335,7 +339,7 @@
 .compact .navLabel svg { width: 16px; height: 16px; flex-shrink: 0; }
 .compact .railFooter { flex-shrink: 0; margin-top: 12px; padding: 12px 4px 0; }
 .compact .railFooter button { min-height: 36px; }
-.compact .main { padding: 28px 32px 40px; }
+.compact .main { --shell-gutter: 32px; padding: 28px 32px 40px; }
 
 @media (min-width: 1024px) {
   .compact .sidebar { position: sticky; top: 0; }
@@ -344,10 +348,10 @@
   .compact .header { height: 56px; }
   .compact .sidebar { top: 56px; height: calc(100dvh - 56px); }
   .compact .scrim { top: 56px; }
-  .compact .main { padding: 24px; }
+  .compact .main { --shell-gutter: 24px; padding: 24px; }
 }
 @media (max-width: 767px) {
-  .compact .main { padding: 20px 16px 32px; }
+  .compact .main { --shell-gutter: 16px; padding: 20px 16px 32px; }
 }
 @media (pointer: coarse) {
   .compact .navItem, .compact .railFooter button { min-height: 44px; }

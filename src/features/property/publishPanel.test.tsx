@@ -299,10 +299,11 @@ describe('the other lifecycle states', () => {
 
     expect(screen.queryByRole('button', { name: 'Đưa vào hoạt động' })).toBeNull();
     expect(screen.getByText('Đang hoạt động')).toBeTruthy();
-    // Inventory and rates are not activation blockers, but they are what makes
-    // an open hotel actually sellable — so this is where they are mentioned.
+    // Prices are SUPER_ADMIN's since 2026-11-08: ADMIN is told who sets them,
+    // not sent to a screen it cannot use.
     expect(screen.queryByRole('link', { name: 'Tồn phòng' })).toBeNull();
-    expect(screen.getByRole('link', { name: 'Giá' })).toBeTruthy();
+    expect(screen.queryByRole('link', { name: 'Giá' })).toBeNull();
+    expect(screen.getByText(/Giá phòng và phụ thu do Super Admin cập nhật/)).toBeTruthy();
   });
 
   it('offers nothing on a withdrawn hotel, and names the state in words', () => {

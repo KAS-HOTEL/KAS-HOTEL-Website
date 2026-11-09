@@ -1,8 +1,6 @@
-import type { Metadata } from 'next';
-import { SiteImageSlots } from '@/features/siteContent/SiteImageSlots';
+import { redirect } from 'next/navigation';
 
-export const metadata: Metadata = { title: 'Ảnh website — KAS Admin' };
-
-export default function AdminSiteImagesPage() {
-  return <SiteImageSlots />;
+/** "Ảnh website" was split into the "Nội dung website" screens (2026-11-08); old links land on the first. */
+export default function MovedSiteImages() {
+  redirect('/admin/content/home');
 }

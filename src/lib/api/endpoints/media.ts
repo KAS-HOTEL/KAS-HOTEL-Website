@@ -2,6 +2,7 @@ import { api } from '../client';
 import type {
   AttachMediaRequest,
   MediaAssetView,
+  MediaCategory,
   MediaCoverView,
   MediaLinkView,
   MediaOwnerType,
@@ -157,6 +158,14 @@ export const mediaApi = {
    */
   setCover: (assetId: string, linkId: string) =>
     api.patch<MediaLinkView>(`${asset(assetId)}/links/${encodeURIComponent(linkId)}/cover`),
+
+  /**
+   * `PATCH /api/v1/admin/media/{assetId}/category` — permission `media.upload`.
+   *
+   * Files the image under another gallery category. Refused for an archived image.
+   */
+  setCategory: (assetId: string, category: MediaCategory) =>
+    api.patch<MediaAssetView>(`${asset(assetId)}/category`, { category }),
 
   /**
    * `PATCH /api/v1/admin/media/{assetId}/links/{linkId}/order?displayOrder=`

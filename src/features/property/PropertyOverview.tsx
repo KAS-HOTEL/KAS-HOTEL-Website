@@ -12,6 +12,7 @@ import type { RoomTypeView } from '@/lib/domain/roomType';
 import { Tabs } from '@/ui/primitives';
 import { PropertyPageHeader } from './PropertyPageHeader';
 import { PublishPanel } from './PublishPanel';
+import { SetupSteps, setupSteps } from './SetupSteps';
 import { propertyTabs } from './tabs';
 import styles from './Overview.module.css';
 
@@ -53,6 +54,7 @@ export function PropertyOverview({
   completeness,
   roomTypes,
   gallery,
+  roomsWithoutPhotos = null,
 }: {
   readonly property: PropertyAdminView;
   readonly completeness: PropertyCompleteness | null;
@@ -60,6 +62,8 @@ export function PropertyOverview({
   readonly roomTypes: readonly RoomTypeView[];
   /** The property's own photographs, for the cover and the count. */
   readonly gallery: readonly GalleryItem[];
+  /** Room types with no photograph of their own; null when that could not be read. */
+  readonly roomsWithoutPhotos?: number | null;
 }) {
   const name = displayName(property.names);
   const at = (segment: string) => `/partner/properties/${property.id}${segment}`;
@@ -141,8 +145,8 @@ export function PropertyOverview({
           )}
 
           <div className={styles.heroActions}>
-            <Link className={styles.heroPrimary} href={at('/calendar')}>
-              Giá
+            <Link className={styles.heroPrimary} href={at('/rooms')}>
+              Loại phòng
             </Link>
             {/*
               Only when a guest could actually reach it. A link to a customer page
@@ -177,6 +181,23 @@ export function PropertyOverview({
         One list, not six cards. Every blocker an operator has, in one place,
         each linking to the screen that fixes it.
       */}
+      {/* While the hotel is a draft, the order to set it up in (2026-11-08). */}
+      {property.lifecycleState === 'DRAFT' ? (
+        <SetupSteps
+          steps={setupSteps({
+            propertyId: property.id,
+            informationComplete: completeness !== null && completeness.sections
+              .filter((section) => !section.complete)
+              .every((section) => sectionHref(section.name, property.id) !== at('/information')),
+            galleryCount: gallery.length,
+            hasCover: gallery.some((item) => item.link.isCover),
+            roomTypeCount: roomTypes.length,
+            roomsWithoutPhotos,
+            published: false,
+          })}
+        />
+      ) : null}
+
       <section className={styles.tasks} aria-labelledby="tasks-title">
         <div className={styles.tasksHead}>
           <h2 className={styles.sectionTitle} id="tasks-title">
@@ -208,7 +229,6 @@ export function PropertyOverview({
       <section className={styles.quickActions} aria-label="Thao tác nhanh">
         <QuickAction href={at('/rooms')} title="Quản lý loại phòng" hint="Sức chứa, giường, mô tả" />
         <QuickAction href={at('/media')} title="Hình ảnh" hint="Ảnh đại diện và thư viện" />
-        <QuickAction href={at('/calendar')} title="Giá" hint="Theo từng ngày" />
         <QuickAction href={at('/information')} title="Thông tin khách sạn" hint="Tên, mô tả, địa chỉ" />
       </section>
 
@@ -227,7 +247,7 @@ export function PropertyOverview({
         longer on the path, the same way `PublishPanel` was once taken off this
         screen and is now back on it.
       */}
-      <div className={styles.lifecycle}>
+      <div className={styles.lifecycle} id="publish">
         <PublishPanel property={property} completeness={completeness} />
       </div>
     </div>

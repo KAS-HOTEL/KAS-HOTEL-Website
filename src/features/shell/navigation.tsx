@@ -1,4 +1,4 @@
-import { BuildingIcon, GuestsIcon, InboxIcon, LayoutIcon, MailIcon, TagIcon } from '@/ui/icons';
+import { BuildingIcon, CalendarIcon, GuestsIcon, InboxIcon, LayoutIcon, TagIcon } from '@/ui/icons';
 import type { ConsoleRole } from '@/lib/domain/session';
 import type { NavSection } from './AppShell';
 
@@ -8,8 +8,14 @@ import type { NavSection } from './AppShell';
  * <h2>The menu follows the permissions</h2>
  *
  * `RoleCatalogue` splits the catalogue in two, and each role is the highest
- * authority over its half. ADMIN owns hotels, rates, media, guest reviews and
- * website content. SUPER_ADMIN owns bookings, customers, vouchers, messages and the payment account.
+ * authority over its half. ADMIN owns hotels with their room types, media and
+ * website content. SUPER_ADMIN owns bookings, customers, guest reviews, room prices,
+ * surcharges, vouchers, messages and the payment account.
+ *
+ * <p>2026-11-08: the Admin menu was reduced to what production uses. "Hồ sơ chờ
+ * duyệt", "Điểm Trip.com", "KAS Collection", "Bản đồ section" and "Nguồn ảnh" were
+ * removed (a hotel is published from its own page; its Hero image is its cover
+ * everywhere), and guest reviews moved to SUPER_ADMIN.
  * `ConsoleRoleIT` proves the split against the endpoints.
  *
  * <p>A menu is navigation, not authorisation: every action is still decided by the
@@ -24,23 +30,21 @@ export const ADMIN_NAV: readonly NavSection[] = [
   {
     heading: 'Khách sạn',
     items: [
-      { label: 'Danh sách khách sạn', href: '/partner/properties', status: 'available', icon: <BuildingIcon /> },
-      { label: 'Hồ sơ chờ duyệt', href: '/admin/review', status: 'available', icon: <InboxIcon /> },
-      { label: 'Chính sách dùng chung', href: '/partner/policies', status: 'available', icon: <LayoutIcon /> },
-      { label: 'Điểm Trip.com', href: '/admin/properties', status: 'available', icon: <LayoutIcon /> },
+      // Room types are managed inside each hotel, never on a page of their own.
+      { label: 'Khách sạn & Hạng phòng', href: '/partner/properties', status: 'available', icon: <BuildingIcon /> },
+      // "Chính sách dùng chung" (/partner/policies) is hidden from the menu (owner, 2026-11-08);
+      // the screen and its API stay in place.
     ],
   },
   {
-    heading: 'Khách hàng',
-    items: [{ label: 'Đánh giá', href: '/admin/reviews', status: 'available', icon: <InboxIcon /> }],
-  },
-  {
     heading: 'Nội dung website',
+    // In website order (owner decision, 2026-11-08): the homepage, the page heroes, hotel and
+    // room photos, then the Guidebook.
     items: [
-      { label: 'Ảnh website', href: '/admin/content/images', status: 'available', icon: <LayoutIcon /> },
-      { label: 'KAS Collection', href: '/admin/collection', status: 'available', icon: <BuildingIcon /> },
-      { label: 'Bản đồ section', href: '/admin/content/map', status: 'available', icon: <LayoutIcon /> },
-      { label: 'Nguồn ảnh', href: '/admin/content/sources', status: 'available', icon: <LayoutIcon /> },
+      { label: 'Trang chủ', href: '/admin/content/home', status: 'available', icon: <LayoutIcon /> },
+      { label: 'Ảnh Hero các trang', href: '/admin/content/heroes', status: 'available', icon: <LayoutIcon /> },
+      { label: 'Ảnh khách sạn & hạng phòng', href: '/admin/content/hotels', status: 'available', icon: <BuildingIcon /> },
+      { label: 'Guidebook', href: '/admin/content/guidebook', status: 'available', icon: <InboxIcon /> },
     ],
   },
 ];
@@ -58,12 +62,23 @@ export const SUPER_ADMIN_NAV: readonly NavSection[] = [
       { label: 'Yêu cầu đặt phòng', href: '/partner/requests', status: 'available', icon: <InboxIcon /> },
       { label: 'Đặt phòng & khách lưu trú', href: '/partner/reservations', status: 'available', icon: <GuestsIcon /> },
       { label: 'Yêu cầu hủy', href: '/partner/cancellation-requests', status: 'available', icon: <InboxIcon /> },
-      { label: 'Tin nhắn', href: '/partner/messages', status: 'available', icon: <MailIcon /> },
+    ],
+  },
+  {
+    // Room prices moved from ADMIN to SUPER_ADMIN (2026-11-08). "Phụ thu" is hidden for now
+    // (owner, 2026-11-08): surcharges are not added to the room price — reception collects
+    // them at check-in. The /partner/surcharges screen and its API stay in place.
+    heading: 'Giá phòng',
+    items: [
+      { label: 'Giá phòng', href: '/partner/pricing', status: 'available', icon: <CalendarIcon /> },
     ],
   },
   {
     heading: 'Khách hàng',
-    items: [{ label: 'Danh sách khách hàng', href: '/admin/customers', status: 'available', icon: <GuestsIcon /> }],
+    items: [
+      { label: 'Danh sách khách hàng', href: '/admin/customers', status: 'available', icon: <GuestsIcon /> },
+      { label: 'Đánh giá', href: '/admin/reviews', status: 'available', icon: <InboxIcon /> },
+    ],
   },
   {
     heading: 'Ưu đãi',

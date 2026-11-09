@@ -236,18 +236,6 @@ export function ReservationDetailView({
         </Card>
       ) : null}
 
-      {/*
-        The conversation lives on its own screen — this is a link into it, not a
-        second copy of the thread. Duplicating the composer here would give the
-        same message two places to be written from and two places to disagree
-        about what the record holds.
-      */}
-      <p className={styles.note}>
-        <Link className={styles.conversationLink} href={`/partner/messages/${summary.reference}`}>
-          {copy.openConversation}
-        </Link>
-      </p>
-
       {/* One sentence, not a paragraph explaining the whole architecture. */}
       <p className={styles.note}>{copy.readOnly}</p>
     </div>
@@ -321,7 +309,6 @@ export interface ReservationDetailCopy {
   readonly discount: string;
   readonly total: string;
   readonly moneyMissing: string;
-  readonly openConversation: string;
   readonly readOnly: string;
 }
 
@@ -352,7 +339,6 @@ export const RESERVATION_DETAIL_COPY: ReservationDetailCopy = {
   discount: 'Giảm giá',
   total: 'Tổng cộng',
   moneyMissing: 'Đặt phòng này chưa có thông tin số tiền.',
-  openConversation: 'Mở cuộc trò chuyện với khách →',
   // Trimmed from a paragraph that also explained where the sales actions live
   // and why — architecture aimed at whoever wrote the page. What survives is
   // the part an operator can act on: this screen changes nothing, and two

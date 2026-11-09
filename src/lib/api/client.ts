@@ -56,6 +56,11 @@ export interface RequestOptions {
   readonly headers?: Readonly<Record<string, string>>;
   readonly cache?: RequestCache;
   readonly signal?: AbortSignal;
+  /**
+   * Receives the response headers of a successful call — e.g. `X-Total-Count` on a
+   * paged list (2026-11-07). The body is still what the call returns.
+   */
+  readonly onHeaders?: (headers: Headers) => void;
   /** Internal: set on the single retry after a refresh, to stop a second one. */
   readonly isRetry?: boolean;
 }
@@ -109,6 +114,7 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   const response = await fetch(url, init);
 
   if (response.ok) {
+    options.onHeaders?.(response.headers);
     if (response.status === 204) {
       return undefined as T;
     }

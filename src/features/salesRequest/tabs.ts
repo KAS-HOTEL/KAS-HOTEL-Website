@@ -6,7 +6,7 @@ import type { TabItem } from '@/ui/primitives';
  *
  * <h2>The backend owns what each view contains</h2>
  *
- * A tab sends `queue=awaiting|expired|accepted` (or nothing, for "Tất cả") and the
+ * A tab sends `queue=awaiting|expired|accepted|alternative` (or nothing, for "Tất cả") and the
  * backend applies the status set it defines for that view. Overdue requests are
  * moved to `EXPIRED` by the backend's expiry job, so "Chờ phản hồi" and "Quá hạn"
  * can never hold the same request.
@@ -22,6 +22,8 @@ export const SALES_QUEUE_VIEWS: readonly { readonly id: 'all' | SalesQueueView; 
   { id: 'awaiting', label: 'Chờ phản hồi' },
   { id: 'expired', label: 'Quá hạn' },
   { id: 'accepted', label: 'Đã chấp nhận' },
+  // Closed: KAS proposed another stay and the guest sends a new request if they want it.
+  { id: 'alternative', label: 'Đã đề xuất phương án khác' },
 ];
 
 export const REQUESTS_PATH = '/partner/requests';

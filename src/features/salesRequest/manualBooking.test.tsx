@@ -60,7 +60,9 @@ it('offers another room only after the admin reviews the proposal', async () => 
   expect(calls.offer).not.toHaveBeenCalled();
   expect(screen.getByRole('dialog').textContent).toContain('Khách sạn B');
   expect(screen.getByRole('dialog').textContent).toContain('Phòng Deluxe');
-  await userEvent.click(screen.getByRole('button', { name: 'Gửi đề xuất cho khách' }));
+  // 2026-11-07: the dialog says the request ends and nothing is held.
+  expect(screen.getByRole('dialog').textContent).toContain('Yêu cầu này sẽ kết thúc');
+  await userEvent.click(screen.getByRole('button', { name: 'Gửi đề xuất và kết thúc yêu cầu' }));
   await waitFor(() => expect(calls.offer).toHaveBeenCalledWith('KAS-TEST', {
     propertySlug: 'hotel-b', roomTypeSlug: 'deluxe', checkIn: '2027-01-01', checkOut: '2027-01-03',
     quantity: 1, totalMinor: 1400000, message: 'Phòng khác cùng kỳ nghỉ',

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/saved-hotels.css">
 
 <style>
 .mykas-banner{height:178px;position:relative;overflow:hidden;background:#403d34 url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2200&q=85") center 47%/cover no-repeat}
@@ -20,7 +21,7 @@
 .mykas-eyebrow{font-size:9px;letter-spacing:.25em;color:#9b7b4b}
 .mykas-heading h1{font:400 clamp(32px,3vw,42px)/1.05 "Cormorant Garamond",Georgia,serif;margin:3px 0 2px;letter-spacing:-.025em}
 .mykas-heading p{font:300 13px/1.5 "Cormorant Garamond",Georgia,serif;color:#777065;margin:0}
-.mykas-tabs{display:flex;align-items:center;gap:clamp(14px,2.1vw,34px);flex-wrap:wrap;justify-content:flex-end}
+.mykas-tabs{display:flex;align-items:center;gap:clamp(14px,2.1vw,34px);flex-wrap:wrap;justify-content:flex-start;margin:-8px 0 18px}
 .mykas-tabs button{border:0;border-bottom:1px solid transparent;background:transparent;padding:11px 0 12px;font:500 8px/1.2 Inter,Arial,sans-serif;letter-spacing:.16em;color:#625c52;cursor:pointer;white-space:nowrap}
 .mykas-tabs button.is-active{border-color:#b49358;color:#25241f}
 .mykas-bookings{display:grid;gap:26px}
@@ -77,7 +78,7 @@
 .mykas-lookup #lookupCard .card__hd h4{margin:0}
 #trustStrip{margin-left:3px;margin-right:3px;box-sizing:border-box}
 @media(max-width:900px){.mykas-page{padding-left:4%;padding-right:4%}.mykas-booking{grid-template-columns:35% minmax(0,1fr)}.mykas-booking__content{padding:16px}.mykas-booking__meta{grid-template-columns:1fr 1fr}.mykas-booking__actions{grid-column:1/-1;flex-direction:row}.mykas-action-main{flex:1}.mykas-action-links{align-items:center;gap:12px}.mykas-dates{gap:7px}.mykas-date-value{font-size:17px}}
-@media(max-width:620px){.mykas-banner{height:140px}.mykas-banner__copy{right:6%;font-size:20px}.mykas-page{padding:20px 16px 54px}.mykas-heading{align-items:flex-start;flex-direction:column;gap:14px}.mykas-tabs{width:100%;justify-content:space-between;gap:10px}.mykas-tabs button{font-size:7px;letter-spacing:.1em}.mykas-bookings{gap:18px}.mykas-booking{grid-template-columns:1fr;min-height:0}.mykas-booking__image{height:220px}.mykas-booking__image img{height:220px;min-height:220px}.mykas-booking__content{padding:17px 15px}.mykas-booking__hotel{font-size:29px}.mykas-booking__ref{font-size:6px;max-width:105px}.mykas-dates{margin:17px 0 12px;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:5px}.mykas-date-value{font-size:17px}.mykas-night-line span{font-size:6px;padding:0 3px}.mykas-booking__meta{gap:10px}.mykas-booking__actions{flex-wrap:wrap}.mykas-action-main{min-width:100%;padding:12px}.mykas-action-links{width:100%}.mykas-timeline{padding-top:19px}.mykas-timeline span{font-size:5px;letter-spacing:.02em}.mykas-cancel-details{gap:8px}.mykas-cancel-details .mykas-meta-label{font-size:6px}.mykas-lookup #lookupCard{padding:16px}}
+@media(max-width:620px){.mykas-banner{height:calc(var(--nav-h,58px) + 104px)}.mykas-banner__copy{top:auto;bottom:18px;transform:none;right:16px;max-width:calc(100% - 32px);font-size:20px}.mykas-page{padding:20px 16px 54px}.mykas-heading{align-items:flex-start;flex-direction:column;gap:14px}.mykas-tabs{width:100%;justify-content:space-between;gap:10px}.mykas-tabs button{font-size:7px;letter-spacing:.1em}.mykas-bookings{gap:18px}.mykas-booking{grid-template-columns:1fr;min-height:0}.mykas-booking__image{height:220px}.mykas-booking__image img{height:220px;min-height:220px}.mykas-booking__content{padding:17px 15px}.mykas-booking__hotel{font-size:29px}.mykas-booking__ref{font-size:6px;max-width:105px}.mykas-dates{margin:17px 0 12px;grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:5px}.mykas-date-value{font-size:17px}.mykas-night-line span{font-size:6px;padding:0 3px}.mykas-booking__meta{gap:10px}.mykas-booking__actions{flex-wrap:wrap}.mykas-action-main{min-width:100%;padding:12px}.mykas-action-links{width:100%}.mykas-timeline{padding-top:19px}.mykas-timeline span{font-size:5px;letter-spacing:.02em}.mykas-cancel-details{gap:8px}.mykas-cancel-details .mykas-meta-label{font-size:6px}.mykas-lookup #lookupCard{padding:16px}}
 @media print{.mykas-tabs,.mykas-lookup,.mykas-booking__actions{display:none!important}.mykas-page{padding:0}.mykas-booking{break-inside:avoid}}
 
 .mykas-timeline{gap:12px;padding:24px 0 8px;margin-top:20px}
@@ -89,7 +90,11 @@
 @media(max-width:620px){.mykas-timeline span{font-size:10px}.mykas-timeline{gap:6px}}
 </style>
 
-<script src="js/site-images.js" defer></script></head>
+<script src="js/site-images.js" defer></script><link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+</head>
 <body>
 
 <header id="hdr"></header>
@@ -102,23 +107,25 @@
   <div id="myKasMemberArea" hidden>
   <div class="mykas-heading">
     <div>
-      <span class="mykas-eyebrow" data-mykas="eyebrow">YOUR STAYS</span>
+      <span class="mykas-eyebrow">MY KAS</span>
       <h1 data-mykas="title">My bookings</h1>
       <p data-mykas="subtitle">View, manage and revisit your KAS stays.</p>
     </div>
-    <div class="mykas-tabs" role="tablist" aria-label="Booking status">
-      <button type="button" class="is-active" data-filter="all" role="tab" aria-selected="true" data-mykas="all">ALL</button>
-      <button type="button" data-filter="upcoming" role="tab" aria-selected="false" data-mykas="upcoming">UPCOMING</button>
-      <button type="button" data-filter="completed" role="tab" aria-selected="false" data-mykas="completed">COMPLETED</button>
-      <button type="button" data-filter="cancelled" role="tab" aria-selected="false" data-mykas="cancelled">CANCELLED</button>
-    </div>
   </div>
 
-  <nav class="mykas-view-switch" aria-label="My KAS sections">
-    <a id="myKasBookingsLink" href="manage-booking.html" class="is-active">MY BOOKINGS</a>
+  <!-- My KAS sections: one page, one header, one set of tabs (?view=profile|saved). -->
+  <nav class="mykas-view-switch" aria-label="My KAS">
+    <a id="myKasBookingsLink" href="manage-booking.html" aria-current="page" class="is-active">MY BOOKINGS</a>
     <a id="myKasProfileLink" href="manage-booking.html?view=profile">MY PROFILE</a>
-    <a id="myKasSavedLink" href="saved-hotels.html">SAVED</a>
+    <a id="myKasSavedLink" href="manage-booking.html?view=saved">SAVED HOTELS</a>
   </nav>
+  <!-- My bookings' status filter: under the My KAS tabs, above the list. -->
+  <div class="mykas-tabs" role="tablist" aria-label="Booking status">
+    <button type="button" class="is-active" data-filter="all" role="tab" aria-selected="true" data-mykas="all">ALL</button>
+    <button type="button" data-filter="upcoming" role="tab" aria-selected="false" data-mykas="upcoming">UPCOMING</button>
+    <button type="button" data-filter="completed" role="tab" aria-selected="false" data-mykas="completed">COMPLETED</button>
+    <button type="button" data-filter="cancelled" role="tab" aria-selected="false" data-mykas="cancelled">CANCELLED</button>
+  </div>
 
   <div id="myKasBookings" class="mykas-bookings" aria-live="polite"></div>
   <section id="myKasProfile" class="mykas-profile" hidden>
@@ -133,6 +140,25 @@
       </div>
       <div class="between" style="margin-top:22px"><span class="tiny muted" id="myKasTier"></span><button class="btn btn--gold" type="submit">SAVE CHANGES</button></div>
     </form>
+  </section>
+  <section id="myKasSaved" class="mykas-saved" hidden>
+    <div class="saved-toolbar">
+      <div class="saved-count" id="savedCount" aria-live="polite"></div>
+      <label class="saved-sort-label" for="savedSort"><span data-saved-sort-label>Sort by:</span>
+        <select id="savedSort" class="select">
+          <option value="recent">Recently saved</option>
+          <option value="rating">Highest rated</option>
+          <option value="name">Hotel name A–Z</option>
+        </select>
+      </label>
+    </div>
+    <div id="savedGrid" class="saved-grid" aria-live="polite"></div>
+    <div id="savedEmpty" class="saved-empty" hidden>
+      <div class="saved-empty-icon" aria-hidden="true">♡</div>
+      <h2 data-saved-empty-title>No saved hotels yet</h2>
+      <p data-saved-empty-copy>Explore the KAS collection and save the places you would love to experience.</p>
+      <a class="saved-primary-link" href="hotels.html" data-saved-explore>Explore hotels <span aria-hidden="true">→</span></a>
+    </div>
   </section>
   </div>
 
@@ -179,6 +205,7 @@
 <script src="js/search.js"></script>
 <script src="js/hotel.js"></script>
 <script src="js/room.js"></script>
+<script src="js/live.js"></script>
 <script>
 (function () {
   var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
@@ -186,7 +213,9 @@
   var resetToken = new URLSearchParams(location.search).get('resetToken');
   if (resetToken) App.openAuth('reset', resetToken);
 
-  var isProfileView = new URLSearchParams(location.search).get('view') === 'profile';
+  /* ?view=profile | saved; anything else is My bookings. */
+  var myKasView = { profile: 'profile', saved: 'saved' }[new URLSearchParams(location.search).get('view')] || 'bookings';
+  var isProfileView = myKasView === 'profile';
   var memberArea = U.$('#myKasMemberArea');
   var profilePanel = U.$('#myKasProfile');
   var memberProfile = null, liveStays = [];
@@ -220,15 +249,20 @@
     if (data) { image.src = data; image.hidden = false; fallback.hidden = true; }
     else { image.removeAttribute('src'); image.hidden = true; fallback.hidden = false; }
   }
-  if (isProfileView) {
+  if (myKasView !== 'bookings') {
     U.$('#myKasBookings').hidden = true;
     U.$('.mykas-tabs').hidden = true;
     U.$('.mykas-lookup').hidden = true;
-    profilePanel.hidden = false;
-    U.$('#myKasProfileLink').classList.add('is-active');
+    profilePanel.hidden = !isProfileView;
+    U.$('#myKasSaved').hidden = myKasView !== 'saved';
+    var activeLink = U.$(isProfileView ? '#myKasProfileLink' : '#myKasSavedLink');
+    activeLink.classList.add('is-active');
+    activeLink.setAttribute('aria-current', 'page');
     U.$('#myKasBookingsLink').classList.remove('is-active');
-    U.$('[data-mykas="title"]').textContent = 'My profile';
-    U.$('[data-mykas="subtitle"]').textContent = 'Manage your KAS member details.';
+    U.$('#myKasBookingsLink').removeAttribute('aria-current');
+    /* The heading follows the section; applyMyKasText fills it in the current language. */
+    U.$('[data-mykas="title"]').setAttribute('data-mykas', myKasView + 'Title');
+    U.$('[data-mykas="subtitle"]').setAttribute('data-mykas', myKasView + 'Subtitle');
   }
   function loadProfileForm(profile) {
     renderNationalityOptions(profile.nationality || '');
@@ -236,7 +270,7 @@
     U.$('#myKasEmail').value = profile.email || '';
     U.$('#myKasPhone').value = profile.phone || '';
     U.$('#myKasNationality').value = profile.nationality || '';
-    U.$('#myKasTier').textContent = (profile.tier || 'SILVER') + ' · ' + Number(profile.points || 0).toLocaleString() + ' KAS points';
+    U.$('#myKasTier').textContent = (profile.tier || 'CLASSIC') + ' · ' + Number(profile.points || 0).toLocaleString() + ' KAS points';
     U.$('#myKasAvatarFallback').textContent = (profile.fullName || 'K').trim().charAt(0).toUpperCase();
     showAvatar(profile.avatarUrl ? window.KAS_API.url(profile.avatarUrl) : null);
   }
@@ -251,7 +285,7 @@
       loadProfileForm(profile);
       var main = U.$('main');
       if (main) main.hidden = false;
-      if (isProfileView) return;
+      if (myKasView !== 'bookings') return;
       return window.KAS_API.stays(profile.locale || 'en').then(function (rows) {
         liveStays = (rows || []).map(function (stay) {
           var mapped = window.KAS_REQUEST_VIEW.map(stay, profile);
@@ -270,7 +304,11 @@
         if (lookupPanel) lookupPanel.hidden = true;
       } else {
         if (memberArea) memberArea.hidden = true;
-        if (lookupPanel) { lookupPanel.hidden = false; lookupPanel.open = true; }
+        /* The booking lookup belongs to My bookings, not to Profile or Saved hotels. */
+        if (lookupPanel && myKasView === 'bookings') { lookupPanel.hidden = false; lookupPanel.open = true; }
+        /* Profile and Saved hotels belong to the account: signed out, ask to sign in
+           (the dialog reloads this page, on the same section, once signed in). */
+        if (myKasView !== 'bookings' && error && (error.status === 401 || error.status === 403 || error.status === 404)) openMyKasSignIn();
       }
       var result = U.$('#result');
       if (result && memberProfile) {
@@ -370,7 +408,9 @@
   /* ---- My KAS bookings view: render only bookings already present in KAS storage ---- */
   var MYKAS_TEXT = {
     en: {
-      banner:'Meaningful places<br>for a more inspired you.', eyebrow:'YOUR STAYS', title:'My bookings',
+      banner:'Meaningful places<br>for a more inspired you.', title:'My bookings',
+      profileTitle:'My profile', profileSubtitle:'Manage your KAS member details.',
+      savedTitle:'Saved hotels', savedSubtitle:'The hotels you have saved to your KAS account.',
       subtitle:'View, manage and revisit your KAS stays.', all:'ALL', upcoming:'UPCOMING', completed:'COMPLETED', cancelled:'CANCELLED',
       lookupTitle:'Look up a booking with booking number and email', lookupIntro:'Use this option to retrieve a reservation by its reference.',
       bookingNumber:'Booking number', email:'Email address', formatHint:'Format: KAS + 2-digit branch code + 5 digits.', findBooking:'Find my booking',
@@ -383,7 +423,9 @@
       leadGuest:'LEAD GUEST', booking:'BOOKING', status:'STATUS'
     },
     vi: {
-      banner:'Những điểm đến ý nghĩa<br>khơi nguồn cảm hứng.', eyebrow:'KỲ NGHỈ CỦA BẠN', title:'Đặt phòng của tôi',
+      banner:'Những điểm đến ý nghĩa<br>khơi nguồn cảm hứng.', title:'Đặt phòng của tôi',
+      profileTitle:'Hồ sơ của tôi', profileSubtitle:'Quản lý thông tin thành viên KAS của bạn.',
+      savedTitle:'Khách sạn đã lưu', savedSubtitle:'Những khách sạn bạn đã lưu vào tài khoản KAS.',
       subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'TẤT CẢ', upcoming:'SẮP TỚI', completed:'ĐÃ HOÀN TẤT', cancelled:'ĐÃ HỦY',
       lookupTitle:'Tra cứu đặt phòng bằng mã đặt phòng và email', lookupIntro:'Dùng chức năng này để tìm đặt phòng bằng mã xác nhận.',
       bookingNumber:'Mã đặt phòng', email:'Địa chỉ email', formatHint:'Định dạng: KAS + mã chi nhánh 2 chữ số + 5 chữ số.', findBooking:'Tìm đặt phòng',
@@ -407,7 +449,7 @@
       var key = el.getAttribute('data-mykas');
       if (MYKAS_TEXT[myKasLang()][key]) el.innerHTML = MYKAS_TEXT[myKasLang()][key];
     });
-    document.title = (myKasLang() === 'vi' ? 'Đặt phòng của tôi' : 'My bookings') + ' — KAS Hotel Collection';
+    document.title = mt(myKasView === 'bookings' ? 'title' : myKasView + 'Title') + ' — KAS Hotel Collection';
     if (memberProfile) renderNationalityOptions(memberProfile.nationality || '');
     var avatarHint = U.$('[data-profile-avatar-hint]');
     if (avatarHint) avatarHint.textContent = myKasLang() === 'vi' ? 'Chọn ảnh rồi nhấn Lưu thay đổi để lưu trên thiết bị này.' : 'Choose a photo, then save it on this device.';
@@ -578,12 +620,14 @@
   var link=document.getElementById('myKasSavedLink'); if(!link||!window.Store) return;
   function paint(){
     var vi=window.KAS_I18N&&window.KAS_I18N.getLanguage()==='vi', n=Store.getSavedHotels().length;
-    link.textContent=(vi?'KHÁCH SẠN ĐÃ LƯU':'SAVED HOTELS')+(n?' ('+n+')':'');
+    var signedIn=Store.savedHotelsSignedIn&&Store.savedHotelsSignedIn()===true;
+    link.textContent=(vi?'KHÁCH SẠN ĐÃ LƯU':'SAVED HOTELS')+(signedIn?' ('+n+')':'');
   }
   paint();
   window.addEventListener('kas:saved-hotels-changed',paint);
   document.addEventListener('kas:language',paint);
 })();
 </script>
+<script src="js/saved-hotels.js"></script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { cache } from 'react';
-import { loadBaseRates, loadRateGrid, loadRateRules } from './load';
-import type { BaseRatesResult, RateGridResult, RateRulesResult } from './load';
+import { loadBaseRates, loadRateGrid, loadRateRules, loadSpecialRates } from './load';
+import type { BaseRatesResult, RateGridResult, RateRulesResult, SpecialRatesResult } from './load';
 
 /**
  * The Next-bound wrappers around `load.ts`, matching every other feature server:
@@ -31,4 +31,9 @@ export const rateRules = cache(async (propertyId: string): Promise<RateRulesResu
  */
 export const baseRates = cache(async (propertyId: string): Promise<BaseRatesResult> => {
   return loadBaseRates(propertyId, (await cookies()).toString());
+});
+
+/** The hotel's special rules — range-independent, cached on the property alone. */
+export const specialRates = cache(async (propertyId: string): Promise<SpecialRatesResult> => {
+  return loadSpecialRates(propertyId, (await cookies()).toString());
 });

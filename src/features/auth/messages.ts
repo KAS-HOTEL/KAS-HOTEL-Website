@@ -63,5 +63,10 @@ export function signInMessageFor(error: ApiError): string {
   if (error.isUnauthenticated) {
     return AUTH_MESSAGES.invalidCredentials;
   }
+  // Server separation (2026-11-07): the console only signs staff in. The backend says
+  // so only after a correct password, so naming it discloses nothing new.
+  if (error.details.some((detail) => detail.code === 'USE_CUSTOMER_SITE')) {
+    return 'Đây là tài khoản khách hàng. Vui lòng đăng nhập trên website KAS.';
+  }
   return messageFor(error);
 }

@@ -227,7 +227,8 @@ function StayCard({
 
 function isCancelable(stay: CustomerStay): boolean {
   if (stay.stayStatus === null) {
-    return ['REQUESTED', 'ASSIGNED', 'AVAILABILITY_CHECK', 'CUSTOMER_CONTACTED', 'ALTERNATIVE_OFFERED'].includes(stay.salesStatus ?? '');
+    // ALTERNATIVE_OFFERED ended the request (2026-11-07): nothing left to cancel.
+    return ['REQUESTED', 'ASSIGNED', 'AVAILABILITY_CHECK', 'CUSTOMER_CONTACTED'].includes(stay.salesStatus ?? '');
   }
   return stay.salesStatus === 'WON' && ['CONFIRMED', 'CHECK_IN_READY'].includes(stay.stayStatus);
 }
@@ -240,7 +241,7 @@ function statusLabel(status: string | null, locale: Locale): string {
   const labels: Record<string, readonly [string, string]> = {
     REQUESTED: ['Đã nhận yêu cầu', 'Request received'], ASSIGNED: ['Đang xử lý', 'In progress'],
     AVAILABILITY_CHECK: ['Đang kiểm tra phòng', 'Checking availability'], CUSTOMER_CONTACTED: ['Đã liên hệ', 'Contacted'],
-    ALTERNATIVE_OFFERED: ['Đã gửi phương án', 'Alternative offered'], WON: ['Đã xác nhận', 'Confirmed'],
+    ALTERNATIVE_OFFERED: ['Đã kết thúc — có phương án khác', 'Closed — alternative suggested'], WON: ['Đã xác nhận', 'Confirmed'],
     CONFIRMED: ['Đã xác nhận', 'Confirmed'], CHECK_IN_READY: ['Sẵn sàng nhận phòng', 'Ready for check-in'],
     CHECKED_IN: ['Đã nhận phòng', 'Checked in'], CHECKED_OUT: ['Đã trả phòng', 'Checked out'],
     COMPLETED: ['Đã hoàn tất', 'Completed'], DECLINED: ['Đã từ chối', 'Declined'],

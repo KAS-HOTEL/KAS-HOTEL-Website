@@ -3,6 +3,8 @@ import { ApiError } from '@/lib/api/errors';
 import type { BaseRateView, RateGridView, RateRuleView } from '@/lib/domain/rate';
 import { MAX_GRID_CELLS, MAX_RATE_RANGE_DAYS } from '@/lib/domain/rate';
 import { isPropertyId } from '@/features/property/load';
+import { specialRatesApi } from '@/lib/api/endpoints/specialRates';
+import type { SpecialRateView } from '@/lib/domain/specialRate';
 
 /**
  * Turns a rate-grid request into a state a page can render.
@@ -179,6 +181,25 @@ export async function loadBaseRates(
   }
   try {
     return { status: 'ok', baseRates: await ratesApi.baseRates(propertyId, cookieHeader) };
+  } catch (error) {
+    return { status: 'error', error: asApiError(error) };
+  }
+}
+
+export type SpecialRatesResult =
+  | { readonly status: 'ok'; readonly specialRates: readonly SpecialRateView[] }
+  | { readonly status: 'error'; readonly error: ApiError };
+
+/** The hotel's "Quy tắc đặc biệt" (holidays, seasons, weekday patterns). */
+export async function loadSpecialRates(
+  propertyId: string,
+  cookieHeader?: string,
+): Promise<SpecialRatesResult> {
+  if (!isPropertyId(propertyId)) {
+    return { status: 'ok', specialRates: [] };
+  }
+  try {
+    return { status: 'ok', specialRates: await specialRatesApi.list(propertyId, cookieHeader) };
   } catch (error) {
     return { status: 'error', error: asApiError(error) };
   }

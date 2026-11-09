@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { MediaCoverView } from '@/lib/domain/media';
 import { displayName, missingInformation, type PropertyAdminView } from '@/lib/domain/property';
 import { Badge, Table, type Column } from '@/ui/primitives';
+import { DeleteDraftButton } from './DeleteDraftButton';
 import { PropertyCover } from './PropertyCover';
 import { PropertyStatus } from './PropertyStatus';
 import { formatAddress } from './address';
@@ -41,12 +42,15 @@ export function PropertyTable({
   covers,
   coversUnavailable = false,
   loading = false,
+  roomTypeCounts,
 }: {
   readonly properties: readonly PropertyAdminView[];
   /** Cover per property id. A property with none is simply absent. */
   readonly covers?: ReadonlyMap<string, MediaCoverView> | undefined;
   readonly coversUnavailable?: boolean | undefined;
   readonly loading?: boolean;
+  /** Room types per property id; absent when they could not be read. */
+  readonly roomTypeCounts?: ReadonlyMap<string, number> | undefined;
 }) {
   const columns: readonly Column<PropertyAdminView>[] = [
     {
@@ -84,6 +88,15 @@ export function PropertyTable({
       key: 'lifecycleState',
       header: 'Trạng thái',
       cell: (property) => <PropertyStatus state={property.lifecycleState} />,
+    },
+    {
+      key: 'roomTypes',
+      header: 'Hạng phòng',
+      align: 'end',
+      cell: (property) => {
+        const count = roomTypeCounts?.get(property.id);
+        return count === undefined ? '—' : String(count);
+      },
     },
     {
       key: 'information',
@@ -135,6 +148,18 @@ export function PropertyTable({
       header: 'Thứ tự',
       align: 'end',
       cell: (property) => property.sortOrder,
+    },
+    {
+      key: 'actions',
+      header: <span className={styles.srOnly}>Thao tác</span>,
+      align: 'end',
+      isActions: true,
+      // Only a draft can be deleted; the backend also refuses a hotel that was ever
+      // published or has booking history.
+      cell: (property) =>
+        property.lifecycleState === 'DRAFT' ? (
+          <DeleteDraftButton propertyId={property.id} name={displayName(property.names) ?? property.slug} />
+        ) : null,
     },
   ];
 

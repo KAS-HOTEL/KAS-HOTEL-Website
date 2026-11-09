@@ -64,7 +64,13 @@ export interface SalesQueueFilters {
   readonly sort?: 'newest' | 'oldest';
 }
 
-export type SalesQueueView = 'awaiting' | 'expired' | 'accepted';
+/** Optional details of a staff cancellation (2026-11-07). */
+export interface CancelOptions {
+  readonly requestedBy?: 'GUEST' | 'KAS';
+  readonly paymentChecked?: boolean;
+}
+
+export type SalesQueueView = 'awaiting' | 'expired' | 'accepted' | 'alternative';
 
 /** `GET /api/v1/admin/sales/requests/counts` — counted in the database, per hotel. */
 export interface SalesQueueCounts {
@@ -72,6 +78,8 @@ export interface SalesQueueCounts {
   readonly awaiting: number;
   readonly expired: number;
   readonly accepted: number;
+  /** Closed with an alternative stay proposed (terminal since 2026-11-07). */
+  readonly alternative: number;
 }
 
 function definedOnly(filters: object): Record<string, string | number> {
@@ -227,10 +235,18 @@ export const salesRequestsApi = {
    * cancel after a win or a decline is. Returns 204 with no body; re-read the
    * detail to see the new state.
    */
-  cancel: (reference: string, reason: string) =>
+  /**
+   * `requestedBy`: who asked (GUEST / KAS), recorded beside the agent who did it.
+   * `paymentChecked`: required only after the guest reported a bank transfer.
+   */
+  cancel: (reference: string, reason: string, options: CancelOptions = {}) =>
     api.post<void>(
       `/api/v1/admin/sales/requests/${encodeURIComponent(reference)}/cancel`,
-      { reason },
+      {
+        reason,
+        ...(options.requestedBy === undefined ? {} : { requestedBy: options.requestedBy }),
+        ...(options.paymentChecked === true ? { paymentChecked: true } : {}),
+      },
     ),
 
   /**

@@ -141,8 +141,9 @@ describe('the queue’s empty state', () => {
 });
 
 describe('open and terminal', () => {
-  it('treats exactly doc 54 §4’s four values as terminal', () => {
+  it('treats doc 54 §4’s four values plus ALTERNATIVE_OFFERED (owner decision 2026-11-07) as terminal', () => {
     expect([...TERMINAL_SALES_STATUSES].sort()).toEqual([
+      'ALTERNATIVE_OFFERED',
       'CANCELLED',
       'DECLINED',
       'EXPIRED',
@@ -156,11 +157,11 @@ describe('open and terminal', () => {
       'ASSIGNED',
       'AVAILABILITY_CHECK',
       'CUSTOMER_CONTACTED',
-      'ALTERNATIVE_OFFERED',
     ]) {
       expect(isOpenRequest(summary({ salesStatus: status }))).toBe(true);
     }
-    for (const status of ['WON', 'DECLINED', 'CANCELLED', 'EXPIRED']) {
+    // ALTERNATIVE_OFFERED closes the request since 2026-11-07 (owner decision).
+    for (const status of ['WON', 'DECLINED', 'CANCELLED', 'EXPIRED', 'ALTERNATIVE_OFFERED']) {
       expect(isOpenRequest(summary({ salesStatus: status }))).toBe(false);
     }
   });
