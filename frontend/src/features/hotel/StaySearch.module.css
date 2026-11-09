@@ -1,0 +1,809 @@
+/*
+ * The guest search bar and the stay summary.
+ *
+ * Kept in its own module rather than added to Hotel.module.css, which is already
+ * 1200 lines covering the whole guest page. These two components are the booking
+ * surface: they appear on the portfolio, on the hotel page and on every width
+ * from 375px to 1440px, and they are easier to reason about apart.
+ *
+ * Every colour, space and font size is a token. No `font:` shorthand anywhere —
+ * the shorthand resets `font-family` to the initial value unless it is restated,
+ * which silently drops the brand typeface.
+ */
+
+/* ---------------------------------------------------------------------------
+ * The search bar
+ * ------------------------------------------------------------------------ */
+
+.bar {
+  background: var(--surface);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+/*
+ * One column on a phone, a row once there is width for one.
+ *
+ * The date fields carry a little more width than the counts because a native
+ * date control renders a full `dd/mm/yyyy` and truncating it makes the control
+ * unreadable at exactly the moment it matters.
+ */
+.fields {
+  display: grid;
+  gap: var(--space-3);
+  grid-template-columns: 1fr;
+  align-items: end;
+}
+
+@media (min-width: 640px) {
+  .fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* The submit spans the row rather than sitting in a half-width cell. */
+  .action {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fields {
+    /* check-in · check-out · adults · rooms · go */
+    grid-template-columns: 1.2fr 1.2fr 0.8fr 0.8fr auto;
+  }
+
+  .fields[data-destination] {
+    grid-template-columns: 1.4fr 1.2fr 1.2fr 0.8fr 0.8fr auto;
+  }
+
+  .action {
+    grid-column: auto;
+  }
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+}
+
+.fieldNote {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.control {
+  height: var(--density-control-height);
+  width: 100%;
+  min-width: 0;
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  border-color: var(--border-focus);
+}
+
+.action {
+  display: flex;
+  align-items: flex-end;
+}
+
+.submit {
+  height: var(--density-control-height);
+  width: 100%;
+  padding: 0 var(--space-5);
+  border: 1px solid var(--accent-700);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.submit:hover {
+  background: var(--accent-600);
+}
+
+.submit:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.note {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.problem {
+  margin: 0;
+  padding: var(--space-3);
+  border-left: 3px solid var(--error-500);
+  background: var(--error-100);
+  color: var(--ink-800);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+/* ---------------------------------------------------------------------------
+ * The booking layout — results beside a summary
+ * ------------------------------------------------------------------------ */
+
+.booking {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .booking {
+    grid-template-columns: minmax(0, 1fr) 20rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .booking {
+    grid-template-columns: minmax(0, 1fr) 22rem;
+    gap: var(--space-6);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The stay summary
+ * ------------------------------------------------------------------------ */
+
+/*
+ * On a phone this is an ordinary block in the flow; the sticky bar at the bottom
+ * of the viewport is a separate element, so a guest scrolling the room list
+ * always sees what they have chosen and what it costs.
+ */
+.summary {
+  background: var(--surface);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .summary {
+    position: sticky;
+    /* Clear of the site header, which is itself sticky. */
+    top: var(--space-6);
+  }
+}
+
+.summaryTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.summaryStay {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.summaryDates {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.summaryMeta {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.summaryLines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  padding-top: var(--space-4);
+}
+
+.summaryLine {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-1) var(--space-3);
+  align-items: baseline;
+}
+
+.summaryLineName {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.summaryLineAmount {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.summaryLineDetail {
+  grid-column: 1 / -1;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.summaryTotal {
+  margin: 0;
+  padding-top: var(--space-4);
+  border-top: var(--border-width) solid var(--border-default);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.summaryTotalLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.summaryTotalValue {
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.summaryEmpty {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.summaryNote {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.summaryAction {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/*
+ * The sticky bar a phone gets instead of a side panel.
+ *
+ * Hidden above 1024px, where the summary itself is sticky and always in view.
+ * `env(safe-area-inset-bottom)` keeps it clear of the home indicator on a
+ * notched phone, where a button flush to the bottom edge is unpressable.
+ */
+.stickyBar {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+  background: var(--surface);
+  border-top: var(--border-width) solid var(--border-default);
+  box-shadow: var(--shadow-lg);
+}
+
+@media (min-width: 1024px) {
+  .stickyBar {
+    display: none;
+  }
+}
+
+.stickyText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.stickyCount {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.stickyTotal {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-tight);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stickyAction {
+  flex-shrink: 0;
+}
+
+/*
+ * Room for the sticky bar at the end of the page, so the last room card is not
+ * permanently covered by it. Removed once the bar is gone.
+ */
+.stickySpacer {
+  height: 76px;
+}
+
+@media (min-width: 1024px) {
+  .stickySpacer {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The room offers
+ * ------------------------------------------------------------------------ */
+
+.resultsSummary {
+  margin: 0 0 var(--space-4) 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.offers {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/*
+ * One column on a phone: photograph, then facts, then price and the control.
+ * From 768px the photograph moves beside the facts, and from 1024px the price
+ * column separates so the eye can compare rooms down a single edge.
+ */
+.offer {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--surface);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.offer[data-selected] {
+  border-color: var(--accent-500);
+  box-shadow: 0 0 0 1px var(--accent-500);
+}
+
+/* Shown, never hidden — a guest can see what the hotel offers and what it costs. */
+.offer[data-soldout] {
+  background: var(--background);
+}
+
+.offer[data-soldout] .offerMedia,
+.offer[data-soldout] .offerName {
+  opacity: 0.72;
+}
+
+@media (min-width: 768px) {
+  .offer {
+    grid-template-columns: 14rem minmax(0, 1fr);
+  }
+
+  .offerAside {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    border-top: var(--border-width-subtle) solid var(--border-subtle);
+    padding-top: var(--space-4);
+  }
+}
+
+@media (min-width: 1280px) {
+  .offer {
+    grid-template-columns: 15rem minmax(0, 1fr) 13rem;
+  }
+
+  .offerAside {
+    grid-column: auto;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    border-top: none;
+    border-left: var(--border-width-subtle) solid var(--border-subtle);
+    padding-top: 0;
+    padding-left: var(--space-4);
+  }
+}
+
+.offerMedia {
+  min-width: 0;
+}
+
+.offerBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.offerName {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.offerLead {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.offerFacts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: var(--space-2) var(--space-4);
+}
+
+.offerFact {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.offerFact dt {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  letter-spacing: 0.02em;
+  color: var(--text-muted);
+}
+
+.offerFact dd {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.offerBed {
+  display: block;
+}
+
+/* A restatement of the published room description, never a filter. */
+.offerFit {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--warning-500);
+}
+
+.offerFit[data-fits] {
+  color: var(--success-500);
+}
+
+.offerState {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.offerBadge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: 1.6;
+  font-weight: 600;
+  background: var(--stone-200);
+  color: var(--ink-700);
+}
+
+.offerBadge[data-tone='available'] {
+  background: var(--success-100);
+  color: var(--success-500);
+}
+
+.offerBadge[data-tone='soldout'] {
+  background: var(--stone-200);
+  color: var(--ink-600);
+}
+
+.offerNote {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.offerAside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.offerPrice {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.offerPriceLabel,
+.offerPriceUnit {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.offerPriceValue {
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.offerChoose {
+  height: var(--density-control-height);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--accent-700);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.offerChoose:hover {
+  background: var(--accent-600);
+}
+
+.offerChoose:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.offerChosen {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.offerChosenCount {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--accent-700);
+}
+
+.offerQuantity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.offerQuantityLabel {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.offerSelect {
+  height: var(--density-control-height);
+  width: 100%;
+  padding: 0 var(--space-3);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.offerSelect:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 1px;
+  border-color: var(--border-focus);
+}
+
+.estimateNote {
+  margin: var(--space-4) 0 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+ * The reconciliation notice
+ * ------------------------------------------------------------------------ */
+
+.summaryChanged {
+  padding: var(--space-3);
+  border-left: 3px solid var(--warning-500);
+  background: var(--warning-100);
+}
+
+.summaryChangedTitle {
+  margin: 0 0 var(--space-2) 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--ink-800);
+}
+
+.summaryChangedList {
+  margin: 0;
+  padding-left: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--ink-700);
+}
+
+/* ---------------------------------------------------------------------------
+ * Loading and failure
+ * ------------------------------------------------------------------------ */
+
+.loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.loadingText {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.failed {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--surface);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-left: 3px solid var(--error-500);
+  border-radius: var(--radius-lg);
+}
+
+.failedTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.failedBody {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.retry {
+  display: inline-flex;
+  align-items: center;
+  height: var(--density-control-height);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--accent-700);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-family: var(--font-text);
+  font-size: var(--text-button);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.retry:hover {
+  background: var(--accent-600);
+}
+
+.retry:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}

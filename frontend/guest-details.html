@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest Details — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+<style>
+.guest-profile-note{margin:-4px 0 16px;padding:11px 13px;border:1px solid var(--line);background:var(--surface-2);font-size:.8rem;color:var(--tx-2)}
+.guest-room-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;margin-bottom:16px;background:var(--surface-2);border:1px solid var(--line);font-size:.86rem}
+.guest-room-summary span{color:var(--tx-2)}
+.guest-booking-note{border-left:3px solid var(--gold)}
+#assist .ct-channels{grid-template-columns:minmax(0,1fr);gap:6px}
+#assist .ct-ch{flex-direction:row;justify-content:flex-start;align-items:center;gap:9px;min-height:40px;padding:8px 10px;text-align:left}
+#assist .ct-ch span{width:auto;min-width:0;flex:1}
+#assist .ct-ch b{font-size:.7rem;white-space:normal;overflow-wrap:anywhere}
+#assist .ct-ch small{font-size:.62rem;line-height:1.25}
+</style>
+<link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+</head>
+<body>
+
+<header id="hdr"></header>
+<div class="container"><nav class="crumb" id="crumb"></nav></div>
+<div id="steps"></div>
+
+<section class="section section--tight">
+  <div class="container">
+    <div class="split">
+      <!-- ============ FORM ============ -->
+      <div class="split__main">
+        <h1 style="font-size:clamp(1.9rem,3vw,2.5rem)">Enter your details</h1>
+        <p class="muted" style="margin:.4rem 0 1.8rem;font-size:.93rem">Add your contact details and review your stay before sending a booking request.</p>
+
+        <form id="gForm" novalidate class="stack" style="gap:18px">
+
+          <!-- contact -->
+          <div class="card">
+              <div class="card__hd">${ICON_USER}<h4>Contact information</h4>
+              <span class="tiny muted" style="margin-left:auto"><span class="req" style="color:var(--err)">*</span> Required fields</span></div>
+            <div id="signedInProfile" class="guest-profile-note" hidden></div>
+            <div class="grid" style="grid-template-columns:1fr" id="nameRow">
+              <div class="field"><label class="label" for="fullName">Full name <span class="req">*</span></label>
+                <input class="input" id="fullName" name="fullName" autocomplete="name" required>
+                <span class="err-msg"></span></div>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:16px" id="contactRow">
+              <div class="field"><label class="label" for="email">Email address <span class="req">*</span></label>
+                <input class="input" type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" required>
+                <span class="err-msg"></span></div>
+              <div class="field"><label class="label" for="nationality">Country/Region <span class="req">*</span></label>
+                <select class="select" id="nationality" required></select><span class="err-msg"></span></div>
+            </div>
+            <div class="field" style="margin-top:16px;max-width:520px">
+              <label class="label" for="phone">Phone number <span class="req">*</span></label>
+              <div style="display:flex;gap:8px">
+                <select class="select" id="dial" aria-label="Country calling code" style="width:110px">
+                  <option value="+84">+84</option><option value="+1">+1</option><option value="+44">+44</option>
+                  <option value="+65">+65</option><option value="+61">+61</option><option value="+82">+82</option>
+                  <option value="+81">+81</option><option value="+86">+86</option>
+                </select>
+                <input class="input" type="tel" id="phone" name="phone" autocomplete="tel" placeholder="912 345 678" required>
+              </div><span class="err-msg"></span>
+            </div>
+            <div class="field" style="margin-top:16px">
+              <label class="label">Who will check in?</label>
+              <div style="display:flex;gap:26px;flex-wrap:wrap;margin-top:4px">
+                <label class="opt"><input type="radio" name="cig" value="same" checked><span>I will check in</span></label>
+                <label class="opt"><input type="radio" name="cig" value="different"><span>Someone else will check in</span></label>
+              </div>
+            </div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:16px" id="diffGuest" hidden>
+              <div class="field" style="grid-column:1/-1"><label class="label" for="guestFullName">Guest full name <span class="req">*</span></label>
+                <input class="input" id="guestFullName" autocomplete="name"><span class="err-msg"></span></div>
+            </div>
+          </div>
+
+          <div class="card guest-booking-note">
+            <div class="card__hd">${ICON_INFO}<h4>Good to know</h4></div>
+            <p class="muted" style="margin:0;font-size:.88rem;line-height:1.7">This is a booking request. The hotel will check room availability and contact you by email. If the room is available, the hotel will send payment instructions; your reservation is confirmed after the hotel verifies payment.</p>
+          </div>
+
+          <!-- room -->
+          <div class="card">
+            <div class="card__hd">${ICON_BED}<h4>Room details &amp; guests</h4></div>
+            <div class="guest-room-summary"><strong id="selectedRoomName"></strong><span id="selectedRoomFacts"></span></div>
+            <div class="grid" style="grid-template-columns:repeat(3,1fr)" id="guestsRow"></div>
+            <p class="hint" style="margin-top:14px" id="occNote"></p>
+            <span class="err-msg" id="occErr"></span>
+          </div>
+
+          <!-- requests -->
+          <div class="card">
+            <div class="card__hd">${ICON_CHAT}<h4>Additional requests <span style="text-transform:none;letter-spacing:0;font-weight:400;color:var(--tx-3)">(optional)</span></h4></div>
+            <div class="field">
+              <label class="label" for="requests">Special requests</label>
+              <textarea class="textarea" id="requests" maxlength="500" placeholder="Late check-in, high floor, quiet room, twin beds…"></textarea>
+              <div style="display:flex;justify-content:space-between">
+                <span class="hint">Requests are subject to availability and cannot be guaranteed.</span>
+                <span class="hint"><span id="charN">0</span>/500</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- arrival -->
+          <div class="card">
+            <div class="card__hd">${ICON_CLOCK}<h4>Arrival details</h4></div>
+            <div class="grid" style="grid-template-columns:1fr" id="arrRow">
+              <div class="field"><label class="label" for="arrival">Estimated arrival time</label>
+                <select class="select" id="arrival"></select></div>
+            </div>
+          </div>
+
+          <div class="between" style="margin-top:6px;flex-wrap:wrap;gap:14px">
+            <a class="btn btn--link" id="backRoom" style="display:inline-flex;align-items:center;gap:6px"></a>
+            <button class="btn btn--gold btn--lg" type="submit" id="submitBtn">Continue to review ${ICON_ARR}</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ============ SIDEBAR ============ -->
+      <aside class="split__side">
+        <div class="sticky stack" style="gap:16px">
+          <div class="panel">
+            <div style="aspect-ratio:16/10;background:var(--beige);overflow:hidden" id="sideImg"></div>
+            <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
+              <h4 style="color:var(--tx)">Your stay</h4>
+              <a class="btn btn--link" id="editStay" href="#">Edit</a></div>
+            <div id="stayPanel"></div>
+          </div>
+          <div class="panel">
+            <div class="panel__hd" style="background:var(--surface-2);border-bottom:1px solid var(--line)">
+              <h4 style="color:var(--tx)">Price summary</h4>
+              <span class="tiny muted" id="nightsLbl"></span></div>
+            <div class="panel__b" id="sidePrice"></div>
+          </div>
+          <div class="panel"><div class="panel__b" id="trustBadges"></div></div>
+          <div class="panel" id="assist"></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<div id="trustStrip"></div>
+<footer id="ftr"></footer>
+
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/hotel.js"></script>
+<script src="js/room.js"></script>
+<script>
+(async function () {
+  var U = window.U, D = window.KAS_DATA, App = window.App, B = window.Booking, S = window.Store;
+
+  /* Swap icon placeholders BEFORE any listeners are bound, and only inside
+     the static form markup — never on document.body, which would discard
+     the header/footer listeners App.boot attaches. */
+  (function swapIcons() {
+    var ICONS = { ICON_USER:['user',18], ICON_USERS:['users',18], ICON_CHAT:['chat',18],
+                  ICON_CLOCK:['clock',18], ICON_BED:['bed',18], ICON_CARD:['card',18],
+                  ICON_INFO:['info',16], ICON_ARR:['arrR',14] };
+    var scope = U.$('.split__main');
+    if (!scope) return;
+    scope.innerHTML = scope.innerHTML.replace(/\$\{(ICON_[A-Z]+)\}/g, function (m, k) {
+      return ICONS[k] ? U.icon(ICONS[k][0], ICONS[k][1]) : '';
+    });
+  })();
+
+  App.boot({ active: 'my kas' });
+
+  var c = B.requireRoom();
+  if (!c) return;
+  var hotel = D.getHotel(c.hotelId), room = D.getRoom(c.hotelId, c.roomId);
+
+  App.renderSteps(U.$('#steps'), 2, [
+    U.fmtDate(c.checkIn) + ' – ' + U.fmtDate(c.checkOut), room.name
+  ]);
+  U.$('#crumb').innerHTML =
+    '<a href="index.html">Home</a><span class="sep">›</span>' +
+    '<a href="hotels.html">Hotels</a><span class="sep">›</span>' +
+    '<a href="hotel-detail.html?hotel=' + hotel.id + '">' + U.esc(hotel.name) + '</a><span class="sep">›</span>' +
+    '<a href="room-detail.html?hotel=' + hotel.id + '&room=' + room.id + '">' + U.esc(room.name) + '</a>' +
+    '<span class="sep">›</span><span class="cur">Your booking</span>';
+  var br = U.$('#backRoom');
+  br.innerHTML = U.icon('arrL', 13) + ' Back to room details';
+  br.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
+
+  /* ---- nationality ---- */
+  var NAT = [
+    ['VN','Vietnamese','Việt Nam'],['AU','Australian','Úc'],['KH','Cambodian','Campuchia'],['CA','Canadian','Canada'],
+    ['CN','Chinese','Trung Quốc'],['FR','French','Pháp'],['DE','German','Đức'],['HK','Hong Kong','Hồng Kông'],
+    ['IN','Indian','Ấn Độ'],['ID','Indonesian','Indonesia'],['IT','Italian','Ý'],['JP','Japanese','Nhật Bản'],
+    ['LA','Lao','Lào'],['MY','Malaysian','Malaysia'],['NL','Dutch','Hà Lan'],['NZ','New Zealander','New Zealand'],
+    ['PH','Filipino','Philippines'],['RU','Russian','Nga'],['SG','Singaporean','Singapore'],['KR','South Korean','Hàn Quốc'],
+    ['ES','Spanish','Tây Ban Nha'],['SE','Swedish','Thụy Điển'],['CH','Swiss','Thụy Sĩ'],['TW','Taiwanese','Đài Loan'],
+    ['TH','Thai','Thái Lan'],['GB','British','Vương quốc Anh'],['US','American','Hoa Kỳ'],['ZZ','Other','Khác']
+  ];
+  function bookingLang() { return window.KAS_I18N && window.KAS_I18N.getLanguage && window.KAS_I18N.getLanguage() === 'vi' ? 'vi' : 'en'; }
+  function renderNationalities(selected) {
+    var vi = bookingLang() === 'vi';
+    U.$('#nationality').innerHTML = '<option value="">' + (vi ? 'Chọn quốc tịch' : 'Select nationality') + '</option>' +
+      NAT.map(function (country) { return '<option value="' + country[0] + '">' + country[vi ? 2 : 1] + '</option>'; }).join('');
+    U.$('#nationality').value = selected || '';
+  }
+  renderNationalities('VN');
+
+  /* ---- arrival times ---- */
+  var times = [bookingLang() === 'vi' ? 'Chưa xác định' : 'I don\'t know yet'];
+  for (var h = 12; h <= 23; h++) times.push(String(h).padStart(2, '0') + ':00 – ' + String(h + 1).padStart(2, '0') + ':00');
+  times.push(bookingLang() === 'vi' ? 'Sau 00:00' : 'After 00:00');
+  U.$('#arrival').innerHTML = times.map(function (t, i) {
+    return '<option' + (i === 3 ? ' selected' : '') + '>' + t + '</option>';
+  }).join('');
+
+  /* ---- guest counters ---- */
+  var counts = { adults: +c.adults || 2, children: +c.children || 0, infants: 0 };
+  var maxA = room.maxGuests, maxC = room.children != null ? room.children : 2;
+  U.$('#guestsRow').innerHTML = [
+    ['adults', bookingLang() === 'vi' ? 'Người lớn' : 'Adults', bookingLang() === 'vi' ? 'Từ 13 tuổi' : 'Ages 13+', 1, maxA],
+    ['children', bookingLang() === 'vi' ? 'Trẻ em' : 'Children', bookingLang() === 'vi' ? '2–12 tuổi' : 'Ages 2–12', 0, maxC],
+    ['infants', bookingLang() === 'vi' ? 'Em bé' : 'Infants', bookingLang() === 'vi' ? 'Dưới 2 tuổi' : 'Under 2', 0, 2]
+  ].map(function (g) {
+    return '<div class="field"><label class="label">' + g[1] + '<span style="text-transform:none;letter-spacing:0;color:var(--tx-3);font-weight:400"> · ' + g[2] + '</span></label>' +
+      '<div class="stepper" data-k="' + g[0] + '" data-min="' + g[3] + '" data-max="' + g[4] + '" ' +
+      'style="border:1px solid var(--line);border-radius:var(--r-sm);padding:8px 12px;justify-content:space-between;background:var(--surface)">' +
+      '<button type="button" data-d="-" aria-label="Decrease ' + g[1] + '">' + U.icon('minus', 14) + '</button>' +
+      '<output>' + counts[g[0]] + '</output>' +
+      '<button type="button" data-d="+" aria-label="Increase ' + g[1] + '">' + U.icon('plus', 14) + '</button></div></div>';
+  }).join('');
+  U.$('#occNote').textContent = bookingLang() === 'vi'
+    ? 'Phòng tối đa ' + maxA + ' người lớn' + (maxC ? ' và ' + maxC + ' trẻ em' : '') + '. Bạn đã chọn ' + c.rooms + ' phòng.'
+    : 'This room type sleeps a maximum of ' + maxA + ' guest' + (maxA === 1 ? '' : 's') + (maxC ? ' and up to ' + maxC + ' child' + (maxC === 1 ? '' : 'ren') : '') + '. You have booked ' + c.rooms + ' room' + (c.rooms === 1 ? '' : 's') + '.';
+  U.$('#selectedRoomName').textContent = room.name;
+  U.$('#selectedRoomFacts').textContent = hotel.name + ' · ' + c.rooms + (bookingLang() === 'vi' ? ' phòng' : (c.rooms === 1 ? ' room' : ' rooms'));
+
+  U.$$('.stepper[data-k]').forEach(function (st) {
+    var k = st.dataset.k, lo = +st.dataset.min, hi = +st.dataset.max, out = U.$('output', st);
+    var btns = U.$$('button', st);
+    function sync() {
+      out.textContent = counts[k];
+      btns[0].disabled = counts[k] <= lo;
+      btns[1].disabled = counts[k] >= hi;
+      U.$('#occErr').classList.remove('show');
+    }
+    btns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        counts[k] = Math.min(hi, Math.max(lo, counts[k] + (b.dataset.d === '+' ? 1 : -1)));
+        sync();
+        S.patchCurrent({ adults: counts.adults, children: counts.children });
+        paintSide();
+      });
+    });
+    sync();
+  });
+
+  /* ---- different guest toggle ---- */
+  U.$$('input[name=cig]').forEach(function (r) {
+    r.addEventListener('change', function () {
+      U.$('#diffGuest').hidden = r.value !== 'different';
+    });
+  });
+
+  /* ---- char counter ---- */
+  var req = U.$('#requests');
+  req.addEventListener('input', function () { U.$('#charN').textContent = req.value.length; });
+
+  /* ---- prefill from saved guest ---- */
+  var saved = (c.guest) || S.getGuest();
+  function fillGuest(savedGuest) {
+    if (!savedGuest) return;
+    var nationality = String(savedGuest.nationality || '').toUpperCase();
+    var countryCodes = { VIETNAMESE:'VN', VIETNAM:'VN', AMERICAN:'US', 'UNITED STATES':'US', BRITISH:'GB', 'UNITED KINGDOM':'GB', AUSTRALIAN:'AU', CANADIAN:'CA', THAI:'TH', 'SOUTH KOREAN':'KR', JAPANESE:'JP', CHINESE:'CN', FRENCH:'FR', GERMAN:'DE', INDIAN:'IN' };
+    nationality = countryCodes[nationality] || nationality;
+    renderNationalities(NAT.some(function (n) { return n[0] === nationality; }) ? nationality : '');
+    setVal('requests', savedGuest.specialRequests); setVal('arrival', savedGuest.arrivalTime);
+    setVal('fullName', savedGuest.fullName || [savedGuest.firstName, savedGuest.lastName].filter(Boolean).join(' '));
+    setVal('email', savedGuest.email); setVal('dial', savedGuest.dial); setVal('phone', savedGuest.phone);
+    setVal('nationality', nationality);
+    if (savedGuest.checkInGuest === 'different') {
+      U.$('input[name=cig][value=different]').checked = true;
+      U.$('#diffGuest').hidden = false;
+      setVal('guestFullName', savedGuest.guestFullName || [savedGuest.guestFirstName, savedGuest.guestLastName].filter(Boolean).join(' '));
+    }
+    U.$('#charN').textContent = (savedGuest.specialRequests || '').length;
+  }
+  fillGuest(saved);
+  if (window.KAS_API) window.KAS_API.profile().then(function (profile) {
+    var signedIn = U.$('#signedInProfile');
+    signedIn.textContent = bookingLang() === 'vi'
+      ? 'Thông tin liên hệ đã được điền từ hồ sơ thành viên KAS.'
+      : 'Contact details have been prefilled from your KAS member profile.';
+    signedIn.hidden = false;
+    var phone = String(profile.phone || '').trim(), dial = '+84';
+    ['+84','+1','+44','+65','+61','+82','+81','+86'].some(function (prefix) {
+      if (phone.indexOf(prefix) === 0) { dial = prefix; phone = phone.slice(prefix.length).trim(); return true; }
+      return false;
+    });
+    if (dial === '+84' && phone.charAt(0) === '0') phone = phone.slice(1);
+    var fromProfile = {
+      fullName: profile.fullName || '',
+      email: profile.email || '', dial: dial, phone: phone, nationality: profile.nationality || ''
+    };
+    fillGuest(Object.assign({}, saved || {}, fromProfile));
+  }).catch(function () {});
+  function setVal(id, v) { var e = U.$('#' + id); if (e && v != null && v !== '') e.value = v; }
+
+  /* ---- live validation ---- */
+  ['fullName','email','phone','nationality'].forEach(function (id) {
+    var e = U.$('#' + id);
+    e.addEventListener('input', function () { U.clearErr(e); });
+    e.addEventListener('change', function () { U.clearErr(e); });
+    e.addEventListener('blur', function () {
+      if (id === 'email' && e.value && !U.isEmail(e.value)) U.setErr(e, 'Please enter a valid email address.');
+      if (id === 'phone' && e.value && !U.isPhone(e.value)) U.setErr(e, 'Please enter a valid phone number.');
+    });
+  });
+
+  function collect() {
+    return {
+      fullName: U.$('#fullName').value.trim(),
+      email: U.$('#email').value.trim(),
+      dial: U.$('#dial').value,
+      phone: U.$('#phone').value.trim(),
+      phoneFull: U.$('#dial').value + ' ' + U.$('#phone').value.trim(),
+      nationality: U.$('#nationality').value,
+      checkInGuest: U.$('input[name=cig]:checked').value,
+      guestFullName: U.$('#guestFullName').value.trim(),
+      specialRequests: U.$('#requests').value.trim(),
+      arrivalTime: U.$('#arrival').value,
+      adults: counts.adults, children: counts.children, infants: counts.infants,
+      paymentMethod: ''
+    };
+  }
+
+  U.$('#gForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    U.clearAllErrs();
+    var g = collect();
+    var v = B.validateGuest(g);
+
+    /* occupancy sanity check */
+    if (g.adults + g.children > room.maxGuests * (+c.rooms || 1)) {
+      v.ok = false;
+      v.errors.adults = 'This room type sleeps ' + room.maxGuests + ' guests. Please reduce the guest count or add a room.';
+    }
+
+    if (!v.ok) {
+      var first = null;
+      Object.keys(v.errors).forEach(function (k) {
+        var map = { guestFullName: 'guestFullName' };
+        var node = U.$('#' + (map[k] || k));
+        if (node) { U.setErr(node, v.errors[k]); if (!first) first = node; }
+      });
+      if (v.errors.adults && !U.$('#adults')) {
+        var oe = U.$('#occErr'); oe.textContent = v.errors.adults; oe.classList.add('show');
+        if (!first) first = U.$('#guestsRow');
+      }
+      U.toast('Please correct the highlighted fields.');
+      (first || U.$('#gForm')).scrollIntoView({ behavior: 'smooth', block: 'center' });
+      if (first && first.focus) first.focus({ preventScroll: true });
+      return;
+    }
+
+    S.patchCurrent({ guest: g, adults: g.adults, children: g.children });
+    S.setGuest(g);
+    location.href = 'review-confirm.html';
+  });
+
+  /* ---- sidebar ---- */
+  function paintSide() {
+    var cur = B.reprice();
+    U.$('#sideImg').innerHTML = U.img(room.images[0], room.name);
+    U.$('#stayPanel').innerHTML =
+      '<div class="panel__b" style="padding-bottom:0">' +
+        '<h4 style="font-family:var(--serif);font-size:1.1rem;margin-bottom:2px">' + U.esc(hotel.name) + '</h4>' +
+        '<p class="tiny" style="color:var(--gold-dk);margin:0 0 2px;font-weight:600">' + U.esc(room.name) + '</p>' +
+        '<p class="tiny muted" style="margin:0">' + U.esc(hotel.address) + '</p></div>' +
+      B.stayPanelHTML(Object.assign({}, cur, {
+        checkInTime: hotel.checkIn, checkOutTime: hotel.checkOut
+      }), { header: false });
+    U.$('#nightsLbl').textContent = cur.nights + ' night' + (cur.nights === 1 ? '' : 's');
+    var _q = window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id)
+      ? window.KAS_RATES.quote(room.id, cur.checkIn, cur.checkOut) : null;
+    U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(cur.price, {
+      nights: _q ? _q.nights : null, rateSource: room.rateSource });
+  }
+  paintSide();
+
+  U.$('#editStay').addEventListener('click', function (e) {
+    e.preventDefault();
+    location.href = 'room-detail.html?hotel=' + hotel.id + '&room=' + room.id;
+  });
+  U.$('#assist').innerHTML = B.assistHTML();
+  U.$('#trustBadges').innerHTML = B.trustBadgesHTML();
+  U.$('#trustStrip').outerHTML = B.trustStripHTML();
+
+  function collapse() {
+    var w = window.innerWidth;
+    U.$('#nameRow').style.gridTemplateColumns = '1fr';
+    ['#contactRow','#diffGuest'].forEach(function (s) {
+      var n = U.$(s); if (n) n.style.gridTemplateColumns = w < 700 ? '1fr' : '1fr 1fr';
+    });
+    U.$('#arrRow').style.gridTemplateColumns = '1fr';
+    U.$('#guestsRow').style.gridTemplateColumns = w < 620 ? '1fr' : 'repeat(3,1fr)';
+  }
+  collapse(); window.addEventListener('resize', U.debounce(collapse, 120));
+})();
+</script>
+</body>
+</html>

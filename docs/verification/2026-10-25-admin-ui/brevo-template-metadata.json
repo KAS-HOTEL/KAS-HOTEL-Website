@@ -1,0 +1,267 @@
+[
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_WELCOME_EN",
+    "id": 4,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "firstName",
+      "memberId",
+      "memberTier"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_WELCOME_VI",
+    "id": 5,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "firstName",
+      "memberId",
+      "memberTier"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_TIER_UPGRADE_EN",
+    "id": 6,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "firstName",
+      "memberId",
+      "memberTier"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_TIER_UPGRADE_VI",
+    "id": 7,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "firstName",
+      "memberId",
+      "memberTier"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_EN",
+    "id": 8,
+    "active": true,
+    "params": [
+      "expiresInMinutes",
+      "firstName",
+      "verificationUrl"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_VI",
+    "status": 404
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_EN",
+    "id": 10,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_VI",
+    "id": 11,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_EN",
+    "id": 12,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_VI",
+    "id": 13,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_EN",
+    "id": 14,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "cancellationDate",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_VI",
+    "id": 15,
+    "active": true,
+    "params": [
+      "accountUrl",
+      "bookingReference",
+      "cancellationDate",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "hotelName"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_STAY_COMPLETED_EN",
+    "id": 16,
+    "active": true,
+    "params": [
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "hotelName",
+      "reviewUrl"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_STAY_COMPLETED_VI",
+    "id": 17,
+    "active": true,
+    "params": [
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "hotelName",
+      "reviewUrl"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_EN",
+    "id": 18,
+    "active": true,
+    "params": [
+      "alternativeBranch",
+      "alternativeHotelName",
+      "availabilityUrl",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "priceSummary",
+      "requestedHotelName",
+      "roomType"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_VI",
+    "id": 19,
+    "active": true,
+    "params": [
+      "alternativeBranch",
+      "alternativeHotelName",
+      "availabilityUrl",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "priceSummary",
+      "requestedHotelName",
+      "roomType"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_EN",
+    "id": 20,
+    "active": true,
+    "params": [
+      "accountHolder",
+      "accountNumber",
+      "bankName",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName",
+      "paymentAmount",
+      "paymentDeadline",
+      "paymentDescription",
+      "qrImageUrl",
+      "roomType",
+      "totalAmount",
+      "transferContent"
+    ],
+    "contactFields": []
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_VI",
+    "id": 21,
+    "active": true,
+    "params": [
+      "accountHolder",
+      "accountNumber",
+      "bankName",
+      "bookingReference",
+      "checkIn",
+      "checkOut",
+      "firstName",
+      "guests",
+      "hotelName",
+      "paymentAmount",
+      "paymentDeadline",
+      "paymentDescription",
+      "qrImageUrl",
+      "roomType",
+      "totalAmount",
+      "transferContent"
+    ],
+    "contactFields": []
+  }
+]

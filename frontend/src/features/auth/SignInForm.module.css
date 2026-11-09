@@ -1,0 +1,60 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: 100%;
+}
+
+/*
+ * The failure banner. Icon plus words, never colour alone — doc 82 forbids
+ * carrying state by colour, and a warm-palette red is exactly the case where
+ * that matters.
+ */
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--error-500);
+  border-radius: var(--radius-md);
+  background: var(--error-100);
+  color: var(--text-primary);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+.error svg {
+  flex: none;
+  /* Optically centred on the first line of text rather than the box. */
+  margin-top: 2px;
+  color: var(--error-500);
+}
+
+/*
+ * What the session actually does, in place of a checkbox that could not change
+ * it. Quiet: it is reassurance and a shared-computer warning, not an action.
+ */
+.persistence {
+  margin: calc(var(--space-2) * -1) 0 0;
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* Silent renewal on the sign-in page, and the note when it could not renew. */
+.renewing {
+  margin: 0;
+  padding: var(--space-5) 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+  text-align: center;
+}
+.sessionNotice {
+  margin: 0 0 var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  font-size: var(--text-body-sm);
+  color: var(--text-primary);
+}

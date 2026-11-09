@@ -1,0 +1,187 @@
+/*
+ * The registration form.
+ *
+ * Wider gaps than the console's forms: this is a first-run experience on a card
+ * that has room, and the reference's fields breathe. `--density-control-height`
+ * is already 48px from `AuthShell`.
+ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--error-500);
+  border-radius: var(--radius-md);
+  background: var(--error-100);
+  color: var(--text-primary);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  text-align: start;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+  text-align: start;
+}
+
+/* ---- Step 3 summary ----------------------------------------------------- */
+
+/*
+ * What was entered, before it is sent. Two columns on anything wider than a
+ * phone; stacked below that, because a 130px label column next to a long email
+ * wraps into an unreadable stripe.
+ */
+.summary {
+  margin: 0;
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  text-align: start;
+}
+
+.summaryRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+@media (min-width: 480px) {
+  .summaryRow {
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.summaryRow dt {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.summaryRow dd {
+  margin: 0;
+  min-inline-size: 0;
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  /* An email or a business name must wrap rather than push the card wider. */
+  overflow-wrap: anywhere;
+}
+
+/* ---- Actions ------------------------------------------------------------ */
+
+/*
+ * Back on the left, forward on the right, and the forward button takes the
+ * remaining width so it stays the obvious next move at every step.
+ */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.actions > button {
+  min-block-size: var(--density-control-height);
+}
+
+.actions > button:last-child {
+  flex: 1;
+}
+
+/* ---- Step 3: the result ------------------------------------------------- */
+
+/*
+ * Not a summary of what is about to be sent — the account already exists by the
+ * time this renders. It leads with a mark, names the hotel the server actually
+ * created, and gives the two things a new operator can do next.
+ */
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  text-align: center;
+}
+
+.successMark {
+  display: grid;
+  place-items: center;
+  inline-size: 64px;
+  block-size: 64px;
+  border-radius: 50%;
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  box-shadow: 0 0 0 6px var(--accent-100);
+}
+
+.successTitle {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.success .note {
+  text-align: center;
+}
+
+/* The real sequence the console enforces, numbered because order matters. */
+.nextSteps {
+  margin: 0;
+  padding: var(--space-4) var(--space-5) var(--space-4) var(--space-7);
+  inline-size: 100%;
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-left: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  text-align: start;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.success .actions {
+  inline-size: 100%;
+}
+
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: var(--density-control-height);
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-md);
+  color: var(--text-accent);
+  font-size: var(--text-button);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.secondaryLink:hover {
+  background: var(--surface-sunken);
+}

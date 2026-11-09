@@ -1,0 +1,11 @@
+node_modules
+.next
+.git
+uploads
+assets
+data
+tools
+.env*
+*.md
+**/*.test.ts
+**/*.test.tsx

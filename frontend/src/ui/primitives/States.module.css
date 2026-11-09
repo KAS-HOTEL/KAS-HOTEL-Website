@@ -1,0 +1,58 @@
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-5);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.body {
+  margin: 0;
+  max-width: 46ch;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+.reference {
+  font-family: var(--font-mono);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.error {
+  border-color: var(--error-500);
+  background: var(--error-100);
+}
+
+.skeleton {
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    90deg,
+    var(--stone-200) 25%,
+    var(--surface-sunken) 37%,
+    var(--stone-200) 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

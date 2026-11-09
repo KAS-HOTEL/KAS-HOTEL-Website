@@ -1,0 +1,116 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  background: rgb(26 23 21 / 45%);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 100%;
+  background: var(--surface-elevated);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal {
+  width: min(560px, calc(100% - var(--space-6)));
+  margin: auto;
+  border-radius: var(--radius-lg);
+}
+
+.drawer {
+  width: min(480px, 100%);
+  height: 100%;
+  border-radius: 0;
+}
+
+.right {
+  margin-left: auto;
+}
+
+.left {
+  margin-right: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-5);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-md);
+  font-weight: 600;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.close:hover {
+  background: var(--surface-sunken);
+}
+
+/*
+ * Doc 82 §3 — 44×44 on a coarse pointer. 32px is comfortable with a mouse and
+ * too small with a thumb, and dismissing a drawer is the one control a phone
+ * user reaches for most.
+ */
+@media (pointer: coarse) {
+  .close {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+.body {
+  flex: 1;
+  padding: var(--space-5);
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+/* Doc 82 — on a small screen a modal becomes a sheet rather than a shrunken
+   dialog, so the actions stay within thumb reach. */
+@media (max-width: 640px) {
+  .modal {
+    width: 100%;
+    margin: auto 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .drawer {
+    width: 100%;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+  }
+
+  .footer > * {
+    width: 100%;
+  }
+}

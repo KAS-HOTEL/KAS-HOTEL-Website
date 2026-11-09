@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KAS City Guide — Saigon Guide Book | KAS Hotel Collection</title>
+<meta name="description" content="The KAS City Guide: 40 places around the KAS hotels in central Ho Chi Minh City, in four chapters, with the best time to go and walking distances from your hotel.">
+<link rel="canonical" href="https://kasluxuryhotel.com/city-guide.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/guide-book.css">
+<link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+</head>
+<!-- The one official City Guide. It replaces city-guide-vi.html, city-guidebook.html,
+     city-guidebook-vi.html and guide-story.html (those now redirect here).
+     Design: KAS Guide Book V9 (soft-bound book), in KAS fonts and colours.
+     Content: js/guide-data.js. Language: the site language (?lang=vi / EN·VI switch). -->
+<body class="kas-guidebook">
+<header id="hdr"></header>
+
+<main id="kasGuideBook" data-i18n-ignore>
+  <!-- Rendered per language by js/guide-book.js; the site-wide auto-translator must not touch it. -->
+  <!-- Opening band: full-width photo (Admin "guidebook.hero", else the Opera House photo), title centred. -->
+  <section class="gb-hero" data-gb="hero" aria-labelledby="gbPageTitle">
+    <div class="gb-hero__inner">
+      <p class="gb-hero__kicker" data-gb="kicker">KAS Guide Book</p>
+      <h1 class="gb-hero__title" id="gbPageTitle">City Guide</h1>
+      <p class="gb-hero__sub" data-gb="sub">A journey through the city · Discover Saigon with KAS</p>
+    </div>
+  </section>
+  <div class="gb-main">
+    <nav class="gb-tabs" data-gb="tabs" aria-label="Chapters"></nav>
+    <p class="gb-chapter" data-gb="chapter"></p>
+
+    <section class="gb-stage" aria-labelledby="gbTitle">
+      <div class="gb-book" data-gb="book" role="region" aria-roledescription="book" aria-label="KAS Guide Book">
+        <article class="gb-page gb-page--left" data-gb="left"></article>
+        <article class="gb-page gb-page--right" data-gb="right"></article>
+      </div>
+    </section>
+
+    <!-- The page-turn hint is a tooltip: it appears only while the pointer is over
+         (or keyboard focus is on) the controls. -->
+    <div class="gb-controls">
+      <button class="gb-control" type="button" data-gb="prev" aria-label="Previous page" aria-describedby="gbHint">‹</button>
+      <span class="gb-counter" data-gb="counter" aria-hidden="true">01 — 40</span>
+      <button class="gb-control" type="button" data-gb="next" aria-label="Next page" aria-describedby="gbHint">›</button>
+      <span class="gb-hint" id="gbHint" role="tooltip" data-gb="caption">Use the arrows, your keyboard or swipe to turn the page</span>
+    </div>
+    <ul class="gb-places" data-gb="places" aria-label="Places in this chapter"></ul>
+    <p class="gb-sr" data-gb="live" aria-live="polite"></p>
+  <noscript><p style="text-align:center">The KAS City Guide needs JavaScript to turn its pages.</p></noscript>
+  </div>
+</main>
+
+<footer id="ftr"></footer>
+<script src="js/images.js"></script>
+<script src="js/rates.js"></script>
+<script src="js/data.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/contact.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/app.js"></script>
+<script src="js/booking.js"></script>
+<script src="js/search.js"></script>
+<script src="js/guide-data.js"></script>
+<script>App.boot({active:'', floating:false});</script>
+<script src="js/guide-book.js"></script>
+</body>
+</html>

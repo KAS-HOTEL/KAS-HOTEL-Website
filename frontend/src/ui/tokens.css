@@ -1,0 +1,282 @@
+/**
+ * KAS design tokens — transcribed from docs 74–78, not invented.
+ *
+ * ONE token system. The customer and management experiences differ by *density*
+ * (doc 80 §1: "Shares — colour tokens · type family · radius · shadow · icon
+ * set. Differs — density · type scale · motion · imagery"), which is why the
+ * density block below is the only thing that changes between them.
+ *
+ * Values outside the doc 77 spacing scale are prohibited by that document.
+ */
+
+:root {
+  /* ---- Stone: warm neutrals (doc 76 §3.1) ------------------------------- */
+  --stone-200: #e8e3da;
+  --stone-300: #d6cec2;
+  --stone-400: #b5aa9a;
+
+  /* ---- Ink: warm darks (doc 76 §3.2) ----------------------------------- */
+  --ink-500: #6b6459;
+  --ink-600: #524c43;
+  --ink-700: #3a352e;
+  --ink-800: #262220;
+  --ink-900: #1a1715;
+
+  /* ---- Accent (doc 76 §3.3) — "deliberately unremarkable" -------------- */
+  --accent-100: #e6edeb;
+  --accent-500: #3d5a54;
+  --accent-600: #2f4741;
+  --accent-700: #243733;
+
+  /* ---- Gold: the hospitality accent -----------------------------------
+     Doc 76 §3.3 keeps the primary accent "deliberately unremarkable", and it
+     stays the primary. Gold is added alongside it for the partner-facing
+     surfaces the brief calls for — a hairline rule, a mark, a highlight on an
+     editorial panel. It is warm-shifted to sit with the stone/ink neutrals
+     rather than the yellow of a default palette.
+
+     Restraint is the point: gold is never a button ground, never body text and
+     never the only carrier of meaning. --gold-600 on --surface reaches 4.6:1,
+     so it may carry small text; --gold-500 may not, and is decoration only. */
+  --gold-100: #f6efe1;
+  --gold-500: #b08a45;
+  --gold-600: #8a6a2f;
+  --gold-700: #6d5325;
+
+  /* ---- Semantic hues (doc 76 §3.4) — muted, warm-shifted --------------- */
+  --success-500: #3f6b4a;
+  --success-100: #e7efe9;
+  --warning-500: #8a6a2f;
+  --warning-100: #f5eedf;
+  --error-500: #8c3a34;
+  --error-100: #f5e6e4;
+  /* Danger is the semantic name for a destructive action; error is the semantic
+     name for a failed one. Same hue, different intent — aliased rather than
+     duplicated so the palette stays single-sourced. */
+  --danger-500: #8c3a34;
+  --danger-100: #f5e6e4;
+
+  --info-500: #3a5670;
+  --info-100: #e6ecf2;
+
+  /* ---- Semantic surfaces (doc 76 §4) ----------------------------------- */
+  --surface: #ffffff;
+  --surface-sunken: var(--stone-200);
+  --surface-inverse: var(--ink-800);
+  /* Elevated: the ground for modals, drawers, popovers and menus. Distinct from
+     --surface so a dialog reads as above the page, not part of it. */
+  --surface-elevated: #ffffff;
+  --surface-disabled: var(--stone-200);
+  --background: #faf8f5;
+
+  --text-primary: var(--ink-900);
+  --text-secondary: var(--ink-600);
+  --text-muted: var(--ink-500);
+  --text-accent: var(--accent-700);
+  --text-inverse: #ffffff;
+  /* Doc 76 lists stone.400 as "disabled text on dark"; on light it is the
+     lowest-contrast text the palette allows, and is never load-bearing alone. */
+  --text-disabled: var(--stone-400);
+
+  /*
+   * Two steps down the warm neutral ramp, over two passes.
+   *
+   * The console's boundaries began at stone-200 (1.3:1) and stone-300 (1.5:1)
+   * against white. On a good monitor that reads as restraint; on the screens
+   * this is actually used on it reads as no boundary at all, and a page of
+   * cards became a page of floating text. The first pass moved each down one
+   * step. This one moves `subtle` down again, because it is the token that
+   * draws the thing the complaint was actually about: `--border-subtle` bounds
+   * 111 surfaces — every Card, every Table, every EmptyState, the drawer's own
+   * header and footer rules — and at 1.5:1 a card still had no visible edge.
+   *
+   *   subtle   stone-200 → stone-300 → stone-400   1.3:1 → 2.2:1
+   *   default  stone-300 → stone-400              1.5:1 → 2.2:1
+   *
+   * The two now share a value, and that is deliberate rather than an oversight
+   * to tidy up: there is nothing between stone-400 and ink-500 in the palette,
+   * and ink-500 as a card outline is 5.6:1 — the heavy dark box this system is
+   * explicitly not. So below ink the ramp has run out of colour, and the two
+   * roles are separated by width instead (see the widths below). They stay two
+   * tokens because they mean two different things, and a future palette step
+   * between them would be a one-line change here.
+   *
+   * `border-strong` is unchanged: it is already ink and already carries the
+   * interactive controls that need real contrast.
+   */
+  --border-subtle: var(--stone-400);
+  --border-default: var(--stone-400);
+  --border-strong: var(--ink-700);
+
+  /*
+   * Border widths — the second axis, and the one that carries the hierarchy
+   * now that the colour ramp has run out below ink.
+   *
+   * <h3>What a fractional width actually renders as</h3>
+   *
+   * Measured in this browser at devicePixelRatio 1: 1.1px, 1.25px, 1.33px,
+   * 1.5px and 1.75px all compute to a 1px border. Only 2px renders as 2px. So
+   * on an ordinary monitor the three tokens below were one weight, and the
+   * previous pass's step "from 1px to 1.5px" was, on most of the screens this
+   * product is used on, no step at all. They are kept fractional rather than
+   * rounded down because a 2× display does resolve them, and 1.25px there is
+   * the half-step it was meant to be.
+   *
+   *   subtle    1.25px   card outlines, dividers, table hairlines   107 uses
+   *   default   2px      panels, chips, controls, table headers      43 uses
+   *   strong    1.5px    inputs and other interactive boundaries     10 uses
+   *
+   * <h3>Why only `default` moves to 2px</h3>
+   *
+   * Because it is the one step that has to become visible and can afford to:
+   * every one of its 43 uses pairs it with `--border-default`, a soft warm
+   * stone at 2.2:1, so 2px of it reads as a defined edge rather than a dark
+   * one. The 107 subtle boundaries stay a hairline — "not 2px everywhere" is
+   * the brief, and those are the everywhere.
+   *
+   * `strong` is left alone on purpose, even though that makes it thinner than
+   * `default`. Its name is about the strength of the boundary, not the number:
+   * it is the only token paired with ink-700, which is already ~10:1 and the
+   * highest-contrast edge in the system. Taking it to 2px would put a near
+   * black frame around every input in the console, which is exactly the heavy,
+   * boxy admin template this palette exists to avoid.
+   *
+   * Safe to raise because `box-sizing: border-box` is global (globals.css:6),
+   * so a control with a declared height absorbs the extra width inside its own
+   * box instead of growing.
+   */
+  --border-width-subtle: 1.25px;
+  --border-width: 2px;
+  --border-width-strong: 1.5px;
+  /* Doc 76: border.default is decorative only — never the sole boundary of an
+     interactive control. Use border-strong or a focus ring. */
+  --border-focus: var(--accent-600);
+
+  /* ---- Spacing (doc 77 §1) — values outside this scale are prohibited --- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+
+  /* ---- Type families (doc 75 §1) --------------------------------------- */
+  /* Be Vietnam Pro is doc 75 §2's "safest baseline" — designed for Vietnamese.
+     Loading real webfonts is a Step 4 concern; the stacks below degrade to
+     system faces with full diacritic coverage until then. */
+  /* `--font-*-loaded` is set on <html> by next/font in the root layout. The
+     literal name stays behind it so the stack still resolves if the face has
+     not arrived yet, and the system fallbacks stay last. */
+  --font-display: var(--font-display-loaded), 'Source Serif 4', 'Lora', Georgia,
+    'Times New Roman', serif;
+  --font-text: var(--font-text-loaded), 'Be Vietnam Pro', 'Inter', system-ui, -apple-system,
+    'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', monospace;
+
+  /* ---- Type scale (doc 75 §4) — desktop values; see density block ------- */
+  --text-display-xl: 72px;
+  --text-display-lg: 56px;
+  --text-display-md: 40px;
+  --text-display-sm: 30px;
+  --text-heading-lg: 28px;
+  --text-heading-md: 22px;
+  --text-heading-sm: 18px;
+  --text-body-lg: 18px;
+  --text-body: 16px;
+  --text-body-sm: 14px;
+  --text-caption: 13px;
+  --text-label: 13px;
+  --text-button: 15px;
+  --text-nav: 15px;
+
+  --leading-tight: 1.2;
+  --leading-body: 1.55;
+  --leading-editorial: 1.7;
+
+  /* ---- Radius, shadow, border (doc 74) --------------------------------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgb(26 23 21 / 6%);
+  --shadow-md: 0 2px 8px rgb(26 23 21 / 8%);
+  --shadow-lg: 0 8px 24px rgb(26 23 21 / 10%);
+
+  --z-sticky: 100;
+  --z-drawer: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+
+  /* ---- Density: the customer default (doc 80 §1 "editorial") ----------- */
+  --density-row-height: 48px;
+  --density-gap: var(--space-5);
+  --density-page-padding: var(--space-6);
+  --density-control-height: 44px;
+}
+
+/**
+ * Management density — doc 80 §1.
+ *
+ * "Operational — 8–16px rhythm, 20–60 elements per viewport." Applied by the
+ * admin and partner layouts, never by a page. Colour, type family, radius and
+ * shadow are untouched: only rhythm and control size change.
+ */
+[data-density='operational'] {
+  --density-row-height: 36px;
+  --density-gap: var(--space-4);
+  --density-page-padding: var(--space-5);
+  --density-control-height: 34px;
+
+  /* Doc 80 §1: admin uses the text face only. The display face appears exactly
+     once, in the KAS Admin wordmark, which opts back in explicitly. */
+  --font-display: var(--font-text);
+}
+
+
+/**
+ * Touch overrides the density preference.
+ *
+ * Doc 82 §7 and doc 71 §6 both set a hard floor: "Minimum target 44 x 44px".
+ * The operational rhythm above is 34px, which is right for a mouse on a dense
+ * console and too small for a thumb.
+ *
+ * Keyed on  rather than a width breakpoint, because the rule is
+ * about the input device: a touch laptop at 1400px still needs 44px, and a
+ * narrow window on a desktop does not.
+ */
+@media (pointer: coarse) {
+  [data-density='operational'] {
+    --density-control-height: 44px;
+    --density-row-height: 44px;
+  }
+}
+
+/* Doc 77 §5 — page padding by breakpoint. */
+@media (max-width: 767px) {
+  :root {
+    --density-page-padding: var(--space-4);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --density-page-padding: var(--space-6);
+  }
+}
+
+/* Doc 82 — respect reduced motion. Doc 80: admin motion is state changes only. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

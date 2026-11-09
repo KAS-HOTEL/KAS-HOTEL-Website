@@ -1,0 +1,1003 @@
+{
+  "basis": "Existing legacy HTML/JS frontend, as directed by product owner",
+  "sourceFiles": [
+    "frontend/find-your-kas.html",
+    "frontend/js/data.js",
+    "frontend/DATA_AUDIT.md"
+  ],
+  "note": "Candidate baseline copied from current frontend. Preserve source attribution; migrate property and room claims using canonical backend property/room frontend keys. Do not invent missing claims.",
+  "tripIntents": [
+    {
+      "key": "family",
+      "label": "Family trip",
+      "branches": [
+        "01",
+        "02",
+        "03",
+        "04"
+      ]
+    },
+    {
+      "key": "slow",
+      "label": "Slow traveller",
+      "branches": [
+        "01",
+        "03",
+        "05",
+        "06",
+        "07",
+        "08"
+      ]
+    },
+    {
+      "key": "business",
+      "label": "Business",
+      "branches": [
+        "02",
+        "04",
+        "06",
+        "07",
+        "08"
+      ]
+    },
+    {
+      "key": "long",
+      "label": "Longer stay",
+      "branches": [
+        "03",
+        "05",
+        "06",
+        "07",
+        "08"
+      ]
+    }
+  ],
+  "sharedRoomAmenities": [
+    "Free Wi-Fi",
+    "Air conditioning",
+    "Flat-screen TV",
+    "Mini fridge",
+    "Electric kettle",
+    "Hair dryer",
+    "Safe box",
+    "In-room telephone",
+    "Private bathroom",
+    "Non-smoking"
+  ],
+  "hotels": [
+    {
+      "branchCode": "01",
+      "frontendKey": "hotel-01",
+      "name": "KAS Passion Boutique Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "24-hour front desk",
+        "Airport transportation",
+        "Laundry service",
+        "Non-smoking hotel",
+        "Air conditioning",
+        "Daily housekeeping",
+        "Luggage storage",
+        "Elevator"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Superior Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Family Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "02",
+      "frontendKey": "hotel-02",
+      "name": "KAS Premium Boutique Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Rooftop bar",
+        "Restaurant",
+        "Cafe",
+        "24-hour front desk",
+        "Airport pick-up / drop-off",
+        "Laundry service",
+        "Dry cleaning",
+        "Currency exchange",
+        "Luggage storage",
+        "Elevator",
+        "24-hour security"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Superior Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Deluxe Twin Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Premium King Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Premium Twin Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Family Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Family Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "03",
+      "frontendKey": "hotel-03",
+      "name": "KAS Ancient Luxury Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Rooftop bar",
+        "Restaurant",
+        "Cafe",
+        "24-hour front desk",
+        "Airport transportation",
+        "Baggage storage",
+        "Laundry service",
+        "Non-smoking hotel",
+        "Concierge"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Double Room No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Superior Queen Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Deluxe King Room with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Deluxe Family Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "04",
+      "frontendKey": "hotel-04",
+      "name": "KAS Milestone Premium Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Rooftop bar",
+        "Fitness centre / gym",
+        "Restaurant",
+        "Cafe",
+        "Free parking",
+        "Airport pick-up / drop-off",
+        "24-hour front desk",
+        "Concierge",
+        "Luggage storage",
+        "Laundry service",
+        "Bar & lounge",
+        "Afternoon tea"
+      ],
+      "roomTypes": [
+        {
+          "name": "Deluxe Queen with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Premium Queen with Balcony & City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        },
+        {
+          "name": "Premium Twin with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Junior Suite with Balcony & City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        },
+        {
+          "name": "Superior Queen Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Queen Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "05",
+      "frontendKey": "hotel-05",
+      "name": "KAS Zody Boutique Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Spa",
+        "24-hour front desk",
+        "Airport transportation",
+        "Laundry service",
+        "Non-smoking property",
+        "Elevator",
+        "Daily housekeeping",
+        "On-site parking"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Room No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Superior Room with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Double Double Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Double Room Street View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Studio Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Suite Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "06",
+      "frontendKey": "hotel-06",
+      "name": "KAS Sonata Luxury Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Thai restaurant",
+        "24-hour front desk",
+        "Airport transportation",
+        "Currency exchange",
+        "Free luggage storage",
+        "Dry cleaning",
+        "Non-smoking hotel",
+        "Elevator",
+        "Daily housekeeping"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Double Room No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Double Room with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Twin Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Balcony Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        },
+        {
+          "name": "Premium King Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Family Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Superior Double Room with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Queen Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Premium Twin Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "07",
+      "frontendKey": "hotel-07",
+      "name": "KAS Eliana Luxury Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Spa",
+        "Breakfast available",
+        "Airport transportation",
+        "24-hour front desk",
+        "Currency exchange",
+        "Luggage storage",
+        "Dry cleaning",
+        "Laundry service",
+        "Non-smoking property",
+        "Balconies in selected rooms"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Double No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Queen with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Premium King with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub",
+            "Private balcony"
+          ]
+        },
+        {
+          "name": "Premium Suite",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Bathtub"
+          ]
+        },
+        {
+          "name": "Superior Queen Room",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe King Room with Balcony",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        }
+      ]
+    },
+    {
+      "branchCode": "08",
+      "frontendKey": "hotel-08",
+      "name": "KAS Dilly Luxury Hotel",
+      "propertyAmenities": [
+        "Free high-speed Wi-Fi",
+        "Spa",
+        "Express check-in / check-out",
+        "Concierge",
+        "24-hour front desk",
+        "Airport transportation",
+        "Baggage storage",
+        "Laundry service",
+        "Ironing service",
+        "Elevator",
+        "CCTV",
+        "Non-smoking hotel",
+        "Balconies in selected rooms"
+      ],
+      "roomTypes": [
+        {
+          "name": "Standard Double Room No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Superior Queen Room No Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe Queen Room with City View",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Deluxe King Room with Window",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower"
+          ]
+        },
+        {
+          "name": "Premium King Room with Balcony",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        },
+        {
+          "name": "Deluxe Queen Room with Balcony",
+          "amenities": [
+            "Free Wi-Fi",
+            "Air conditioning",
+            "Flat-screen TV",
+            "Mini fridge",
+            "Electric kettle",
+            "Hair dryer",
+            "Safe box",
+            "In-room telephone",
+            "Private bathroom",
+            "Non-smoking",
+            "Rain shower",
+            "Private balcony"
+          ]
+        }
+      ]
+    }
+  ]
+}

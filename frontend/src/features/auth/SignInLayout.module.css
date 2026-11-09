@@ -1,0 +1,261 @@
+/*
+ * Sign-in shell — doc 76's warm palette, doc 77's spacing scale, no value
+ * outside either.
+ *
+ * Mobile first: one column, brand panel hidden. The two-panel arrangement is a
+ * desktop enhancement, not a layout being squeezed.
+ */
+
+/*
+ * Sign-in is not a dense console screen — it is one form a person meets before
+ * any work begins. The shell still sets `data-density="operational"` for the
+ * consoles, but here the controls are restored to the editorial 44px, which is
+ * also the touch floor. The 34px operational control was the main reason this
+ * page read as a CRUD form rather than the product's front door.
+ */
+.page {
+  --density-control-height: 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--background);
+}
+
+/*
+ * The brand half. Hidden below 900 rather than stacked: on a phone it would be
+ * a screenful of decoration between the operator and the form they came for, and
+ * at tablet portrait the split leaves it too narrow to be worth the room.
+ */
+.brand {
+  display: none;
+}
+
+.panel {
+  display: grid;
+  place-items: center;
+  padding: var(--space-6) var(--space-4);
+  /*
+    A grid item's automatic minimum size is its min-content width, so without
+    this the panel could push its track wider than the column it was given and
+    the card spilled past the right edge of the page. `minmax(0, …)` handles the
+    track; this handles the item inside it.
+  */
+  min-width: 0;
+}
+
+.card {
+  width: 100%;
+  max-width: 460px;
+  /*
+    The card is a grid item, so its automatic minimum size is its own min-content
+    width — which `width: 100%` does not override. On the registration screen that
+    floor was wider than the column and the card hung 12px past the right edge of
+    the page. This lets the declared width actually win.
+  */
+  min-width: 0;
+}
+
+.wordmark {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+}
+
+.subtitle {
+  margin: 0 0 var(--space-7);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.notice {
+  margin-top: var(--space-6);
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border-default);
+  border-left: 3px solid var(--warning-500);
+  border-radius: var(--radius-md);
+  background: var(--warning-100);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Tablet and up — the card becomes a card.
+
+   Below this width it is bare on the page background: a bordered box inset by
+   16px on a 375px screen wastes the only horizontal room there is.
+   --------------------------------------------------------------------------- */
+@media (min-width: 768px) {
+  .panel {
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .card {
+    padding: var(--space-8) var(--space-7);
+    border: var(--border-width-subtle) solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    background: var(--surface);
+    box-shadow: var(--shadow-md);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Desktop — two panels.
+
+   The form column is fixed-ish and the brand column takes the remainder, so the
+   card never drifts to the middle of a wide screen or stretches with it.
+   --------------------------------------------------------------------------- */
+@media (min-width: 900px) {
+  .page {
+    /*
+      Both tracks may shrink. A hard 420px floor on the form column plus the
+      panel's own padding needed more width than a 768px viewport has once the
+      scrollbar is taken off it, which pushed the card past the right edge. The
+      card's own max-width does the sizing instead, so neither track can force
+      the page wider than the window.
+
+      900px rather than 768: at tablet portrait the split left the brand panel a
+      269px sliver, which is worse than the stacked form it replaced.
+    */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 46%);
+  }
+
+  .brand {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: var(--space-4);
+    padding: var(--space-8) var(--space-7);
+    background: var(--accent-700);
+    color: var(--text-inverse);
+    overflow: hidden;
+    /* A single quiet warm wash rather than a decorative gradient: it lifts the
+       lower edge where the text sits and does nothing else. */
+    background-image: linear-gradient(180deg, var(--accent-600) 0%, var(--accent-700) 62%);
+  }
+
+  .brand::before {
+    content: '';
+    position: absolute;
+    top: var(--space-7);
+    right: var(--space-7);
+    width: 96px;
+    height: 96px;
+    /* Two gold hairlines meeting at the corner — a bracket, not a monogram. It
+       gives the empty upper half a fixed point without competing with the
+       headline, which a large letterform did. */
+    border-top: 1px solid rgb(176 138 69 / 55%);
+    border-right: 1px solid rgb(176 138 69 / 55%);
+    pointer-events: none;
+  }
+
+  /* The panel's own content sits above the corner rule. */
+  .brandMark,
+  .brandStatement,
+  .brandTagline,
+  .brandQuote {
+    position: relative;
+  }
+
+  .brandMark {
+    margin: 0;
+    margin-bottom: auto;
+    font-family: var(--font-display);
+    font-size: var(--text-heading-md);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    /* The one gold note doc 76 allows on a dark ground. */
+    color: var(--stone-300);
+  }
+
+  .brandStatement {
+    margin: 0;
+    max-width: 18ch;
+    font-family: var(--font-display);
+    font-size: var(--text-display-md);
+    font-weight: 400;
+    line-height: var(--leading-tight);
+    color: var(--text-inverse);
+  }
+
+  .brandTagline {
+    margin: 0;
+    max-width: 40ch;
+    font-size: var(--text-body-sm);
+    line-height: var(--leading-body);
+    color: var(--stone-300);
+  }
+}
+
+@media (min-width: 1440px) {
+  .brand {
+    padding: var(--space-9) var(--space-8);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Links under the card — forgot password, and the route to an account.
+   Present at every width, unlike the brand panel: they are the way out of a
+   screen the operator may be on because they are stuck.
+   --------------------------------------------------------------------------- */
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+.footerLink {
+  /* 44px of hit area on a touch screen without 44px of visible chrome. */
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--density-control-height);
+  color: var(--text-accent);
+}
+
+/*
+ * The panel's closing lines. Same breakpoint as the panel itself — these were
+ * gated at 1024 while the panel arrives at 900, which left a window in between
+ * with an unstyled quote and a wordmark that was not gold.
+ */
+@media (min-width: 900px) {
+  /*
+    The editorial line at the foot of the brand panel. The gold rule above it is
+    the one place gold appears on this screen — a hairline, not a fill, which is
+    the restraint doc 76 asks of an accent it never intended as a primary.
+  */
+  .brandQuote {
+    margin: var(--space-5) 0 0;
+    max-width: 34ch;
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-style: italic;
+    line-height: var(--leading-body);
+    color: var(--stone-300);
+  }
+
+  .brandRule {
+    display: block;
+    width: 48px;
+    height: 2px;
+    margin-bottom: var(--space-4);
+    background: var(--gold-500);
+  }
+
+  .brandMark {
+    color: var(--gold-500);
+  }
+}

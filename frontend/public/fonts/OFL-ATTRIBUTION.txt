@@ -1,0 +1,9 @@
+Be Vietnam Pro
+Copyright 2021 The Be Vietnam Pro Project Authors (https://github.com/bettergui/BeVietnamPro)
+
+Source Serif 4
+Copyright 2014 The Source Serif 4 Project Authors (https://github.com/adobe-fonts/source-serif)
+
+Both font families are licensed under the SIL Open Font License, Version 1.1.
+The complete license text is available at https://openfontlicense.org and in the
+Google Fonts repository at https://github.com/google/fonts/tree/main/ofl.

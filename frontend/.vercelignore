@@ -1,0 +1,13 @@
+# Internal files that must never be served by the static host.
+# (tools/ and package.json stay: `npm run build` needs them.)
+.claude
+data
+uploads
+*.md
+KEEP_UPLOADS.txt
+server.js
+Dockerfile
+render.yaml
+netlify.toml
+.env
+.env.*

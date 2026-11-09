@@ -1,0 +1,94 @@
+# =============================================================================
+# Test profile
+# =============================================================================
+# Unit and architecture tests must run with no database at all, so the pool is
+# configured never to fail startup. Tests that genuinely need PostgreSQL are
+# *IT.java, run by failsafe, and skip themselves when no database is reachable.
+#
+# The target is the dedicated integration-test database kas_web_test as
+# kas_web_app, in the same Docker container as kas_web_dev (127.0.0.1:5433), so
+# test fixtures never land in development data. Flyway is off here, so build and
+# update its schema with IntegrationDatabaseMigration (docs/kas/00-README.md).
+# The legacy kas_dev, kas_test and kas_app must never appear here.
+# =============================================================================
+
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/kas_web_test?currentSchema=kas
+    username: kas_web_app
+    # Blank becomes null, which delegates resolution to the JDBC driver
+    # (PGPASSWORD, then pgpass). See application-dev.yml for the full note.
+    password: ${KAS_DB_PASSWORD:}
+    hikari:
+      # Load the context even with no reachable database or no credential.
+      initialization-fail-timeout: -1
+      connection-timeout: 3000
+      maximum-pool-size: 2
+
+  flyway:
+    # Disabled for CONTEXT LOADING only, and for one specific reason: the unit
+    # and architecture suites must start with no database at all. With Flyway
+    # enabled, every @SpringBootTest would fail to load whenever PostgreSQL is
+    # unreachable, which would make the DB-free guarantee impossible to keep.
+    #
+    # This is not a gap in coverage. Flyway validation against the real
+    # kas_web_dev runs in FlywayHistoryIT, which checks all 22 checksums, the
+    # completeness of the history, and that no BASELINE row exists.
+    enabled: false
+
+kas:
+  rate-limit:
+    # OFF for tests: every MockMvc request comes from one address.
+    # RateLimitFilterTest covers the filter itself.
+    enabled: false
+  email:
+    outbox:
+      encryption-key: "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+      enabled: false
+  holds:
+    expiry-sweep:
+      # OFF for tests. A background job that mutates inventory on a timer would
+      # make every other integration test non-deterministic — a hold could vanish
+      # mid-assertion. HoldExpiryServiceIT drives the service directly instead,
+      # which is also the only way to test it without waiting on a clock.
+      enabled: false
+  sales:
+    expiry-sweep:
+      # OFF for tests: a timer that moves sales statuses would race every other
+      # integration test. SalesRequestExpiryIT drives the service directly.
+      enabled: false
+  membership:
+    jobs:
+      # OFF for tests: the start-up tier run and the automatic check-out requests would change
+      # shared rows under other tests. MembershipTierIT drives the services directly.
+      enabled: false
+  security:
+    # A FIXED TEST KEY. Not a secret, not used anywhere but this test suite, and
+    # deliberately obvious so it can never be mistaken for a real one. Production
+    # takes its key from KAS_JWT_SIGNING_SECRET and has no default.
+    signing-secret: "test-only-signing-key-not-a-secret-0000000000"
+    cookie-secure: false
+  # The origins production will list in KAS_CORS_ALLOWED_ORIGINS (SecurityBoundaryTest
+  # preflights one of them and one unlisted origin).
+  cors:
+    allowed-origins: "https://kasluxuryhotel.com,https://www.kasluxuryhotel.com,https://admin.kasluxuryhotel.com"
+  media:
+    # A fixed, obviously fake delivery base. Production has NO default: an unset
+    # value raises CONFIG_MISSING naming the property rather than emitting a URL
+    # that resolves to nothing. The real base depends on the object-storage
+    # provider, which is OQ-106 and deliberately unchosen.
+    delivery-base-url: "https://test-delivery.invalid"
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  structured:
+    format:
+      console:
+  level:
+    com.kas.platform: DEBUG
+    org.springframework.jdbc: WARN
+    com.zaxxer.hikari: WARN

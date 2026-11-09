@@ -1,0 +1,698 @@
+/**
+ * Property list and detail.
+ *
+ * Fluid throughout: no fixed widths, no assumed column count. The detail grid
+ * collapses to one column below 900px and the definition rows stack below 600px,
+ * so a long UUID never forces the page to scroll sideways.
+ */
+
+.none {
+  color: var(--text-muted);
+}
+
+/* ---- detail ------------------------------------------------------------- */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--density-gap);
+}
+
+.detailHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  overflow-wrap: anywhere;
+}
+
+.detailBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/*
+ * The overview's cards.
+ *
+ * The track floor was 320px, which let four cards sit across a 1440px page.
+ * That is too many: each card then carries a definition list whose term column
+ * alone claimed 140px, leaving about 120px for the value — enough to wrap a
+ * property id over four lines and a hotel name over three. 420px is the width
+ * at which a term and its value can share a row and still read as prose.
+ */
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+  gap: var(--density-gap);
+  align-items: start;
+}
+
+/* ---- definition list ---------------------------------------------------- */
+
+.definitions {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/*
+ * One term and its value.
+ *
+ * Stacked first. A side-by-side pair needs roughly 420px before the value has
+ * room to be a sentence rather than a column of two-word lines, and below that
+ * width the label reads perfectly well above what it labels. The two-column
+ * arrangement returns at the breakpoint where the cards are wide enough for it.
+ */
+.definition {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  .definition {
+    grid-template-columns: minmax(140px, 12rem) minmax(0, 1fr);
+    gap: var(--space-2) var(--space-4);
+    align-items: baseline;
+  }
+}
+
+.definition dt {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.definition dd {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+/* ---- completeness ------------------------------------------------------- */
+
+.sectionList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionItem {
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+  padding-top: var(--space-3);
+}
+
+.sectionItem:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.sectionName {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.missingList {
+  margin: var(--space-2) 0 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.missingItem {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* ---- page --------------------------------------------------------------- */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--density-gap);
+  padding: var(--density-page-padding);
+}
+
+/*
+ * The portfolio's own heading block, matching the overview's: a gold eyebrow, a
+ * display-serif title, then the lead. Before STEP G the title's `font:`
+ * shorthand was invalid and dropped, so this page opened with an unstyled h1 —
+ * which is most of why the console read as administrative rather than designed.
+ */
+.pageHead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/*
+ * Title on the left, primary action on the right, wrapping to two rows when the
+ * two cannot share a line. `align-items: end` keeps the button on the baseline
+ * of the title rather than floating against the eyebrow above it.
+ */
+.pageHeadRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/*
+ * The one primary action on the portfolio. A link, not a button: it navigates,
+ * so it must open in a new tab on a middle click and be reachable by Tab as a
+ * link. Styled as the primary control because that is its weight on the page.
+ */
+.pageAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: #fff;
+  font-size: var(--text-label);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.pageAction:hover {
+  background: var(--accent-600);
+}
+
+.pageAction:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* The way back out of a sub-page, at a 44px target because on a phone it is the
+   only one that is not the browser's own chrome. */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.pageEyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold-700);
+}
+
+.pageTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-display-sm);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.pageCount {
+  color: var(--text-muted);
+  font-size: var(--text-heading-sm);
+}
+
+.pageIntro {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 70ch;
+}
+
+/* ---- identity ----------------------------------------------------------- */
+
+/*
+ * Cover, then name. A row rather than a column since the thumbnail arrived:
+ * `align-items: center` so the name sits against the middle of the 56px frame
+ * instead of its top edge.
+ */
+.identity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  color: inherit;
+}
+
+.identityText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.identity:hover .identityName,
+.identity:focus-visible .identityName {
+  text-decoration: underline;
+}
+
+/*
+ * The name carries the row now that the slug is not under it.
+ *
+ * It was `--text-label` because it shared the cell with a second line; alone in
+ * a 56px-tall cell beside a cover thumbnail it read as small. Body size and 600
+ * give the hotel the visual priority the operator scans by — the cards already
+ * treat it that way, and the two shapes of one list should agree.
+ */
+.identityName {
+  color: var(--text-accent);
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+}
+
+/* Still used by the room-type detail page, which shows its own slug. The
+   property `.identitySlug` beside it is gone with the column that used it. */
+.detailSlug {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.detailIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.unnamed,
+.unset {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ---- information form --------------------------------------------------- */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--density-gap);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+/*
+ * `wrap` and the phone reversal: at 375px two buttons side by side either
+ * shrink below a comfortable target or push the row off the edge. Wrapping
+ * stacks them, and `row-reverse` keeps the primary action on top where a thumb
+ * reaches first — the same order the eye reads on a wide screen, rotated.
+ */
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  justify-content: flex-end;
+}
+
+@media (max-width: 480px) {
+  .formActions {
+    flex-direction: row-reverse;
+    justify-content: stretch;
+  }
+
+  .formActions > * {
+    flex: 1 1 auto;
+  }
+}
+
+/* A statement about what happens next, not a warning. Sits under the actions. */
+.formNote {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.formAlert {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--error-500);
+  border-radius: var(--radius-md);
+  background: var(--error-100);
+}
+
+.formAlertText {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+/* A link that reads as the primary action. Used where the destination is a page
+   rather than a mutation — a button would be the wrong element for navigation. */
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--density-control-height);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--accent-600);
+  color: var(--text-inverse);
+  font-size: var(--text-button);
+  line-height: var(--leading-body);
+  text-decoration: none;
+}
+
+.primaryLink:hover,
+.primaryLink:focus-visible {
+  background: var(--accent-700);
+}
+
+/* ---- portfolio filters --------------------------------------------------- */
+
+.portfolioFilters {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.portfolioFilterTitle {
+  margin: 0;
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.portfolioFilterFields {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+/* The search grows, the status select stays legible, the button sizes to itself
+   — only once there is room for all three side by side. */
+@media (min-width: 720px) {
+  .portfolioFilterFields {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) auto;
+    align-items: end;
+  }
+}
+
+.portfolioFilterActions {
+  display: flex;
+}
+
+.portfolioFilterActions > * {
+  width: 100%;
+}
+
+.portfolioCount {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * The publish panel — a state change, so it explains itself before it offers
+ * the action. No tint of its own: the blockers list is the thing with weight.
+ */
+.publishNote {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  max-width: 60ch;
+}
+
+.publishBlockers ul,
+.publishError ul {
+  margin: 0 0 var(--space-3);
+  padding-left: var(--space-4);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.publishError {
+  margin-bottom: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm, 6px);
+  background: var(--danger-50, transparent);
+  color: var(--danger-700, var(--text-primary));
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+.publishError p {
+  margin: 0 0 var(--space-2);
+}
+
+/* The way out of a blocker — a link to the screen that already shows the fact. */
+.publishLink {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+/*
+ * The portfolio table is the desktop instrument only.
+ *
+ * Below 768px its six columns cannot be seen together — three sit outside the
+ * scroll region and the hotel name wraps to four lines — so PropertyCards
+ * renders the same rows instead. Hiding rather than unmounting keeps the choice
+ * in one place: `display: none` removes this from the accessibility tree too, so
+ * exactly one of the two lists is ever announced.
+ */
+.tableOnly {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .tableOnly {
+    display: block;
+  }
+}
+
+/*
+ * The unsaved-changes line beside the save button. Quiet by design: it is a
+ * status, not an action, and it sits in a row that already has the only control.
+ */
+.dirtyHint {
+  margin: 0;
+  margin-inline-end: auto;
+  align-self: center;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/*
+  The portfolio's triage signal. Deliberately quieter than a Badge: it reports
+  outstanding work, not a state the backend assigned, and it must not compete
+  with the lifecycle badge beside it.
+*/
+.missingCount {
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   A section header inside a property page — a title, an optional count, and the
+   section's own action. Replaces a bare right-aligned button, which named
+   nothing and said nothing about what was already there.
+
+   Named `pageSection*` rather than `section*`: the completeness panel higher up
+   this file already owns `.sectionHead`, `.sectionTitle` and `.sectionName`, and
+   reusing those names silently restyled it.
+   --------------------------------------------------------------------------- */
+
+.pageSectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pageSectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  color: var(--text-primary);
+}
+
+/* The count sits beside the title as a quiet pill, never as a badge: it reports
+   how many rows follow, not a state the backend assigned. */
+.pageSectionCount {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full, 999px);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   The shared property-page header.
+
+   One hierarchy across all seven screens: breadcrumb, then section eyebrow,
+   hotel name as the heading, slug, and the lifecycle badge. Before this the
+   heading meant "hotel" on three screens and "section" on four.
+   --------------------------------------------------------------------------- */
+
+.propertyHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.propertyHeaderMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-4);
+}
+
+.propertyHeaderIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* The section, above the hotel. Small and lettered wide so it reads as a label
+   rather than as a second heading competing with the name below it. */
+.propertyEyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.propertyHeaderTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.propertyHeaderMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/*
+ * The submit confirmation. Set apart from the panel body rather than floated in
+ * a dialog: the checklist above it is what the reader is confirming against, and
+ * a modal would cover it.
+ */
+.publishConfirm {
+  padding: var(--space-4);
+  border: var(--border-width) solid var(--border-default);
+  border-left: 3px solid var(--gold-500);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.publishActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/*
+ * The hotel's location under its name in the page header.
+ *
+ * Replaces the slug that used to sit here. A slug is a URL segment; an operator
+ * identifies their hotel by where it is.
+ */
+.propertyHeaderPlace {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* A link that acts as a section's own action — "manage the room's photos". */
+.sectionLink {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-accent);
+  white-space: nowrap;
+}
+
+/* "Xoá" under a draft hotel card (phone layout). Outside the card link: a button may not sit inside a link. */
+.cardActions { display: flex; justify-content: flex-end; padding-top: var(--space-2); }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }

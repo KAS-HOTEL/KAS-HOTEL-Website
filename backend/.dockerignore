@@ -1,0 +1,8 @@
+.git
+.mvn/wrapper/maven-wrapper.jar
+target/
+logs/
+*.log
+.env
+application-local.yml
+application-prod.yml

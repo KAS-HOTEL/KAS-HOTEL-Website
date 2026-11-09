@@ -1,0 +1,139 @@
+/**
+ * The customer homepage.
+ *
+ * Editorial density throughout — this tree carries no `data-density`
+ * attribute, so `tokens.css` keeps 44px controls and the display face. Written
+ * mobile-first: the single column is the base rule and width is added at
+ * breakpoints, rather than a desktop grid being squeezed down.
+ */
+
+.home {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-9);
+}
+
+/* ---- Hero ------------------------------------------------------------- */
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--density-page-padding) var(--space-7);
+  background: var(--surface-inverse);
+  color: var(--text-inverse);
+}
+
+.heroEyebrow {
+  margin: 0;
+  font-size: var(--text-caption);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent-500);
+}
+
+.heroTitle {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-size: var(--text-display-md);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.heroLead {
+  margin: 0;
+  max-width: 56ch;
+  color: var(--stone-300);
+  line-height: var(--leading-body);
+}
+
+/*
+  The search sits on its own ivory surface over the dark hero, which is what
+  gives it the reference's "instrument on a photograph" reading. It is a plain
+  GET form; nothing here changes that.
+*/
+.heroSearch {
+  margin-top: var(--space-4);
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ---- Collection ------------------------------------------------------- */
+
+.collection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0 var(--density-page-padding) var(--space-9);
+}
+
+.collectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg);
+  font-weight: 400;
+}
+
+.collectionLead {
+  margin: 0 0 var(--space-4);
+  color: var(--text-muted);
+}
+
+.collectionMore {
+  margin: var(--space-5) 0 0;
+}
+
+.collectionLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--density-control-height);
+  padding: 0 var(--space-5);
+  border: 1px solid var(--accent-600);
+  border-radius: var(--radius-md);
+  color: var(--accent-700);
+  font-size: var(--text-body);
+  text-decoration: none;
+}
+
+.collectionLink:hover {
+  background: var(--accent-100);
+}
+
+/* ---- Wider than a phone ----------------------------------------------- */
+
+@media (min-width: 768px) {
+  .heroTitle {
+    font-size: var(--text-display-lg);
+  }
+
+  .hero {
+    gap: var(--space-5);
+    padding: var(--space-10) var(--density-page-padding) var(--space-9);
+  }
+
+  /* Centred and bounded, so the measure stays readable on a wide desktop
+     rather than the lead running the full width of a 1440px viewport. */
+  .hero,
+  .collection {
+    --home-measure: 1180px;
+  }
+
+  .heroEyebrow,
+  .heroTitle,
+  .heroLead,
+  .heroSearch,
+  .collectionTitle,
+  .collectionLead,
+  .collectionMore {
+    width: min(100%, var(--home-measure));
+    margin-inline: auto;
+  }
+
+  .collectionLead {
+    margin-block: 0 var(--space-5);
+  }
+}

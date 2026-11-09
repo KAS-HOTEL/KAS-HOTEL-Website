@@ -1,0 +1,212 @@
+# Production on Render (owner decision 2026-11-05). Setup and cut-over steps:
+# docs/kas/156-production-render-setup.md
+#
+#   kasluxuryhotel.com, www  -> kas-website  (HTML site + server.js, proxies /api/v1)
+#   admin.kasluxuryhotel.com -> kas-console  (Next.js Admin/Partner consoles)
+#   kas-backend              -> Spring Boot API, reached only through the two above
+#   kas-postgres             -> Render PostgreSQL
+#
+# The consoles live on their own host so staff session cookies are never shared
+# with the public website (a guest and a staff member can be signed in on one
+# machine, and a fault in the public site cannot ride the staff session).
+#
+# No secret is written here: every `sync: false` value is typed into Render.
+# autoDeploy is off: production changes only when someone deploys on purpose.
+#
+# Source stays on the company GitLab only (Render cannot read a self-hosted GitLab,
+# nor pull private images from its registry). GitLab CI builds the three images and
+# pushes them to a private Docker Hub repository (CI variable DOCKERHUB_REPO, shown
+# here as kashotel/kas-web: replace it with the real one). Render pulls them with the
+# registry credential "kas-dockerhub" (Docker Hub read-only token).
+# deploy:production in .gitlab-ci.yml fires each service's deploy hook with the
+# commit's image (imgURL=docker.io/<repo>:<name>-sha-<commit>).
+# Steps: docs/kas/157-production-render-registry.md
+
+databases:
+  - name: kas-postgres
+    region: singapore
+    # Both names are checked by the backend's readiness probe
+    # (DatabaseSchemaHealthIndicator); a different name reports DOWN.
+    databaseName: kas_web_dev
+    user: kas_web_app
+
+services:
+  - type: web
+    name: kas-backend
+    runtime: image
+    image:
+      url: docker.io/kashotel/kas-web:backend-latest
+      creds:
+        fromRegistryCreds:
+          name: kas-dockerhub
+    region: singapore
+    # Spring Boot needs more than the 512 MB of the starter plan.
+    plan: standard
+    autoDeploy: false
+    healthCheckPath: /actuator/health
+    envVars:
+      # JDBC form, using the database's INTERNAL host from the Render dashboard:
+      # jdbc:postgresql://<internal-host>:5432/kas_web_dev?currentSchema=kas
+      - key: KAS_DB_URL
+        sync: false
+      - key: KAS_DB_USERNAME
+        fromDatabase: { name: kas-postgres, property: user }
+      - key: KAS_DB_PASSWORD
+        fromDatabase: { name: kas-postgres, property: password }
+      - key: KAS_JWT_SIGNING_SECRET
+        sync: false
+      # base64 of 32 random bytes.
+      - key: KAS_EMAIL_OUTBOX_ENCRYPTION_KEY
+        sync: false
+      # Email is Brevo only. Each BREVO_TEMPLATE_{KEY}_{VI|EN} holds a Brevo
+      # template id (same values as the local .env); a key left empty is sent
+      # from the design in backend/src/main/resources/email-templates.
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_EMAIL
+        sync: false
+      - key: BREVO_SENDER_NAME
+        value: KAS Hotel Collection
+      - key: BREVO_TEMPLATE_MEMBER_WELCOME_VI
+        sync: false
+      - key: BREVO_TEMPLATE_MEMBER_WELCOME_EN
+        sync: false
+      - key: BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_VI
+        sync: false
+      - key: BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_EN
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_VI
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_EN
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_VI
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_EN
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_CONFIRMED_VI
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_CONFIRMED_EN
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_CANCELLED_VI
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_CANCELLED_EN
+        sync: false
+      - key: BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_VI
+        sync: false
+      - key: BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_EN
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_REQUEST_REJECTED_VI
+        sync: false
+      - key: BREVO_TEMPLATE_BOOKING_REQUEST_REJECTED_EN
+        sync: false
+      # Starts ON: mail leaves only for the listed addresses until the owner
+      # approves real customer email (then set it to "false").
+      - key: KAS_EMAIL_REQUIRE_ALLOWLIST
+        value: "true"
+      - key: KAS_EMAIL_ALLOWED_RECIPIENTS
+        sync: false
+      - key: KAS_BOOKING_OPERATIONS_EMAIL
+        sync: false
+      # Browser origins allowed cross-origin with cookies (exact, comma separated, no "*").
+      # The website and the console call the API same-origin through their proxies.
+      - key: KAS_CORS_ALLOWED_ORIGINS
+        value: https://kasluxuryhotel.com,https://www.kasluxuryhotel.com,https://admin.kasluxuryhotel.com
+      # Uploaded images are kept on the persistent disk below until object storage (R2) is
+      # set up (owner decision 2026-11-08). Leave the KAS_R2_* values empty for that; filling
+      # them switches uploads to R2 (copy /var/data/kas-media across first).
+      - key: KAS_MEDIA_LOCAL_DIR
+        value: /var/data/kas-media
+      - key: KAS_R2_ENDPOINT
+        sync: false
+      - key: KAS_R2_ACCESS_KEY_ID
+        sync: false
+      - key: KAS_R2_SECRET_ACCESS_KEY
+        sync: false
+      - key: KAS_R2_BUCKET
+        sync: false
+      - key: KAS_MEDIA_DELIVERY_BASE_URL
+        sync: false
+      # Email links go to the public site; it forwards /api/v1 to the backend.
+      - key: KAS_BOOKING_ACTION_BASE_URL
+        value: https://kasluxuryhotel.com
+      - key: KAS_CUSTOMER_VERIFICATION_BASE_URL
+        value: https://kasluxuryhotel.com
+      - key: KAS_CUSTOMER_SITE_BASE_URL
+        value: https://kasluxuryhotel.com
+      - key: TZ
+        value: Asia/Ho_Chi_Minh
+    # Uploaded images (KAS_MEDIA_LOCAL_DIR). A disk ties the service to one instance and
+    # makes each deploy stop the old instance before starting the new one (a short pause).
+    disk:
+      name: kas-backend-media
+      mountPath: /var/data/kas-media
+      sizeGB: 5
+
+  - type: web
+    name: kas-website
+    runtime: image
+    image:
+      url: docker.io/kashotel/kas-web:website-latest
+      creds:
+        fromRegistryCreds:
+          name: kas-dockerhub
+    region: singapore
+    plan: starter
+    autoDeploy: false
+    healthCheckPath: /health
+    # kasluxuryhotel.com and www are still attached to the current live service
+    # (kas-hotel-collection). They move here at cut-over, by hand in the
+    # dashboard (doc 156), not from this file.
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # server.js listens on PORT (docker/website.Dockerfile exposes 3000).
+      - key: PORT
+        value: "3000"
+      # The backend's private-network address from the Render dashboard,
+      # e.g. http://kas-backend-xxxx:10000 (no trailing slash). The backend listens on
+      # ${PORT:8080} and Render sets PORT (10000 by default), so use the port Render shows.
+      - key: KAS_API_ORIGIN
+        sync: false
+      - key: KAS_CONSOLE_URL
+        value: https://admin.kasluxuryhotel.com
+      - key: ADMIN_KEY
+        sync: false
+      - key: UPLOAD_DIR
+        value: /var/data/uploads
+      - key: KAS_CONFIG_DIR
+        value: /var/data/kas-config
+    disk:
+      name: kas-website-data
+      mountPath: /var/data
+      sizeGB: 1
+
+  - type: web
+    name: kas-console
+    runtime: image
+    image:
+      url: docker.io/kashotel/kas-web:console-latest
+      creds:
+        fromRegistryCreds:
+          name: kas-dockerhub
+    region: singapore
+    plan: starter
+    autoDeploy: false
+    healthCheckPath: /admin/login
+    domains:
+      - admin.kasluxuryhotel.com
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # The image listens on 3000 (docker/console.Dockerfile).
+      - key: PORT
+        value: "3000"
+      # Same address as the website's. src/proxy.ts reads it at RUN time and proxies
+      # /api/v1 there (marking requests X-KAS-Surface: console). next.config.ts still
+      # bakes the GitLab variable PROD_KAS_API_ORIGIN in at build time as a fallback.
+      - key: KAS_API_ORIGIN
+        sync: false
+      # Console host only: guest pages (/en, /vi, ...) answer 404, / opens /admin/login.
+      # The image already defaults to true; kept here so the setting is visible.
+      - key: KAS_CONSOLE_ONLY
+        value: "true"

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ============================================================================
+  KAS Hotel Platform — Backend
+  ============================================================================
+  Phase 7.3 — Backend Foundation.
+
+  Architecture: MODULAR MONOLITH (Spring Modulith). Not microservices.
+  Dependency policy: the smallest set that satisfies the frozen architecture.
+  Every dependency below is justified in docs/kas/89-phase-7-3-backend-foundation.md §4.
+
+  Persistence is Spring JDBC, NOT JPA/Hibernate. Rationale (doc 89 §4.2):
+  the schema is frozen and database-first with 38 PostgreSQL enum types and
+  129 CHECK constraints. Hibernate's schema management is a standing risk to a
+  validated schema; JdbcClient carries no `ddl-auto` and cannot alter it.
+  ============================================================================
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.5.16</version>
+    <relativePath/>
+  </parent>
+
+  <groupId>com.kas</groupId>
+  <artifactId>kas-backend</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+  <name>KAS Hotel Platform Backend</name>
+  <description>Modular monolith backend for the KAS multi-property direct booking platform</description>
+
+  <properties>
+    <java.version>21</java.version>
+    <maven.compiler.release>21</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <spring-modulith.version>1.4.12</spring-modulith.version>
+    <archunit.version>1.5.0</archunit.version>
+    <bouncycastle.version>1.85.2</bouncycastle.version>
+    <!--
+      Cloudflare R2 speaks the S3 API, so the S3 client is the R2 client — doc 12
+      §4 names R2 "(S3 API)". The SDK appears in exactly one package,
+      com.kas.platform.media.r2, which is the adapter doc 12 §3 confines vendor
+      SDKs to.
+    -->
+    <awssdk.version>2.31.78</awssdk.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework.modulith</groupId>
+        <artifactId>spring-modulith-bom</artifactId>
+        <version>${spring-modulith.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>software.amazon.awssdk</groupId>
+        <artifactId>bom</artifactId>
+        <version>${awssdk.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- HTTP surface. Five separate route trees, doc 58 §1. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <!-- Deny by default + permission-based authorisation, doc 59 §7. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-security</artifactId>
+    </dependency>
+
+    <!-- Bean Validation at the application boundary, doc 63. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-validation</artifactId>
+    </dependency>
+
+    <!-- Health / readiness, doc 89 §9. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <!-- Persistence: JdbcClient + HikariCP. Deliberately NOT spring-boot-starter-data-jpa. -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+
+    <!-- Migration authority. V1-V21 are frozen; adoption is gated, doc 89 §6. -->
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.flywaydb</groupId>
+      <artifactId>flyway-database-postgresql</artifactId>
+    </dependency>
+
+    <!-- Modular monolith boundaries, enforced by an executable test. -->
+    <dependency>
+      <groupId>org.springframework.modulith</groupId>
+      <artifactId>spring-modulith-starter-core</artifactId>
+    </dependency>
+
+    <!--
+      Argon2id password hashing is mandated by doc 59 §8.
+      Spring Security's Argon2PasswordEncoder requires BouncyCastle on the classpath.
+    -->
+    <dependency>
+      <groupId>org.bouncycastle</groupId>
+      <artifactId>bcprov-jdk18on</artifactId>
+      <version>${bouncycastle.version}</version>
+    </dependency>
+
+    <!--
+      Signed access tokens (Phase 7.4).
+
+      Doc 59 §8 requires a "short access token + rotating refresh". The frozen
+      schema has exactly ONE token column - user_session.refresh_token_hash -
+      so the refresh token is the stored half and the access token cannot be
+      looked up server-side. It must therefore be self-contained and tamper
+      proof, which means a signed token.
+
+      Nimbus via Spring Security rather than a hand-rolled HMAC format: expiry,
+      clock skew, signature and claim validation are the parts that are easy to
+      get subtly wrong, and security code should be boring.
+    -->
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
+    </dependency>
+
+    <!--
+      Object storage for media bytes — OQ-106, answered: Cloudflare R2.
+
+      R2 exposes the S3 API, so this is the S3 client pointed at an R2 endpoint;
+      there is no R2-specific SDK to add. `s3` carries the presigner used to mint
+      the doc 62 §4 upload URL, and `apache-client` is the synchronous HTTP
+      implementation — without an explicit one the SDK fails at runtime rather
+      than at build time, which is the wrong end to discover it.
+
+      Nothing outside com.kas.platform.media.r2 imports either.
+    -->
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>s3</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>software.amazon.awssdk</groupId>
+      <artifactId>apache-client</artifactId>
+    </dependency>
+
+    <!-- ===================== test ===================== -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.modulith</groupId>
+      <artifactId>spring-modulith-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit-junit5</artifactId>
+      <version>${archunit.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!--
+      Testcontainers is declared so CI can run true integration tests against a
+      disposable PostgreSQL 17 the moment a Docker daemon exists. Docker is NOT
+      installed on this workstation (doc 88 risk R6); the tests that need it skip
+      themselves and say so. Nothing here creates a database on the local server.
+    -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-testcontainers</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>postgresql</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <compilerArgs>
+            <arg>-Xlint:all,-processing,-serial</arg>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <!-- Fail fast and legibly if the toolchain is not the verified one. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce-toolchain</id>
+            <goals><goal>enforce</goal></goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion><version>[21,22)</version></requireJavaVersion>
+                <requireMavenVersion><version>[3.9,)</version></requireMavenVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Unit + architecture tests. Never require a database. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+          <excludes>
+            <exclude>**/*IT.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+
+      <!-- Integration tests. Skip themselves when no database is reachable. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includes>
+            <include>**/*IT.java</include>
+          </includes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

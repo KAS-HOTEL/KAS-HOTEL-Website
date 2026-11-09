@@ -1,0 +1,267 @@
+# ==============================================================================
+# KAS Hotel Platform — .gitignore
+# ==============================================================================
+# Governing rule: this file protects secrets and excludes generated artefacts.
+# It must NEVER exclude documentation, source code, migrations, package
+# manifests, build wrappers, Docker configuration or CI configuration.
+#
+# See docs/kas/87-phase-7-1b-git-foundation.md
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# SECRETS AND CREDENTIALS  — highest priority
+# ------------------------------------------------------------------------------
+.env
+.env.*
+*.env
+# Templates carry names and placeholders only, never real values.
+# NOTE: git does not support trailing comments on pattern lines.
+!.env.example
+!.env.template
+
+secrets/
+secrets.*
+credentials
+credentials.*
+*credentials*.json
+*secret*.json
+*.secrets.*
+
+# Private keys, certificates, keystores
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+*.asc
+*.gpg
+id_rsa
+id_dsa
+id_ecdsa
+id_ed25519
+*.ppk
+
+# Cloud / service credentials
+.aws/
+.gcp/
+gha-creds-*.json
+service-account*.json
+application-local.yml
+application-local.yaml
+application-local.properties
+application-secrets.*
+
+
+# ------------------------------------------------------------------------------
+# NODE / FRONTEND  (Phase 7.5)
+# ------------------------------------------------------------------------------
+node_modules/
+.pnp
+.pnp.*
+.yarn/cache
+.yarn/unplugged
+.yarn/install-state.gz
+
+# Build output
+.next/
+out/
+build/
+dist/
+.turbo/
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+
+# Package manager logs and debug output
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+.npm/
+.eslintcache
+.stylelintcache
+
+# NOTE: package.json, package-lock.json, tsconfig.json, next.config.*,
+#       tailwind.config.* and postcss.config.* ARE tracked — not listed here.
+
+
+# ------------------------------------------------------------------------------
+# JAVA / SPRING BOOT  (Phase 7.3)
+# ------------------------------------------------------------------------------
+target/
+
+# Build wrappers MUST be committed — they pin the build-tool version in-repo
+# so local and CI builds are identical.
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+!gradle/wrapper/gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
+*.class
+*.war
+*.ear
+*.nar
+hs_err_pid*
+replay_pid*
+
+# Gradle build output (wrapper itself is un-ignored above)
+.gradle/
+!gradle/
+build/
+
+# NOTE: pom.xml, mvnw, mvnw.cmd, .mvn/, settings.gradle, build.gradle
+#       ARE tracked — not listed here.
+
+
+# ------------------------------------------------------------------------------
+# DATABASE — local artefacts only
+# ------------------------------------------------------------------------------
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+*.mdb
+pgdata/
+postgres-data/
+*.dump
+*.sql.gz
+*.backup
+
+# NOTE: db/migrations/**/*.sql and db/seed/**/*.sql ARE tracked — schema
+#       migrations are source code, not artefacts.
+
+
+# ------------------------------------------------------------------------------
+# LOCAL DATABASE BACKUPS
+# ------------------------------------------------------------------------------
+# If a kas_dev-specific backup is ever taken it lives here and is NEVER
+# committed. It must never be written to C:\Kas, C:\KasData or C:\Kas-Dev.
+db-backups/
+/backups/
+
+
+# ------------------------------------------------------------------------------
+# TESTS, COVERAGE, REPORTS
+# ------------------------------------------------------------------------------
+coverage/
+.nyc_output/
+*.lcov
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+allure-results/
+allure-report/
+surefire-reports/
+failsafe-reports/
+jacoco.exec
+*.exec
+lighthouse-report*
+.lighthouseci/
+
+
+# ------------------------------------------------------------------------------
+# LOGS AND TEMPORARY FILES
+# ------------------------------------------------------------------------------
+*.log
+logs/
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+*~
+.cache/
+.temp/
+tmp/
+
+
+# ------------------------------------------------------------------------------
+# IDE AND EDITOR
+# ------------------------------------------------------------------------------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+.project
+.classpath
+.settings/
+.factorypath
+nbproject/
+.sts4-cache/
+.apt_generated/
+
+# NOTE: if the team later decides to share editor config, un-ignore
+#       .vscode/extensions.json and .vscode/settings.json deliberately.
+
+
+# ------------------------------------------------------------------------------
+# OPERATING SYSTEM
+# ------------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+
+# ------------------------------------------------------------------------------
+# DOCKER / LOCAL INFRASTRUCTURE
+# ------------------------------------------------------------------------------
+# Local-only compose overrides frequently hold credentials.
+docker-compose.override.yml
+docker-compose.local.yml
+.docker/data/
+
+# NOTE: ops/docker-compose.yml and Dockerfile ARE tracked — infrastructure
+#       configuration is source code.
+
+
+# ------------------------------------------------------------------------------
+# MEDIA — uploaded assets are object storage, never the repository
+# ------------------------------------------------------------------------------
+uploads/
+storage/
+public/uploads/
+media-local/
+
+# NOTE: design assets and committed brand files, when they arrive, live in a
+#       tracked directory decided at that time. This rule covers runtime uploads.
+
+
+# ------------------------------------------------------------------------------
+# LOCAL UI REFERENCE MATERIAL — not part of implementation scope
+# ------------------------------------------------------------------------------
+# Owner-supplied screenshots kept locally for reference. Explicitly OUT of
+# backend implementation scope and must never be added to Git automatically.
+# Rooted pattern so it only matches at the repository root.
+# A deliberate `git add -f` still works if the owner ever chooses to commit them.
+/Giao diện demo/
+
+
+# ------------------------------------------------------------------------------
+# EXPLICITLY TRACKED  — recorded here as intent, not as rules
+# ------------------------------------------------------------------------------
+# docs/**                    approved KAS documentation
+# .gitignore  .gitattributes
+# .env.example
+# package.json  package-lock.json  tsconfig.json
+# pom.xml  mvnw  mvnw.cmd  .mvn/
+# db/migrations/**  db/seed/**
+# ops/docker-compose.yml  Dockerfile
+# .github/workflows/**
+
+# Local-only folders
+local-backups/
+.claude/

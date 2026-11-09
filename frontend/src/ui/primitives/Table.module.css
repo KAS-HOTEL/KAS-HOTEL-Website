@@ -1,0 +1,87 @@
+.wrap {
+  /* The containing block for visually hidden header text, so it scrolls with the
+     table instead of widening the page. */
+  position: relative;
+  overflow-x: auto;
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.loading {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-5);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+}
+
+.table th {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: var(--border-width) solid var(--border-default);
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: start;
+  white-space: nowrap;
+}
+
+.table td {
+  height: var(--density-row-height);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.table tbody tr:hover {
+  background: var(--accent-100);
+}
+
+.end {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.actions {
+  width: 1%;
+  white-space: nowrap;
+}
+
+/* Selection is carried by aria-selected and a left rail, not by tint alone —
+   doc 82 forbids colour as the only signal. */
+.selected {
+  background: var(--accent-100);
+  box-shadow: inset 3px 0 0 0 var(--accent-500);
+}
+
+/* A section heading inside the body (e.g. "Hôm nay"); not a clickable row. */
+.table tbody tr.group th {
+  padding: var(--space-4) var(--space-4) var(--space-2);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--text-label);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: start;
+  text-transform: uppercase;
+}
+
+.table tbody tr.group:hover,
+.table tbody tr.group {
+  cursor: default;
+}
+
+.table tbody tr.group:hover {
+  background: transparent;
+}

@@ -1,0 +1,100 @@
+# =============================================================================
+# KAS Hotel Platform — local development profile
+# =============================================================================
+# Committed. Contains NO password.
+#
+# CREDENTIAL RESOLUTION (verified, doc 89 §5.2)
+#
+# `${KAS_DB_PASSWORD:}` has an empty default, and Spring Boot converts a blank
+# password to null. A null password makes the PostgreSQL JDBC driver resolve the
+# credential itself, exactly as psql does:
+#
+#     PGPASSWORD  →  PGPASSFILE  →  %APPDATA%\postgresql\pgpass.conf
+#
+# So a developer whose pgpass is already configured needs to set nothing. To
+# override it explicitly:
+#
+#     $env:KAS_DB_PASSWORD = "<the kas_web_app password>"
+#
+# Note the distinction: null delegates to the driver, but an empty STRING is
+# sent as an empty password and SCRAM rejects it. Do not "fix" the blank default
+# by quoting it.
+#
+# Production does not use this path. The base application.yml requires
+# KAS_DB_URL / KAS_DB_USERNAME / KAS_DB_PASSWORD with no defaults, so a missing
+# one stops startup by name rather than silently falling back to a local file.
+#
+# The `local` profile name is deliberately avoided here: .gitignore excludes
+# application-local.yml so it can serve as an untracked personal override.
+# =============================================================================
+
+spring:
+  datasource:
+    # Primary local database: the Docker Compose service in compose.yaml
+    # (container kas-postgres, published on 127.0.0.1:5433 only). Use the IPv4
+    # address: `localhost` may resolve to ::1, which the container does not bind.
+    # Its password is KAS_DB_PASSWORD in the repository-root .env, which only
+    # Docker Compose reads; export it before starting the backend.
+    url: jdbc:postgresql://127.0.0.1:5433/kas_web_dev?currentSchema=kas
+    username: kas_web_app
+    # Empty default so the application still starts and reports readiness DOWN
+    # honestly, instead of failing before the health surface exists.
+    password: ${KAS_DB_PASSWORD:}
+    hikari:
+      # -1 = do not fail startup when the database is unreachable. The readiness
+      # probe reports the problem; the HTTP surface stays inspectable.
+      initialization-fail-timeout: -1
+
+  flyway:
+    # ---------------------------------------------------------------------
+    # ENABLED. Option C history adoption was approved and executed on
+    # 2026-08-15 — docs/kas/89 §6. kas.flyway_schema_history holds one row
+    # per migration, each carrying Flyway's own checksum, so startup runs a
+    # full validation of V1-V21 and the repeatable migration.
+    #
+    # baseline-on-migrate stays FALSE (inherited from application.yml). The
+    # history exists now, so it is never needed again; it remains false as a
+    # guard, because turning it on would silently paper over a missing or
+    # damaged history rather than failing.
+    #
+    # If startup reports a checksum mismatch: STOP. Do not run flyway repair,
+    # do not edit the migration, do not reset. Report the mismatch.
+    # ---------------------------------------------------------------------
+    enabled: true
+
+kas:
+  email:
+    # Local data can hold real guest addresses, so nothing leaves this machine
+    # unless KAS_EMAIL_ALLOWED_RECIPIENTS names the recipient.
+    require-allowlist: ${KAS_EMAIL_REQUIRE_ALLOWLIST:true}
+  security:
+    # Local development is plain HTTP, so Secure cookies would never be sent.
+    # The base profile leaves this true; do not copy this line to any other.
+    cookie-secure: false
+  # Without an R2 bucket, uploaded images are kept on this machine
+  # (LocalDiskStorageProvider, dev profile only). Setting KAS_R2_BUCKET switches back
+  # to R2. Images uploaded here never reach production.
+  media:
+    local:
+      dir: ${KAS_MEDIA_LOCAL_DIR:${user.home}/kas-media}
+  # Local website (3000/3001), console (3002) and Next dev server (3010) call the API
+  # on 8080 directly. Production lists its hosts in KAS_CORS_ALLOWED_ORIGINS instead.
+  cors:
+    allowed-origins: ${KAS_CORS_ALLOWED_ORIGINS:http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:3002,http://127.0.0.1:3002,http://localhost:3010,http://127.0.0.1:3010}
+
+management:
+  endpoint:
+    health:
+      # Local only. Lets a developer see which database, role and schema the
+      # application actually resolved. The base profile keeps this restricted.
+      show-details: always
+
+logging:
+  structured:
+    format:
+      # Empty disables ECS JSON, so local console output stays readable.
+      console:
+  pattern:
+    console: "%d{HH:mm:ss.SSS} %-5level [%X{correlationId:-no-correlation}] %logger{36} - %msg%n"
+  level:
+    com.kas.platform: DEBUG

@@ -1,0 +1,6 @@
+# Manual website testing: start with --spring.profiles.active=dev,web-test.
+# Keep the development database separate; retain Flyway validation and the
+# kas_web_app/kas readiness checks.
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/kas_web_test?currentSchema=kas

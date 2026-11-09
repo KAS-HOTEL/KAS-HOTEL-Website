@@ -1,0 +1,717 @@
+/*
+  The direct sales queue and workspace — doc 69 §4.2/§4.3.
+  Reuses the console's density tokens so the screen sits inside the existing
+  partner shell rather than beside it.
+*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--density-page-padding);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.pageIntro {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* Monospaced-ish so a reference read aloud over the phone is unambiguous. */
+.reference {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--density-page-padding);
+}
+
+.detailHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.detailBadges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/*
+  One column on a phone; the three cards sit side by side only where each still
+  has room for a label and its value.
+*/
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 900px) {
+  .detailGrid {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  }
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.fact dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.fact dd {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  /* An email or a special request must wrap, never overflow the card. */
+  overflow-wrap: anywhere;
+  /*
+   * Values are text. Said explicitly because a card of facts in which several
+   * lines carry an underline reads as a card of links, and the operator cannot
+   * tell which two of them actually do anything. Only .contactLink below opts
+   * back in.
+   */
+  text-decoration: none;
+}
+
+/*
+ * The two values that are controls: the address and the number.
+ *
+ * Underlined, accented and 44px tall — the same treatment the reservation
+ * detail gives the same two fields, so a guest looks the same on both screens.
+ */
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-accent);
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .fact {
+    grid-template-columns: 9rem 1fr;
+    align-items: baseline;
+    column-gap: var(--space-3);
+  }
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+  padding-bottom: var(--space-3);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.line:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+@media (min-width: 640px) {
+  .line {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: var(--space-4);
+  }
+}
+
+.lineName {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.lineDetail {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.lineAmount {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.note {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   S11 decline — the one action this workspace has.
+--------------------------------------------------------------------------- */
+
+.declinePanel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.declineActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+/* Words as well as tint — doc 82 forbids state carried by colour alone. */
+.problem {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--danger-700, var(--text-primary));
+}
+
+/*
+ * The workflow actions, stacked. One column at every width: each action is its
+ * own Card, and side-by-side Cards would collapse to unreadable widths on the
+ * 375px breakpoint this console is measured at.
+ */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/*
+ * The filter bar. Wraps rather than scrolls: at 375px each control takes the
+ * full width and stacks, which is the only arrangement that keeps four labelled
+ * controls legible on a phone.
+ */
+.filterBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 12rem;
+  flex: 1 1 12rem;
+}
+
+.filterField label {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.filterControl {
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background: var(--surface-base);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+/*
+ * The row was already 44px tall; the things inside it were not.
+ *
+ * Measured at 375px the box itself was 13×13 — the browser default — and the
+ * label beside it about 20px tall. `htmlFor` means the label is tappable too,
+ * so the real target was a 20px-high strip rather than the row's 44px. Growing
+ * both is enough: no custom control, no hidden input, no second implementation
+ * of a checkbox to keep in step with the native one.
+ */
+.filterCheck {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+}
+
+.filterCheck input[type='checkbox'] {
+  inline-size: 20px;
+  block-size: 20px;
+  margin: 0;
+  flex: none;
+}
+
+.filterCheck label {
+  display: flex;
+  align-items: center;
+  min-block-size: 44px;
+  cursor: pointer;
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.filterSubmit {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-on-accent, #fff);
+  background: var(--accent-600, var(--text-primary));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.filterClear {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * The transition history. A semantic ordered list — the entries have a real
+ * sequence, and a screen reader should say so.
+ */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.timelineEntry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: var(--space-4);
+  border-left: 2px solid var(--border-default);
+}
+
+/* Wraps at 375px rather than scrolling: four short facts, not a table row. */
+.timelineHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.timelineField,
+.timelineActor,
+.timelineAt,
+.timelineFrom {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.timelineAt {
+  margin-left: auto;
+}
+
+.timelineReason {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.timelineFrom {
+  margin: 0;
+}
+
+/*
+ * Internal notes. Doc 21 §592 requires a distinct colour and a lock — an agent
+ * must never mistake this panel for something the guest can read.
+ */
+.internalBanner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--warning-800, var(--text-primary));
+  background: var(--warning-50, var(--surface-muted));
+  border-left: 3px solid var(--warning-500, var(--border-strong));
+  border-radius: var(--radius-sm);
+}
+
+.notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.noteEntry {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--border-default);
+}
+
+.noteBody {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  /* An agent's own prose: keep their line breaks and let long words wrap. */
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.noteAt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/*
+ * The SLA cell: the band, and — when breached — how far past the promise.
+ * Stacks rather than truncating, so the duration survives a narrow column.
+ */
+.slaCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.overdue {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--danger-700, var(--text-primary));
+  white-space: nowrap;
+}
+
+/*
+ * Age — doc 69 §4.2's own column. A plain measurement, so it carries no tint of
+ * its own: the band beside it is the thing that has a state, and giving the
+ * duration a colour would read as a threshold nobody has set.
+ */
+.age {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+ * Booking request queue — tabs, the hotel filter and the compact table cells.
+ * ------------------------------------------------------------------------ */
+.queueBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin-block-end: var(--space-4);
+}
+
+.hotelFilter {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.hotelFilter label {
+  font-size: var(--text-label);
+  color: var(--text-secondary);
+}
+
+.hotelFilter select { min-width: 14rem; min-height: 38px; }
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.muted {
+  font-size: var(--text-caption, 12px);
+  color: var(--text-secondary);
+}
+
+.nowrap { white-space: nowrap; }
+
+.deadlineOpen { color: var(--text-primary); font-weight: 500; white-space: nowrap; }
+.deadlineOverdue { color: var(--danger-600, #a3402e); font-weight: 600; white-space: nowrap; }
+
+.rowAction {
+  font-size: var(--text-label);
+  font-weight: 600;
+  color: var(--accent-700, var(--text-primary));
+  text-decoration: none;
+}
+
+.rowAction:hover { text-decoration: underline; }
+
+.queueTable tbody tr { cursor: pointer; }
+/* Ten columns on a laptop: tighter gutters, and identifiers never break mid-code. */
+.queueTable table th, .queueTable table td { padding-inline: var(--space-3); }
+.queueTable .reference { white-space: nowrap; }
+.queueTable tbody tr:hover td { background: var(--surface-muted, #f7f4ee); }
+
+/* The request's timing, at the top of the detail view. */
+.timing {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-3) var(--space-5);
+  margin: 0 0 var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  border: var(--border-width-subtle, 1px) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.timing dt {
+  margin: 0 0 2px;
+  font-size: var(--text-caption, 12px);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.timing dd { margin: 0; font-weight: 500; color: var(--text-primary); }
+
+/* Queue pagination. */
+.pager { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3); margin-top: var(--space-4); }
+.pagerLinks { display: flex; align-items: center; gap: var(--space-4); font-size: var(--text-label); }
+.pagerLinks a { font-weight: 600; color: var(--accent-700, var(--text-primary)); text-decoration: none; }
+.pagerLinks a:hover { text-decoration: underline; }
+.pagerLinks [aria-disabled='true'] { color: var(--text-secondary); opacity: .55; }
+.pagerCurrent { color: var(--text-primary); }
+
+/* ---------------------------------------------------------------------------
+ * Inbox controls: search, order, result count; emphasis for unhandled rows.
+ * ------------------------------------------------------------------------ */
+.queueControls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-4);
+  margin-block-end: var(--space-4);
+}
+
+.searchBar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  flex: 1 1 28rem;
+}
+
+.searchInput {
+  flex: 1 1 16rem;
+  min-width: 0;
+  max-width: 24rem;
+  min-height: 38px;
+  padding: 0 var(--space-3);
+  border: var(--border-width-subtle, 1px) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-body-sm);
+}
+
+.searchInput:focus-visible { outline: 2px solid var(--accent-500); outline-offset: 1px; }
+
+.searchButton {
+  min-height: 38px;
+  padding: 0 var(--space-4);
+  border: var(--border-width-subtle, 1px) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: var(--text-label);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.searchButton:hover { background: var(--accent-100); }
+
+.resultCount {
+  font-size: var(--text-label);
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+
+.guestName { font-weight: 500; }
+
+/* Not yet picked up: a rail and a heavier name, never colour alone. */
+.unhandled td:first-child { box-shadow: inset 3px 0 0 0 var(--accent-500); }
+.unhandled .guestName,
+.unhandled .reference { font-weight: 700; }
+
+.reference { text-decoration: none; }
+.reference:hover, .reference:focus-visible { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .searchInput { max-width: none; }
+}
+
+/* ---------------------------------------------------------------------------
+ * Request detail: header, then two columns — the request on the left, its
+ * handling (status, deadline, actions, history) on the right.
+ * ------------------------------------------------------------------------ */
+.backLink {
+  align-self: flex-start;
+  font-size: var(--text-label);
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.backLink:hover, .backLink:focus-visible { color: var(--text-primary); text-decoration: underline; }
+
+.detailHeading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+.detailHeader h1.reference { margin: 0; font-size: var(--text-heading-lg, 1.5rem); line-height: 1.2; }
+.detailHeader { flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+.detailMeta { margin: 0; color: var(--text-secondary); font-size: var(--text-body-sm); }
+
+.detailLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+.detailMain, .detailSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+@media (min-width: 1100px) {
+  .detailLayout { grid-template-columns: minmax(0, 1.55fr) minmax(20rem, 1fr); }
+}
+
+.detailSide .timing {
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.historyEntry {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  border-left: 2px solid var(--border-subtle);
+  position: relative;
+}
+.historyEntry::before {
+  content: '';
+  position: absolute;
+  left: -5px;
+  top: calc(var(--space-2) + 5px);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--border-default);
+}
+.historyEntry:first-child::before { background: var(--accent-500); }
+.historyStatus { font-weight: 600; font-size: var(--text-body-sm); }
+.historyReason { font-size: var(--text-body-sm); color: var(--text-primary); }
+
+/* The tab strip scrolls inside itself on a phone rather than widening the page. */
+.queueTabs { max-width: 100%; overflow-x: auto; }
+.hotelCell { display: inline-block; min-width: 8.5rem; }
+.queueTable .deadlineOpen, .queueTable .deadlineOverdue { font-size: var(--text-body-sm); }
+.queueTable table th, .queueTable table td { padding-inline: var(--space-2); }
+.queueTable table th:first-child, .queueTable table td:first-child { padding-inline-start: var(--space-4); }
+.hotelCell { min-width: 7rem; }
+/* Long labels ("Đã đề xuất phương án khác", "Còn 21 giờ 16 phút") wrap inside
+   a bounded cell instead of widening the table. */
+.statusCell { display: inline-block; white-space: nowrap; }
+.queueTable .deadlineCell { max-width: 9.5rem; }
+.queueTable .deadlineCell .deadlineOpen,
+.queueTable .deadlineCell .deadlineOverdue { white-space: normal; }
+.hotelCell { min-width: 6.5rem; }
+.queueTable table th:first-child, .queueTable table td:first-child { padding-inline-start: var(--space-3); }
+
+.moreActions {
+  border: var(--border-width-subtle, 1px) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+.moreActions > summary {
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.moreActions[open] > summary { border-bottom: var(--border-width-subtle, 1px) solid var(--border-subtle); }
+.moreActions > .actions { padding: var(--space-4); }

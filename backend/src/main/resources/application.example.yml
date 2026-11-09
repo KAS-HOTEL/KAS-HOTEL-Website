@@ -1,0 +1,74 @@
+# =============================================================================
+# KAS Hotel Platform — configuration template
+# =============================================================================
+# This file documents the environment variables the application requires.
+# It is a TEMPLATE: it carries names and placeholders, never real values.
+#
+# Copy nothing from here into a committed file. Set the variables in the
+# environment, a secret manager, or an untracked application-local.yml
+# (already excluded by .gitignore).
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# REQUIRED — database
+# -----------------------------------------------------------------------------
+# The application runtime account is kas_web_app. It is NOT the postgres
+# superuser, and its six role flags are all false (verified in doc 88 §2).
+#
+#   KAS_DB_URL       jdbc:postgresql://<host>:<port>/kas_web_dev?currentSchema=kas
+#   KAS_DB_USERNAME  kas_web_app
+#   KAS_DB_PASSWORD  <supplied out of band; never committed, never logged>
+#
+# The schema must resolve to `kas`. A silent fallback to `public` is a defect,
+# and the `kasSchema` readiness indicator reports DOWN if it happens.
+#
+# The legacy databases kas_dev, kas_test and kas_app belong to a different
+# project. They must never appear in any value above.
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# EMAIL OUTBOX — encrypts queued links and retries transient Brevo failures
+# -----------------------------------------------------------------------------
+#   KAS_EMAIL_OUTBOX_ENCRYPTION_KEY  base64-encoded random 32-byte key
+# Keep this key stable while queued/retry rows exist. A separate dedicated key
+# is recommended; if omitted, the backend derives a separate key from the JWT
+# signing secret to preserve local setups during rollout.
+# -----------------------------------------------------------------------------
+
+spring:
+  datasource:
+    url: jdbc:postgresql://127.0.0.1:5433/kas_web_dev?currentSchema=kas
+    username: kas_web_app
+    password: "<set KAS_DB_PASSWORD in the environment>"
+
+# -----------------------------------------------------------------------------
+# NOT CONFIGURED HERE — business values
+# -----------------------------------------------------------------------------
+# None of the following belongs in any YAML file. They live in `system_setting`
+# and are read through SystemSettingService, which raises 422 CONFIG_MISSING
+# naming the key when a value has not been supplied (doc 51 §6, doc 58 §2):
+#
+#   room types · room quantities · rates · VAT · service charge
+#   cancellation policy · no-show policy · SLA wording
+#   OTA buffer values · OTA recording threshold · hold durations
+#   deposit rules · review window · FX rules · lifecycle timings
+#
+# All 18 registered keys currently hold NULL. That is the correct state until
+# KAS supplies them. Writing a placeholder here would defeat the mechanism.
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# OPTIONAL — Brevo transactional email (verification, reset, booking notices)
+# Configure as environment variables; never put the API key in this template.
+#
+#   BREVO_API_KEY                   <Brevo API key>
+#   BREVO_SENDER_EMAIL              <sender address on a domain authenticated in Brevo>
+#   BREVO_SENDER_NAME               KAS Hotel Collection
+#   BREVO_TEMPLATE_{KEY}_{VI|EN}    Brevo template id per email; without one the design in
+#                                   src/main/resources/email-templates is sent.
+#   KAS_EMAIL_OUTBOX_ENABLED        true runs the dispatcher (the default)
+#   KAS_EMAIL_ALLOWED_RECIPIENTS    required by the dev profile before anything is sent
+#   KAS_BOOKING_OPERATIONS_EMAIL    hotel notices for a property with no email
+#   KAS_BOOKING_ACTION_BASE_URL     host of the links in booking emails
+#   KAS_CUSTOMER_SITE_BASE_URL      http://127.0.0.1:3000 (account links in emails)
+# -----------------------------------------------------------------------------

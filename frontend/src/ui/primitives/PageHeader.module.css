@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-6, 32px);
+  padding-block-end: var(--space-5);
+  border-bottom: var(--border-width-subtle, 1px) solid var(--border-subtle);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+  flex: 1 1 28rem;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: var(--text-caption, 12px);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted, var(--text-secondary));
+}
+
+/* Specific enough to win over older page-level `h1` rules on the same screen. */
+.header .title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-lg, 1.875rem);
+  font-weight: 400;
+  line-height: var(--leading-tight, 1.2);
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.description {
+  max-width: 72ch;
+  font-size: var(--text-body-sm, 14px);
+  line-height: var(--leading-body, 1.6);
+  color: var(--text-secondary);
+}
+
+.description p { margin: 0; }
+.description p + p { margin-top: var(--space-2); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}

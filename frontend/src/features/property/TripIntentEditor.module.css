@@ -1,0 +1,73 @@
+.section {
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+
+.title {
+  color: var(--text-primary);
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin: 0 0 .45rem;
+}
+
+.note {
+  color: var(--text-muted);
+  font-size: .9rem;
+  line-height: 1.55;
+  margin: 0 0 1rem;
+  max-width: 46rem;
+}
+
+.options {
+  display: grid;
+  gap: .75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  margin-bottom: 1rem;
+}
+
+.option {
+  align-items: flex-start;
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  gap: .65rem;
+  padding: .9rem;
+}
+
+.option input {
+  accent-color: var(--accent-600);
+  margin-top: .25rem;
+}
+
+.optionText {
+  display: grid;
+  gap: .3rem;
+}
+
+.label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.description {
+  color: var(--text-muted);
+  font-size: .85rem;
+  line-height: 1.45;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .85rem;
+}
+
+.status,
+.error {
+  font-size: .9rem;
+  margin: 0;
+}
+
+.status { color: var(--text-muted); }
+.error { color: var(--error-500); }

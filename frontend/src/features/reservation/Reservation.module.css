@@ -1,0 +1,722 @@
+/*
+  The reservation workspace — doc 58 §6.
+
+  Reuses the console's density tokens so the screen sits inside the existing
+  partner shell rather than beside it, and mirrors SalesRequest.module.css where
+  the two screens show the same kind of thing. Interactive controls are at least
+  44px tall throughout, which is the touch target the 375px layout needs.
+*/
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--density-page-padding);
+}
+
+.pageTitle {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.pageIntro {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* Tabular so a reference read aloud over the phone is unambiguous. */
+.reference {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.muted {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.note {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Search and filters — a plain GET form.
+--------------------------------------------------------------------------- */
+
+/*
+  The operations toolbar.
+
+  One wrapping row rather than a stacked block over a grid of equal cells. Every
+  field used to be the same width, which said they mattered equally; they do not.
+  The keyword box grows into whatever is left, the two selects and the date pair
+  hold their natural size, and the actions sit at the end.
+
+  A hairline and a faint ivory ground rather than a heavy card: this is a strip
+  of controls above a table, not a form to fill in.
+*/
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3) var(--space-4);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg, var(--radius-md));
+  background: var(--surface-sunken, var(--surface-base));
+}
+
+/* Grows. The 18rem basis is where the placeholder stops being truncated. */
+.toolbarSearch {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 3 1 18rem;
+  min-width: 0;
+}
+
+/* Holds its size; two of these fit beside the keyword box on a laptop. */
+.toolbarField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  /* Does not grow: only the keyword box should absorb spare width. */
+  flex: 0 1 12rem;
+  min-width: 0;
+}
+
+.toolbarDates {
+  margin: 0;
+  padding: 0;
+  border: none;
+  /* Two dates and nothing more. Growing this was what pushed the actions onto
+     a third row at 1440. */
+  flex: 0 1 20rem;
+  min-width: 0;
+}
+
+.toolbarActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+  flex: 0 0 auto;
+  margin-inline-start: auto;
+}
+
+.toolbarSearch label,
+.toolbarField label {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.searchInput {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background: var(--surface-base);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.searchActions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+
+.submit {
+  min-height: 44px;
+  padding: 0 var(--space-4);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-on-accent, #fff);
+  background: var(--accent-600, var(--text-primary));
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+
+.clear {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.dateField label {
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.control {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  background: var(--surface-base);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+/*
+  Two bounds under one legend, so a screen reader announces "Ngày đặt, từ ngày"
+  rather than two identically shaped date fields side by side.
+*/
+.dateLegend {
+  padding: 0;
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.dateInputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+
+.dateField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+   Results — a table on a wide screen, cards on a narrow one.
+   Exactly one is displayed, so a screen reader never reads a row twice.
+--------------------------------------------------------------------------- */
+
+.tableOnly {
+  display: none;
+}
+
+.cardsOnly {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 768px) {
+  .tableOnly {
+    display: block;
+  }
+
+  .cardsOnly {
+    display: none;
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--surface-raised, var(--surface-base));
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg, var(--radius-md));
+}
+
+.cardHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.cardGuest {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.cardFacts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.cardFact {
+  display: grid;
+  grid-template-columns: 7.5rem 1fr;
+  align-items: baseline;
+  column-gap: var(--space-3);
+}
+
+.cardFact dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.cardFact dd {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* A full-width tap target, comfortably past 44px. */
+.cardAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  margin-top: var(--space-1);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.rowAction {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.guestCell,
+.stayCell,
+.channelCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+/*
+ * The date range is one fact and stays on one line.
+ *
+ * Measured at 1440: the table gave this column 81px — less than "Phòng", whose
+ * content is the digit 1 — and every row stood 214px tall holding the wreckage
+ * of "2026-09-28 → 2026-09-30 · 2 đêm" broken after each token. Refusing the
+ * break makes the column ask for the width it actually needs, and the browser's
+ * table layout gives it back by taking from the columns that were over-served.
+ */
+.stayDates {
+  white-space: nowrap;
+}
+
+.phone {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------------------
+   Pagination.
+--------------------------------------------------------------------------- */
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.pagerSummary {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.pagerControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pagerLink,
+.pagerDisabled {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--space-3);
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+}
+
+.pagerLink {
+  color: var(--text-primary);
+}
+
+.pagerDisabled {
+  color: var(--text-disabled, var(--text-secondary));
+  opacity: 0.5;
+}
+
+.pagerPosition {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------
+   Detail.
+--------------------------------------------------------------------------- */
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding: var(--density-page-padding);
+}
+
+/*
+  The header answers "which booking, in what state" and then "where and when",
+  and nothing below repeats either. Column rather than one wrapping row: the
+  identity line and the stay line are two thoughts, not one long one.
+*/
+.detailHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.detailIdentity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+/*
+  Hotel and dates on one line, wrapping to two on a phone. The separator is a
+  border rather than a bullet character so it disappears cleanly when the line
+  wraps — a stranded '·' at the start of a row reads as a typo.
+*/
+.detailSummaryLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-3);
+  margin: 0;
+}
+
+.detailProperty {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+.detailDates {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.detailReference {
+  margin: 0;
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  overflow-wrap: anywhere;
+}
+
+.detailBadges {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/*
+  One column on a phone; two above 900px.
+
+  Two, not `auto-fit`. Auto-fit put three cards on the first row and left the
+  fourth — the money — alone on the second with two empty columns beside it,
+  which is the large blank right-hand side this page was meant to lose. Four
+  cards in a 2×2 grid fill the space evenly and give each one room for a label
+  and its value on the same line.
+*/
+.detailGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 900px) {
+  .detailGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px;
+}
+
+.fact dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.fact dd {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  /* An email or a special request must wrap, never overflow the card. */
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 640px) {
+  .fact {
+    grid-template-columns: 9rem 1fr;
+    align-items: baseline;
+    column-gap: var(--space-3);
+  }
+}
+
+/*
+ * A 44px tap target, not a 22px line of text. `inline-flex` with a minimum
+ * height rather than padding alone, so the hit area is the full row on a phone
+ * where this is the only way back to the results.
+ */
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Phone tap targets.
+
+   The card shape is the phone shape, and two of its links were 22–25px tall:
+   the booking reference, which is the card's whole purpose, and the guest's
+   phone number, which is a `tel:` link an operator taps while standing at a
+   desk. Doc 82 §7 puts the minimum at 44px.
+
+   Height only, and only where the cards are actually shown. The desktop table
+   is unaffected, and nothing about the type scale or the card's rhythm moves.
+--------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .card .reference,
+  .card .phone,
+  .cardHeader .reference {
+    display: inline-flex;
+    align-items: center;
+    min-block-size: 44px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reference cell.
+
+   The booking reference with its channel beneath it. Channel used to be a column
+   of its own: a header, a badge and 108px for one of two words. At 1440 the
+   workspace has 983px of content width and nine columns wanted 1145, so the
+   table scrolled sideways on a desktop — and channel was the column paying least
+   for its width.
+
+   `channel_type` is untouched in the API and the database. This is presentation.
+--------------------------------------------------------------------------- */
+.referenceCell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+/*
+ * Quiet by default, and never colour alone: the word is the signal. An OTA row
+ * gets a little more weight because "not ours" is the exception worth catching
+ * in a scan — the attribute selector carries that, not a second element.
+ */
+.channelTag {
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.channelTag[data-channel='OTA'] {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/*
+ * A slightly tighter gutter inside this table, and only this one.
+ *
+ * The shared Table primitive pads cells with `--space-4` (16px) on each side.
+ * Eight columns of that is 256px spent on whitespace, and this workspace has
+ * 983px of content width at 1440 — the shell keeps the rest, and widening the
+ * shell would move every other Partner page. Twelve pixels reads as comfortably
+ * as sixteen at this density and returns 64px to the columns, which is the
+ * difference between a table that fits and one that scrolls sideways on a
+ * desktop.
+ *
+ * Element selectors, because the primitive's own class names are hashed by CSS
+ * Modules and are not addressable from here. `.tableOnly th/td` outranks the
+ * single-class rule inside the primitive, so no `!important` is needed.
+ */
+.tableOnly th,
+.tableOnly td {
+  padding-inline: var(--space-3);
+}
+
+/* ---------------------------------------------------------------------------
+   Reservation detail — money, contacts, requests.
+--------------------------------------------------------------------------- */
+
+/*
+ * The money block. Rows are a label/amount pair with the amount right-aligned
+ * and tabular, so the digits line up and the eye can compare them without
+ * reading. The old version used the generic fact list, which stacked the label
+ * above the value and made five amounts into ten lines of nothing much.
+ */
+.money {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.moneyRow,
+.moneyTotalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.moneyRow dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.moneyRow dd {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * The one line on this page that shouts. A rule above it rather than a box
+ * around it: the total is the conclusion of the rows above, and a second card
+ * border would sever it from them.
+ */
+.moneyTotalRow {
+  margin-top: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.moneyTotalRow dt {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.moneyTotalRow dd {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/*
+ * A phone number and an email are things an operator taps, not text they read.
+ * 44px on a phone, where the tap happens; the inline size stays natural so the
+ * value does not become a full-width band inside a definition list.
+ */
+.contactLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--text-accent);
+  overflow-wrap: anywhere;
+}
+
+/* What the guest actually asked for, in prose rather than as a squeezed row. */
+.requestText {
+  margin: 0;
+  max-width: 68ch;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.detailActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* "Xử lý yêu cầu →": a reservation not accepted yet is handled on its request. */
+.detailRequestLink {
+  font-size: var(--text-label);
+  font-weight: 600;
+  color: var(--accent-700, var(--text-primary));
+  text-decoration: none;
+}
+.detailRequestLink:hover, .detailRequestLink:focus-visible { text-decoration: underline; }

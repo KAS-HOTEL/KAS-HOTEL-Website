@@ -1,0 +1,147 @@
+# ==============================================================================
+# KAS Hotel Platform — .gitattributes
+# ==============================================================================
+# Developed on Windows, built and deployed on Linux. These rules keep the
+# repository byte-identical across platforms.
+#
+# Strategy: normalise EVERYTHING to LF in the repository. Check out LF on all
+# platforms except the few Windows-only script types that require CRLF.
+# Encoding convention: UTF-8 without BOM for every text file.
+#
+# See docs/kas/87-phase-7-1b-git-foundation.md
+# ==============================================================================
+
+
+# ------------------------------------------------------------------------------
+# DEFAULT — auto-detect text, normalise to LF in the repository
+# ------------------------------------------------------------------------------
+* text=auto eol=lf
+
+
+# ------------------------------------------------------------------------------
+# DOCUMENTATION
+# ------------------------------------------------------------------------------
+*.md        text eol=lf diff=markdown
+*.markdown  text eol=lf diff=markdown
+*.txt       text eol=lf
+LICENSE     text eol=lf
+*.adoc      text eol=lf
+
+# The approved KAS corpus is documentation, not code — keep it out of
+# language statistics and collapsed in diff review by default.
+docs/**     linguist-documentation
+
+
+# ------------------------------------------------------------------------------
+# JAVA / SPRING BOOT
+# ------------------------------------------------------------------------------
+*.java      text eol=lf diff=java
+*.kt        text eol=lf diff=kotlin
+*.gradle    text eol=lf
+*.properties text eol=lf
+pom.xml     text eol=lf
+*.xml       text eol=lf
+
+
+# ------------------------------------------------------------------------------
+# TYPESCRIPT / JAVASCRIPT / FRONTEND
+# ------------------------------------------------------------------------------
+*.ts        text eol=lf
+*.tsx       text eol=lf
+*.js        text eol=lf
+*.jsx       text eol=lf
+*.mjs       text eol=lf
+*.cjs       text eol=lf
+*.css       text eol=lf diff=css
+*.scss      text eol=lf diff=css
+*.html      text eol=lf diff=html
+*.svg       text eol=lf
+
+
+# ------------------------------------------------------------------------------
+# DATA AND CONFIGURATION
+# ------------------------------------------------------------------------------
+*.json      text eol=lf
+*.jsonc     text eol=lf
+*.yml       text eol=lf
+*.yaml      text eol=lf
+*.toml      text eol=lf
+*.ini       text eol=lf
+*.env.example text eol=lf
+.editorconfig text eol=lf
+
+
+# ------------------------------------------------------------------------------
+# SQL — migrations are source code
+# ------------------------------------------------------------------------------
+*.sql       text eol=lf
+
+
+# ------------------------------------------------------------------------------
+# SHELL SCRIPTS — MUST be LF or they fail to execute on Linux and in CI
+# ------------------------------------------------------------------------------
+*.sh        text eol=lf
+*.bash      text eol=lf
+mvnw        text eol=lf
+gradlew     text eol=lf
+Dockerfile  text eol=lf
+*.dockerfile text eol=lf
+.dockerignore text eol=lf
+Makefile    text eol=lf
+
+
+# ------------------------------------------------------------------------------
+# WINDOWS SCRIPTS — MUST be CRLF or cmd.exe misparses them
+# ------------------------------------------------------------------------------
+*.bat       text eol=crlf
+*.cmd       text eol=crlf
+*.ps1       text eol=crlf
+mvnw.cmd    text eol=crlf
+gradlew.bat text eol=crlf
+
+
+# ------------------------------------------------------------------------------
+# BINARY — never diffed, never line-ending converted
+# ------------------------------------------------------------------------------
+*.jar       binary
+*.war       binary
+*.class     binary
+*.zip       binary
+*.gz        binary
+*.tar       binary
+*.7z        binary
+*.pdf       binary
+
+# Images
+*.png       binary
+*.jpg       binary
+*.jpeg      binary
+*.gif       binary
+*.webp      binary
+*.avif      binary
+*.ico       binary
+*.tif       binary
+*.tiff      binary
+*.psd       binary
+*.ai        binary
+
+# Fonts — relevant once brand typefaces arrive (config A8)
+*.woff      binary
+*.woff2     binary
+*.ttf       binary
+*.otf       binary
+*.eot       binary
+
+# Media
+*.mp4       binary
+*.webm      binary
+*.mov       binary
+*.mp3       binary
+
+
+# ------------------------------------------------------------------------------
+# EXCLUDE FROM RELEASE ARCHIVES
+# ------------------------------------------------------------------------------
+.gitattributes export-ignore
+.gitignore     export-ignore
+.github/       export-ignore

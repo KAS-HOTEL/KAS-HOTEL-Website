@@ -1,0 +1,44 @@
+.shell { display: flex; flex-direction: column; min-height: 100vh; background: var(--background); }
+
+.skipLink {
+  position: absolute; left: var(--space-4); top: -60px; z-index: var(--z-toast);
+  padding: var(--space-2) var(--space-4); border-radius: var(--radius-md);
+  background: var(--surface-elevated); box-shadow: var(--shadow-md);
+}
+.skipLink:focus { top: var(--space-2); }
+
+.header {
+  display: flex; align-items: center; gap: var(--space-6);
+  padding: var(--space-4) var(--density-page-padding);
+  border-bottom: var(--border-width-subtle) solid var(--border-subtle); background: var(--surface);
+}
+
+/* The display face, which the operational consoles deliberately do not use. */
+.wordmark {
+  font-family: var(--font-display); font-size: var(--text-heading-md);
+  color: var(--text-primary); text-decoration: none; letter-spacing: -0.005em;
+}
+
+.nav { display: flex; gap: var(--space-5); }
+
+.navLink {
+  min-height: var(--density-control-height); display: inline-flex; align-items: center;
+  color: var(--text-secondary); font-size: var(--text-nav); text-decoration: none;
+}
+.navLink:hover { color: var(--text-primary); }
+
+/* Editorial rhythm: generous, centred, and capped so long text stays readable. */
+.main {
+  flex: 1; width: 100%; max-width: 1200px; margin: 0 auto;
+  padding: var(--space-7) var(--density-page-padding);
+}
+
+.footer {
+  padding: var(--space-6) var(--density-page-padding);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+.footerText { margin: 0; font-size: var(--text-body-sm); color: var(--text-muted); }
+
+@media (min-width: 1024px) {
+  .main { padding-top: var(--space-9); padding-bottom: var(--space-9); }
+}

@@ -1,0 +1,246 @@
+# KAS Hotel Collection — GitLab CI/CD
+#
+#   test     backend unit + integration tests (PostgreSQL 17), console typecheck/lint/test/build,
+#            website server.js syntax check
+#   build    backend / website / console images -> GitLab Container Registry
+#            ($CI_REGISTRY_IMAGE/<name>:sha-<commit>, plus :latest on the default branch)
+#            and, when DOCKERHUB_REPO is set, the same images -> Docker Hub
+#            ($DOCKERHUB_REPO:<name>-sha-<commit>, plus <name>-latest). Render pulls from Docker Hub:
+#            it cannot pull private images from a self-hosted registry.
+#   deploy   webdemo  -> https://webdemo.kasbookingapp.com (VPS 202.143.110.15, /srv/kas-web/bin/deploy.sh)
+#            production -> Render (doc 157): fire each Render deploy hook with this commit's image,
+#                          backend first, then website + console. Always MANUAL.
+#                          The source never leaves GitLab; Render only pulls the images.
+#   verify   health / smoke checks of the environment that was just deployed
+#
+# CI/CD variables (Settings -> CI/CD -> Variables). None are written in this file.
+#   WEBDEMO_SSH_KEY            File, Protected, private key allowed on root@202.143.110.15
+#   WEBDEMO_SSH_KNOWN_HOSTS    File, output of: ssh-keyscan -p 38791 202.143.110.15
+#   DOCKERHUB_REPO             private Docker Hub repository, e.g. kashotel/kas-web
+#   DOCKERHUB_USERNAME / DOCKERHUB_TOKEN   Docker Hub user + access token (Read & Write), token Masked
+#   PROD_KAS_API_ORIGIN        kas-backend private address on Render, e.g. http://kas-backend-xxxx:10000
+#                              (baked into the console image at build time)
+#   RENDER_DEPLOY_HOOK_BACKEND / _WEBSITE / _CONSOLE   Masked+Protected, Render -> service -> Settings -> Deploy Hook
+#   PROD_BACKEND_HEALTH_URL    https://<kas-backend>.onrender.com/actuator/health
+#   PROD_WEBSITE_URL           https://kas-website.onrender.com   (the real domain after cut-over)
+#   PROD_CONSOLE_URL           https://admin.kasluxuryhotel.com
+
+stages: [test, build, deploy, verify]
+
+variables:
+  WEBDEMO_HOST: "202.143.110.15"
+  WEBDEMO_PORT: "38791"
+  WEBDEMO_URL: "https://webdemo.kasbookingapp.com"
+  MAVEN_OPTS: "-Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository"
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# --------------------------------------------------------------------------- test
+backend:test:
+  stage: test
+  image: maven:3.9-eclipse-temurin-21
+  services:
+    - name: postgres:17.10
+      alias: pg
+  variables:
+    POSTGRES_USER: postgres
+    POSTGRES_PASSWORD: ci-postgres-only
+    POSTGRES_DB: postgres
+    KAS_DB_PASSWORD: ci-app-only          # throwaway CI database, never a real secret
+    PGPASSWORD: ci-postgres-only
+  cache:
+    key: maven-$CI_COMMIT_REF_SLUG
+    paths: [.m2/repository]
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq postgresql-client socat >/dev/null
+    - until pg_isready -h pg -U postgres; do sleep 2; done
+    - psql -h pg -U postgres -v ON_ERROR_STOP=1 -c "CREATE ROLE kas_web_app LOGIN PASSWORD '$KAS_DB_PASSWORD'"
+    - psql -h pg -U postgres -v ON_ERROR_STOP=1 -c "CREATE DATABASE kas_web_test OWNER kas_web_app"
+    # The tests target 127.0.0.1:5433 (LocalDatabase); forward it to the service container.
+    - socat TCP-LISTEN:5433,fork,reuseaddr TCP:pg:5432 &
+    - cd backend && chmod +x mvnw
+    - KAS_TEST_DB_MIGRATE=apply ./mvnw -B -q test -Dtest=IntegrationDatabaseMigration -DfailIfNoSpecifiedTests=false
+  script:
+    - ./mvnw -B verify
+  artifacts:
+    when: always
+    reports:
+      junit:
+        - backend/target/surefire-reports/TEST-*.xml
+        - backend/target/failsafe-reports/TEST-*.xml
+
+console:test:
+  stage: test
+  image: node:22
+  cache:
+    key: npm-$CI_COMMIT_REF_SLUG
+    paths: [.npm/]
+  variables:
+    NEXT_TELEMETRY_DISABLED: "1"
+  script:
+    - cd frontend
+    - npm ci --cache "$CI_PROJECT_DIR/.npm" --prefer-offline
+    - npm run verify          # typecheck + lint + vitest + next build
+
+website:check:
+  stage: test
+  image: node:22
+  script:
+    - cd frontend
+    - node --check server.js
+    - for f in js/*.js; do node --check "$f" || exit 1; done
+
+# --------------------------------------------------------------------------- build
+build:images:
+  stage: build
+  image: docker:27
+  services: [docker:27-dind]
+  variables:
+    DOCKER_TLS_CERTDIR: "/certs"
+  needs: [backend:test, console:test, website:check]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+      allow_failure: true
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" --password-stdin "$CI_REGISTRY"
+  script:
+    - TAG="sha-$CI_COMMIT_SHORT_SHA"
+    - docker build -t "$CI_REGISTRY_IMAGE/backend:$TAG" backend
+    - docker build -f docker/website.Dockerfile -t "$CI_REGISTRY_IMAGE/website:$TAG" frontend
+    - docker build -f docker/console.Dockerfile --build-arg KAS_API_ORIGIN="${PROD_KAS_API_ORIGIN:-http://localhost:8080}" -t "$CI_REGISTRY_IMAGE/console:$TAG" frontend
+    - |
+      for n in backend website console; do
+        docker push "$CI_REGISTRY_IMAGE/$n:$TAG"
+        if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+          docker tag "$CI_REGISTRY_IMAGE/$n:$TAG" "$CI_REGISTRY_IMAGE/$n:latest"
+          docker push "$CI_REGISTRY_IMAGE/$n:latest"
+        fi
+      done
+    - |
+      if [ -n "$DOCKERHUB_REPO" ]; then
+        echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin docker.io
+        for n in backend website console; do
+          docker tag "$CI_REGISTRY_IMAGE/$n:$TAG" "docker.io/$DOCKERHUB_REPO:$n-$TAG"
+          docker push "docker.io/$DOCKERHUB_REPO:$n-$TAG"
+          if [ "$CI_COMMIT_BRANCH" = "$CI_DEFAULT_BRANCH" ]; then
+            docker tag "$CI_REGISTRY_IMAGE/$n:$TAG" "docker.io/$DOCKERHUB_REPO:$n-latest"
+            docker push "docker.io/$DOCKERHUB_REPO:$n-latest"
+          fi
+        done
+      fi
+
+# --------------------------------------------------------------------------- deploy
+.ssh_webdemo: &ssh_webdemo
+  - mkdir -p ~/.ssh && chmod 700 ~/.ssh
+  # GitLab may store the key without its final newline, which OpenSSH rejects.
+  - (cat "$WEBDEMO_SSH_KEY"; echo) | tr -d '\r' > ~/.ssh/id_webdemo && chmod 600 ~/.ssh/id_webdemo
+  - cp "$WEBDEMO_SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+  - export SSH="ssh -i $HOME/.ssh/id_webdemo -p $WEBDEMO_PORT -o BatchMode=yes -o ServerAliveInterval=30 root@$WEBDEMO_HOST"
+
+deploy:webdemo:
+  stage: deploy
+  image: alpine:3.20
+  environment: { name: webdemo, url: $WEBDEMO_URL }
+  resource_group: webdemo
+  needs: [backend:test, console:test, website:check]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $WEBDEMO_SSH_KEY
+    - if: $CI_COMMIT_BRANCH && $WEBDEMO_SSH_KEY
+      when: manual
+      allow_failure: true
+  before_script:
+    - apk add --no-cache openssh-client git tar curl >/dev/null
+    - *ssh_webdemo
+  script:
+    - NAME="webdemo-$(date +%Y%m%d-%H%M)-$CI_COMMIT_SHORT_SHA"
+    # Exactly the committed tree of backend/ and frontend/; uploads stay on the server.
+    - git archive --format=tar.gz -o "$NAME.tar.gz" HEAD backend frontend
+    - scp -i ~/.ssh/id_webdemo -P "$WEBDEMO_PORT" -o BatchMode=yes "$NAME.tar.gz" "root@$WEBDEMO_HOST:/srv/kas-web/incoming/"
+    - $SSH "/srv/kas-web/bin/deploy.sh /srv/kas-web/incoming/$NAME.tar.gz > /srv/kas-web/incoming/deploy-$NAME.log 2>&1; rc=\$?; tail -30 /srv/kas-web/incoming/deploy-$NAME.log; exit \$rc"
+
+rollback:webdemo:
+  stage: deploy
+  image: alpine:3.20
+  environment: { name: webdemo, url: $WEBDEMO_URL, action: access }
+  resource_group: webdemo
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH && $WEBDEMO_SSH_KEY
+      when: manual
+      allow_failure: true
+  before_script:
+    - apk add --no-cache openssh-client >/dev/null
+    - *ssh_webdemo
+  script:
+    - $SSH "/srv/kas-web/bin/deploy.sh --rollback"
+
+deploy:production:
+  stage: deploy
+  image: alpine:3.20
+  environment: { name: production, url: $PROD_WEBSITE_URL }
+  resource_group: production
+  needs: [build:images]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $RENDER_DEPLOY_HOOK_BACKEND && $DOCKERHUB_REPO
+      when: manual            # production changes only when someone presses the button
+  before_script:
+    - apk add --no-cache curl >/dev/null
+  script:
+    - TAG="sha-$CI_COMMIT_SHORT_SHA"
+    - |
+      hook() { curl -fsS -o /dev/null -X POST -G --data-urlencode "imgURL=docker.io/$DOCKERHUB_REPO:$2-$TAG" "$1" && echo "deploy requested - $2-$TAG"; }
+    - hook "$RENDER_DEPLOY_HOOK_BACKEND" backend
+    - |
+      echo "waiting for backend health"
+      for i in $(seq 1 60); do
+        s=$(curl -s -m 10 "$PROD_BACKEND_HEALTH_URL" | grep -o '"status":"[A-Z]*"' | head -1)
+        [ "$s" = '"status":"UP"' ] && echo "backend UP" && break
+        sleep 20
+      done
+      [ "$s" = '"status":"UP"' ] || { echo "backend not healthy"; exit 1; }
+    - hook "$RENDER_DEPLOY_HOOK_WEBSITE" website
+    - hook "$RENDER_DEPLOY_HOOK_CONSOLE" console
+
+# --------------------------------------------------------------------------- verify
+.smoke: &smoke |
+  check() { code=$(curl -s -o /dev/null -m 30 -w '%{http_code}' "$1"); echo "$code $1"; [ "$code" = "$2" ] || FAIL=1; }
+  FAIL=0
+
+verify:webdemo:
+  stage: verify
+  image: alpine:3.20
+  needs: [deploy:webdemo]
+  rules:
+    - if: $CI_COMMIT_BRANCH && $WEBDEMO_SSH_KEY
+  before_script: [apk add --no-cache curl >/dev/null]
+  script:
+    - *smoke
+    - curl -s -m 30 "$WEBDEMO_URL/actuator/health" | grep -q '"status":"UP"' && echo "UP $WEBDEMO_URL/actuator/health" || FAIL=1
+    - check "$WEBDEMO_URL/" 200
+    - check "$WEBDEMO_URL/hotels.html" 200
+    - check "$WEBDEMO_URL/admin/login" 200
+    - check "$WEBDEMO_URL/api/v1/public/properties" 200
+    - exit $FAIL
+
+verify:production:
+  stage: verify
+  image: alpine:3.20
+  needs: [deploy:production]
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $RENDER_DEPLOY_HOOK_BACKEND
+  before_script: [apk add --no-cache curl >/dev/null]
+  script:
+    - *smoke
+    - sleep 240               # website + console builds on Render
+    - check "$PROD_WEBSITE_URL/" 200
+    - check "$PROD_WEBSITE_URL/health" 200
+    - check "$PROD_CONSOLE_URL/admin/login" 200
+    - exit $FAIL

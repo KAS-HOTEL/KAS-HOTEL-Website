@@ -1,0 +1,32 @@
+/* KAS My KAS › Saved hotels (manage-booking.html?view=saved).
+   The page shell, heading and section tabs are My KAS's own (manage-booking.html);
+   the hotel card is the shared .hcard from components.css / responsive.css.
+   This file only adds the Saved toolbar (count + sort), the list and the empty state. */
+
+/* Sits right under the My KAS tabs, whose rule is the line above it. */
+.saved-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:4px 0 14px;border-bottom:1px solid var(--line);margin-bottom:22px}
+.saved-count{border:1px solid rgba(169,137,85,.45);border-radius:var(--r-sm);padding:9px 15px;color:var(--gold-dk);font-size:.75rem;letter-spacing:.03em;white-space:nowrap}
+.saved-sort-label{display:flex;align-items:center;justify-content:flex-end;gap:9px;flex:0 1 auto;min-width:0;color:var(--tx-2);font-size:.72rem;white-space:nowrap}
+.saved-sort-label select{width:210px;max-width:100%;min-width:0;height:40px;padding:0 30px 0 11px;font-size:.75rem}
+
+.saved-grid{display:flex;flex-direction:column;gap:18px}
+.saved-grid[hidden]{display:none}
+
+/* ---------- empty / signed-out state ---------- */
+.saved-empty{padding:64px 20px;text-align:center;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.saved-empty[hidden]{display:none}
+.saved-empty-icon{font-family:var(--serif);font-size:56px;line-height:1;color:var(--gold-dk)}
+.saved-empty h2{font:400 2rem var(--serif);margin:12px 0 8px}
+.saved-empty p{color:var(--tx-2);font-size:.88rem;margin:0 auto 22px;max-width:480px;line-height:1.7}
+.saved-primary-link{display:inline-flex;align-items:center;gap:14px;background:var(--gold);color:#16140f;text-decoration:none;padding:14px 22px;border-radius:var(--r-sm);font-size:.75rem;font-weight:600;letter-spacing:.04em}
+
+@media (max-width:767px){
+  .saved-toolbar{gap:8px}
+  .saved-count{padding:8px 10px;font-size:.7rem}
+  .saved-sort-label{gap:6px;font-size:.66rem}
+  .saved-sort-label select{width:150px;height:38px;padding:0 24px 0 8px;font-size:.7rem}
+  .saved-grid{gap:14px}
+}
+@media (max-width:360px){
+  .saved-sort-label select{width:124px}
+}

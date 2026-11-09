@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+uploads
+src
+public
+tools
+.env*
+*.md

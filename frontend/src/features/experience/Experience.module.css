@@ -1,0 +1,127 @@
+/*
+ * The console's experience panel. Deliberately the landmark panel's geometry —
+ * same editor block, same card list, same action row — because it is the same
+ * kind of object in the same screen, and a second visual language for a sibling
+ * resource would be a redesign nobody asked for.
+ */
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken, var(--surface));
+}
+
+.editorTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .editorGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.editorHint {
+  margin: 0;
+  font-size: var(--text-label);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/*
+ * An ordered list, unlike the landmarks' unordered one: here the sequence is
+ * content — it is the order a guest reads the experiences in — so the numbering
+ * is real information rather than decoration.
+ */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+@media (min-width: 768px) {
+  .list {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  }
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.itemHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.itemName {
+  margin: 0;
+  font-size: var(--text-body);
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* The guest-facing position, so a Partner can see what reordering did. */
+.itemPosition {
+  font-size: var(--text-body-sm);
+  color: var(--text-accent);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.itemLocales {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-1) var(--space-3);
+}
+
+.itemLocales dt {
+  margin: 0;
+  font-size: var(--text-label);
+  color: var(--text-muted);
+}
+
+.itemLocales dd {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  overflow-wrap: anywhere;
+}
+
+.missing {
+  color: var(--text-muted);
+}
+
+.itemActions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: auto;
+}

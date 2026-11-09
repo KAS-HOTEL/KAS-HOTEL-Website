@@ -1,0 +1,52 @@
+[
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_EN",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_VI",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_EN",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_VI",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_EN",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_VI",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_EN",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_VI",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_EN",
+    "status": 201,
+    "mode": "sandbox-drop"
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_VI",
+    "status": 201,
+    "mode": "sandbox-drop"
+  }
+]

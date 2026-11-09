@@ -1,0 +1,946 @@
+.manager {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.note {
+  margin: 0 0 var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+}
+
+.coverState {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.addGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--space-3);
+  align-items: end;
+}
+
+.addGrid + .addGrid {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.addAction {
+  display: flex;
+  align-items: center;
+}
+
+.gallery {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
+  gap: var(--space-4);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.itemHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.itemFacts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2) var(--space-3);
+}
+
+.itemFacts dt {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--text-label);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.itemFacts dd {
+  margin: 0;
+  font-size: var(--text-body-sm);
+}
+
+.itemActions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+/* ---- STEP H: the room gallery ------------------------------------------- */
+
+.roomGallery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.roomGalleryHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.roomGalleryTitle {
+  margin: 0 0 var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-heading-md);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.roomGalleryNote {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+/*
+ * A label wrapping a hidden file input: the native control cannot be styled and
+ * a button that opens it by script is a second thing to keep in sync.
+ */
+.uploadButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 44px;
+  padding-inline: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-size: var(--text-button);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.uploadButton:hover {
+  background: var(--accent-600);
+}
+
+.uploadButton:focus-within {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+/* While a batch runs the label must read as unavailable: the input inside it is
+   disabled, and a control that still looks pressable is one an operator keeps
+   pressing. */
+.uploadButton[data-disabled] {
+  background: var(--accent-700);
+  opacity: 0.6;
+  cursor: progress;
+}
+
+.uploadInput {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * The batch, one row per picked file.
+ *
+ * It stays on screen after the batch finishes, because the run worth reading is
+ * the one where some files failed — and a list that clears itself on completion
+ * cannot be read afterwards.
+ */
+.uploadQueue {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.uploadQueueItem {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: baseline;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-body-sm);
+}
+
+.uploadQueueItem[data-status='done'] {
+  border-color: var(--success-500, var(--border-subtle));
+}
+
+.uploadQueueItem[data-status='failed'] {
+  border-color: var(--error-500);
+  background: var(--error-100);
+}
+
+/* The name can be long and is the least useful part to read in full; the status
+   is the part that matters, so it keeps its width. */
+.uploadQueueName {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.uploadQueueStatus {
+  flex: none;
+  color: var(--text-muted);
+}
+
+.uploadQueueItem[data-status='failed'] .uploadQueueStatus {
+  color: var(--text-primary);
+}
+
+.roomGalleryError {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--error-500);
+  border-radius: var(--radius-md);
+  background: var(--error-100);
+  font-size: var(--text-body-sm);
+}
+
+/* The large photo. 3:2 so the row of thumbnails below it never reflows as the
+   selection changes. */
+.roomPrimary {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+}
+
+.roomPrimaryImage {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.roomPrimaryBadge {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-start: var(--space-3);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-size: var(--text-caption);
+  font-weight: 600;
+}
+
+.roomNoPreview {
+  padding: var(--space-5);
+  max-inline-size: 32ch;
+  text-align: center;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.roomThumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.roomThumb {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.roomThumbButton {
+  position: relative;
+  display: block;
+  inline-size: 100%;
+  aspect-ratio: 4 / 3;
+  padding: 0;
+  overflow: hidden;
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  cursor: pointer;
+}
+
+.roomThumbButton[data-active] {
+  border-color: var(--accent-700);
+}
+
+.roomThumbButton:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.roomThumbButton img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.roomThumbBlank {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  background: var(--surface-disabled);
+}
+
+.roomThumbCover {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding: 2px;
+  background: var(--accent-700);
+  color: var(--text-inverse);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Four square controls, each meeting the touch floor on a phone. */
+.roomThumbActions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-1);
+}
+
+.roomThumbAction {
+  min-block-size: 44px;
+  padding: 0;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.roomThumbAction:hover:not(:disabled) {
+  border-color: var(--accent-600);
+  color: var(--accent-700);
+}
+
+.roomThumbAction:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.roomThumbDelete:hover:not(:disabled) {
+  border-color: var(--error-500);
+  color: var(--error-500);
+}
+
+/* ---------------------------------------------------------------------------
+ * STEP K — the property media screen, rebuilt around photographs
+ *
+ * The previous layout showed the cover as an asset UUID in a monospace font and
+ * gave each gallery entry a header of the same UUID over a definition list of
+ * mime type, display order and status. An operator cannot tell from a UUID
+ * whether the right picture leads their hotel page.
+ * ------------------------------------------------------------------------ */
+
+.coverSection,
+.librarySection,
+.uploadSection {
+  background: var(--surface);
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.sectionNote {
+  margin: 2px 0 0 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.coverHead,
+.libraryHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+.libraryCount {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.coverPreview,
+.coverEmpty {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface-sunken);
+  aspect-ratio: 16 / 9;
+  max-height: 20rem;
+}
+
+.coverImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.coverEmpty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--border-default);
+}
+
+.coverEmptyText {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* A responsive grid that fills the width rather than a column of wide rows. */
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+  gap: var(--space-3);
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-width) solid var(--border-default);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  min-width: 0;
+}
+
+.tile[data-cover] {
+  border-color: var(--gold-500);
+  box-shadow: 0 0 0 1px var(--gold-500);
+}
+
+.tileImageWrap {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: var(--surface-sunken);
+}
+
+.tileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tileBlank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: var(--space-2);
+  text-align: center;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.tileCoverBadge {
+  position: absolute;
+  inset: auto auto var(--space-2) var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--gold-500);
+  color: var(--text-inverse);
+  font-family: var(--font-text);
+  font-size: 11px;
+  line-height: 1.6;
+  font-weight: 700;
+}
+
+.tileMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: var(--space-2) var(--space-3);
+  min-width: 0;
+}
+
+.tileCategory {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tileStatus {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.tileActions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.tileAction {
+  height: 34px;
+  border: none;
+  border-left: var(--border-width-subtle) solid var(--border-subtle);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+  cursor: pointer;
+}
+
+.tileAction:first-child {
+  border-left: none;
+}
+
+.tileAction:hover:not(:disabled) {
+  background: var(--accent-100);
+  color: var(--text-accent);
+}
+
+.tileAction:focus-visible {
+  outline: 2px solid var(--border-focus);
+  outline-offset: -2px;
+}
+
+.tileAction:disabled {
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.tileDelete:hover:not(:disabled) {
+  background: var(--error-100);
+  color: var(--error-500);
+}
+
+/*
+ * The upload row. Fields sit on one line from tablet up rather than stacking
+ * into a tall column with a button stranded at the bottom.
+ */
+.uploadRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  align-items: end;
+}
+
+@media (min-width: 768px) {
+  .uploadRow {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+ * The upload area — a dropzone, with its two controls beside it
+ *
+ * One column on a phone: category, then the zone, then the button, in the order
+ * they are used. From 768 the controls move into a fixed narrow column so the
+ * zone takes the width it needs to read as a target rather than as a field.
+ * ------------------------------------------------------------------------ */
+
+.uploadMain {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .uploadMain {
+    grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  }
+}
+
+.uploadSide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  align-items: stretch;
+}
+
+/*
+ * `min-height` is a floor, not a height: the label inside is a flex child that
+ * carries its own padding and grows the zone when its text wraps. An earlier
+ * version positioned that label `absolute; inset: 0`, which looked identical at
+ * 1440 and clipped at 375, where "Kéo thả ảnh vào đây hoặc chọn tệp" takes two
+ * lines and an absolute child cannot push its parent taller.
+ */
+.dropzone {
+  position: relative;
+  display: flex;
+  min-height: 11rem;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-sunken);
+  transition: border-color 120ms ease, background-color 120ms ease;
+}
+
+/* Dragging over it, and holding a file, are different states and look it. */
+.dropzone[data-dragging='true'] {
+  border-color: var(--border-focus);
+  border-style: solid;
+  background: var(--surface);
+}
+
+.dropzone[data-chosen='true'] {
+  border-style: solid;
+  border-color: var(--border-default);
+  background: var(--surface);
+}
+
+/*
+ * The real file input: hidden from sight, kept in the accessibility tree and in
+ * the tab order. `display: none` would take it out of both, and the label would
+ * have nothing to point at.
+ */
+.dropzoneInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The whole zone is the label, so the entire area opens the picker. */
+.dropzoneBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  text-align: center;
+  cursor: pointer;
+  border-radius: inherit;
+}
+
+/* Focus lands on the hidden input; the ring has to show on what is visible. */
+.dropzoneInput:focus-visible + .dropzoneBody {
+  outline: 2px solid var(--border-focus);
+  outline-offset: 2px;
+}
+
+.dropzoneIcon {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-bottom: var(--space-1);
+  color: var(--text-muted);
+}
+
+.dropzoneTitle {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: var(--leading-tight);
+  color: var(--text-primary);
+}
+
+.dropzoneHint {
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.dropzoneTypes {
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+.dropzoneChosen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  text-align: center;
+  /* Same reason as the label: the filename wraps, and the zone grows with it. */
+  min-width: 0;
+}
+
+.dropzoneFile {
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+  /* A camera's filename is long and has no spaces in it. */
+  overflow-wrap: anywhere;
+}
+
+.uploadAction {
+  display: flex;
+  align-items: flex-end;
+}
+
+.uploadNote {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  line-height: var(--leading-body);
+  color: var(--text-muted);
+}
+
+/* ---------------------------------------------------------------------------
+   Gallery groups (2026-11-08): the six groups guests see, with counts, a group
+   per photo, and several photos previewed before they are uploaded.
+   --------------------------------------------------------------------------- */
+.groupFilter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.groupChip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 36px;
+  padding: 0 var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.groupChip span {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.groupChip[aria-pressed='true'] {
+  border-color: var(--text-primary);
+  background: var(--text-primary);
+  color: var(--surface);
+}
+
+.groupChip[aria-pressed='true'] span {
+  color: var(--surface);
+}
+
+.groupChip:focus-visible,
+.tileCategorySelect:focus-visible {
+  outline: 2px solid var(--accent-700);
+  outline-offset: 2px;
+}
+
+.tileCategorySelect {
+  min-height: 32px;
+  max-width: 100%;
+  padding: 0 var(--space-2);
+  border: var(--border-width-subtle) solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  font-weight: 600;
+}
+
+.previewList {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-3);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.previewItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1, 4px);
+  min-width: 0;
+  text-align: left;
+}
+
+.previewImage {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--border-subtle);
+}
+
+/* ---------------------------------------------------------------------------
+   Arranging a gallery (2026-11-08): drag a photo to reorder, drag a box on the
+   empty space to select, a checkbox per photo, and one bar for the selection.
+   --------------------------------------------------------------------------- */
+.arrangeGrid {
+  position: relative;
+  padding: var(--space-2);
+  margin: calc(var(--space-2) * -1);
+  touch-action: pan-y;
+  user-select: none;
+}
+
+.roomThumb {
+  position: relative;
+}
+
+.arrangeGrid [data-arrange-id][draggable='true'] {
+  cursor: grab;
+}
+
+.arrangeGrid [data-arrange-id][data-dragging] {
+  opacity: 0.45;
+}
+
+.arrangeGrid [data-arrange-id][data-selected] {
+  outline: 2px solid var(--accent-600);
+  outline-offset: 2px;
+}
+
+.arrangeGrid [data-arrange-id][data-drop='before'] {
+  box-shadow: -4px 0 0 0 var(--accent-600);
+}
+
+.arrangeGrid [data-arrange-id][data-drop='after'] {
+  box-shadow: 4px 0 0 0 var(--accent-600);
+}
+
+.pick {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 252, 247, 0.92);
+  cursor: pointer;
+}
+
+.pick input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--accent-600);
+  cursor: pointer;
+}
+
+.marquee {
+  position: absolute;
+  z-index: 3;
+  border: 1px solid var(--accent-600);
+  background: rgba(128, 101, 65, 0.12);
+  pointer-events: none;
+  list-style: none;
+}
+
+.arrangeHint {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-text);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.selectionBar {
+  position: sticky;
+  top: var(--space-2);
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: var(--border-width-subtle) solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-family: var(--font-text);
+  font-size: var(--text-body-sm);
+  color: var(--text-secondary);
+}
+
+.selectionBar strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .arrangeGrid [data-arrange-id] {
+    transition: none;
+  }
+}

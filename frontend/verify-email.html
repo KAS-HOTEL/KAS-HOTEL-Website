@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex,nofollow"><title>Verify email — KAS Hotel Collection</title><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/components.css"><link rel="stylesheet" href="css/responsive.css"><link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
+</head>
+<body><header id="hdr"></header><main class="container" style="padding-block:140px 80px;min-height:70vh"><section class="card" style="max-width:580px;margin:auto;padding:32px"><p class="eyebrow">KAS REWARDS</p><h1 id="verifyTitle" style="font-size:2rem">Verify your email</h1><p id="verifyIntro" style="margin:18px 0"></p><form id="verifyForm" novalidate><div class="field"><label class="label" for="verifyEmail">Email</label><input id="verifyEmail" class="input" type="email" maxlength="320" autocomplete="email" required></div><div class="field" style="margin-top:14px"><label class="label" id="verifyCodeLabel" for="verifyCode"></label><input id="verifyCode" class="input" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6"></div><button id="verifyButton" class="btn btn--gold" style="margin-top:18px" type="submit"></button> <button id="resendButton" class="btn btn--ghost" style="margin-top:18px" type="button"></button></form><p id="verifyMessage" role="status" style="margin-top:18px"></p><a id="verifyLogin" class="btn btn--ghost" style="margin-top:18px" href="manage-booking.html"></a></section></main><footer id="ftr"></footer>
+<script src="js/images.js"></script><script src="js/rates.js"></script><script src="js/data.js"></script><script src="js/utils.js"></script><script src="js/storage.js"></script><script src="js/contact.js"></script><script src="js/i18n.js"></script><script src="js/api-map.js"></script><script src="js/api.js"></script><script src="js/catalog-sync.js"></script><script src="js/app.js"></script>
+<script>
+(function(){
+  'use strict';
+  App.boot({active:'my kas',noWelcome:true});
+  var vi=window.KAS_I18N && window.KAS_I18N.getLanguage()==='vi', busy=false;
+  var form=document.getElementById('verifyForm'),button=document.getElementById('verifyButton'),resend=document.getElementById('resendButton'),message=document.getElementById('verifyMessage');
+  var emailInput=document.getElementById('verifyEmail'),codeInput=document.getElementById('verifyCode');
+  document.getElementById('verifyTitle').textContent=vi?'Xác thực email':'Verify your email';
+  document.getElementById('verifyIntro').textContent=vi?'Nhập email đã đăng ký và mã gồm 6 chữ số trong thư xác thực. Mã có hiệu lực 30 phút và chỉ dùng được một lần.':'Enter your registered email and the six-digit code from the verification message. The code expires in 30 minutes and can only be used once.';
+  document.getElementById('verifyCodeLabel').textContent=vi?'Mã xác thực':'Verification code';
+  button.textContent=vi?'Xác thực email':'Verify email';
+  resend.textContent=vi?'Gửi lại mã':'Resend code';
+  document.getElementById('verifyLogin').textContent=vi?'Đăng nhập':'Sign in';
+  function setBusy(value){busy=value;button.disabled=value;resend.disabled=value;}
+  function email(){return emailInput.value.trim().toLowerCase();}
+  codeInput.addEventListener('input',function(){codeInput.value=codeInput.value.replace(/\D/g,'').slice(0,6);});
+  form.onsubmit=function(event){
+    event.preventDefault();if(busy)return;
+    var code=codeInput.value.trim();
+    if(!U.isEmail(email())||!/^\d{6}$/.test(code)){message.textContent=vi?'Vui lòng nhập email hợp lệ và mã gồm 6 chữ số.':'Enter a valid email and the six-digit code.';return;}
+    setBusy(true);message.textContent='';
+    KAS_API.verifyEmail(email(),code).then(function(){
+      form.hidden=true;message.textContent=vi?'Email đã được xác thực. Bạn có thể đăng nhập.':'Email verified. You can now sign in.';
+    }).catch(function(error){
+      message.textContent=error.status===400?(vi?'Mã không đúng, đã hết hạn hoặc đã được sử dụng. Kiểm tra lại hoặc gửi lại mã.':'The code is incorrect, expired or already used. Check it or resend a code.'):error.message;
+    }).finally(function(){setBusy(false);});
+  };
+  resend.onclick=function(){
+    if(busy)return;
+    if(!U.isEmail(email())){message.textContent=vi?'Nhập email hợp lệ trước khi gửi lại.':'Enter a valid email first.';return;}
+    setBusy(true);message.textContent='';
+    KAS_API.resendVerification(email()).then(function(){
+      message.textContent=vi?'Nếu tài khoản chưa xác thực, mã sẽ được gửi đến email. Mã có hiệu lực 30 phút; thử gửi lại sau 1 phút.':'If the account is unverified, a code will be sent. It expires in 30 minutes; wait one minute before retrying.';
+    }).catch(function(error){message.textContent=error.message;}).finally(function(){setBusy(false);});
+  };
+})();
+</script></body></html>

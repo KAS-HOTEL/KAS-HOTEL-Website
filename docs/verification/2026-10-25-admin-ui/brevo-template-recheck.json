@@ -1,0 +1,110 @@
+[
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_WELCOME_EN",
+    "id": 4,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_WELCOME_VI",
+    "id": 5,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_TIER_UPGRADE_EN",
+    "id": 6,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_TIER_UPGRADE_VI",
+    "id": 7,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_EN",
+    "id": 8,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_MEMBER_EMAIL_VERIFICATION_VI",
+    "id": 9,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_EN",
+    "id": 10,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_REQUEST_RECEIVED_VI",
+    "id": 11,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_EN",
+    "id": 12,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CONFIRMED_VI",
+    "id": 13,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_EN",
+    "id": 14,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_CANCELLED_VI",
+    "id": 15,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_STAY_COMPLETED_EN",
+    "id": 16,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_STAY_COMPLETED_VI",
+    "id": 17,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_EN",
+    "id": 18,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_ALTERNATIVE_STAY_SUGGESTION_VI",
+    "id": 19,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_EN",
+    "id": 20,
+    "active": true,
+    "status": 200
+  },
+  {
+    "config": "BREVO_TEMPLATE_BOOKING_AVAILABILITY_PAYMENT_VI",
+    "id": 21,
+    "active": true,
+    "status": 200
+  }
+]

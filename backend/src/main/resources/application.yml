@@ -1,0 +1,223 @@
+# =============================================================================
+# KAS Hotel Platform — base configuration
+# =============================================================================
+# Production-oriented defaults. Contains NO credentials and NO business values.
+#
+# Two rules govern this file:
+#
+#   1. No secret is ever written here. Credentials arrive as environment
+#      variables and have no default, so a missing one stops startup with a
+#      named placeholder instead of silently connecting somewhere unintended.
+#
+#   2. No business value is ever written here. Rates, policies, SLAs, buffers,
+#      hold durations and thresholds live in `system_setting` and are read
+#      through SystemSettingService, which refuses to default them (doc 51 §6).
+#
+# See application.example.yml for the environment variables to set.
+# =============================================================================
+
+spring:
+  application:
+    name: kas-backend
+
+  datasource:
+    # No defaults. An unset variable fails startup loudly and by name.
+    url: ${KAS_DB_URL}
+    username: ${KAS_DB_USERNAME}
+    password: ${KAS_DB_PASSWORD}
+    hikari:
+      pool-name: kas-pool
+      maximum-pool-size: 10
+      # Every pooled connection resolves unqualified names in `kas`, never `public`.
+      connection-init-sql: SET search_path TO kas
+
+  flyway:
+    # ---------------------------------------------------------------------
+    # Flyway is the single source of migration truth for schema `kas`.
+    #
+    # Schema `kas` was applied by psql in Phase 7.2. Its history was adopted
+    # into Flyway on 2026-08-15 (Option C, docs/kas/89 §6): one row per
+    # migration, each carrying Flyway's own checksum, with no BASELINE row.
+    # V1-V21 are therefore fully checksum-validated on every startup.
+    #
+    # baseline-on-migrate stays FALSE permanently. It is not needed — the
+    # history exists — and leaving it false means a missing or damaged
+    # history fails loudly instead of being silently re-baselined.
+    #
+    # On a checksum mismatch: STOP. No repair, no migration edit, no reset.
+    # ---------------------------------------------------------------------
+    enabled: true
+    baseline-on-migrate: false
+    validate-on-migrate: true
+    # `flyway:clean` can never run, in any environment, by configuration.
+    clean-disabled: true
+    out-of-order: false
+    schemas: kas
+    default-schema: kas
+    locations: classpath:db/migration
+
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: true
+
+  mvc:
+    # The error contract is doc 58 §2 ({code, message, details[], correlationId}),
+    # not RFC 7807. ApiError is the only error shape the API emits.
+    problemdetails:
+      enabled: false
+
+# =============================================================================
+# Authentication — doc 59 §8, doc 06 §5.2-5.3
+# =============================================================================
+# The lifetimes below are NOT invented. Doc 59 §8 requires "short access token +
+# rotating refresh" without numbers; doc 06 §5.3 supplies them:
+#
+#   PROPOSED lifetimes: customer access 15 min / refresh 30 days;
+#                       staff access 15 min / refresh 12 h
+#
+# They remain marked PROPOSED upstream and should be confirmed before launch.
+# They live here rather than in code so confirming them is a config change.
+#
+# signing-secret has NO usable default. Unset, the application still starts and
+# serves public content, but readiness reports DOWN naming the property and every
+# login fails with 422 CONFIG_MISSING. It is never logged and never returned.
+# =============================================================================
+kas:
+  rate-limit:
+    # Per client address, per window (web/RateLimitFilter). In memory, per instance.
+    enabled: ${KAS_RATE_LIMIT_ENABLED:true}
+    window: PT1M
+    login: 20
+    register: 5
+    account-email: 10
+    booking: 10
+    receipt: 30
+  health:
+    # Readiness accepts only this database / role (defaults: kas_web_dev, kas_web_app;
+    # kas_web_test under the web-test profile). Set both for a differently named database.
+    expected-database: ${KAS_EXPECTED_DB_NAME:}
+    expected-role: ${KAS_EXPECTED_DB_ROLE:}
+  email:
+    # Delivery is Brevo only. Brevo templates: BREVO_TEMPLATE_{KEY}_{VI|EN} ids; a key
+    # with no id is rendered from resources/email-templates.
+    # Empty sends to everyone unless require-allowlist is on. Entries are full
+    # addresses or @domain, comma separated.
+    allowed-recipients: ${KAS_EMAIL_ALLOWED_RECIPIENTS:}
+    require-allowlist: ${KAS_EMAIL_REQUIRE_ALLOWLIST:false}
+    outbox:
+      encryption-key: ${KAS_EMAIL_OUTBOX_ENCRYPTION_KEY:}
+      enabled: ${KAS_EMAIL_OUTBOX_ENABLED:true}
+      # Eight attempts span about an hour, which outlasts a short provider outage.
+      max-attempts: ${KAS_EMAIL_OUTBOX_MAX_ATTEMPTS:8}
+      batch-size: ${KAS_EMAIL_OUTBOX_BATCH_SIZE:20}
+      poll-interval: ${KAS_EMAIL_OUTBOX_POLL_INTERVAL:PT5S}
+  brevo:
+    api-key: ${BREVO_API_KEY:${KAS_BREVO_API_KEY:}}
+    sender-email: ${BREVO_SENDER_EMAIL:${KAS_BREVO_SENDER_EMAIL:}}
+    sender-name: ${BREVO_SENDER_NAME:${KAS_BREVO_SENDER_NAME:KAS Hotel Collection}}
+  booking:
+    action-base-url: ${KAS_BOOKING_ACTION_BASE_URL:http://127.0.0.1:8080}
+    # Receives hotel notices for a property with no email of its own.
+    operations-email: ${KAS_BOOKING_OPERATIONS_EMAIL:}
+  auth:
+    customer-verification-base-url: ${KAS_CUSTOMER_VERIFICATION_BASE_URL:http://127.0.0.1:3000}
+    customer-site-base-url: ${KAS_CUSTOMER_SITE_BASE_URL:http://127.0.0.1:3010}
+  security:
+    access-token-ttl: PT15M
+    staff-refresh-ttl: PT12H
+    customer-refresh-ttl: P30D
+    cookie-secure: true
+    signing-secret: ${KAS_JWT_SIGNING_SECRET:}
+    # Owner decision 2026-10-24 (doc 154; closes doc 90 §5.4 R3 per account):
+    # 5 consecutive wrong passwords lock the account for 15 minutes. While
+    # locked, even the right password is refused and attempts do not extend it.
+    lockout-max-failures: 5
+    lockout-duration: PT15M
+
+  # Browser origins allowed to call /api/v1 cross-origin with cookies (comma separated,
+  # exact scheme://host[:port], no "*": credentials are on). The website and the console
+  # call the API same-origin through their own proxies, so production normally needs only
+  # its own hosts here. Empty = no cross-origin access. The dev profile adds local ports.
+  cors:
+    allowed-origins: ${KAS_CORS_ALLOWED_ORIGINS:}
+
+  # ---------------------------------------------------------------------------
+  # Media — doc 62. Every value is environment-specific and every fallback is
+  # empty, deliberately: an unset bucket means the R2 adapter is not created at
+  # all, so uploads fail loudly naming the property rather than silently writing
+  # somewhere unintended. A non-empty default here could only ever be wrong.
+  #
+  # delivery-base-url is the public image origin — a CDN or bucket domain the
+  # deployment owns. It is NOT the R2 S3 endpoint, which is credentialed and
+  # never shown to a guest. Unset keeps the pre-existing behaviour: delivery URL
+  # resolution raises CONFIG_MISSING and readiness reports DOWN.
+  # ---------------------------------------------------------------------------
+  media:
+    delivery-base-url: ${KAS_MEDIA_DELIVERY_BASE_URL:}
+    # Images on a disk of the backend's own (LocalDiskStorageProvider) while no R2 bucket is
+    # configured — production points this at the Render persistent disk (render.yaml).
+    # Empty keeps it off; a configured KAS_R2_BUCKET always wins.
+    local:
+      dir: ${KAS_MEDIA_LOCAL_DIR:}
+    r2:
+      endpoint: ${KAS_R2_ENDPOINT:}
+      access-key-id: ${KAS_R2_ACCESS_KEY_ID:}
+      secret-access-key: ${KAS_R2_SECRET_ACCESS_KEY:}
+      bucket: ${KAS_R2_BUCKET:}
+      presign-ttl: ${KAS_R2_PRESIGN_TTL:PT10M}
+
+server:
+  # Render and other managed platforms provide PORT; local runs keep Spring's
+  # conventional 8080. The service listens on the platform-assigned port.
+  port: ${PORT:8080}
+  error:
+    # Belt and braces behind GlobalExceptionHandler: even the container's own
+    # error path must not emit a message, stack trace or exception class.
+    include-message: never
+    include-stacktrace: never
+    include-binding-errors: never
+    include-exception: false
+    whitelabel:
+      enabled: false
+  servlet:
+    session:
+      cookie:
+        # Doc 59 §8: HttpOnly, Secure, SameSite. Never localStorage.
+        http-only: true
+        secure: true
+        same-site: lax
+  forward-headers-strategy: framework
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # Health only. env, beans, configprops, loggers, heapdump and threaddump
+        # stay unexposed; several of them would disclose configuration values.
+        include: health
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+      group:
+        readiness:
+          # Readiness means "can serve traffic", so it must include the database,
+          # the identity check that proves it is the RIGHT database, and whether
+          # this instance can actually authenticate anyone. An instance with no
+          # signing secret serves public content perfectly while every login
+          # fails — healthy-looking and useless, which is exactly what readiness
+          # exists to keep out of a load balancer.
+          include: readinessState, db, kasSchema, kasAuthentication
+        liveness:
+          include: livenessState
+
+logging:
+  structured:
+    format:
+      # ECS JSON. Each line carries correlationId from the MDC.
+      console: ecs
+  level:
+    root: INFO
+    com.kas.platform: INFO

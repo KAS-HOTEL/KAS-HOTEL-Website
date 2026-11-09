@@ -1,0 +1,13 @@
+/* "Chờ xác nhận trả phòng" panel on the reservation workspace (V59). Console tokens only. */
+.panel { display: grid; gap: var(--space-2); padding: var(--space-4); border: var(--border-width-subtle) solid var(--warning-500); border-radius: var(--radius-lg); background: var(--warning-100); font-family: var(--font-text); }
+.panel h2 { margin: 0; display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display); font-size: var(--text-heading-sm); font-weight: 500; color: var(--text-primary); }
+.count { display: inline-grid; place-items: center; min-width: 24px; height: 24px; padding: 0 6px; border-radius: var(--radius-full); background: var(--warning-500); color: var(--surface); font-family: var(--font-text); font-size: var(--text-caption); font-weight: 700; }
+.hint { margin: 0; font-size: var(--text-caption); color: var(--text-secondary); }
+.list { display: grid; gap: var(--space-1, 4px); margin: 0; padding: 0; list-style: none; }
+.item { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); background: var(--surface); color: var(--text-primary); font-size: var(--text-body-sm); text-decoration: none; }
+.item:hover { box-shadow: inset 0 0 0 1px var(--accent-500); }
+.item:focus-visible { outline: 2px solid var(--border-focus); outline-offset: 2px; }
+.ref { font-weight: 700; font-variant-numeric: tabular-nums; }
+.meta { color: var(--text-muted); }
+.badge { margin-left: auto; padding: 2px 8px; border-radius: var(--radius-full); background: var(--surface-sunken); font-size: 11px; font-weight: 600; color: var(--text-secondary); }
+.badge[data-source='GUEST'] { background: var(--success-100); color: var(--success-500); }
