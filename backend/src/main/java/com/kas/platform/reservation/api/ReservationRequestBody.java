@@ -64,7 +64,23 @@ public record ReservationRequestBody(
         String offerCode,
         String acceptedTermsVersion,
         Boolean marketingConsent,
-        String locale) {
+        String locale,
+        /** KAS points to spend (1 point = 1 VND); only for a signed-in member (2026-11-10). */
+        @jakarta.validation.constraints.PositiveOrZero
+        Long pointsToUse) {
+
+    /** The pre-2026-11-10 shape, without points. */
+    public ReservationRequestBody(String propertySlug, LocalDate checkIn, LocalDate checkOut, int adults,
+                                  int children, List<Integer> childAges, List<Line> lines, Guest guest,
+                                  String specialRequests, String discoveryChannel, String offerCode,
+                                  String acceptedTermsVersion, Boolean marketingConsent, String locale) {
+        this(propertySlug, checkIn, checkOut, adults, children, childAges, lines, guest, specialRequests,
+                discoveryChannel, offerCode, acceptedTermsVersion, marketingConsent, locale, null);
+    }
+
+    public long pointsOrZero() {
+        return pointsToUse == null ? 0 : pointsToUse;
+    }
 
     /** One requested room type and how many of it. */
     public record Line(

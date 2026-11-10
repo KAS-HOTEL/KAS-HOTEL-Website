@@ -129,7 +129,12 @@
     stays: function (locale) { return request('/api/v1/me/stays?locale=' + encodeURIComponent(locale || 'en')); },
     /* The guest asks to check out; SUPER_ADMIN confirms (membership tier review, V59). */
     requestCheckout: function (reference) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/check-out-request', { method: 'POST' }); },
-    requestCancellation: function (reference) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel', { method: 'POST' }); },
+    /* What cancelling now would mean (deadline, fee, refund), decided by the backend. */
+    previewCancellation: function (reference) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel/preview'); },
+    /* expectedFeeMinor: the fee the guest was shown; a changed fee is refused, never charged. */
+    requestCancellation: function (reference, expectedFeeMinor) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel', { method: 'POST', body: expectedFeeMinor == null ? {} : { expectedFeeMinor: expectedFeeMinor } }); },
+    /* A guest without an account: a one-time cancellation link to the booking's own email. */
+    requestCancellationLink: function (reference, email) { return request('/api/v1/public/cancellations/link', { method: 'POST', body: { reference: reference, email: email } }); },
     decideCancellation: function (reference, accept) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel/decision', { method: 'POST', body: { accept: !!accept } }); },
     submitReservation: function (body, key, locale) {
       return request('/api/v1/public/reservations/requests?locale=' + encodeURIComponent(locale || 'en'), {

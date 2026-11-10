@@ -37,10 +37,17 @@ public class CashbackExpiryScheduler {
                        AND NOT EXISTS (SELECT 1 FROM cashback_ledger x
                                         WHERE x.source_entry_id = e.id AND x.entry_type = 'EXPIRY')
                 ), used_points AS (
-                    SELECT customer_id, SUM(points_amount) AS total_used
-                      FROM cashback_ledger
-                     WHERE direction = 'DEBIT' AND entry_type <> 'EXPIRY'
-                     GROUP BY customer_id
+                    -- Points spent, less points given back by a REVERSAL of a REDEEM (a paid booking
+                    -- cancelled, 2026-11-10): returned points go back to their own lots and keep
+                    -- their original expiry, as the member policy states.
+                    SELECT l.customer_id,
+                           SUM(CASE WHEN l.direction = 'DEBIT' AND l.entry_type <> 'EXPIRY' THEN l.points_amount
+                                    WHEN l.entry_type = 'REVERSAL' AND l.direction = 'CREDIT' AND src.entry_type = 'REDEEM'
+                                         THEN -l.points_amount
+                                    ELSE 0 END) AS total_used
+                      FROM cashback_ledger l
+                      LEFT JOIN cashback_ledger src ON src.id = l.source_entry_id
+                     GROUP BY l.customer_id
                 ), due AS (
                     SELECT e.id AS earn_id, e.customer_id, e.expires_at, e.created_at,
                            GREATEST(0, e.points_amount -

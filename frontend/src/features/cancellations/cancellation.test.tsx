@@ -3,11 +3,11 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { cancellationFeePreview } from '@/lib/domain/manualBooking';
-const calls = vi.hoisted(() => ({ list: vi.fn(), quote: vi.fn() }));
+const calls = vi.hoisted(() => ({ list: vi.fn(), quote: vi.fn(), refunds: vi.fn(), recordRefund: vi.fn(), rejectRefund: vi.fn() }));
 vi.mock('@/lib/api/endpoints/cancellations', () => ({ cancellationsApi: calls }));
 import { CancellationQueue } from './CancellationQueue';
 const row = { requestId: 'request-1', reference: 'KAS-FEE', propertySlug: 'hotel-a', propertyName: 'Hotel A', guestName: 'Guest', checkIn: '2027-01-01', checkOut: '2027-01-03', requestedAt: '', currency: 'VND', totalMinor: 1500000 };
-beforeEach(() => { vi.resetAllMocks(); calls.list.mockResolvedValue([row]); calls.quote.mockResolvedValue(undefined); });
+beforeEach(() => { vi.resetAllMocks(); calls.list.mockResolvedValue([row]); calls.quote.mockResolvedValue(undefined); calls.refunds.mockResolvedValue([]); });
 afterEach(cleanup);
 
 it('computes exact percentage rounding and validates currency precision', () => {

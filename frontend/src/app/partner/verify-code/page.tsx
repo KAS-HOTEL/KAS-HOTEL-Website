@@ -6,7 +6,7 @@ import { OtpBoxes } from '@/features/auth/OtpBoxes';
 import { Button } from '@/ui/primitives';
 import styles from '@/features/auth/RegisterForm.module.css';
 
-export const metadata = { title: 'KAS Partner — Xác thực mã', robots: { index: false } };
+export const metadata = { title: 'KAS Admin — Xác thực mã', robots: { index: false } };
 
 /**
  * Entering a verification code.
@@ -42,7 +42,7 @@ export default function PartnerVerifyCodePage() {
       <FlowUnavailable action="Xác thực mã qua email" />
 
       <AuthFooter>
-        <Link href="/partner/login">← Quay lại đăng nhập</Link>
+        <Link href="/admin/login">← Quay lại đăng nhập</Link>
       </AuthFooter>
     </AuthShell>
   );

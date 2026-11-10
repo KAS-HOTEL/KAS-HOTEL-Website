@@ -52,7 +52,9 @@ class QuoteIT extends SecurityIntegrationTest {
                 // Doc 56 §3.2 — Σ over nights × quantity. Two nights, one room.
                 .andExpect(jsonPath("$.lines[0].subtotal.amountMinor").value(RATE_A * 2))
                 .andExpect(jsonPath("$.roomsSubtotal.amountMinor").value(RATE_A * 2))
-                .andExpect(jsonPath("$.total.amountMinor").value(RATE_A * 2))
+                .andExpect(jsonPath("$.total.amountMinor").value(Vat.with(RATE_A * 2)))
+                .andExpect(jsonPath("$.taxes[0].type").value("VAT"))
+                .andExpect(jsonPath("$.taxes[0].amount.amountMinor").value(Vat.of(RATE_A * 2)))
                 .andExpect(jsonPath("$.currency").value("VND"))
                 // VND is zero-decimal — doc 56 §6.
                 .andExpect(jsonPath("$.total.exponent").value(0))
@@ -69,7 +71,7 @@ class QuoteIT extends SecurityIntegrationTest {
                 // 3 rooms x 2 nights. The third night — check-out — is not occupied and not
                 // charged, doc 55 §2.
                 .andExpect(jsonPath("$.lines[0].subtotal.amountMinor").value(RATE_A * 2 * 3))
-                .andExpect(jsonPath("$.total.amountMinor").value(RATE_A * 2 * 3));
+                .andExpect(jsonPath("$.total.amountMinor").value(Vat.with(RATE_A * 2 * 3)));
     }
 
     @Test
@@ -86,7 +88,7 @@ class QuoteIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$.lines[0].subtotal.amountMinor").value(RATE_A * 2 * 2))
                 .andExpect(jsonPath("$.lines[1].subtotal.amountMinor").value(RATE_B * 2 * 1))
                 .andExpect(jsonPath("$.roomsSubtotal.amountMinor").value(expected))
-                .andExpect(jsonPath("$.total.amountMinor").value(expected));
+                .andExpect(jsonPath("$.total.amountMinor").value(Vat.with(expected)));
     }
 
     @Test
@@ -165,7 +167,8 @@ class QuoteIT extends SecurityIntegrationTest {
                 "partnerId", "roomTypeId", "propertyId", "total\":{\"amountMinor\":null",
                 "occupied", "reserved", "maintenance", "otherBlocks", "bufferTarget",
                 "directCommitted", "otaCommitted", "inventoryDayId", "availableDirect",
-                "lifecycleState", "tax", "serviceCharge")) {
+                "lifecycleState", "serviceCharge")) {
+            // "tax" left this list on 2026-11-09: VAT is now part of the quote by owner decision.
             assertThat(json).doesNotContain(denied);
         }
         // No raw database identifier either. The guest's own propertySlug is excluded from the
@@ -245,15 +248,15 @@ class QuoteIT extends SecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("an offer code is refused, never silently ignored — config B23 is OPEN")
-    void offerCodeIsRefused() throws Exception {
+    @DisplayName("an unknown offer code is refused, never silently ignored")
+    void unknownOfferCodeIsRefused() throws Exception {
         Fixture f = property(1);
 
         mockMvc.perform(post(QUOTE).with(csrf()).contentType(MediaType.APPLICATION_JSON)
                         .content(body(f, 2, 0, List.of(), "TET2027", line(f.slugs.get(0), 1))))
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(jsonPath("$.code").value("CONFIG_MISSING"))
-                .andExpect(jsonPath("$.details[0].code").value("VOUCHER_UNSUPPORTED"));
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
+                .andExpect(jsonPath("$.details[0].code").value("VOUCHER_NOT_FOUND"));
     }
 
     // ---------------------------------------------------------- atomic refusals

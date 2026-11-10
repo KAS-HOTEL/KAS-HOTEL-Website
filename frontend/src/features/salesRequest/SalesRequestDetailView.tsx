@@ -11,6 +11,7 @@ import {
   salesStatusTone,
   TERMINAL_SALES_STATUSES,
   type SalesRequestDetail,
+  type SalesRequestPrice,
 } from '@/lib/domain/salesRequest';
 // Three label helpers, not a dependency on the reservation workspace: they turn
 // a contact-channel token, a country code and an absent field into words, and
@@ -136,6 +137,12 @@ export function SalesRequestDetailView({
             </dl>
           </Card>
 
+          {request.price ? (
+            <Card title="Chi tiết giá">
+              <PriceBreakdown price={request.price} nights={summary.nights} rooms={summary.rooms} />
+            </Card>
+          ) : null}
+
           <Card title="Phòng đã yêu cầu">
             {/* The same section the reservation workspace renders, so a line
                 means the same thing on both screens. */}
@@ -254,9 +261,8 @@ export function SalesRequestDetailView({
               <div className={styles.facts}>
                 {emailDeliveries.map((delivery) => (
                   <p key={delivery.eventKey}>
-                    {emailEventLabel(delivery.eventKey)} · <strong>{emailStatusLabel(delivery.status)}</strong>
-                    {delivery.status === 'RETRY' ? ` · lần thử ${delivery.attempts}` : ''}
-                    {emailFailureNote(delivery)}
+                    {emailEventLabel(delivery.eventKey)} · <strong>{emailDeliveryState(delivery).status}</strong>
+                    {emailDeliveryState(delivery).detail ? ` · ${emailDeliveryState(delivery).detail}` : ''}
                     {delivery.sentAt ? ` · ${formatBusinessDateTime(delivery.sentAt)}` : ''}
                   </p>
                 ))}
@@ -336,22 +342,31 @@ function historyReason(reason: string | null | undefined): string | null {
   return /^[A-Z0-9_]+$/.test(reason) ? null : reason;
 }
 
-function emailStatusLabel(status: EmailDeliveryStatus['status']): string {
-  switch (status) {
-    case 'PENDING': return 'Đang chờ gửi';
-    case 'PROCESSING': return 'Đang gửi';
-    case 'RETRY': return 'Gửi lỗi, đang thử lại';
-    case 'SENT': return 'Resend đã nhận';
-    case 'FAILED': return 'Gửi thất bại';
+/**
+ * One email's state in plain words, with the reason that matters to staff (2026-11-10).
+ *
+ * A delivery held because the recipient is outside the test allowlist was never an error and is
+ * never retried: it says so, instead of "sending failed, retrying · attempt 0". "Đã gửi đi" means
+ * the email provider accepted the message; it does not prove it reached the inbox.
+ */
+export function emailDeliveryState(delivery: EmailDeliveryStatus): { status: string; detail: string } {
+  if (delivery.lastErrorCode === 'RECIPIENT_NOT_ALLOWED') {
+    return { status: 'Không gửi (chế độ thử nghiệm)', detail: 'người nhận không nằm trong danh sách được phép nhận email' };
   }
-}
-
-/** The reason in words, because a hotel with no address needs a different fix from a provider refusal. */
-function emailFailureNote(delivery: EmailDeliveryStatus): string {
-  if (delivery.lastErrorCode === 'HOTEL_EMAIL_MISSING') return ' · khách sạn chưa có email';
-  if (delivery.lastErrorCode === 'RECIPIENT_NOT_ALLOWED') return ' · người nhận ngoài danh sách thử nghiệm';
-  if (delivery.status === 'FAILED' || delivery.status === 'RETRY') return ' · cần kiểm tra cấu hình email';
-  return '';
+  if (delivery.lastErrorCode === 'HOTEL_EMAIL_MISSING') {
+    return { status: 'Không gửi được', detail: 'khách sạn chưa có email' };
+  }
+  switch (delivery.status) {
+    case 'PENDING': return { status: 'Đang chờ gửi', detail: '' };
+    case 'PROCESSING': return { status: 'Đang gửi', detail: '' };
+    case 'SENT': return { status: 'Đã gửi đi', detail: '' };
+    case 'RETRY':
+      return {
+        status: 'Gửi lỗi, sẽ thử lại',
+        detail: delivery.attempts > 0 ? `đã thử ${delivery.attempts} lần · cần kiểm tra cấu hình email` : 'cần kiểm tra cấu hình email',
+      };
+    case 'FAILED': return { status: 'Gửi thất bại', detail: 'cần kiểm tra cấu hình email' };
+  }
 }
 
 function emailEventLabel(eventKey: string): string {
@@ -363,6 +378,13 @@ function emailEventLabel(eventKey: string): string {
   if (eventKey.startsWith('booking-payment-')) return 'Thông tin thanh toán';
   if (eventKey.startsWith('booking-confirmed-')) return 'Xác nhận đặt phòng';
   if (eventKey.startsWith('alternative-offer-')) return 'Đề xuất phòng thay thế';
+  if (eventKey.startsWith('booking-guest-')) return 'Xác nhận đã nhận yêu cầu cho khách';
+  if (eventKey.startsWith('guest-cancel-link-')) return 'Liên kết huỷ cho khách';
+  if (eventKey.startsWith('cancellation-fee-')) return 'Báo phí huỷ cho khách';
+  if (eventKey.startsWith('cancellation-review-')) return 'Báo Super Admin xem xét huỷ';
+  if (eventKey.startsWith('refund-requested-')) return 'Báo Super Admin cần hoàn tiền';
+  if (eventKey.startsWith('refund-completed-')) return 'Báo khách đã hoàn tiền';
+  if (eventKey.startsWith('refund-rejected-')) return 'Báo khách không hoàn tiền';
   return 'Cập nhật yêu cầu cho khách';
 }
 
@@ -383,6 +405,95 @@ const TERMINAL = TERMINAL_SALES_STATUSES;
 /** Contact logging remains available before a hotel issues its payment request. */
 
 
+
+const TAX_NAME: Record<string, string> = {
+  VAT: 'Thuế GTGT (VAT)',
+  SERVICE_CHARGE: 'Phí dịch vụ',
+  CITY_TAX: 'Thuế địa phương',
+  OTHER: 'Phí khác',
+  TAX: 'Thuế',
+};
+
+function percent(value: number | null): string {
+  return value === null ? '' : `${String(Math.round(Number(value) * 10) / 10).replace('.', ',')}%`;
+}
+
+/**
+ * The price the guest was shown and will be asked to pay, line by line:
+ * rooms − voucher + taxes = total. Every figure is the reservation's own.
+ */
+function PriceBreakdown({
+  price,
+  nights,
+  rooms,
+}: {
+  readonly price: SalesRequestPrice;
+  readonly nights: number;
+  readonly rooms: number;
+}) {
+  const discount = price.discount?.amountMinor ?? 0;
+  return (
+    <>
+      <dl className={styles.money}>
+        <div className={styles.moneyRow}>
+          <dt>
+            Tiền phòng
+            <span className={styles.moneySub}>{`${nights} đêm × ${rooms} phòng`}</span>
+          </dt>
+          <dd>{price.roomsSubtotal ? formatMoney(price.roomsSubtotal) : '—'}</dd>
+        </div>
+        {price.voucherCode ? (
+          <div className={`${styles.moneyRow} ${styles.moneyDiscount}`}>
+            <dt>
+              {`Voucher ${price.voucherCode}`}
+              {price.voucherPercent !== null ? ` (−${percent(price.voucherPercent)})` : ''}
+              {price.voucherName ? <span className={styles.moneySub}>{price.voucherName}</span> : null}
+            </dt>
+            <dd>{price.discount && discount > 0 ? `−${formatMoney(price.discount)}` : '0 ₫'}</dd>
+          </div>
+        ) : null}
+        {(price.memberDiscount?.amountMinor ?? 0) > 0 && price.memberDiscount ? (
+          <div className={`${styles.moneyRow} ${styles.moneyDiscount}`}>
+            <dt>
+              {`Ưu đãi thành viên${price.memberDiscountPercent ? ` (−${percent(price.memberDiscountPercent)})` : ''}`}
+              {price.memberTier ? <span className={styles.moneySub}>{`Hạng ${price.memberTier} lúc đặt`}</span> : null}
+            </dt>
+            <dd>{`−${formatMoney(price.memberDiscount)}`}</dd>
+          </div>
+        ) : null}
+        {(discount > 0 || (price.memberDiscount?.amountMinor ?? 0) > 0) && price.roomsAfterDiscount ? (
+          <div className={`${styles.moneyRow} ${styles.moneySubtotal}`}>
+            <dt>Tiền phòng sau ưu đãi</dt>
+            <dd>{formatMoney(price.roomsAfterDiscount)}</dd>
+          </div>
+        ) : null}
+        {price.taxes.map((tax, i) => (
+          <div className={styles.moneyRow} key={`${tax.type}-${i}`}>
+            <dt>
+              {`${TAX_NAME[tax.type] ?? tax.type}${tax.ratePercent !== null ? ` ${percent(tax.ratePercent)}` : ''}`}
+              {tax.inclusive ? ' · đã gồm trong giá' : ''}
+            </dt>
+            <dd>{tax.amount ? formatMoney(tax.amount) : '—'}</dd>
+          </div>
+        ))}
+        {(price.pointsUsed ?? 0) > 0 ? (
+          <div className={`${styles.moneyRow} ${styles.moneyDiscount}`}>
+            <dt>Dùng điểm KAS<span className={styles.moneySub}>{`${(price.pointsUsed ?? 0).toLocaleString('vi-VN')} điểm`}</span></dt>
+            <dd>{`−${formatMoney({ amountMinor: price.pointsUsed ?? 0, currency: 'VND', exponent: 0 })}`}</dd>
+          </div>
+        ) : null}
+        <div className={styles.moneyTotalRow}>
+          <dt>Tổng khách cần thanh toán</dt>
+          <dd>{price.total ? formatMoney(price.total) : '—'}</dd>
+        </div>
+      </dl>
+      <p className={styles.note}>
+        Số liệu lưu lúc khách gửi yêu cầu: tiền phòng − voucher + thuế = tổng. Email thanh toán và đối
+        soát chuyển khoản dùng số tổng này.
+      </p>
+    </>
+  );
+}
 
 function Fact({
   label,

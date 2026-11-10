@@ -120,6 +120,10 @@ kas:
     action-base-url: ${KAS_BOOKING_ACTION_BASE_URL:http://127.0.0.1:8080}
     # Receives hotel notices for a property with no email of its own.
     operations-email: ${KAS_BOOKING_OPERATIONS_EMAIL:}
+    # Payment deadline after the hotel approves (owner 2026-11-10, V66): 24h, or 2h when the
+    # stay starts that day, never past the check-in time. Past it the booking expires.
+    payment-window: ${KAS_BOOKING_PAYMENT_WINDOW:PT24H}
+    same-day-payment-window: ${KAS_BOOKING_SAME_DAY_PAYMENT_WINDOW:PT2H}
   auth:
     customer-verification-base-url: ${KAS_CUSTOMER_VERIFICATION_BASE_URL:http://127.0.0.1:3000}
     customer-site-base-url: ${KAS_CUSTOMER_SITE_BASE_URL:http://127.0.0.1:3010}
@@ -153,6 +157,20 @@ kas:
   # never shown to a guest. Unset keeps the pre-existing behaviour: delivery URL
   # resolution raises CONFIG_MISSING and readiness reports DOWN.
   # ---------------------------------------------------------------------------
+  # ---------------------------------------------------------------------------
+  # SePay payment gateway (cổng thanh toán). Off while merchant-id or secret-key is
+  # empty: guests then see only the bank QR. environment is "sandbox" or
+  # "production"; each has its own merchant id and secret key. A paid IPN is always
+  # checked against SePay's order API (merchant id + secret key) before it confirms a
+  # booking. ipn-secret-key (SePay's IPN tab, sent as X-Secret-Key) is optional: the
+  # sandbox does not send it; when set, an IPN carrying a different key is refused.
+  # ---------------------------------------------------------------------------
+  sepay:
+    environment: ${KAS_SEPAY_ENVIRONMENT:sandbox}
+    merchant-id: ${KAS_SEPAY_MERCHANT_ID:}
+    secret-key: ${KAS_SEPAY_SECRET_KEY:}
+    ipn-secret-key: ${KAS_SEPAY_IPN_SECRET_KEY:}
+
   media:
     delivery-base-url: ${KAS_MEDIA_DELIVERY_BASE_URL:}
     # Images on a disk of the backend's own (LocalDiskStorageProvider) while no R2 bucket is

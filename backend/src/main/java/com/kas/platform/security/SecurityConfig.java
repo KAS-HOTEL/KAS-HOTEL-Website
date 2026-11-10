@@ -79,10 +79,16 @@ public class SecurityConfig {
                                 "/api/v1/public/reservation-actions/*/confirm-payment",
                                 "/api/v1/public/reservation-actions/*/accept-alternative",
                                 "/api/v1/public/reservation-actions/*/reject-alternative",
+                                "/api/v1/public/reservation-actions/*/guest-cancel",
+                                // V66: the guest's signed SePay form, checked then forwarded to SePay.
+                                "/api/v1/public/reservation-actions/*/sepay",
                                 // Disk image store upload (LocalMediaController; absent when R2 is
                                 // configured). Its HMAC-signed URL is the authority, as an R2
                                 // pre-signed URL is.
-                                "/api/v1/public/local-media/upload"))
+                                "/api/v1/public/local-media/upload",
+                                // SePay's server-to-server IPN: no browser, no cookie; the
+                                // order is read back from SePay before anything is confirmed.
+                                "/api/v1/public/payments/sepay/ipn"))
                 .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class)
 
                 // Establishes the identity. Never refuses — the rules below do that.

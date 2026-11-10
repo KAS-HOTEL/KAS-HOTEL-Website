@@ -134,3 +134,63 @@ describe('detail view — manual payment workflow', () => {
     await waitFor(() => expect(declineApi).toHaveBeenCalledTimes(1));
   });
 });
+
+describe('detail view — price breakdown (2026-11-10)', () => {
+  const vnd = (amountMinor: number) => ({ amountMinor, currency: 'VND', exponent: 0 });
+
+  it('lists rooms, voucher, VAT and the total the guest pays', () => {
+    const request: SalesRequestDetail = {
+      ...detail('REQUESTED'),
+      price: {
+        roomsSubtotal: vnd(1_400_000),
+        voucherCode: 'KAS-FKRYTFKZ',
+        voucherName: 'TEST',
+        voucherPercent: 50,
+        discount: vnd(700_000),
+        roomsAfterDiscount: vnd(700_000),
+        taxes: [{ type: 'VAT', ratePercent: 8, amount: vnd(56_000), inclusive: false }],
+        total: vnd(756_000),
+      },
+    };
+    render(<SalesRequestDetailView request={request} now={NOW} />);
+
+    expect(screen.getByText('Chi tiết giá')).toBeTruthy();
+    expect(screen.getByText(/Voucher KAS-FKRYTFKZ \(−50%\)/)).toBeTruthy();
+    expect(screen.getByText('Tiền phòng sau ưu đãi')).toBeTruthy();
+    expect(screen.getByText('Thuế GTGT (VAT) 8%')).toBeTruthy();
+    expect(screen.getByText('Tổng khách cần thanh toán')).toBeTruthy();
+  });
+
+  it('shows no voucher rows when none was used, and no card from an older server', () => {
+    const withoutVoucher: SalesRequestDetail = {
+      ...detail('REQUESTED'),
+      price: {
+        roomsSubtotal: vnd(2_400_000), voucherCode: null, voucherName: null, voucherPercent: null,
+        discount: vnd(0), roomsAfterDiscount: vnd(2_400_000),
+        taxes: [{ type: 'VAT', ratePercent: 8, amount: vnd(192_000), inclusive: false }],
+        total: vnd(2_592_000),
+      },
+    };
+    const { unmount } = render(<SalesRequestDetailView request={withoutVoucher} now={NOW} />);
+    expect(screen.queryByText(/^Voucher /)).toBeNull();
+    expect(screen.queryByText('Tiền phòng sau ưu đãi')).toBeNull();
+    unmount();
+
+    render(<SalesRequestDetailView request={detail('REQUESTED')} now={NOW} />);
+    expect(screen.queryByText('Chi tiết giá')).toBeNull();
+  });
+});
+
+describe('detail view — email status wording (2026-11-10)', () => {
+  it('says a test-allowlist hold is not an error and shows no attempt count', async () => {
+    const { emailDeliveryState } = await import('./SalesRequestDetailView');
+    const held = emailDeliveryState({ eventKey: 'booking-guest-KAS1', status: 'RETRY', attempts: 0, nextAttemptAt: null, sentAt: null, lastErrorCode: 'RECIPIENT_NOT_ALLOWED' });
+    expect(held.status).toBe('Không gửi (chế độ thử nghiệm)');
+    expect(held.detail).not.toMatch(/thử lại|lần/);
+    const sent = emailDeliveryState({ eventKey: 'booking-hotel-KAS1', status: 'SENT', attempts: 1, nextAttemptAt: null, sentAt: '2026-11-10T06:32:00Z', lastErrorCode: null });
+    expect(sent.status).toBe('Đã gửi đi');
+    const retry = emailDeliveryState({ eventKey: 'x', status: 'RETRY', attempts: 2, nextAttemptAt: null, sentAt: null, lastErrorCode: 'PROVIDER_5XX' });
+    expect(retry.detail).toContain('đã thử 2 lần');
+    expect(emailDeliveryState({ eventKey: 'x', status: 'RETRY', attempts: 0, nextAttemptAt: null, sentAt: null, lastErrorCode: 'PROVIDER_5XX' }).detail).not.toContain('0');
+  });
+});

@@ -715,3 +715,77 @@
 }
 .moreActions[open] > summary { border-bottom: var(--border-width-subtle, 1px) solid var(--border-subtle); }
 .moreActions > .actions { padding: var(--space-4); }
+
+/*
+ * Price breakdown (2026-11-10): rooms, voucher, taxes and the total, label left and
+ * amount right, so staff can add the figures up at a glance. Same layout as the
+ * reservation workspace's amounts.
+ */
+.money {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.moneyRow,
+.moneyTotalRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.moneyRow dt {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body);
+  color: var(--text-secondary);
+}
+
+.moneyRow dd,
+.moneyTotalRow dd {
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.moneyRow dd {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--text-primary);
+}
+
+.moneySub {
+  display: block;
+  font-size: var(--text-caption, 0.75rem);
+  color: var(--text-tertiary, var(--text-secondary));
+}
+
+.moneyDiscount dd {
+  color: var(--status-success-text, #2f6b3a);
+}
+
+.moneySubtotal {
+  padding-top: var(--space-2);
+  border-top: var(--border-width-subtle) dashed var(--border-subtle);
+}
+
+.moneyTotalRow {
+  margin-top: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: var(--border-width-subtle) solid var(--border-subtle);
+}
+
+.moneyTotalRow dt {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.moneyTotalRow dd {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+  color: var(--text-primary);
+}

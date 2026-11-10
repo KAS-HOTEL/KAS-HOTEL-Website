@@ -9,7 +9,7 @@ import { Breadcrumb, ErrorState } from '@/ui/primitives';
 import styles from '@/features/property/Property.module.css';
 
 export const metadata: Metadata = {
-  title: 'Sửa loại phòng — KAS Partner',
+  title: 'Sửa loại phòng — KAS Admin',
 };
 
 /**

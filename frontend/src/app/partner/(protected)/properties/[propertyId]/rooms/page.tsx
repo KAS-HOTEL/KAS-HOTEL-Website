@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   // Constant, like every other property screen: a title built from the record
   // would differ between "absent" and "someone else's hotel" the moment either
   // resolved, and the browser tab is as good a side channel as the page body.
-  title: 'Loại phòng — KAS Partner',
+  title: 'Loại phòng — KAS Admin',
 };
 
 /**

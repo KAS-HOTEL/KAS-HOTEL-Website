@@ -33,8 +33,9 @@ describe('the two consoles', () => {
   it('keeps every SUPER_ADMIN-only screen out of the Admin menu', () => {
     const admin = hrefs(ADMIN_NAV);
     for (const href of ['/partner', '/partner/requests', '/partner/reservations', '/partner/cancellation-requests',
+      '/partner/unmatched-payments',
       '/partner/messages', '/admin/customers', '/admin/vouchers', '/partner/payment-account',
-      '/partner/pricing', '/partner/surcharges', '/admin/reviews']) {
+      '/partner/pricing', '/partner/surcharges', '/partner/cancellation-fees', '/admin/reviews']) {
       expect(admin).not.toContain(href);
     }
   });

@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 
 export const metadata = {
-  title: 'KAS Partner — Tạo tài khoản',
+  title: 'KAS Admin — Tạo tài khoản',
   robots: { index: false },
 };
 

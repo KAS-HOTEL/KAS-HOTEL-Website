@@ -11,8 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 /** State changes initiated through expiring, single-use email action links. */
@@ -21,17 +24,60 @@ public class ReservationEmailActionService {
     private final JdbcClient jdbc;
     private final ReservationEmailActionTokenService tokens;
     private final com.kas.platform.settings.SystemSettingService settings;
+    private final VoucherHoldService voucherHolds;
+    private final com.kas.platform.customer.LoyaltyPointsService loyaltyPoints;
+    private final Duration paymentWindow;
+    private final Duration sameDayPaymentWindow;
 
     public ReservationEmailActionService(JdbcClient jdbc, ReservationEmailActionTokenService tokens,
-                                         com.kas.platform.settings.SystemSettingService settings) {
+                                         com.kas.platform.settings.SystemSettingService settings,
+                                         VoucherHoldService voucherHolds,
+                                         com.kas.platform.customer.LoyaltyPointsService loyaltyPoints,
+                                         @org.springframework.beans.factory.annotation.Value("${kas.booking.payment-window:PT24H}")
+                                         Duration paymentWindow,
+                                         @org.springframework.beans.factory.annotation.Value("${kas.booking.same-day-payment-window:PT2H}")
+                                         Duration sameDayPaymentWindow) {
         this.jdbc = jdbc;
         this.tokens = tokens;
         this.settings = settings;
+        this.voucherHolds = voucherHolds;
+        this.loyaltyPoints = loyaltyPoints;
+        this.paymentWindow = paymentWindow;
+        this.sameDayPaymentWindow = sameDayPaymentWindow;
+    }
+
+    /** The booking's payment deadline (V66); empty when none was set (approved before V66). */
+    @Transactional(readOnly = true)
+    public Optional<OffsetDateTime> paymentDueAt(UUID reservationId) {
+        return jdbc.sql("SELECT payment_due_at FROM reservation WHERE id = :id")
+                .param("id", reservationId)
+                .query((rs, n) -> Optional.ofNullable(rs.getObject("payment_due_at", OffsetDateTime.class)))
+                .optional().flatMap(due -> due);
+    }
+
+    /** True while the booking waits for payment and its deadline, if any, has not passed. */
+    public static boolean payable(String salesStatus, Optional<OffsetDateTime> dueAt, OffsetDateTime now) {
+        return "PAYMENT_PENDING".equals(salesStatus) && dueAt.map(now::isBefore).orElse(true);
     }
 
     @Transactional(readOnly = true)
     public EmailActionView preview(String rawToken) {
         return find(rawToken, false);
+    }
+
+    /**
+     * Uses a GUEST_CANCEL link once: the reservation it was issued for. The token is the
+     * authority (256-bit, expiring, single-use, emailed to the booking's own address), so a
+     * guessed booking reference is worth nothing.
+     */
+    @Transactional
+    public UUID consumeGuestCancel(String rawToken) {
+        EmailActionView action = find(rawToken, true);
+        if (!"GUEST_CANCEL".equals(action.action())) {
+            throw new IllegalArgumentException("Not a cancellation link");
+        }
+        consume(rawToken);
+        return action.reservationId();
     }
 
     @Transactional
@@ -104,6 +150,41 @@ public class ReservationEmailActionService {
         return action;
     }
 
+    /** What a gateway notification did to the booking it names. */
+    public enum GatewayMatch { CONFIRMED, NO_BOOKING, NOT_PENDING, AMOUNT_MISMATCH, ALREADY_PAID }
+
+    public record GatewayResult(GatewayMatch match, UUID reservationId, EmailActionView booking) {}
+
+    /**
+     * SePay reported a captured payment for {@code reference}. The stay is confirmed only
+     * when the booking is waiting for payment and the paid amount and currency equal the
+     * booking total; anything else changes nothing and is left for SUPER_ADMIN.
+     */
+    @Transactional
+    public GatewayResult confirmPaymentByGateway(String reference, long amountMinor, String currency,
+                                                 String gatewayReference, String paymentMethod) {
+        UUID reservationId = jdbc.sql("SELECT id FROM reservation WHERE reference = :ref")
+                .param("ref", reference).query(UUID.class).optional().orElse(null);
+        if (reservationId == null) return new GatewayResult(GatewayMatch.NO_BOOKING, null, null);
+        EmailActionView action = viewOf(reservationId);
+        if (!"PAYMENT_PENDING".equals(action.salesStatus())) {
+            boolean paid = jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id = :id AND status = 'VERIFIED'")
+                    .param("id", reservationId).query(Long.class).single() > 0;
+            return new GatewayResult(paid ? GatewayMatch.ALREADY_PAID : GatewayMatch.NOT_PENDING, reservationId, action);
+        }
+        if (action.totalMinor() == null || action.totalMinor() != amountMinor
+                || !String.valueOf(action.currency()).equalsIgnoreCase(currency)) {
+            return new GatewayResult(GatewayMatch.AMOUNT_MISMATCH, reservationId, action);
+        }
+        applyPaymentConfirmation(action, "SYSTEM", null,
+                "Paid through the SePay payment gateway.",
+                "SePay reported the payment; reservation confirmed.", gatewayReference,
+                "CARD".equalsIgnoreCase(paymentMethod) ? "CARD" : "QR");
+        invalidateTokens(reservationId, "GUEST_MARK_PAID");
+        invalidateTokens(reservationId, "HOTEL_CONFIRM_PAYMENT");
+        return new GatewayResult(GatewayMatch.CONFIRMED, reservationId, action);
+    }
+
     private PaymentRequest applyApproval(EmailActionView action, String actorType, UUID actorId, String note) {
         // V51: every hotel is paid into the one KAS account (payment_account, a single row).
         jdbc.sql("SELECT id FROM reservation WHERE id = :reservationId FOR UPDATE")
@@ -119,21 +200,33 @@ public class ReservationEmailActionService {
             throw new BusinessRuleException(ApiErrorCode.CONFIG_MISSING,
                     "The KAS payment QR is not configured in the payment account.");
         }
+        // V66: the payment deadline — 24h, 2h for a stay starting today, never past check-in.
+        OffsetDateTime now = OffsetDateTime.now(PaymentDeadline.HOTEL_ZONE);
+        LocalTime checkInTime = jdbc.sql("SELECT check_in_time FROM property WHERE slug = :slug")
+                .param("slug", action.propertySlug())
+                .query((rs, n) -> Optional.ofNullable(rs.getObject("check_in_time", LocalTime.class)))
+                .optional().flatMap(time -> time).orElse(null);
+        OffsetDateTime dueAt = PaymentDeadline.dueAt(now, action.checkIn(), checkInTime,
+                paymentWindow, sameDayPaymentWindow);
         jdbc.sql("""
                 UPDATE reservation SET sales_status = 'PAYMENT_PENDING',
                        payment_qr_url_snapshot = :qr,
                        payment_instructions_snapshot = :instructions,
-                       payment_requested_at = now(), updated_at = now()
+                       payment_requested_at = now(), payment_due_at = :dueAt, updated_at = now()
                  WHERE id = :reservationId AND sales_status = CAST(:fromStatus AS sales_status)
                 """)
                 .param("qr", profile.qrUrl()).param("instructions", profile.instructions())
+                .param("dueAt", dueAt)
                 .param("reservationId", action.reservationId())
                 .param("fromStatus", action.salesStatus()).update();
-        history(action.reservationId(), action.salesStatus(), "PAYMENT_PENDING", actorType, actorId, note);
-        String guestToken = tokens.issue(action.reservationId(), "GUEST_MARK_PAID",
-                action.guestEmail(), Duration.ofDays(3));
+        history(action.reservationId(), action.salesStatus(), "PAYMENT_PENDING", actorType, actorId,
+                note + " Payment due by " + PaymentDeadline.format(dueAt, false) + ".");
+        // The guest's payment link lives exactly until the deadline.
+        Duration linkLifetime = Duration.between(now, dueAt);
+        String guestToken = tokens.issue(action.reservationId(), "GUEST_MARK_PAID", action.guestEmail(),
+                linkLifetime.compareTo(Duration.ofMinutes(1)) < 0 ? Duration.ofMinutes(1) : linkLifetime);
         return new PaymentRequest(action, profile.qrUrl(), profile.instructions(), guestToken,
-                profile.bankName(), profile.accountHolder(), profile.accountNumber());
+                profile.bankName(), profile.accountHolder(), profile.accountNumber(), dueAt);
     }
 
     @Transactional
@@ -248,6 +341,12 @@ public class ReservationEmailActionService {
 
     private void applyPaymentConfirmation(EmailActionView action, String actorType, UUID actorId,
                                           String paymentNote, String historyNote, String transactionReference) {
+        applyPaymentConfirmation(action, actorType, actorId, paymentNote, historyNote, transactionReference, "QR");
+    }
+
+    private void applyPaymentConfirmation(EmailActionView action, String actorType, UUID actorId,
+                                          String paymentNote, String historyNote, String transactionReference,
+                                          String method) {
         String reference = transactionReference == null || transactionReference.isBlank() ? null : transactionReference.trim();
         if (reference != null && reference.length() > 120) {
             throw new KasException(ApiErrorCode.VALIDATION_FAILED, "The transaction reference is too long.",
@@ -260,9 +359,10 @@ public class ReservationEmailActionService {
             jdbc.sql("""
                     INSERT INTO payment (reservation_id, method, amount_minor, currency,
                                          received_at, status, notes, external_reference, recorded_by)
-                    SELECT id, 'QR', total_minor, currency, now(), 'VERIFIED', :note, :reference, :actor
+                    SELECT id, CAST(:method AS payment_method), total_minor, currency, now(), 'VERIFIED',
+                           :note, :reference, :actor
                       FROM reservation WHERE id = :id AND sales_status = 'PAYMENT_PENDING'
-                    """).param("id", action.reservationId()).param("note", paymentNote)
+                    """).param("id", action.reservationId()).param("note", paymentNote).param("method", method)
                     .param("reference", reference).param("actor", actorId).update();
         } catch (org.springframework.dao.DuplicateKeyException duplicate) {
             // V50: one VERIFIED payment per reservation, one bank transaction per payment.
@@ -270,6 +370,11 @@ public class ReservationEmailActionService {
             throw ConflictException.paymentAlreadyVerified(String.valueOf(duplicate.getMessage())
                     .contains("payment_verified_external_reference_uniq"));
         }
+        // V65: the payment is verified — the voucher use this booking held becomes the
+        // redemption (once; a repeated IPN or confirmation finds the payment already VERIFIED above).
+        voucherHolds.consume(action.reservationId());
+        // The points the booking held are spent now (once per booking).
+        loyaltyPoints.consume(action.reservationId());
         jdbc.sql("""
                 UPDATE reservation SET sales_status = 'WON', stay_status = 'CONFIRMED',
                        won_at = now(), confirmed_at = now(), payment_verified_at = now(),
@@ -434,7 +539,9 @@ public class ReservationEmailActionService {
 
     public record PaymentRequest(EmailActionView booking, String qrUrl,
                                  String instructions, String guestToken,
-                                 String bankName, String accountHolder, String accountNumber) {}
+                                 String bankName, String accountHolder, String accountNumber,
+                                 /** The payment deadline (V66). */
+                                 OffsetDateTime paymentDueAt) {}
     public record HotelPaymentCheck(EmailActionView booking, String hotelToken) {}
     public record AlternativeOfferInput(String propertySlug, String roomTypeSlug,
                                         LocalDate checkIn, LocalDate checkOut, int quantity,

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/booking-price.css">
 <link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
@@ -222,15 +223,19 @@
     var _q = quote;
     var nightly = _q && _q.nights && _q.nights.length ? _q.nights[0].rate : null;
     var total = _q && _q.complete ? _q.total : null;
-    U.$('#sidePrice').innerHTML = '<div class="price"><span class="price__lb">Price · ' + c.nights + ' night' + (c.nights===1?'':'s') + '</span>' +
-      U.priceHTML(total != null ? total : (nightly != null ? nightly * c.nights : c.price.total)) +
-      '<div class="tiny muted" style="margin-top:5px">No VAT · No service charge · Breakfast not included</div>' +
+    var vi = window.KAS_I18N && window.KAS_I18N.getLanguage() === 'vi';
+    var totals = B.priceTotals(c.price);
+    var feeNote = B.taxNote(c.price);
+    U.$('#sidePrice').innerHTML = '<div class="price"><span class="price__lb">' + (vi ? 'Tiền phòng · ' + c.nights + ' đêm' : 'Room price · ' + c.nights + ' night' + (c.nights===1?'':'s')) + '</span>' +
+      U.priceHTML(total != null ? total : (nightly != null ? nightly * c.nights : (c.price.subtotal != null ? c.price.subtotal : c.price.total))) +
+      '<div class="tiny muted" style="margin-top:5px">' + feeNote + (vi ? ' · Chưa gồm bữa sáng' : ' · Breakfast not included') + '</div>' +
+      (totals && totals.total !== totals.room ? '<div class="price__incl"><span>' + (totals.discount > 0 ? (vi ? 'Tổng dự kiến (sau voucher, gồm thuế)' : 'Estimated total after voucher, incl. tax') : (vi ? 'Tổng dự kiến (gồm thuế, phí)' : 'Estimated total incl. tax & fees')) + '</span><b>' + U.vnd(totals.total) + ' VND</b></div>' : '') +
       (_q && _q.nights ? '<div class="rate-lines" style="margin-top:10px">' + _q.nights.map(function(x){ return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.78rem;margin-top:5px"><span>' + U.esc(x.date) + (x.weekend?' · Weekend':' · Weekday') + '</span><b>' + U.vnd(x.rate) + '</b></div>'; }).join('') + '</div>' : '') +
       '</div>';
 
     U.$('#mcta').innerHTML =
       '<div class="price"><span class="price__lb">Total · ' + c.nights + ' night' + (c.nights === 1 ? '' : 's') + '</span>' +
-      U.priceHTML(c.price.total) + '</div>' +
+      U.priceHTML(totals ? totals.total : c.price.total) + '</div>' +
       '<button class="btn btn--gold" id="mctaBtn">Book this room</button>';
     U.$('#mctaBtn').addEventListener('click', goBook);
   }
@@ -244,7 +249,13 @@
     var search = B.readSearch();
     search.hotelId = hotel.id;
     B.saveSearch(search);
-    if (!B.startBooking(hotel.id, room.id, search)) {
+    /* Keep the backend quote already in the draft for this exact stay;
+       restarting the booking would replace it with the static (0 VND) price. */
+    var d = B.draft();
+    var sameStay = d.hotelId === hotel.id && d.roomId === room.id &&
+      d.checkIn === search.checkIn && d.checkOut === search.checkOut &&
+      +d.rooms === +search.rooms && d.price && d.price.source === 'BACKEND';
+    if (!sameStay && !B.startBooking(hotel.id, room.id, search)) {
       U.toast('Không thể bắt đầu yêu cầu đặt phòng. Vui lòng kiểm tra lại ngày lưu trú.');
       return;
     }

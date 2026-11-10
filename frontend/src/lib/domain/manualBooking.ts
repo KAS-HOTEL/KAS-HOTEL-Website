@@ -19,6 +19,28 @@ export interface PendingCancellation {
   requestedAt: string;
   currency: string;
   totalMinor: number | null;
+  /** 2026-11-10 fields; absent from older servers. */
+  status?: string;
+  freePolicy?: string | null;
+  freeUntil?: string | null;
+  feeMinor?: number | null;
+  feeSource?: string | null;
+  paidMinor?: number | null;
+  refundDueMinor?: number | null;
+  refundAmountMinor?: number | null;
+  refundReference?: string | null;
+  refundNote?: string | null;
+  refundedAt?: string | null;
+  confirmedAt?: string | null;
+  paymentReference?: string | null;
+}
+
+/** What SUPER_ADMIN records after refunding outside KAS. */
+export interface RefundRecord {
+  refundAmountMinor: number;
+  refundedAt: string | null;
+  reference: string | null;
+  note: string | null;
 }
 
 export type CancellationFeeQuote = { feeMinor: number; note: string } | { percentage: number; note: string };

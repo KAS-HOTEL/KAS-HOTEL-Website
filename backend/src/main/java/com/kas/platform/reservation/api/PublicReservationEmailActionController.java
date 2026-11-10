@@ -38,11 +38,125 @@ public class PublicReservationEmailActionController {
     private static final String BASE = "/api/v1/public/reservation-actions/";
     private final ReservationEmailActionService actions;
     private final BookingNotificationService notifications;
+    private final com.kas.platform.reservation.SePayGatewayService sePay;
+    private final com.kas.platform.reservation.CustomerCancellationService cancellations;
+    private final com.kas.platform.reservation.CancellationNotifier cancellationEmails;
+    private final com.kas.platform.reservation.SePayCheckoutCanceller sePayCheckouts;
+    private final String siteBaseUrl;
 
     public PublicReservationEmailActionController(ReservationEmailActionService actions,
-                                                  BookingNotificationService notifications) {
+                                                  BookingNotificationService notifications,
+                                                  com.kas.platform.reservation.SePayGatewayService sePay,
+                                                  com.kas.platform.reservation.CustomerCancellationService cancellations,
+                                                  com.kas.platform.reservation.CancellationNotifier cancellationEmails,
+                                                  com.kas.platform.reservation.SePayCheckoutCanceller sePayCheckouts,
+                                                  @org.springframework.beans.factory.annotation.Value("${kas.auth.customer-site-base-url:http://127.0.0.1:3010}")
+                                                  String siteBaseUrl) {
         this.actions = actions;
         this.notifications = notifications;
+        this.sePay = sePay;
+        this.cancellations = cancellations;
+        this.cancellationEmails = cancellationEmails;
+        this.sePayCheckouts = sePayCheckouts;
+        this.siteBaseUrl = siteBaseUrl.replaceAll("/+$", "");
+    }
+
+    /**
+     * The guest's decision from the cancellation page: {@code confirm} cancels (accepting the
+     * fee that page showed, {@code expectedFeeMinor}), {@code keep} keeps the booking. The link
+     * is used up either way.
+     */
+    @PostMapping(value = "/{token}/guest-cancel", produces = MediaType.TEXT_HTML_VALUE)
+    @PublicEndpoint(reason = "Explicit POST with an expiring, single-use guest cancellation token")
+    @org.springframework.transaction.annotation.Transactional
+    public String guestCancel(@PathVariable String token,
+                              @org.springframework.web.bind.annotation.RequestParam String decision,
+                              @org.springframework.web.bind.annotation.RequestParam(required = false) Long expectedFeeMinor) {
+        var view = actions.preview(token);
+        boolean vi = "vi".equals(EmailLanguage.forCountry(view.guestCountry()));
+        java.util.UUID reservationId = actions.consumeGuestCancel(token);
+        var terms = cancellations.previewForGuest(reservationId);
+        com.kas.platform.reservation.CustomerCancellationService.CancellationResult result;
+        if ("keep".equals(decision)) {
+            if ("OPEN_REQUEST".equals(terms.outcome()) && "QUOTED".equals(terms.openRequestStatus())) {
+                result = cancellations.decideForGuest(reservationId, false);
+            } else {
+                return page(vi ? "vi" : "en", vi ? "Đặt phòng được giữ nguyên" : "Your booking is kept", "",
+                        vi ? "Không có thay đổi nào với đặt phòng của bạn." : "Nothing has changed on your booking.", "");
+            }
+        } else {
+            result = cancellations.requestForGuest(reservationId, true, expectedFeeMinor);
+        }
+        cancellationEmails.after(result, true);
+        return switch (result.status()) {
+            case "CANCELLED" -> page(vi ? "vi" : "en", vi ? "Đã huỷ đặt phòng" : "Booking cancelled", facts(view.reference()),
+                    vi ? "Đặt phòng đã được huỷ. Bạn sẽ nhận email xác nhận." : "Your booking is cancelled. A confirmation email is on its way.", "");
+            case "REFUND_PENDING" -> page(vi ? "vi" : "en", vi ? "Đã huỷ – chờ hoàn tiền" : "Cancelled – refund pending", facts(view.reference()),
+                    vi ? "Đặt phòng đã được huỷ. KAS sẽ hoàn " + money(result.refundDueMinor()) + " thủ công và gửi email khi đã hoàn xong."
+                       : "Your booking is cancelled. KAS will refund " + money(result.refundDueMinor()) + " by hand and email you once it is done.", "");
+            case "PENDING_HOTEL_FEE" -> page(vi ? "vi" : "en", vi ? "Đã gửi yêu cầu huỷ" : "Cancellation request sent", facts(view.reference()),
+                    vi ? "Đã quá hạn huỷ miễn phí. KAS sẽ xem xét và gửi email cho bạn mức phí (nếu có) để bạn quyết định. Đặt phòng chưa bị huỷ."
+                       : "The free-cancellation deadline has passed. KAS will review and email you any fee so you can decide. Your booking is not cancelled yet.", "");
+            case "DECLINED" -> page(vi ? "vi" : "en", vi ? "Đặt phòng được giữ nguyên" : "Your booking is kept", facts(view.reference()),
+                    vi ? "Bạn đã không đồng ý phí huỷ; đặt phòng vẫn giữ nguyên." : "You did not accept the fee; your booking stays as it is.", "");
+            default -> page(vi ? "vi" : "en", vi ? "Đã ghi nhận" : "Received", facts(view.reference()), "", "");
+        };
+    }
+
+    private String guestCancelPage(String token, ReservationEmailActionService.EmailActionView view, boolean vi) {
+        var t = cancellations.previewForGuest(view.reservationId());
+        String deadline = t.freeUntil() == null ? "" : t.freeUntil().atZoneSameInstant(java.time.ZoneId.of("Asia/Ho_Chi_Minh"))
+                .format(java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy"));
+        String policy = com.kas.platform.reservation.CustomerCancellationService.MEMBER_POLICY.equals(t.policy())
+                ? (vi ? "Thành viên KAS: huỷ miễn phí đến 12:00 ngày nhận phòng" : "KAS member: free cancellation until 12:00 on the check-in day")
+                : (vi ? "Khách thường: huỷ miễn phí trước giờ nhận phòng 24 giờ" : "Guest: free cancellation until 24 hours before check-in");
+        String head = facts((vi ? "Đặt phòng " : "Booking ") + view.reference() + " · " + view.propertyName() + " · "
+                + view.checkIn() + " – " + view.checkOut());
+        String terms = "<p>" + esc(policy) + (deadline.isEmpty() ? "" : (vi ? " (hạn: " : " (deadline: ") + esc(deadline) + ")") + ".</p>";
+        String paid = t.paidMinor() > 0 ? "<p>" + esc(vi ? "Đã thanh toán: " : "Paid: ") + esc(money(t.paidMinor())) + "</p>" : "";
+        String keep = form(token, "keep", null, vi ? "Giữ đặt phòng" : "Keep my booking", true);
+        String lang = vi ? "vi" : "en";
+        String title = vi ? "Huỷ đặt phòng" : "Cancel your booking";
+        return switch (t.outcome()) {
+            case "CANCEL_FREE" -> page(lang, title, head,
+                    vi ? "Bạn đang trong thời hạn huỷ miễn phí." : "You are within the free-cancellation period.",
+                    terms + form(token, "confirm", null, vi ? "Xác nhận huỷ miễn phí" : "Cancel free of charge", false) + keep);
+            case "PAID_REVIEW" -> page(lang, title, head,
+                    vi ? "Bạn đang trong thời hạn huỷ miễn phí. Vì đặt phòng đã thanh toán, KAS sẽ xem xét yêu cầu và gửi email để bạn xác nhận trước khi huỷ và hoàn tiền."
+                       : "You are within the free-cancellation period. As this booking is paid, KAS will review the request and email you to confirm before it is cancelled and refunded.",
+                    terms + paid + form(token, "confirm", null, vi ? "Gửi yêu cầu huỷ" : "Send the cancellation request", false) + keep);
+            case "CONFIRM_FEE" -> page(lang, title, head,
+                    vi ? "Đã quá thời hạn huỷ miễn phí nên có phí huỷ. Đặt phòng chỉ bị huỷ khi bạn xác nhận."
+                       : "The free-cancellation deadline has passed, so a fee applies. Nothing is cancelled unless you confirm.",
+                    terms + paid + "<p>" + esc(vi ? "Phí huỷ: " : "Cancellation fee: ") + "<strong>" + esc(money(t.feeMinor()))
+                            + "</strong><br>" + esc(vi ? "Dự kiến hoàn lại: " : "Expected refund: ") + "<strong>"
+                            + esc(money(t.refundDueMinor())) + "</strong></p>"
+                            + form(token, "confirm", t.feeMinor(), vi ? "Đồng ý phí và huỷ" : "Accept the fee and cancel", false) + keep);
+            case "MANUAL_REVIEW" -> page(lang, title, head,
+                    vi ? "Đã quá thời hạn huỷ miễn phí. KAS sẽ xem xét và báo mức phí (nếu có) để bạn quyết định; đặt phòng chưa bị huỷ."
+                       : "The free-cancellation deadline has passed. KAS will review and tell you any fee so you can decide; nothing is cancelled yet.",
+                    terms + form(token, "confirm", null, vi ? "Gửi yêu cầu huỷ" : "Send the cancellation request", false) + keep);
+            case "OPEN_REQUEST" -> "QUOTED".equals(t.openRequestStatus())
+                    ? page(lang, title, head, vi ? "KAS đã báo phí huỷ cho yêu cầu của bạn." : "KAS has quoted a fee for your request.",
+                        terms + paid + "<p>" + esc(vi ? "Phí huỷ: " : "Cancellation fee: ") + "<strong>" + esc(money(t.feeMinor()))
+                            + "</strong><br>" + esc(vi ? "Dự kiến hoàn lại: " : "Expected refund: ") + "<strong>"
+                            + esc(money(t.refundDueMinor())) + "</strong></p>"
+                            + form(token, "confirm", t.feeMinor(), vi ? "Đồng ý phí và huỷ" : "Accept the fee and cancel", false) + keep)
+                    : page(lang, title, head, vi ? "KAS đang xem xét yêu cầu huỷ của bạn và sẽ gửi email." : "KAS is reviewing your request and will email you.", "");
+            default -> page(lang, title, head,
+                    vi ? "Đặt phòng này không thể huỷ trực tuyến nữa. Vui lòng liên hệ KAS." : "This booking can no longer be cancelled online. Please contact KAS.", "");
+        };
+    }
+
+    private static String form(String token, String decision, Long expectedFeeMinor, String label, boolean secondary) {
+        return "<form method=\"post\" action=\"" + BASE + esc(token) + "/guest-cancel\">"
+                + "<input type=\"hidden\" name=\"decision\" value=\"" + esc(decision) + "\">"
+                + (expectedFeeMinor == null ? "" : "<input type=\"hidden\" name=\"expectedFeeMinor\" value=\"" + expectedFeeMinor + "\">")
+                + "<button type=\"submit\"" + (secondary ? " class=\"secondary\"" : "") + ">" + esc(label) + "</button></form>";
+    }
+
+    private static String money(Long minor) {
+        return minor == null ? "—" : String.format(java.util.Locale.ROOT, "%,d", minor).replace(',', '.') + " VND";
     }
 
     @GetMapping(value = "/{token}", produces = MediaType.TEXT_HTML_VALUE)
@@ -68,15 +182,27 @@ public class PublicReservationEmailActionController {
                         button(token, "approve", "Xác nhận còn phòng và gửi QR", false) + proposal);
             }
             case "GUEST_MARK_PAID" -> {
+                // V66 layer 1: the payment gate is open only while the booking waits for payment
+                // and its deadline has not passed.
+                var dueAt = actions.paymentDueAt(view.reservationId());
+                if (!ReservationEmailActionService.payable(view.salesStatus(), dueAt,
+                        java.time.OffsetDateTime.now())) {
+                    return paymentClosedPage(view, vi);
+                }
+                String online = sePayForm(token, view, vi);
+                String deadline = dueAt.map(due -> facts((vi ? "Hạn thanh toán: " : "Pay by: ")
+                        + com.kas.platform.reservation.PaymentDeadline.format(due, vi))).orElse("");
                 return vi
-                        ? page("vi", "Báo khách sạn kiểm tra thanh toán",
-                                facts("Yêu cầu " + view.reference() + " tại " + view.propertyName()),
-                                "Thao tác này chỉ báo khách sạn kiểm tra giao dịch, chưa xác nhận đặt phòng.",
-                                button(token, "paid", "Tôi đã chuyển khoản", false))
-                        : page("en", "Ask the hotel to check your payment",
-                                facts("Request " + view.reference() + " at " + view.propertyName()),
-                                "This only asks the hotel to check the transfer; it does not confirm the booking.",
-                                button(token, "paid", "I have made the transfer", false));
+                        ? page("vi", "Thanh toán đặt phòng",
+                                facts("Yêu cầu " + view.reference() + " tại " + view.propertyName()) + deadline,
+                                online.isEmpty() ? "Thao tác này chỉ báo khách sạn kiểm tra giao dịch, chưa xác nhận đặt phòng."
+                                        : "Thanh toán online qua SePay để đặt phòng được xác nhận tự động. Nếu đã chuyển khoản theo mã QR trong email, hãy bấm nút bên dưới để khách sạn kiểm tra.",
+                                online + button(token, "paid", "Tôi đã chuyển khoản", !online.isEmpty()))
+                        : page("en", "Pay for your booking",
+                                facts("Request " + view.reference() + " at " + view.propertyName()) + deadline,
+                                online.isEmpty() ? "This only asks the hotel to check the transfer; it does not confirm the booking."
+                                        : "Pay online with SePay and your booking is confirmed automatically. If you already transferred with the QR in the email, use the button below so the hotel checks it.",
+                                online + button(token, "paid", "I have made the transfer", !online.isEmpty()));
             }
             case "HOTEL_CONFIRM_PAYMENT" -> {
                 return page("vi", "Xác nhận đã nhận thanh toán",
@@ -85,6 +211,9 @@ public class PublicReservationEmailActionController {
                         "<form method=\"post\" action=\"" + BASE + esc(token) + "/confirm-payment\">"
                                 + "<label>Mã giao dịch ngân hàng (không bắt buộc)<input name=\"transactionReference\" maxlength=\"120\" autocomplete=\"off\"></label>"
                                 + "<button type=\"submit\">Đã kiểm tra, xác nhận đặt phòng</button></form>");
+            }
+            case "GUEST_CANCEL" -> {
+                return guestCancelPage(token, view, vi);
             }
             case "GUEST_ACCEPT_ALTERNATIVE", "GUEST_REJECT_ALTERNATIVE" -> {
                 // Links from emails sent before 2026-11-07. Accepting or declining by email
@@ -102,6 +231,52 @@ public class PublicReservationEmailActionController {
         var request = actions.approveAndSendQr(token);
         notifications.paymentRequestSent(request);
         return page("vi", "Đã gửi thông tin thanh toán", "", "Email QR và hướng dẫn thanh toán đã được gửi cho khách.", "");
+    }
+
+    /**
+     * The guest pressed "Pay online" (V66 layer 2). The page's signed checkout form comes here
+     * first: KAS checks the booking still waits for payment within its deadline and that the
+     * form is the one it signed for this booking, records the SePay invoice (so it can be
+     * cancelled at SePay if the booking ends unpaid), and answers 307 so the browser re-posts
+     * the very same form to SePay. The CSP allows that redirect target (form-action).
+     */
+    @PostMapping(value = "/{token}/sepay", produces = MediaType.TEXT_HTML_VALUE)
+    @PublicEndpoint(reason = "Explicit POST with an expiring guest payment token; forwards the signed checkout to SePay")
+    public ResponseEntity<String> startSePay(@PathVariable String token,
+                                             @org.springframework.web.bind.annotation.RequestParam
+                                             java.util.Map<String, String> form) {
+        var view = actions.preview(token);
+        boolean vi = "vi".equals(EmailLanguage.forCountry(view.guestCountry()));
+        if (!"GUEST_MARK_PAID".equals(view.action())) throw new IllegalArgumentException("Not a payment link");
+        if (!ReservationEmailActionService.payable(view.salesStatus(), actions.paymentDueAt(view.reservationId()),
+                java.time.OffsetDateTime.now())) {
+            return ResponseEntity.status(409).contentType(HTML).body(paymentClosedPage(view, vi));
+        }
+        String invoice = view.totalMinor() == null ? null : sePay.verifyCheckout(form, view.reference(), view.totalMinor());
+        if (invoice == null) {
+            log.warn("SePay checkout form refused for reference={}", view.reference());
+            return failurePage(400, "Thông tin thanh toán không hợp lệ hoặc đã thay đổi. Vui lòng mở lại liên kết trong email.",
+                    "The payment details are not valid or have changed. Please open the link in the email again.");
+        }
+        sePayCheckouts.record(invoice, view.reservationId(), view.totalMinor());
+        return ResponseEntity.status(307).location(java.net.URI.create(sePay.checkoutUrl())).build();
+    }
+
+    private static final MediaType HTML = new MediaType("text", "html", java.nio.charset.StandardCharsets.UTF_8);
+
+    /** The payment gate is closed: deadline passed, or the booking no longer waits for payment. */
+    private String paymentClosedPage(ReservationEmailActionService.EmailActionView view, boolean vi) {
+        String again = "<p><a href=\"" + esc(siteBaseUrl + "/hotels.html?lang=" + (vi ? "vi" : "en")) + "\">"
+                + esc(vi ? "Gửi yêu cầu đặt phòng mới" : "Send a new booking request") + "</a></p>";
+        if ("WON".equals(view.salesStatus())) {
+            return page(vi ? "vi" : "en", vi ? "Đặt phòng đã thanh toán" : "Booking already paid", facts(view.reference()),
+                    vi ? "Đặt phòng này đã được thanh toán và xác nhận. Không cần thanh toán thêm."
+                       : "This booking is already paid and confirmed. Nothing more to pay.", "");
+        }
+        return page(vi ? "vi" : "en", vi ? "Đã hết hạn thanh toán" : "Payment deadline passed", facts(view.reference()),
+                vi ? "Đặt phòng này không còn nhận thanh toán (đã quá hạn hoặc đã kết thúc). Vui lòng không chuyển tiền cho đặt phòng này. Nếu bạn đã chuyển, KAS sẽ kiểm tra và liên hệ bạn."
+                   : "This booking no longer takes payment (the deadline passed or it has ended). Please do not send money for it. If you already did, KAS will check and contact you.",
+                again);
     }
 
     @PostMapping(value = "/{token}/paid", produces = MediaType.TEXT_HTML_VALUE)
@@ -220,6 +395,21 @@ public class PublicReservationEmailActionController {
     private static String button(String token, String target, String label, boolean secondary) {
         return "<form method=\"post\" action=\"" + BASE + esc(token) + "/" + target + "\"><button type=\"submit\""
                 + (secondary ? " class=\"secondary\"" : "") + ">" + esc(label) + "</button></form>";
+    }
+
+    /** The signed SePay checkout form, or "" when the gateway is off or the total is unknown. */
+    private String sePayForm(String token, ReservationEmailActionService.EmailActionView view, boolean vi) {
+        if (!sePay.checkoutEnabled() || view.totalMinor() == null || view.totalMinor() <= 0
+                || !"VND".equalsIgnoreCase(view.currency())) return "";
+        // Posted to KAS first (V66): checked and recorded, then 307-forwarded to SePay unchanged.
+        StringBuilder form = new StringBuilder("<form method=\"post\" action=\"").append(BASE).append(esc(token))
+                .append("/sepay\">");
+        sePay.checkoutFields(view.reference(), view.totalMinor(), vi ? "vi" : "en").forEach((name, value) ->
+                form.append("<input type=\"hidden\" name=\"").append(esc(name)).append("\" value=\"").append(esc(value)).append("\">"));
+        String amount = String.format(java.util.Locale.ROOT, "%,d", view.totalMinor()).replace(',', '.');
+        form.append("<button type=\"submit\">").append(esc(vi ? "Thanh toán online " + amount + " VND"
+                : "Pay online " + amount + " VND")).append("</button></form>");
+        return form.toString();
     }
 
     private static String facts(String text) {

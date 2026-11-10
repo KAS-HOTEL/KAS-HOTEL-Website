@@ -67,7 +67,7 @@ class RequestReceiptIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$.status").value("REQUEST_RECEIVED"))
                 .andExpect(jsonPath("$.responsePromise").exists())
                 .andExpect(jsonPath("$.trackingUrlIssued").value(false))
-                .andExpect(jsonPath("$.estimatedTotal.amountMinor").value(RATE * 2))
+                .andExpect(jsonPath("$.estimatedTotal.amountMinor").value(Vat.with(RATE * 2)))
                 .andExpect(jsonPath("$.estimatedTotal.currency").value("VND"))
                 .andExpect(jsonPath("$.estimateDisclaimer").exists());
     }

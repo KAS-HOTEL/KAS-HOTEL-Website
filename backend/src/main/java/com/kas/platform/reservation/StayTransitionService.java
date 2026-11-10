@@ -31,15 +31,18 @@ public class StayTransitionService {
     private final SystemSettingService settings;
     private final Clock clock;
     private final com.kas.platform.customer.MembershipTierService tiers;
+    private final com.kas.platform.customer.LoyaltyPointsService loyaltyPoints;
 
     public StayTransitionService(JdbcClient jdbc, AuditLogger audit,
                                  SystemSettingService settings, Clock clock,
-                                 com.kas.platform.customer.MembershipTierService tiers) {
+                                 com.kas.platform.customer.MembershipTierService tiers,
+                                 com.kas.platform.customer.LoyaltyPointsService loyaltyPoints) {
         this.jdbc = jdbc;
         this.audit = audit;
         this.settings = settings;
         this.clock = clock;
         this.tiers = tiers;
+        this.loyaltyPoints = loyaltyPoints;
     }
 
     @Transactional
@@ -99,8 +102,11 @@ public class StayTransitionService {
         // qualifies; undoing it stops the count and may lower the tier at once.
         if (action == Action.CHECK_OUT) {
             tiers.recordCheckout(rows.id(), actor.userId());
+            // KAS points (2026-11-10): earned once the paid stay is checked out.
+            loyaltyPoints.earnForCheckout(rows.id());
         } else if (action == Action.UNDO_CHECK_OUT) {
             tiers.reverseCheckout(rows.id(), "Check-out undone by staff", actor.userId());
+            loyaltyPoints.reverseEarn(rows.id());
         }
         return new StayTransitionView(reference, from, to);
     }

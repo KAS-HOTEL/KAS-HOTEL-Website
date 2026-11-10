@@ -4,7 +4,7 @@ import { AuthFooter, AuthHeading, AuthShell } from '@/features/auth/AuthShell';
 import { FlowUnavailable } from '@/features/auth/FlowUnavailable';
 import { ResetPasswordForm } from '@/features/auth/ResetPasswordForm';
 
-export const metadata = { title: 'KAS Partner — Đặt lại mật khẩu', robots: { index: false } };
+export const metadata = { title: 'KAS Admin — Đặt lại mật khẩu', robots: { index: false } };
 
 /**
  * Choosing a new password.
@@ -31,7 +31,7 @@ export default function PartnerResetPasswordPage() {
       <FlowUnavailable action="Đặt lại mật khẩu" />
 
       <AuthFooter>
-        <Link href="/partner/login">Quay lại đăng nhập</Link>
+        <Link href="/admin/login">Quay lại đăng nhập</Link>
       </AuthFooter>
     </AuthShell>
   );

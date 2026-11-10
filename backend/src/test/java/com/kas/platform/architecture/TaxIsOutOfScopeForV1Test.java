@@ -11,6 +11,15 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
+ * <h2>Superseded 2026-11-09 — read this first</h2>
+ * <p>The owner approved the booking-price demo with <strong>VAT 8% and no service charge</strong>
+ * and asked for it live (docs/kas/159). VAT is now applied by
+ * {@code pricing.StayAdjustmentService} from {@code tax_rule} (V62 seeds one global VAT 8% row),
+ * snapshotted on every booking ({@code tax_minor}, {@code price_snapshot.taxes}). The decision
+ * below is kept as history. This guard still forbids the class names it lists, so a second,
+ * parallel tax engine cannot appear beside {@code StayAdjustmentService}.
+ *
+ * <p>Original text (2026-08-18):
  * Tax is <strong>outside the KAS V1 business scope</strong> — owner decision, 2026-08-18.
  *
  * <h2>What changed, and why this class was renamed</h2>

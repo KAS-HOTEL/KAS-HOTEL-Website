@@ -93,6 +93,10 @@ final class RequestFingerprint {
         field(canonical, "specialRequests", body.specialRequests());
         field(canonical, "discoveryChannel", body.discoveryChannel());
         field(canonical, "offerCode", body.offerCode());
+        // A retry asking for different points is a different request (2026-11-10).
+        if (body.pointsToUse() != null && body.pointsToUse() > 0) {
+            field(canonical, "pointsToUse", String.valueOf(body.pointsToUse()));
+        }
         field(canonical, "acceptedTermsVersion", body.acceptedTermsVersion());
         field(canonical, "marketingConsent", String.valueOf(body.marketingConsentOrFalse()));
         field(canonical, "locale", body.locale());

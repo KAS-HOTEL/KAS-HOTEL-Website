@@ -549,6 +549,10 @@
     /* V17.7 — dynamic hotel-detail/review/trust/support strings */
     "Always the best rate when you book direct.": "Luôn có mức giá tốt nhất khi đặt trực tiếp.",
     "Cancel up to 24 hours before check-in.": "Có thể hủy trước 24 giờ so với giờ nhận phòng.",
+    "Members until 12:00 on check-in day; guests 24h before check-in.": "Thành viên đến 12:00 ngày nhận phòng; khách thường trước giờ nhận phòng 24 giờ.",
+    "Free cancellation: members until 12:00 on check-in day, guests until 24h before check-in": "Huỷ miễn phí: thành viên đến 12:00 ngày nhận phòng, khách thường trước giờ nhận phòng 24 giờ",
+    "KAS members (signed in when booking) cancel free until 12:00 on the check-in day; other guests until 24 hours before check-in (hotel time). After that, the cancellation fee shown before you confirm applies.": "Thành viên KAS (đăng nhập khi đặt) được huỷ miễn phí đến 12:00 ngày nhận phòng; khách thường được huỷ miễn phí trước giờ nhận phòng 24 giờ (giờ khách sạn). Sau thời hạn đó, áp dụng phí huỷ được hiển thị trước khi bạn xác nhận.",
+    "After that, the cancellation fee shown before you confirm applies.": "Sau thời hạn đó, áp dụng phí huỷ được hiển thị trước khi bạn xác nhận.",
     "Your payment information is always protected.": "Thông tin thanh toán của bạn luôn được bảo vệ.",
     "Exclusive benefits for KAS Privilege members.": "Quyền lợi độc quyền dành cho thành viên KAS Privilege.",
     "Not sure which room is right for you?": "Chưa chắc phòng nào phù hợp với bạn?",

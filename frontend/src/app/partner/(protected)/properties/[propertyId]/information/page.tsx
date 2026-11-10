@@ -21,7 +21,7 @@ import styles from '@/features/property/Property.module.css';
 export const metadata: Metadata = {
   // Constant, like the overview: a title built from the property would differ
   // between "absent" and "someone else's hotel" the moment either resolved.
-  title: 'Thông tin khách sạn — KAS Partner',
+  title: 'Thông tin khách sạn — KAS Admin',
 };
 
 /**

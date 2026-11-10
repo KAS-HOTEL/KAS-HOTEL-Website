@@ -58,8 +58,22 @@ public record QuoteRequest(
         @Valid
         List<Line> lines,
 
-        /** Must be absent in V1 — config B23 is OPEN (OQ-029). */
-        String offerCode) {
+        /** One voucher code, or absent (owner decision 2026-11-09). */
+        String offerCode,
+
+        /** KAS points to spend (1 point = 1 VND); only for a signed-in member. Absent = none. */
+        @jakarta.validation.constraints.PositiveOrZero
+        Long pointsToUse) {
+
+    /** The pre-2026-11-10 shape, without points. */
+    public QuoteRequest(String propertySlug, LocalDate checkIn, LocalDate checkOut, int adults, int children,
+                        List<Integer> childAges, List<Line> lines, String offerCode) {
+        this(propertySlug, checkIn, checkOut, adults, children, childAges, lines, offerCode, null);
+    }
+
+    public long pointsOrZero() {
+        return pointsToUse == null ? 0 : pointsToUse;
+    }
 
     /** One requested room type and how many of it. */
     public record Line(

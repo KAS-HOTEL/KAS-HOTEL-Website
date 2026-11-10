@@ -1,0 +1,128 @@
+# /srv/kas-web/compose.yml on kas-staging (202.143.110.15)
+# KAS Web demo: https://webdemo.kasbookingapp.com
+#
+#   backend  Spring Boot API   (/api/v1/*, /actuator/health)
+#   website  HTML site + Express (everything else)
+#   console  Next.js admin/partner consoles, /admin* and /partner* on the same domain
+#            (own host webdemo-admin.kasbookingapp.com is prepared, waits for its DNS record)
+#
+# No port is published on the host. Caddy from the staging project (/srv/kas)
+# reaches these containers over the shared network kas_kas-internal, under the
+# aliases kasweb-backend / kasweb-website / kasweb-console.
+# Database: host PostgreSQL 17, database kas_web_dev, role kas_web_app
+# (the backend's readiness check requires exactly that name and role).
+# Secrets live in /srv/kas-web/.env and brevo.env (mode 600) and are never committed.
+# Images are built from releases/$RELEASE (set by bin/deploy.sh) with the release's own
+# docker/*.Dockerfile, the same files that build the production images; a build never touches
+# the running release. Canonical copy: kas-web-full deploy/webdemo/compose.yml.
+name: kas-web
+
+x-logging: &logging
+  driver: json-file
+  options: { max-size: "10m", max-file: "5" }
+
+services:
+  backend:
+    image: kas-web-backend:${RELEASE:?RELEASE set by bin/deploy.sh}
+    build:
+      context: ./releases/${RELEASE:?}/backend
+    restart: unless-stopped
+    environment:
+      KAS_DB_URL: jdbc:postgresql://host.docker.internal:5432/kas_web_dev?currentSchema=kas
+      KAS_DB_USERNAME: kas_web_app
+      KAS_DB_PASSWORD: ${KAS_DB_PASSWORD:?}
+      KAS_JWT_SIGNING_SECRET: ${KAS_JWT_SIGNING_SECRET:?}
+      KAS_EMAIL_OUTBOX_ENCRYPTION_KEY: ${KAS_EMAIL_OUTBOX_ENCRYPTION_KEY:?}
+      # Demo: real mail only to the owner's test address.
+      # Email is Brevo only (Resend removed 2026-11-05). BREVO_API_KEY,
+      # BREVO_SENDER_* and the BREVO_TEMPLATE_* ids come from ./brevo.env (mode 600).
+      KAS_EMAIL_REQUIRE_ALLOWLIST: "true"
+      KAS_EMAIL_ALLOWED_RECIPIENTS: ${KAS_EMAIL_ALLOWED_RECIPIENTS:?}
+      KAS_BOOKING_OPERATIONS_EMAIL: ${KAS_BOOKING_OPERATIONS_EMAIL:-}
+      KAS_BOOKING_ACTION_BASE_URL: https://webdemo.kasbookingapp.com
+      KAS_CUSTOMER_VERIFICATION_BASE_URL: https://webdemo.kasbookingapp.com
+      KAS_CUSTOMER_SITE_BASE_URL: https://webdemo.kasbookingapp.com
+      KAS_MEDIA_DELIVERY_BASE_URL: ${KAS_MEDIA_DELIVERY_BASE_URL:-}
+      KAS_R2_ENDPOINT: ${KAS_R2_ENDPOINT:-}
+      KAS_R2_ACCESS_KEY_ID: ${KAS_R2_ACCESS_KEY_ID:-}
+      KAS_R2_SECRET_ACCESS_KEY: ${KAS_R2_SECRET_ACCESS_KEY:-}
+      KAS_R2_BUCKET: ${KAS_R2_BUCKET:-}
+      # SePay payment gateway, SANDBOX only on webdemo. Empty keeps it off.
+      KAS_SEPAY_ENVIRONMENT: sandbox
+      KAS_SEPAY_MERCHANT_ID: ${KAS_SEPAY_MERCHANT_ID:-}
+      KAS_SEPAY_SECRET_KEY: ${KAS_SEPAY_SECRET_KEY:-}
+      KAS_SEPAY_IPN_SECRET_KEY: ${KAS_SEPAY_IPN_SECRET_KEY:-}
+      TZ: Asia/Ho_Chi_Minh
+    env_file: [./brevo.env]
+    extra_hosts: ["host.docker.internal:host-gateway"]
+    mem_limit: 1100m
+    healthcheck:
+      # 200 only when db, schema identity and authentication are all UP.
+      test: ["CMD", "curl", "-fsS", "-o", "/dev/null", "http://127.0.0.1:8080/actuator/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 120s
+    security_opt: [no-new-privileges:true]
+    logging: *logging
+    networks:
+      edge: { aliases: [kasweb-backend] }
+
+  website:
+    image: kas-web-website:${RELEASE:?}
+    build:
+      context: ./releases/${RELEASE:?}/frontend
+      dockerfile: ../docker/website.Dockerfile
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      KAS_API_ORIGIN: http://kasweb-backend:8080
+      # Console on its own host, so staff and guest sessions never share cookies.
+      # Enable together with the webdemo-admin Caddy block, once its DNS exists.
+      # KAS_CONSOLE_URL: https://webdemo-admin.kasbookingapp.com
+      ADMIN_KEY: ${WEBSITE_ADMIN_KEY:?}
+      UPLOAD_DIR: /data/uploads
+      KAS_CONFIG_DIR: /data/kas-config
+    volumes:
+      - ./data/website:/data
+    mem_limit: 300m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    security_opt: [no-new-privileges:true]
+    logging: *logging
+    networks:
+      edge: { aliases: [kasweb-website] }
+
+  console:
+    image: kas-web-console:${RELEASE:?}
+    build:
+      context: ./releases/${RELEASE:?}/frontend
+      dockerfile: ../docker/console.Dockerfile
+      args: { KAS_API_ORIGIN: http://kasweb-backend:8080 }
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      HOSTNAME: 0.0.0.0
+      KAS_API_ORIGIN: http://kasweb-backend:8080
+    mem_limit: 450m
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/admin/login').then(r=>process.exit(r.status<500?0:1)).catch(()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    security_opt: [no-new-privileges:true]
+    logging: *logging
+    networks:
+      edge: { aliases: [kasweb-console] }
+
+networks:
+  edge:
+    name: kas_kas-internal
+    external: true

@@ -3,6 +3,7 @@ package com.kas.platform.inventory;
 import com.kas.platform.pricing.PublishedRateRepository;
 import com.kas.platform.pricing.RateResolver;
 import com.kas.platform.pricing.ResolvedRate;
+import com.kas.platform.pricing.StayAdjustmentService;
 import com.kas.platform.property.BasePrice;
 import com.kas.platform.shared.ApiErrorCode;
 import com.kas.platform.shared.BusinessRuleException;
@@ -27,13 +28,32 @@ public class AvailabilityService {
     private final PublishedAvailabilityRepository published;
     private final PublishedRateRepository rates;
     private final Clock clock;
+    private final StayAdjustmentService adjustments;
 
     public AvailabilityService(PublishedAvailabilityRepository published,
                                PublishedRateRepository rates,
-                               Clock clock) {
+                               Clock clock,
+                               StayAdjustmentService adjustments) {
         this.published = published;
         this.rates = rates;
         this.clock = clock;
+        this.adjustments = adjustments;
+    }
+
+    /**
+     * The vouchers a guest can see for this stay (owner decision 2026-11-09: show the available
+     * vouchers to pick from, not only a code field), each with its saving or the reason it
+     * cannot be used yet.
+     */
+    public List<StayAdjustmentService.VoucherCheck> vouchers(String propertySlug, LocalDate checkIn,
+                                                             LocalDate checkOut, int adults, int children,
+                                                             List<Integer> childAges, List<QuoteLine> lines,
+                                                             String locale) {
+        PricedRequest priced = pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
+                childAges, lines, null, locale, null, 0);
+        return adjustments.vouchersFor(propertySlug, checkIn, checkOut,
+                priced.lines().stream().map(PricedLine::roomTypeId).toList(),
+                priced.roomsSubtotalMinor(), priced.currency());
     }
 
     /** Manual hotel review (owner decision 153). Room stock is not stored or inferred. */
@@ -61,19 +81,28 @@ public class AvailabilityService {
     public Quote quote(String propertySlug, LocalDate checkIn, LocalDate checkOut, int adults,
                        int children, List<Integer> childAges, List<QuoteLine> lines, String offerCode,
                        String locale) {
+        return quote(propertySlug, checkIn, checkOut, adults, children, childAges, lines, offerCode, locale, null, 0);
+    }
 
-        PricedRequest priced = priceRequest(propertySlug, checkIn, checkOut, adults, children,
-                childAges, lines, offerCode, locale);
+    /**
+     * As above, for the signed-in user {@code customerUserId} (null for a guest): their member
+     * discount, and {@code pointsToUse} KAS points if they ask for them (2026-11-10).
+     */
+    public Quote quote(String propertySlug, LocalDate checkIn, LocalDate checkOut, int adults,
+                       int children, List<Integer> childAges, List<QuoteLine> lines, String offerCode,
+                       String locale, UUID customerUserId, long pointsToUse) {
+
+        PricedRequest priced = pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
+                childAges, lines, offerCode, locale, customerUserId, pointsToUse);
 
         List<QuotedLine> quoted = priced.lines().stream()
                 .map(line -> new QuotedLine(line.roomTypeSlug(), line.roomTypeName(),
                         line.quantity(), line.nightlyFromMinor(), line.subtotalMinor()))
                 .toList();
 
-        // No tax and no voucher: the total is the room-rate total. Doc 99 §12 — V1 has no tax step,
-        // and config B23 keeps vouchers out, which is why an offer code was refused.
+        // Owner decision 2026-11-09: one voucher, then the active taxes (VAT; no service charge).
         return new Quote(propertySlug, checkIn, checkOut, priced.nights(), quoted,
-                priced.roomsSubtotalMinor(), priced.roomsSubtotalMinor(), priced.currency());
+                priced.roomsSubtotalMinor(), priced.totalMinor(), priced.currency(), priced.adjustment());
     }
 
     /** Manual hotel review (owner decision 153). Room stock is not stored or inferred. */
@@ -82,7 +111,7 @@ public class AvailabilityService {
                                       List<QuoteLine> lines, String offerCode, String locale) {
 
         return pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
-                childAges, lines, offerCode, locale);
+                childAges, lines, offerCode, locale, null, 0);
     }
 
     /** Prices a guest's request without asserting availability; hotel staff checks it manually. */
@@ -91,16 +120,25 @@ public class AvailabilityService {
                                       List<Integer> childAges, List<QuoteLine> lines,
                                       String offerCode, String locale) {
         return pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
-                childAges, lines, offerCode, locale);
+                childAges, lines, offerCode, locale, null, 0);
+    }
+
+    /** As above, with the booking user's member pricing and the points they spend. */
+    public PricedRequest priceRequestForManualReview(String propertySlug, LocalDate checkIn,
+                                      LocalDate checkOut, int adults, int children,
+                                      List<Integer> childAges, List<QuoteLine> lines,
+                                      String offerCode, String locale, UUID customerUserId, long pointsToUse) {
+        return pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
+                childAges, lines, offerCode, locale, customerUserId, pointsToUse);
     }
 
     private PricedRequest pricePublishedRequest(String propertySlug, LocalDate checkIn, LocalDate checkOut,
                                       int adults, int children, List<Integer> childAges,
-                                      List<QuoteLine> lines, String offerCode, String locale) {
+                                      List<QuoteLine> lines, String offerCode, String locale,
+                                      UUID customerUserId, long pointsToUse) {
 
         requireUsableStay(checkIn, checkOut);
         requireNoChildren(children, childAges);
-        requireNoOfferCode(offerCode);
         requireDistinctLines(lines);
 
         List<String> slugs = lines.stream().map(QuoteLine::roomTypeSlug).toList();
@@ -152,8 +190,38 @@ public class AvailabilityService {
 
         requirePartyFits(adults, children, capacity);
 
+        // One voucher at most; a code that cannot be used is refused, never silently dropped.
+        StayAdjustmentService.VoucherCheck voucher = null;
+        if (offerCode != null && !offerCode.isBlank()) {
+            voucher = adjustments.checkCode(offerCode, propertySlug, checkIn, checkOut,
+                    priced.stream().map(PricedLine::roomTypeId).toList(), roomsSubtotal, currency);
+            if (!voucher.eligible()) throw voucherRefused(voucher);
+        }
+        // Member discount and points (2026-11-10): from the signed-in account only.
+        StayAdjustmentService.MemberPricing member = adjustments.memberPricingForUser(customerUserId).orElse(null);
+        StayAdjustmentService.Adjustment adjusted;
+        try {
+            adjusted = adjustments.adjust(propertySlug, checkIn, roomsSubtotal, voucher, member, pointsToUse);
+        } catch (StayAdjustmentService.PointsRefused refused) {
+            throw new KasException(ApiErrorCode.VALIDATION_FAILED, "These KAS points cannot be used for this stay.",
+                    List.of(new KasException.ErrorDetail("pointsToUse", "POINTS_" + refused.reason().name(),
+                            "limit=" + refused.limit())));
+        }
+
         return new PricedRequest(propertySlug, checkIn, checkOut, nights, List.copyOf(priced),
-                roomsSubtotal, currency);
+                roomsSubtotal, currency, adjusted);
+    }
+
+    private static KasException voucherRefused(StayAdjustmentService.VoucherCheck check) {
+        var v = check.voucher();
+        String note = switch (check.reason()) {
+            case MIN_NIGHTS -> "minNights=" + v.minNights();
+            case MIN_TOTAL -> "minTotalMinor=" + v.minTotalMinor();
+            case STAY_OUT_OF_RANGE -> "stayFrom=" + v.stayFrom() + " stayTo=" + v.stayTo();
+            default -> check.reason().name();
+        };
+        return new KasException(ApiErrorCode.VALIDATION_FAILED, "This voucher cannot be used for this stay.",
+                List.of(new KasException.ErrorDetail("offerCode", "VOUCHER_" + check.reason().name(), note)));
     }
 
     /** One priced line, with the per-night detail the snapshot records. */
@@ -168,10 +236,13 @@ public class AvailabilityService {
     /** A validated, priced request. Creates nothing. */
     public record PricedRequest(String propertySlug, LocalDate checkIn, LocalDate checkOut,
                                 int nights, List<PricedLine> lines, long roomsSubtotalMinor,
-                                String currency) {
+                                String currency, StayAdjustmentService.Adjustment adjustment) {
         public PricedRequest {
             lines = List.copyOf(lines);
         }
+
+        /** What the guest pays: rooms − voucher + taxes and charges. */
+        public long totalMinor() { return adjustment.totalMinor(); }
     }
 
 
@@ -193,7 +264,7 @@ public class AvailabilityService {
      */
     public record Quote(String propertySlug, LocalDate checkIn, LocalDate checkOut, int nights,
                         List<QuotedLine> lines, long roomsSubtotalMinor, long totalMinor,
-                        String currency) {
+                        String currency, StayAdjustmentService.Adjustment adjustment) {
     }
 
     /** The whole-stay price of one room, and its cheapest night. */
@@ -239,16 +310,6 @@ public class AvailabilityService {
                     List.of(new KasException.ErrorDetail("children", "CHILD_PRICING_UNSUPPORTED",
                             "Child pricing and age bands are config B10 and have not been supplied, "
                                     + "so a child cannot be priced as an adult or as free.")));
-        }
-    }
-
-    /** Config B23 is OPEN — OQ-029. A supplied code is refused, never silently dropped. */
-    private static void requireNoOfferCode(String offerCode) {
-        if (offerCode != null && !offerCode.isBlank()) {
-            throw new BusinessRuleException(ApiErrorCode.CONFIG_MISSING,
-                    "Offer codes cannot be applied online yet. Please contact us directly.",
-                    List.of(new KasException.ErrorDetail("offerCode", "VOUCHER_UNSUPPORTED",
-                            "Voucher rules are config B23 and have not been supplied.")));
         }
     }
 

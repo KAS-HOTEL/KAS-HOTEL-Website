@@ -29,7 +29,7 @@
     var rows = [
       ['Check-in',     h.checkIn, 'Photo ID or passport required.'],
       ['Check-out',    h.checkOut, 'Late check-out on request.'],
-      ['Cancellation', 'Free until ' + U.cancelBy(checkIn), 'After that, 1 night is charged.'],
+      ['Cancellation', 'Free cancellation: members until 12:00 on check-in day, guests until 24h before check-in', 'After that, the cancellation fee shown before you confirm applies.'],
       ['Children',     'All ages welcome', 'Extra bed on request, subject to availability.'],
       ['Payment',      r.payment, 'No payment is taken in this demo.'],
       ['Smoking',      'Non-smoking room', 'Smoking is not permitted indoors.']

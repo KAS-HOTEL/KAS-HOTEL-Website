@@ -31,8 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnabledIf("com.kas.platform.db.FlywayHistoryIT#databaseIsReachable")
 class FlywayHistoryIT {
 
-    /** V1–V55, two repeatables (distribution channels, amenities) and Flyway's schema row. */
-    private static final int EXPECTED_MIGRATIONS = 63;
+    /** V1–V66, two repeatables (distribution channels, amenities) and Flyway's schema row. */
+    private static final int EXPECTED_MIGRATIONS = 69;
 
     /**
      * The highest versioned migration. V24–V26 were added in Phase 7.5F Step 16A;
@@ -45,8 +45,10 @@ class FlywayHistoryIT {
      * V48/V49 change membership tiers and cashback rates; V50 adds the hotel bank
      * details and the one-verified-payment-per-booking guard; V51 the shared KAS
      * payment account; V52 renames the Silver tier to Classic; V53 adds surcharges; V54 removes the Find Your KAS image slots; V55 aligns the website image slots with Homepage V3 and the Guidebook.
+     * V61 SePay IPN log; V62 VAT 8%; V63/V64 cancellation fee rules and the manual refund workflow; V65 voucher holds;
+     * V66 payment deadline, SePay checkout sessions and unmatched-payment follow-up.
      */
-    private static final int HIGHEST_VERSION = 60;
+    private static final int HIGHEST_VERSION = 66;
 
     static boolean databaseIsReachable() {
         return LocalDatabase.isReachable();

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/booking-price.css">
 <style>
 .guest-profile-note{margin:-4px 0 16px;padding:11px 13px;border:1px solid var(--line);background:var(--surface-2);font-size:.8rem;color:var(--tx-2)}
 .guest-room-summary{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 14px;margin-bottom:16px;background:var(--surface-2);border:1px solid var(--line);font-size:.86rem}
@@ -263,7 +264,7 @@
         counts[k] = Math.min(hi, Math.max(lo, counts[k] + (b.dataset.d === '+' ? 1 : -1)));
         sync();
         S.patchCurrent({ adults: counts.adults, children: counts.children });
-        paintSide();
+        requote();
       });
     });
     sync();
@@ -398,9 +399,22 @@
     var _q = window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id)
       ? window.KAS_RATES.quote(room.id, cur.checkIn, cur.checkOut) : null;
     U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(cur.price, {
-      nights: _q ? _q.nights : null, rateSource: room.rateSource });
+      nights: _q ? _q.nights : null, rateSource: room.rateSource, voucherBox: true });
+    B.bindVoucher(U.$('#sidePrice'), paintSide);
   }
-  paintSide();
+  /* Prices come only from the backend quote; the static catalog has no rates,
+     so painting from the draft alone would show 0 VND. Latest request wins. */
+  var quoteSeq = 0;
+  function requote() {
+    var seq = ++quoteSeq;
+    return B.refreshQuote().then(function () { if (seq === quoteSeq) paintSide(); });
+  }
+  if (!(c.price && c.price.source === 'BACKEND')) {
+    U.$('#sidePrice').innerHTML = '<p role="status" class="tiny muted">' + (bookingLang() === 'vi' ? 'Đang tải giá…' : 'Loading price…') + '</p>';
+  } else {
+    paintSide();
+  }
+  requote();
 
   U.$('#editStay').addEventListener('click', function (e) {
     e.preventDefault();

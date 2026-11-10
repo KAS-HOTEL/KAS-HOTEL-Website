@@ -45,7 +45,7 @@ class ReservationRequestIT extends SecurityIntegrationTest {
                 // Doc 58 §3.3 — guest vocabulary, never salesStatus.
                 .andExpect(jsonPath("$.status").value("REQUEST_RECEIVED"))
                 .andExpect(jsonPath("$.responsePromise").exists())
-                .andExpect(jsonPath("$.estimatedTotal.amountMinor").value(RATE * 2))
+                .andExpect(jsonPath("$.estimatedTotal.amountMinor").value(Vat.with(RATE * 2)))
                 .andExpect(jsonPath("$.estimatedTotal.currency").value("VND"))
                 .andExpect(jsonPath("$.estimatedTotal.exponent").value(0))
                 .andExpect(jsonPath("$.estimateDisclaimer").exists())
@@ -165,12 +165,13 @@ class ReservationRequestIT extends SecurityIntegrationTest {
         // The check-out night is not charged and must not appear.
         assertThat(snapshot).doesNotContain(CHECK_OUT.toString());
         assertThat(snapshot).contains("\"rateMinor\":" + RATE);
-        assertThat(snapshot).contains("\"totalMinor\":" + RATE * 2);
+        assertThat(snapshot).contains("\"subtotalMinor\":" + RATE * 2);
+        assertThat(snapshot).contains("\"totalMinor\":" + Vat.with(RATE * 2));
 
-        // Doc 117 §14.2 — tax left V1, so the snapshot carries neither field.
-        assertThat(snapshot).doesNotContain("taxes").doesNotContain("serviceChargeMinor");
-        assertThat(fixtures.reservationText(reference, "tax_minor")).isNull();
-        assertThat(fixtures.reservationText(reference, "service_charge_minor")).isNull();
+        // Owner decision 2026-11-09: VAT 8% is charged (V62); no service charge.
+        assertThat(snapshot).contains("\"taxes\"").doesNotContain("serviceChargeMinor");
+        assertThat(fixtures.reservationText(reference, "tax_minor")).isEqualTo(String.valueOf(Vat.of(RATE * 2)));
+        assertThat(fixtures.reservationText(reference, "service_charge_minor")).isEqualTo("0");
 
         // Doc 125 §11 — the typed shape. `propertySlug` is still not a snapshot
         // field: §7.2 admits propertyId and propertyName and nothing further.
@@ -583,13 +584,14 @@ class ReservationRequestIT extends SecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("an offer code is refused — config B23 is open")
+    @DisplayName("an unknown offer code is refused, never silently dropped")
     void offerCodeIsRefused() throws Exception {
         Fixture f = property();
         String withOffer = body(f, 2, 1).replace("\"offerCode\":null", "\"offerCode\":\"SUMMER\"");
 
         submitRaw(key("offer"), withOffer)
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.details[0].code").value("VOUCHER_NOT_FOUND"));
 
         assertThat(fixtures.reservationCount()).isZero();
     }
@@ -887,7 +889,7 @@ class ReservationRequestIT extends SecurityIntegrationTest {
         assertThat(fixtures.reservationText(reference, "currency")).isEqualTo("VND");
         assertThat(fixtures.reservationText(reference, "total_minor"))
                 .as("the price is the server’s arithmetic, never a client number")
-                .isEqualTo(String.valueOf(RATE * 2));
+                .isEqualTo(String.valueOf(Vat.with(RATE * 2)));
     }
 
     @org.junit.jupiter.api.Disabled("Owner decision 153: the website no longer reads or writes room stock or holds")

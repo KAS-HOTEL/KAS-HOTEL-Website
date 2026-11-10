@@ -62,6 +62,8 @@ export const SUPER_ADMIN_NAV: readonly NavSection[] = [
       { label: 'Yêu cầu đặt phòng', href: '/partner/requests', status: 'available', icon: <InboxIcon /> },
       { label: 'Đặt phòng & khách lưu trú', href: '/partner/reservations', status: 'available', icon: <GuestsIcon /> },
       { label: 'Yêu cầu hủy', href: '/partner/cancellation-requests', status: 'available', icon: <InboxIcon /> },
+      // SePay money that could not confirm a booking (V66, 2026-11-10): late, cancelled, twice, wrong amount.
+      { label: 'Tiền chưa khớp đơn', href: '/partner/unmatched-payments', status: 'available', icon: <InboxIcon /> },
     ],
   },
   {
@@ -71,6 +73,8 @@ export const SUPER_ADMIN_NAV: readonly NavSection[] = [
     heading: 'Giá phòng',
     items: [
       { label: 'Giá phòng', href: '/partner/pricing', status: 'available', icon: <CalendarIcon /> },
+      // Late-cancellation fees (2026-11-10): charged after the member / guest free window.
+      { label: 'Phí huỷ phòng', href: '/partner/cancellation-fees', status: 'available', icon: <TagIcon /> },
     ],
   },
   {

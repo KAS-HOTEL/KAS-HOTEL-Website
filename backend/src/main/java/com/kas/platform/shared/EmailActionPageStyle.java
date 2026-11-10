@@ -24,7 +24,7 @@ public final class EmailActionPageStyle {
             *{box-sizing:border-box}body{margin:0;background:#f5f1e9;color:#29251f;font:16px/1.6 Arial,Helvetica,sans-serif;padding:8vh 16px}\
             main{max-width:620px;margin:0 auto;background:#fffdf9;padding:36px;border:1px solid #d9cfbf}\
             .brand{margin:0 0 18px;letter-spacing:.22em;font-size:12px;color:#9a7948}\
-            h1{margin:0 0 14px;font:400 30px/1.25 Georgia,'Times New Roman',serif}h2{margin:28px 0 10px;font:400 22px Georgia,serif}\
+            h1{margin:0 0 14px;font:400 30px/1.25 'Times New Roman',Georgia,serif}h2{margin:28px 0 10px;font:400 22px 'Times New Roman',Georgia,serif}\
             p{margin:0 0 14px}.muted{color:#6b6255;font-size:14px}.facts{margin:0 0 20px;padding:14px 16px;background:#f5f1e9;border-left:3px solid #c2a25c}\
             .error{border-left-color:#a33a2b}button{appearance:none;border:0;background:#1f1b16;color:#fff;padding:14px 22px;font:600 14px Arial,sans-serif;letter-spacing:.04em;cursor:pointer;width:100%;max-width:360px}\
             button.secondary{background:#fff;color:#1f1b16;border:1px solid #1f1b16}form{margin:0 0 12px}\
@@ -32,7 +32,9 @@ public final class EmailActionPageStyle {
             hr{border:0;border-top:1px solid #e3dacb;margin:28px 0}a{color:#7a5c2e}@media(max-width:480px){main{padding:24px}h1{font-size:25px}}""";
 
     public static final String CONTENT_SECURITY_POLICY = "default-src 'none'; style-src '" + sha256(CSS) + "'; "
-            + "frame-ancestors 'none'; base-uri 'none'; form-action 'self'";
+            + "frame-ancestors 'none'; base-uri 'none'; "
+            // The guest payment page posts its signed checkout form to SePay.
+            + "form-action 'self' https://pay.sepay.vn https://pay-sandbox.sepay.vn";
 
     private EmailActionPageStyle() {
     }

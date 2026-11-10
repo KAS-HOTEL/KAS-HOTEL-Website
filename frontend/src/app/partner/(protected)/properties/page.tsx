@@ -15,7 +15,7 @@ import { EmptyState, ErrorState, PageHeader } from '@/ui/primitives';
 import styles from '@/features/property/Property.module.css';
 
 export const metadata: Metadata = {
-  title: 'Khách sạn — KAS Partner',
+  title: 'Khách sạn — KAS Admin',
 };
 
 /**

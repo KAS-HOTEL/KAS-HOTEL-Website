@@ -344,6 +344,58 @@ public class SalesRequestRepository implements ScopedRepository {
                 .list();
     }
 
+    /**
+     * The price as the request recorded it: rooms, voucher, taxes, total — the reservation's
+     * own columns and the S1 price snapshot, so staff can check the figure the guest was shown
+     * and will be asked to pay. Nothing is recomputed.
+     */
+    public Optional<SalesRequestPriceRow> price(UUID reservationId, AuthorizationScope scope) {
+        ScopeFilter filter = ScopeFilter.forProperties(scope, "p.partner_id", "p.id");
+
+        List<Object> params = new ArrayList<>();
+        params.add(reservationId);
+        params.addAll(filter.parameters());
+
+        return jdbc.sql("""
+                        SELECT r.currency, r.subtotal_minor, r.discount_minor, r.tax_minor,
+                               r.service_charge_minor, r.total_minor,
+                               v.code::text AS voucher_code, v.name AS voucher_name,
+                               v.voucher_type::text AS voucher_type, v.value_percent,
+                               COALESCE(r.price_snapshot -> 'discount' ->> 'voucherCode', v.code::text) AS snapshot_code,
+                               COALESCE(r.price_snapshot -> 'taxes', '[]'::jsonb)::text AS taxes,
+                               ls.member_discount_percent, COALESCE(ls.member_discount_minor, 0) AS member_discount_minor,
+                               COALESCE(ls.cashback_redeemed_points, 0) AS points_used, ls.tier_code_snapshot
+                          FROM reservation r
+                          JOIN property p ON p.id = r.property_id
+                          LEFT JOIN voucher v ON v.id = r.voucher_id
+                          LEFT JOIN reservation_loyalty_snapshot ls ON ls.reservation_id = r.id
+                         WHERE r.id = ? AND %s AND %s
+                        """.formatted(DIRECT_ONLY, filter.sql()))
+                .params(params)
+                .query((rs, n) -> new SalesRequestPriceRow(
+                        rs.getString("currency"),
+                        (Long) rs.getObject("subtotal_minor"),
+                        rs.getLong("discount_minor"),
+                        (Long) rs.getObject("tax_minor"),
+                        (Long) rs.getObject("service_charge_minor"),
+                        (Long) rs.getObject("total_minor"),
+                        rs.getString("snapshot_code"),
+                        rs.getString("voucher_name"),
+                        rs.getString("voucher_type"),
+                        rs.getBigDecimal("value_percent"),
+                        rs.getString("taxes"), rs.getBigDecimal("member_discount_percent"),
+                        rs.getLong("member_discount_minor"), rs.getLong("points_used"), rs.getString("tier_code_snapshot")))
+                .optional();
+    }
+
+    public record SalesRequestPriceRow(String currency, Long subtotalMinor, long discountMinor, Long taxMinor,
+                                       Long serviceChargeMinor, Long totalMinor, String voucherCode,
+                                       String voucherName, String voucherType,
+                                       java.math.BigDecimal voucherPercent, String taxesJson,
+                                       java.math.BigDecimal memberPercent, long memberDiscountMinor, long pointsUsed,
+                                       String tierCode) {
+    }
+
     // ------------------------------------------------------------- transitions
 
     /**

@@ -89,6 +89,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
                 rule(config, "account-email", "POST",
                         "/api/v1/public/auth/(forgot-password|resend-verification|verify-email|reset-password)", 10),
                 rule(config, "booking", "POST", "/api/v1/public/reservations/requests", 10),
+                // Each call can send an email: keep it as tight as the password-reset form.
+                rule(config, "cancel-link", "POST", "/api/v1/public/cancellations/link", 10),
                 rule(config, "receipt", "GET", "/api/v1/public/reservations/requests/[^/]+/sent", 30));
     }
 

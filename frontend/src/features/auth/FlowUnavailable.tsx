@@ -47,7 +47,7 @@ export function FlowUnavailable({
       <p className={styles.body}>{action} hiện chưa khả dụng trên cổng đối tác.</p>
       <p className={styles.body}>
         Tài khoản quản trị do KAS tạo và đặt lại mật khẩu. Vui lòng liên hệ KAS để được hỗ trợ, rồi{' '}
-        <Link href="/partner/login" className={styles.link}>
+        <Link href="/admin/login" className={styles.link}>
           quay lại trang đăng nhập
         </Link>
         .

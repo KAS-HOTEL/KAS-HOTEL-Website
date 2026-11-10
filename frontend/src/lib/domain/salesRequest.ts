@@ -62,6 +62,35 @@ export interface SalesRequestDetail {
   readonly timeline: readonly SalesRequestEvent[];
   /** The latest alternative stay KAS proposed (2026-11-07); absent from older servers. */
   readonly alternativeOffer?: SalesAlternativeOffer | null;
+  /** How the total is made up (2026-11-10); absent from older servers. */
+  readonly price?: SalesRequestPrice | null;
+}
+
+/** The recorded price: roomsSubtotal − discount + taxes = total. Nothing is recomputed. */
+export interface SalesRequestPrice {
+  readonly roomsSubtotal: Money | null;
+  readonly voucherCode: string | null;
+  readonly voucherName: string | null;
+  /** e.g. 50 for a 50% voucher; null for a fixed amount or a gift. */
+  readonly voucherPercent: number | null;
+  readonly discount: Money | null;
+  readonly roomsAfterDiscount: Money | null;
+  readonly taxes: readonly SalesRequestTax[];
+  readonly total: Money | null;
+  /** Member discount frozen at booking; absent from older servers. */
+  readonly memberTier?: string | null;
+  readonly memberDiscountPercent?: number | null;
+  readonly memberDiscount?: Money | null;
+  /** KAS points spent (1 point = 1 VND). */
+  readonly pointsUsed?: number;
+}
+
+export interface SalesRequestTax {
+  /** VAT, SERVICE_CHARGE, CITY_TAX, OTHER, or TAX when only the total was recorded. */
+  readonly type: string;
+  readonly ratePercent: number | null;
+  readonly amount: Money | null;
+  readonly inclusive: boolean;
 }
 
 /** What KAS suggested when it could not take the request. Nothing is held. */

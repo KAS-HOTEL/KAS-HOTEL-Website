@@ -66,11 +66,14 @@ class S1Transaction {
     private final ObjectMapper json;
     private final Clock clock;
     private final BookingNotificationService notifications;
+    private final VoucherHoldService voucherHolds;
+    private final com.kas.platform.customer.LoyaltyPointsService loyaltyPoints;
 
     S1Transaction(AvailabilityService availability, PublicAllocationRepository allocation,
                   ReservationRepository reservations, IdempotencyRepository idempotency,
                   SystemSettingService settings, ObjectMapper json, Clock clock,
-                  BookingNotificationService notifications) {
+                  BookingNotificationService notifications, VoucherHoldService voucherHolds,
+                  com.kas.platform.customer.LoyaltyPointsService loyaltyPoints) {
         this.availability = availability;
         this.allocation = allocation;
         this.reservations = reservations;
@@ -79,6 +82,20 @@ class S1Transaction {
         this.json = json;
         this.clock = clock;
         this.notifications = notifications;
+        this.voucherHolds = voucherHolds;
+        this.loyaltyPoints = loyaltyPoints;
+    }
+
+    /**
+     * Holds (voucher use, points) live with the booking (owner 2026-11-10, V66): they are
+     * released when it ends unpaid — expired by the payment deadline, cancelled, declined — and
+     * consumed when it is paid. 12:00 on the check-out day is only the backstop for a booking
+     * nobody closed; the stay is over by then, so nothing can still be paid for it.
+     * (It used to be 12:00 on the check-in day, which expired the hold of a same-day booking
+     * at once and let its voucher use and points be taken twice.)
+     */
+    static java.time.OffsetDateTime holdUntil(java.time.LocalDate checkOut) {
+        return checkOut.atTime(12, 0).atZone(PaymentDeadline.HOTEL_ZONE).toOffsetDateTime();
     }
 
     @Transactional
@@ -99,7 +116,7 @@ class S1Transaction {
                         .map(line -> new AvailabilityService.QuoteLine(line.roomTypeSlug(),
                                 line.quantity()))
                         .toList(),
-                body.offerCode(), locale);
+                body.offerCode(), locale, customerUserId, body.pointsOrZero());
 
         // The snapshot's propertyName — doc 125 §7.2. Read AFTER priceRequest on
         // purpose: priceRequest already refuses a locale this property cannot be
@@ -135,12 +152,42 @@ class S1Transaction {
                 // OQ-167, closed by doc 117 §24.2: stored opaquely, never validated,
                 // never looked up against the policy catalogue.
                 body.acceptedTermsVersion(),
-                priced.currency(), priced.roomsSubtotalMinor(), priced.roomsSubtotalMinor(),
+                priced.currency(), priced.roomsSubtotalMinor(), priced.totalMinor(),
                 snapshot, requestedAt, slaDueAt);
+
+        // Voucher and taxes (owner decision 2026-11-09). total_minor above already includes
+        // them: the payment email and SePay take the amount to pay from it.
+        var adjusted = priced.adjustment();
+        UUID voucherId = adjusted.voucher() != null && adjusted.voucher().eligible()
+                ? adjusted.voucher().voucher().id() : null;
+        reservations.recordAdjustment(reservationId, adjusted.discountMinor(), adjusted.taxMinor(),
+                adjusted.serviceChargeMinor(), voucherId);
+        // V65: the request only holds one use; it becomes the redemption when the payment is
+        // verified, and is released when the booking ends unpaid (see holdUntil).
+        java.time.OffsetDateTime holdUntil = holdUntil(body.checkOut());
+        if (voucherId != null && !voucherHolds.hold(voucherId, reservationId, customerId,
+                adjusted.discountMinor(), holdUntil)) {
+            throw new KasException(ApiErrorCode.VALIDATION_FAILED, "This voucher cannot be used for this stay.",
+                    List.of(new KasException.ErrorDetail("offerCode", "VOUCHER_USED_UP", "USED_UP")));
+        }
 
         if (customerId != null) {
             reservations.insertMembershipSnapshot(reservationId, customerId,
                     priced.currency(), requestedAt);
+            // Member pricing frozen on the booking (2026-11-10): later tier or policy changes do
+            // not rewrite it. Points are held now and spent only when the booking is paid.
+            var member = priced.adjustment().member();
+            if (member != null) {
+                reservations.recordMemberPricing(reservationId, member.discountPolicyId(), member.discountPercent(),
+                        priced.roomsSubtotalMinor() - priced.adjustment().discountMinor(),
+                        priced.adjustment().memberDiscountMinor(), member.cashbackRatePercent(),
+                        priced.adjustment().pointsUsed());
+                if (priced.adjustment().pointsUsed() > 0 && !loyaltyPoints.hold(customerId, reservationId,
+                        priced.adjustment().pointsUsed(), holdUntil)) {
+                    throw new KasException(ApiErrorCode.VALIDATION_FAILED, "These KAS points cannot be used for this stay.",
+                            List.of(new KasException.ErrorDetail("pointsToUse", "POINTS_OVER_BALANCE", "limit=0")));
+                }
+            }
         }
 
         for (AvailabilityService.PricedLine line : ordered) {
@@ -184,7 +231,7 @@ class S1Transaction {
                 RequestReceiptView.REQUEST_RECEIVED,
                 responsePromise(sla),
                 false,
-                new Money(priced.roomsSubtotalMinor(), priced.currency(), exponent),
+                new Money(priced.totalMinor(), priced.currency(), exponent),
                 ESTIMATE_DISCLAIMER);
     }
 
@@ -262,13 +309,27 @@ class S1Transaction {
 
         root.put("subtotalMinor", priced.roomsSubtotalMinor());
 
-        // An offer code is refused before this point (doc 117 §13), so the discount
-        // is structurally zero rather than a decision taken here.
+        // One voucher at most, already checked by priceRequest (owner decision 2026-11-09).
+        var adjusted = priced.adjustment();
         ObjectNode discount = root.putObject("discount");
-        discount.putNull("voucherId");
-        discount.put("amountMinor", 0);
+        if (adjusted.voucher() != null && adjusted.voucher().eligible()) {
+            discount.put("voucherId", adjusted.voucher().voucher().id().toString());
+            discount.put("voucherCode", adjusted.voucher().voucher().code());
+        } else {
+            discount.putNull("voucherId");
+        }
+        discount.put("amountMinor", adjusted.discountMinor());
 
-        root.put("totalMinor", priced.roomsSubtotalMinor());
+        ArrayNode taxes = root.putArray("taxes");
+        for (var tax : adjusted.taxes()) {
+            ObjectNode t = taxes.addObject();
+            t.put("type", tax.type());
+            t.put("ratePercent", tax.ratePercent());
+            t.put("amountMinor", tax.amountMinor());
+            t.put("inclusive", tax.inclusive());
+        }
+
+        root.put("totalMinor", priced.totalMinor());
 
         ArrayNode applied = root.putArray("appliedRuleIds");
         appliedRuleIds(priced).forEach(applied::add);

@@ -53,10 +53,32 @@ public record QuoteView(
         Money roomsSubtotal,
         Money total,
         String currency,
-        boolean estimate) {
+        boolean estimate,
+        /** The voucher applied, or null. */
+        VoucherView voucher,
+        /** What the voucher took off the rooms subtotal (0 without one). */
+        Money discount,
+        /** Taxes and charges, in the order applied; {@code total} includes the non-inclusive ones. */
+        List<Tax> taxes,
+        /** The signed-in member's discount and points for this stay, or null for a guest (2026-11-10). */
+        Member member) {
 
     public QuoteView {
         lines = List.copyOf(lines);
+        taxes = taxes == null ? List.of() : List.copyOf(taxes);
+    }
+
+    /**
+     * Member pricing on this quote: the tier, its discount and the amount taken off, the points
+     * the member holds, the points used here, and the most this stay can take.
+     */
+    public record Member(String tierCode, java.math.BigDecimal discountPercent, Money discount,
+                         long pointsAvailable, long pointsUsed, java.math.BigDecimal maxRedeemPercent,
+                         long pointsMaxForStay) {
+    }
+
+    /** One tax or charge. {@code ratePercent} e.g. 8 for VAT 8%. */
+    public record Tax(String type, java.math.BigDecimal ratePercent, Money amount, boolean inclusive) {
     }
 
     /**

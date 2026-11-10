@@ -19,7 +19,9 @@ class ManualRequestPricingTest {
     private final PublishedRateRepository rates = mock(PublishedRateRepository.class);
     private final SystemSettingService settings = mock(SystemSettingService.class);
     private final Clock clock = Clock.fixed(Instant.parse("2026-10-24T00:00:00Z"), ZoneOffset.UTC);
-    private final AvailabilityService pricing = new AvailabilityService(rooms, rates, clock);
+    private final com.kas.platform.pricing.StayAdjustmentService adjustments =
+            mock(com.kas.platform.pricing.StayAdjustmentService.class);
+    private final AvailabilityService pricing = new AvailabilityService(rooms, rates, clock, adjustments);
     private final UUID roomId = UUID.randomUUID();
     private final LocalDate in = LocalDate.of(2026, 11, 1);
     private final LocalDate out = in.plusDays(2);
@@ -45,9 +47,14 @@ class ManualRequestPricingTest {
 
     @Test void quoteAcceptsRequestedQuantityWithoutCheckingAvailableRoomsOrHorizon() {
         withRoom(List.of("suite"));
+        when(adjustments.adjust("hotel", in, 1_200_000, null, null, 0L)).thenReturn(
+                new com.kas.platform.pricing.StayAdjustmentService.Adjustment(1_200_000, null, 0,
+                        List.of(new com.kas.platform.pricing.StayAdjustmentService.TaxLine("VAT",
+                                java.math.BigDecimal.valueOf(8), 96_000, false)), 0, 96_000, 1_296_000));
         var quote = pricing.quote("hotel", in, out, 12, 0, List.of(),
                 List.of(new AvailabilityService.QuoteLine("suite", 6)), null, "vi");
-        assertThat(quote.totalMinor()).isEqualTo(1_200_000);
+        assertThat(quote.roomsSubtotalMinor()).isEqualTo(1_200_000);
+        assertThat(quote.totalMinor()).isEqualTo(1_296_000);
         assertThat(quote.lines().getFirst().quantity()).isEqualTo(6);
         verify(rooms).requestRooms("hotel", List.of("suite"));
         verifyNoMoreInteractions(rooms);

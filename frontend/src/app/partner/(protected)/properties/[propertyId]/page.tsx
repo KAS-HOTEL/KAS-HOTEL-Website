@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   // Deliberately constant. A title built from the property would differ between
   // "absent" and "someone else's hotel" the moment either one resolved, and the
   // browser tab is as good a side channel as the page body.
-  title: 'Khách sạn — KAS Partner',
+  title: 'Khách sạn — KAS Admin',
 };
 
 /**

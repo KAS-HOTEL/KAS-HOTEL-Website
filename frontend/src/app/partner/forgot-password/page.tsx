@@ -3,7 +3,7 @@ import { AuthEmblem } from '@/features/auth/AuthEmblem';
 import { AuthFooter, AuthHeading, AuthShell } from '@/features/auth/AuthShell';
 import { FlowUnavailable } from '@/features/auth/FlowUnavailable';
 
-export const metadata = { title: 'KAS Partner — Khôi phục mật khẩu', robots: { index: false } };
+export const metadata = { title: 'KAS Admin — Khôi phục mật khẩu', robots: { index: false } };
 
 /**
  * Password recovery, which this application cannot yet perform.
@@ -38,7 +38,7 @@ export default function PartnerForgotPasswordPage() {
       <FlowUnavailable action="Đặt lại mật khẩu" />
 
       <AuthFooter>
-        <Link href="/partner/login">Quay lại đăng nhập</Link>
+        <Link href="/admin/login">Quay lại đăng nhập</Link>
       </AuthFooter>
     </AuthShell>
   );

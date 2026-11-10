@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   // Constant, like every other property-scoped page: a title built from the room
   // would differ between "absent" and "someone else's", and the browser tab is
   // as good a side channel as the page body.
-  title: 'Ảnh phòng — KAS Partner',
+  title: 'Ảnh phòng — KAS Admin',
 };
 
 /**

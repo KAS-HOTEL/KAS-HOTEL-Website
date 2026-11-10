@@ -19,6 +19,12 @@ import type { NextConfig } from 'next';
 const apiOrigin = process.env.KAS_API_ORIGIN ?? 'http://localhost:8080';
 
 const nextConfig: NextConfig = {
+  // Docker images (docker/console.Dockerfile) set KAS_NEXT_STANDALONE=1: Next.js then
+  // traces only the files the server needs into .next/standalone, which makes the image
+  // ~5x smaller (and ~5x faster to push) than shipping the full node_modules.
+  // The rewrites below are baked in at build time, so KAS_API_ORIGIN is a build argument.
+  // `npm run dev` / `npm start` are unchanged.
+  ...(process.env.KAS_NEXT_STANDALONE === '1' ? { output: 'standalone' as const } : {}),
   reactStrictMode: true,
   poweredByHeader: false,
   // The floating Next.js dev tools badge (Route / Bundler / Route Info /

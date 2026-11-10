@@ -31,14 +31,27 @@ public class MeStayController {
     private final CustomerCancellationService cancellations;
     private final BookingNotificationService notifications;
     private final com.kas.platform.reservation.CheckoutRequestService checkouts;
+    private final com.kas.platform.reservation.CancellationNotifier cancellationEmails;
 
     public MeStayController(JdbcClient jdbc, CustomerCancellationService cancellations,
                             BookingNotificationService notifications,
-                            com.kas.platform.reservation.CheckoutRequestService checkouts) {
+                            com.kas.platform.reservation.CheckoutRequestService checkouts,
+                            com.kas.platform.reservation.CancellationNotifier cancellationEmails) {
         this.jdbc = jdbc;
         this.cancellations = cancellations;
         this.notifications = notifications;
         this.checkouts = checkouts;
+        this.cancellationEmails = cancellationEmails;
+    }
+
+    /**
+     * What cancelling now would mean — free-cancellation deadline, policy, fee, amount paid and
+     * the refund — decided by the backend and shown before the guest confirms. Changes nothing.
+     */
+    @GetMapping("/{reference}/cancel/preview")
+    @PreAuthorize("hasAuthority('" + Permissions.ME_STAY_CANCEL + "')")
+    public CustomerCancellationService.CancellationTerms previewCancellation(@PathVariable String reference) {
+        return cancellations.preview(reference, requireCustomerActor());
     }
 
     @GetMapping
@@ -62,7 +75,8 @@ public class MeStayController {
                                rl.rooms, rl.room_names,
                                cr.id AS cancellation_request_id,
                                cr.status::text AS cancellation_request_status,
-                               cr.fee_amount_minor, cr.fee_currency, cr.fee_note
+                               cr.fee_amount_minor, cr.fee_currency, cr.fee_note,
+                               cr.refund_due_minor, cr.refund_amount_minor
                           FROM reservation r
                           JOIN customer c ON c.id = r.customer_id
                           JOIN property p ON p.id = r.property_id
@@ -74,7 +88,7 @@ public class MeStayController {
                           LEFT JOIN property_translation pt
                                  ON pt.property_id = p.id AND pt.locale = :locale
                           LEFT JOIN LATERAL (
-                               SELECT id, status, fee_amount_minor, fee_currency, fee_note
+                               SELECT id, status, fee_amount_minor, fee_currency, fee_note, refund_due_minor, refund_amount_minor
                                  FROM reservation_cancellation_request
                                 WHERE reservation_id = r.id
                                 ORDER BY created_at DESC, id DESC LIMIT 1
@@ -104,7 +118,8 @@ public class MeStayController {
                         rs.getObject("check_in_time", java.time.LocalTime.class), rs.getObject("check_out_time", java.time.LocalTime.class),
                         rs.getString("guest_name"), rs.getString("guest_email"), rs.getString("special_requests"),
                         (Long) rs.getObject("subtotal_minor"), rs.getObject("payment_verified_at", java.time.OffsetDateTime.class),
-                        rs.getObject("checkout_requested_at", java.time.OffsetDateTime.class), rs.getString("checkout_request_source")))
+                        rs.getObject("checkout_requested_at", java.time.OffsetDateTime.class), rs.getString("checkout_request_source"),
+                        (Long) rs.getObject("refund_due_minor"), (Long) rs.getObject("refund_amount_minor")))
                 .list();
     }
 
@@ -112,11 +127,16 @@ public class MeStayController {
     @PreAuthorize("hasAuthority('" + Permissions.ME_STAY_CANCEL + "')")
     @org.springframework.transaction.annotation.Transactional
     public CustomerCancellationService.CancellationResult requestCancellation(
-            @PathVariable String reference) {
-        var result = cancellations.request(reference, requireCustomerActor());
-        if (result.cancelled()) notifications.bookingCancelled(reference);
+            @PathVariable String reference,
+            @RequestBody(required = false) CancellationRequestBody body) {
+        // expectedFeeMinor: the fee the guest was shown; a changed fee is refused, not charged.
+        var result = cancellations.request(reference, requireCustomerActor(),
+                body == null ? null : body.expectedFeeMinor());
+        cancellationEmails.after(result, false);
         return result;
     }
+
+    public record CancellationRequestBody(Long expectedFeeMinor) { }
 
     /**
      * The guest presses "Trả phòng" (V59). SUPER_ADMIN confirms the check-out, which is what counts
@@ -134,7 +154,7 @@ public class MeStayController {
     public CustomerCancellationService.CancellationResult decideCancellation(
             @PathVariable String reference, @RequestBody CancellationDecision decision) {
         var result = cancellations.decide(reference, decision.accept(), requireCustomerActor());
-        if (result.cancelled()) notifications.bookingCancelled(reference);
+        cancellationEmails.after(result, false);
         return result;
     }
 
@@ -156,6 +176,8 @@ public class MeStayController {
                        java.time.LocalTime checkInTime, java.time.LocalTime checkOutTime,
                        String guestName, String guestEmail, String specialRequests, Long subtotalMinor,
                        java.time.OffsetDateTime paymentVerifiedAt,
-                       java.time.OffsetDateTime checkoutRequestedAt, String checkoutRequestSource) { }
+                       java.time.OffsetDateTime checkoutRequestedAt, String checkoutRequestSource,
+                       /** Refund KAS owes / has recorded for a cancelled, paid stay (2026-11-10). */
+                       Long refundDueMinor, Long refundAmountMinor) { }
     public record CancellationDecision(boolean accept) { }
 }

@@ -9,6 +9,7 @@ import { cancellationFeePreview, type PendingCancellation, type CancellationFeeQ
 import { formatMoney } from '@/lib/domain/availability';
 import { Button, Card, ConfirmDialog } from '@/ui/primitives';
 import styles from '@/features/adminTools/AdminTools.module.css';
+import { RefundQueue } from './RefundQueue';
 
 function CancellationQuote({ row, onQuoted }: { readonly row: PendingCancellation; readonly onQuoted: () => Promise<void> }) {
   const [mode, setMode] = useState<'AMOUNT' | 'PERCENTAGE'>('AMOUNT');
@@ -79,12 +80,13 @@ export function CancellationQueue() {
   const { rows, loading, error, reload } = useAdminList(loader);
   const [notice, setNotice] = useState('');
   return <div className={styles.page}>
-    <header className={styles.pageHeader}><div><p className={styles.eyebrow}>Vận hành</p><h1>Yêu cầu hủy</h1><p>Chọn phí theo phần trăm hoặc số tiền cụ thể, xem lại rồi gửi khách quyết định.</p></div>
+    <header className={styles.pageHeader}><div><p className={styles.eyebrow}>Vận hành</p><h1>Yêu cầu hủy</h1><p>Huỷ sau thời hạn miễn phí khi chưa cấu hình phí (Giá phòng → Phí huỷ phòng): chọn phí theo phần trăm hoặc số tiền cụ thể, xem lại rồi gửi khách quyết định.</p></div>
       <Button variant="secondary" disabled={loading} onClick={() => void reload()}>Tải lại danh sách</Button>
     </header>
     {notice && <p role="status">{notice}</p>}
     {loading || error || rows.length === 0 ? <ListState loading={loading} error={error} onRetry={() => void reload()}
       errorTitle="Chưa tải được yêu cầu hủy" emptyTitle="Không có yêu cầu chờ báo phí" emptyDescription="Các yêu cầu cần báo phí sẽ xuất hiện tại đây." />
       : rows.map((row) => <CancellationQuote key={row.requestId} row={row} onQuoted={async () => { setNotice(`Đã báo phí cho ${row.reference}.`); await reload(); }} />)}
+    <RefundQueue />
   </div>;
 }

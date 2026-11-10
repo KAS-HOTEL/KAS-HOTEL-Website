@@ -89,6 +89,32 @@ public class ReservationRepository {
      *       unvalidated — OQ-167, closed by doc 117 §24.2.</li>
      * </ul>
      */
+    /** Records the voucher discount and the taxes/charges priced at S1 on the new reservation. */
+    public void recordAdjustment(UUID reservationId, long discountMinor, long taxMinor,
+                                 long serviceChargeMinor, UUID voucherId) {
+        jdbc.sql("""
+                UPDATE reservation SET discount_minor = :discount, tax_minor = :tax,
+                       service_charge_minor = :service, voucher_id = :voucherId
+                 WHERE id = :id
+                """).param("discount", discountMinor).param("tax", taxMinor)
+                .param("service", serviceChargeMinor).param("voucherId", voucherId)
+                .param("id", reservationId).update();
+    }
+
+    /** Freezes the member discount, the tier cashback rate and the points spent on the booking's snapshot. */
+    public void recordMemberPricing(UUID reservationId, UUID policyId, java.math.BigDecimal percent, long baseMinor,
+                                    long discountMinor, java.math.BigDecimal cashbackRate, long pointsUsed) {
+        jdbc.sql("""
+                UPDATE reservation_loyalty_snapshot
+                   SET discount_policy_id = :policy, member_discount_percent = :percent,
+                       member_discount_base_minor = :base, member_discount_minor = :discount,
+                       cashback_rate_percent_snapshot = :rate, cashback_redeemed_points = :points
+                 WHERE reservation_id = :id AND customer_membership_id IS NOT NULL
+                """).param("policy", policyId).param("percent", percent).param("base", baseMinor)
+                .param("discount", discountMinor).param("rate", cashbackRate).param("points", pointsUsed)
+                .param("id", reservationId).update();
+    }
+
     public void insertReservation(UUID id, String reference, UUID propertyId, UUID channelId,
                                   UUID customerId,
                                   LocalDate checkIn, LocalDate checkOut, int adults, int children,

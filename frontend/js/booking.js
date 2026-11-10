@@ -15,25 +15,88 @@
    */
   function sheetNightly() { return null; }
 
+  /** Body of a quote / voucher-list request for the current draft. */
+  function quoteBody(c, offerCode) {
+    var mapped = global.KAS_API_MAP && global.KAS_API_MAP[c.roomId];
+    if (!mapped || !global.KAS_API) return null;
+    return {
+      propertySlug: mapped.propertySlug, checkIn: c.checkIn, checkOut: c.checkOut,
+      adults: +c.adults || 1, children: +c.children || 0, childAges: [],
+      lines: [{ roomTypeSlug: mapped.roomTypeSlug, quantity: +c.rooms || 1 }],
+      offerCode: offerCode || null,
+      pointsToUse: +c.pointsToUse > 0 ? +c.pointsToUse : null
+    };
+  }
+  function money(m) { return m && m.amountMinor != null ? Number(m.amountMinor) : null; }
+  /** The backend quote as the draft's price: rooms, voucher discount, taxes, total. */
+  function priceFromQuote(quote, c) {
+    var line = quote.lines && quote.lines[0];
+    return { nightly: line && line.nightlyFrom ? line.nightlyFrom.amountMinor : null,
+      nights: quote.nights, rooms: +c.rooms || 1, subtotal: money(quote.roomsSubtotal),
+      discount: money(quote.discount) || 0,
+      taxes: (quote.taxes || []).map(function (t) { return { type: t.type, ratePercent: Number(t.ratePercent), amount: money(t.amount) || 0, inclusive: !!t.inclusive }; }),
+      member: quote.member ? { tier: quote.member.tierCode, percent: Number(quote.member.discountPercent),
+        discount: money(quote.member.discount) || 0, pointsAvailable: +quote.member.pointsAvailable || 0,
+        pointsUsed: +quote.member.pointsUsed || 0, pointsMax: +quote.member.pointsMaxForStay || 0 } : null,
+      total: money(quote.total), source: 'BACKEND' };
+  }
+  function postQuote(c, offerCode) {
+    var body = quoteBody(c, offerCode);
+    if (!body) return Promise.reject(new Error('Price is not configured for this room.'));
+    return global.KAS_API.request('/api/v1/public/request-pricing/quote', { method: 'POST', body: body });
+  }
+  /** The points-refusal reason in an API error (POINTS_OVER_LIMIT → OVER_LIMIT, limit), or null. */
+  function pointsReason(error) {
+    var d = error && error.payload && Array.isArray(error.payload.details) ? error.payload.details[0] : null;
+    if (!d || d.field !== 'pointsToUse' || !/^POINTS_/.test(d.code || '')) return null;
+    var m = String(d.message || '').match(/limit=(\d+)/);
+    return { code: d.code.slice(7), limit: m ? +m[1] : null };
+  }
+  function pointsMessage(reason, limit) {
+    var vi = !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi');
+    var n = limit == null ? '' : U.vnd(limit);
+    switch (reason) {
+      case 'OVER_LIMIT': return vi ? 'Đơn này dùng tối đa ' + n + ' điểm (50% tiền phòng sau ưu đãi).' : 'This stay can use up to ' + n + ' points (50% of the room amount after offers).';
+      case 'OVER_BALANCE': return vi ? 'Bạn chỉ có ' + n + ' điểm khả dụng.' : 'You have ' + n + ' points available.';
+      case 'BELOW_MINIMUM': return vi ? 'Cần dùng tối thiểu ' + n + ' điểm.' : 'Use at least ' + n + ' points.';
+      case 'NOT_A_MEMBER': return vi ? 'Đăng nhập tài khoản thành viên để dùng điểm KAS.' : 'Sign in to your member account to use KAS points.';
+      default: return vi ? 'Hiện chưa dùng được điểm KAS.' : 'KAS points cannot be used right now.';
+    }
+  }
+
+  /** The voucher-refusal reason in an API error (VOUCHER_MIN_NIGHTS → MIN_NIGHTS), or null. */
+  function voucherReason(error) {
+    var d = error && error.payload && Array.isArray(error.payload.details) ? error.payload.details[0] : null;
+    return d && d.field === 'offerCode' && /^VOUCHER_/.test(d.code || '') ? { code: d.code.slice(8), note: d.message || '' } : null;
+  }
+
   async function refreshQuote() {
     var c = draft();
-    var mapped = global.KAS_API_MAP && global.KAS_API_MAP[c.roomId];
+    var code = c.voucher && c.voucher.code;
     try {
-      if (!mapped || !global.KAS_API) throw new Error('Price is not configured for this room.');
-      var quote = await global.KAS_API.request('/api/v1/public/request-pricing/quote', { method: 'POST', body: {
-        propertySlug: mapped.propertySlug, checkIn: c.checkIn, checkOut: c.checkOut,
-        adults: +c.adults || 1, children: +c.children || 0, childAges: [],
-        lines: [{ roomTypeSlug: mapped.roomTypeSlug, quantity: +c.rooms || 1 }]
-      }});
-      var line = quote.lines && quote.lines[0];
-      var price = { nightly: line && line.nightlyFrom ? line.nightlyFrom.amountMinor : null,
-        nights: quote.nights, rooms: +c.rooms || 1, subtotal: quote.roomsSubtotal.amountMinor,
-        total: quote.estimatedTotal ? quote.estimatedTotal.amountMinor : quote.total.amountMinor,
-        serviceCharge: 0, vat: 0, serviceChargeRate: 0, vatRate: 0, source: 'BACKEND' };
-      return S.patchCurrent({ price: price, quoteError: '', nights: quote.nights });
+      var quote;
+      try {
+        quote = await postQuote(c, code);
+      } catch (error) {
+        /* The voucher no longer fits this stay (dates, room, used up): drop it, say why, price without it. */
+        var pts = pointsReason(error);
+        if (pts && +c.pointsToUse > 0) {
+          S.patchCurrent({ pointsToUse: 0, pointsNotice: pointsMessage(pts.code, pts.limit) });
+          return refreshQuote();
+        }
+        var why = code && voucherReason(error);
+        if (!why) throw error;
+        S.patchCurrent({ voucher: null, voucherNotice: voucherMessage(why.code, null) });
+        c = draft();
+        quote = await postQuote(c, null);
+      }
+      var price = priceFromQuote(quote, c);
+      var patch = { price: price, quoteError: '', nights: quote.nights };
+      if (quote.voucher) patch.voucher = voucherFromView(quote.voucher);
+      return S.patchCurrent(patch);
     } catch (error) {
-      var why = describeBookingError(error);
-      return S.patchCurrent({ price: { total: null, subtotal: null, nightly: null, nights: U.nights(c.checkIn,c.checkOut), rooms: c.rooms, source: 'UNAVAILABLE' }, quoteError: why.message, quoteErrorCustomer: why.customer });
+      var described = describeBookingError(error);
+      return S.patchCurrent({ price: { total: null, subtotal: null, nightly: null, nights: U.nights(c.checkIn,c.checkOut), rooms: c.rooms, source: 'UNAVAILABLE' }, quoteError: described.message, quoteErrorCustomer: described.customer });
     }
   }
 
@@ -182,7 +245,7 @@
       return { customer: true, message: t('Số khách vượt quá sức chứa của phòng đã chọn' + (capacity ? ' (tối đa ' + capacity + ' khách)' : '') + '. Vui lòng thêm phòng hoặc giảm số khách.', 'Too many guests for the selected rooms' + (capacity ? ' (up to ' + capacity + ')' : '') + '. Add a room or reduce the number of guests.') };
     }
     if (reason === 'CHILD_PRICING_UNSUPPORTED') return { customer: true, message: t('Hiện chưa nhận đặt online cho kỳ nghỉ có trẻ em. Vui lòng liên hệ khách sạn để được hỗ trợ.', 'Online booking with children is not available yet. Please contact the hotel.') };
-    if (reason === 'VOUCHER_UNSUPPORTED') return { customer: true, message: t('Mã ưu đãi chưa áp dụng được khi đặt online. Vui lòng bỏ mã ưu đãi hoặc liên hệ khách sạn.', 'Offer codes cannot be applied online yet. Remove the code or contact the hotel.') };
+    if (field === 'offerCode' && reason.indexOf('VOUCHER_') === 0) return { customer: true, message: voucherMessage(reason.slice(8), null) + ' ' + t('Vui lòng gỡ hoặc chọn voucher khác.', 'Remove it or choose another voucher.') };
     if (code === 'PROPERTY_CLOSED') return { customer: false, message: t('Khách sạn này đang tạm ngừng nhận đặt phòng. Vui lòng chọn khách sạn khác hoặc liên hệ KAS.', 'This hotel is not taking bookings at the moment. Please choose another hotel or contact KAS.') };
     if (code === 'CONFIG_MISSING') return { customer: false, message: t('Khách sạn chưa thiết lập đủ thông tin để nhận đặt online cho lựa chọn này (lỗi phía khách sạn). Vui lòng liên hệ khách sạn.', 'The hotel has not finished setting up online booking for this choice (hotel-side). Please contact the hotel.') };
     if (code === 'VALIDATION_FAILED') {
@@ -265,7 +328,9 @@
       },
       specialRequests: c.guest.specialRequests || null,
       discoveryChannel: 'WEBSITE',
-      offerCode: null,
+      /* The backend re-checks the voucher and prices the request itself. */
+      offerCode: c.voucher ? c.voucher.code : null,
+      pointsToUse: +c.pointsToUse > 0 ? +c.pointsToUse : null,
       acceptedTermsVersion: null,
       marketingConsent: false,
       locale: locale
@@ -293,6 +358,7 @@
       var n = U.nights(c.checkIn, c.checkOut);
       var p = U.calcPrice(r.pricePerNight, n, c.rooms || 1, null, sheetNightly(r, c.checkIn, c.checkOut));
       var total = receipt && receipt.estimatedTotal ? Number(receipt.estimatedTotal.amountMinor) : null;
+      var totals = priceTotals(c.price);
       var booking = {
       bookingNumber: receipt.reference,
       branchId:   h.id,
@@ -324,12 +390,14 @@
       paymentMethod:   (c.guest && c.guest.paymentMethod) || 'pay-later',
       roomRate:      receipt.estimatedTotal ? receipt.estimatedTotal.amountMinor : null,
       nightlyRate:   null,
-      serviceCharge: 0,
-      vat:           0,
+      serviceCharge: totals ? totals.service : 0,
+      vat:           totals ? totals.vat : 0,
+      voucher:       c.voucher || null,
+      voucherDiscount: totals ? totals.discount : 0,
       total:         p.total,
       currency:      'VND',
-      serviceChargeRate: 0,
-      vatRate:           0,
+      serviceChargeRate: totals ? totals.serviceRate : 0,
+      vatRate:           totals ? totals.vatRate : 0,
       cancellationDeadline: U.cancelBy(c.checkIn),
       cancellationPolicy:   r.cancellation,
       priceBasis: r.priceBasis,
@@ -408,14 +476,275 @@
    *        When the operator rate sheet drives the price, each night is listed
    *        with its own figure, because weekday and weekend rates differ.
    */
-  function priceBreakdownHTML(p) {
+  /* ---------- taxes and voucher ----------
+     All figures come from the backend quote (owner decision 2026-11-09): the voucher
+     comes off the room amount, then VAT (and a service charge, if one is ever turned
+     on) is added. One voucher per booking. */
+  function isVi() { return !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi'); }
+  function pct(rate) { return String(Math.round(Number(rate) * 10) / 10).replace('.', isVi() ? ',' : '.') + '%'; }
+
+  /** Every figure of the price summary, in VND, from a backend price. null when unknown. */
+  function priceTotals(p) {
     p = p || {};
-    var vi = global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi';
-    var amount = p.total == null || !Number.isFinite(Number(p.total)) ? null : Number(p.total);
-    if (amount == null) return '<p role="status" class="tiny muted">' + (vi ? 'Chưa có giá xác thực. Vui lòng liên hệ khách sạn.' : 'No current price is available. Please contact the hotel.') + '</p>';
-    return '<div class="prow"><span>' + (vi ? 'Tiền phòng' : 'Room amount') + '</span><span>' + U.vnd(p.subtotal == null ? amount : p.subtotal) + ' VND</span></div>' +
-      '<div class="prow prow--total"><span>' + (vi ? 'Tổng giá dự kiến' : 'Estimated total') + '</span><span>' + U.vnd(amount) + '<sup>VND</sup></span></div>' +
-      '<p class="tiny muted">' + (vi ? 'Khách sạn kiểm tra và xác nhận phòng, giá và điều kiện thanh toán trước khi đặt phòng được xác nhận.' : 'The hotel reviews the room, price and payment terms before the booking is confirmed.') + '</p>';
+    var room = p.subtotal != null ? Number(p.subtotal) : (p.total != null ? Number(p.total) : NaN);
+    if (!Number.isFinite(room) || p.total == null) return null;
+    var taxes = p.taxes || [];
+    var sum = function (type) { return taxes.filter(function (t) { return t.type === type && !t.inclusive; }).reduce(function (a, t) { return a + t.amount; }, 0); };
+    var vatRule = taxes.filter(function (t) { return t.type === 'VAT'; })[0];
+    var svcRule = taxes.filter(function (t) { return t.type === 'SERVICE_CHARGE'; })[0];
+    var memberOff = p.member ? p.member.discount : 0, pointsUsed = p.member ? p.member.pointsUsed : 0;
+    return { room: room, discount: Number(p.discount) || 0, member: p.member || null, memberDiscount: memberOff, points: pointsUsed,
+             base: room - (Number(p.discount) || 0) - memberOff, taxes: taxes,
+             service: sum('SERVICE_CHARGE'), serviceRate: svcRule ? svcRule.ratePercent / 100 : 0,
+             vat: sum('VAT'), vatRate: vatRule ? vatRule.ratePercent / 100 : 0, total: Number(p.total) };
+  }
+
+  /** "Excludes VAT 8%" for the room page, from the quote's taxes. */
+  function taxNote(p) {
+    var vi = isVi();
+    var added = ((p && p.taxes) || []).filter(function (t) { return !t.inclusive && t.amount > 0; });
+    if (!added.length) return vi ? 'Đã gồm thuế, phí' : 'Taxes and fees included';
+    return (vi ? 'Chưa gồm ' : 'Excludes ') + added.map(taxLabel).join(vi ? ' và ' : ' and ');
+  }
+  function taxLabel(t) {
+    var vi = isVi();
+    var name = t.type === 'VAT' ? (vi ? 'thuế GTGT (VAT)' : 'VAT') : t.type === 'SERVICE_CHARGE' ? (vi ? 'phí dịch vụ' : 'service charge')
+      : t.type === 'CITY_TAX' ? (vi ? 'thuế địa phương' : 'city tax') : (vi ? 'phí khác' : 'other charge');
+    return name + ' ' + pct(t.ratePercent);
+  }
+  function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+  function voucherLabel(v) {
+    if (v.type === 'PERCENTAGE') return '−' + v.value + '%';
+    if (v.type === 'FIXED_AMOUNT') return '−' + U.vnd(v.value) + ' VND';
+    return v.valueAdd || (isVi() ? 'Quà tặng' : 'Gift');
+  }
+  /** VoucherView (backend) → the shape the summary and cards use. */
+  function voucherFromView(view) {
+    return { code: view.code, name: view.name, type: view.type,
+      value: view.type === 'PERCENTAGE' ? Number(view.valuePercent) : (view.valueAmount ? Number(view.valueAmount.amountMinor) : 0),
+      valueAdd: view.valueAddDescription || '', validTo: view.validTo || null };
+  }
+  /** Why a voucher cannot be used, in the guest's language (reason codes from the backend). */
+  function voucherMessage(reason, view) {
+    var vi = isVi();
+    var fmt = function (iso) { return iso ? iso.split('-').reverse().join('/') : ''; };
+    switch (reason) {
+      case 'NOT_FOUND': return vi ? 'Mã voucher không tồn tại.' : 'This voucher code does not exist.';
+      case 'INACTIVE': return vi ? 'Voucher này hiện không còn hiệu lực.' : 'This voucher is not active.';
+      case 'NOT_STARTED': return vi ? 'Voucher chưa đến thời gian sử dụng.' : 'This voucher cannot be used yet.';
+      case 'EXPIRED': return vi ? 'Mã voucher đã hết hạn.' : 'This voucher has expired.';
+      case 'USED_UP': return vi ? 'Voucher đã hết lượt sử dụng.' : 'This voucher has been fully used.';
+      case 'WRONG_HOTEL': return vi ? 'Voucher không áp dụng cho khách sạn này.' : 'This voucher is not valid at this hotel.';
+      case 'WRONG_ROOM': return vi ? 'Voucher không áp dụng cho hạng phòng này.' : 'This voucher is not valid for this room type.';
+      case 'STAY_OUT_OF_RANGE':
+        return (vi ? 'Áp dụng cho kỳ nghỉ' : 'Valid for stays') + (view && view.stayFrom ? (vi ? ' từ ' : ' from ') + fmt(view.stayFrom) : '') +
+          (view && view.stayTo ? (vi ? ' đến ' : ' to ') + fmt(view.stayTo) : '') + '.';
+      case 'MIN_NIGHTS': return view && view.minNights ? (vi ? 'Áp dụng cho kỳ nghỉ từ ' + view.minNights + ' đêm.' : 'Needs a stay of at least ' + view.minNights + ' nights.')
+        : (vi ? 'Kỳ nghỉ chưa đủ số đêm tối thiểu.' : 'The stay is shorter than this voucher needs.');
+      case 'MIN_TOTAL': return view && view.minTotal ? (vi ? 'Áp dụng cho tiền phòng từ ' + U.vnd(view.minTotal.amountMinor) + ' VND.' : 'Needs a room amount of at least ' + U.vnd(view.minTotal.amountMinor) + ' VND.')
+        : (vi ? 'Tiền phòng chưa đạt mức tối thiểu.' : 'The room amount is below this voucher\'s minimum.');
+      default: return vi ? 'Voucher không áp dụng được cho đơn này.' : 'This voucher cannot be used for this booking.';
+    }
+  }
+
+  /**
+   * Price summary. {voucherBox:true} adds the voucher field and list (guest details, review);
+   * the page then calls bindVoucher(container, repaint).
+   */
+  function priceBreakdownHTML(p, opts) {
+    opts = opts || {};
+    var vi = isVi();
+    var c = draft();
+    var voucher = c.voucher || null;
+    var t = priceTotals(p);
+    if (!t) return '<p role="status" class="tiny muted">' + (vi ? 'Chưa có giá xác thực. Vui lòng liên hệ khách sạn.' : 'No current price is available. Please contact the hotel.') + '</p>';
+    var n = U.nights(c.checkIn, c.checkOut) || (p && p.nights) || 1, r = +c.rooms || 1;
+    function row(label, value, cls) {
+      return '<div class="prow' + (cls ? ' ' + cls : '') + '"><span>' + label + '</span><span>' + value + '</span></div>';
+    }
+    var html = row((vi ? 'Tiền phòng' : 'Room amount') + '<small class="prow__sub">' +
+        n + (vi ? ' đêm × ' : (n === 1 ? ' night × ' : ' nights × ')) + r + (vi ? ' phòng' : (r === 1 ? ' room' : ' rooms')) + '</small>',
+        U.vnd(t.room) + ' VND');
+    if (voucher && (t.discount > 0 || voucher.type === 'VALUE_ADD')) {
+      html += row('Voucher <b class="prow__code">' + U.esc(voucher.code) + '</b>' +
+          (voucher.type !== 'FIXED_AMOUNT' ? '<small class="prow__sub">' + U.esc(voucherLabel(voucher)) + '</small>' : ''),
+        t.discount > 0 ? '−' + U.vnd(t.discount) + ' VND' : (vi ? 'Quà tặng' : 'Gift'), 'prow--discount');
+    }
+    if (t.memberDiscount > 0) {
+      html += row((vi ? 'Ưu đãi thành viên KAS' : 'KAS member discount') + ' (' + pct(t.member.percent) + ')',
+        '−' + U.vnd(t.memberDiscount) + ' VND', 'prow--discount');
+    }
+    if (t.discount > 0 || t.memberDiscount > 0) {
+      html += row(vi ? 'Tiền phòng sau ưu đãi' : 'Room amount after offers', U.vnd(t.base) + ' VND', 'prow--sub');
+    }
+    t.taxes.forEach(function (tax) {
+      html += row(cap(taxLabel(tax)).replace(/ (\d)/, ' ($1') + ')' + (tax.inclusive ? (vi ? ' · đã gồm' : ' · included') : ''),
+        U.vnd(tax.amount) + ' VND');
+    });
+    if (t.points > 0) {
+      html += row((vi ? 'Dùng điểm KAS' : 'KAS points used') + '<small class="prow__sub">' + U.vnd(t.points) + (vi ? ' điểm' : ' points') + '</small>',
+        '−' + U.vnd(t.points) + ' VND', 'prow--discount');
+    }
+    html += row(vi ? 'Tổng giá dự kiến' : 'Estimated total', U.vnd(t.total) + '<sup>VND</sup>', 'prow--total');
+    html += '<p class="tiny muted">' + (t.taxes.length
+        ? (vi ? 'Đã gồm ' + t.taxes.map(function (x) { return taxLabel(x).replace(/ [\d.,]+%$/, ''); }).join(', ') + '. ' : 'Includes ' + t.taxes.map(function (x) { return taxLabel(x).replace(/ [\d.,]+%$/, ''); }).join(', ') + '. ')
+        : '') + (vi ? 'Khách sạn kiểm tra và xác nhận phòng, giá và điều kiện thanh toán trước khi đặt phòng được xác nhận.'
+        : 'The hotel reviews the room, price and payment terms before the booking is confirmed.') + '</p>';
+    if (opts.voucherBox) html += voucherBoxHTML(voucher, c.voucherNotice);
+    if (opts.voucherBox && t.member && t.member.pointsAvailable > 0) html += pointsBoxHTML(t.member, c.pointsNotice);
+    return html;
+  }
+
+  function voucherBoxHTML(voucher, notice) {
+    var vi = isVi();
+    var top = voucher
+      ? '<div class="vbox__applied">' + U.icon('checkC', 15) +
+          '<div><b>' + U.esc(voucher.code) + '</b><span>' + U.esc(voucher.name || voucherLabel(voucher)) + '</span></div>' +
+          '<button type="button" class="vbox__remove" data-voucher-remove>' + (vi ? 'Gỡ' : 'Remove') + '</button></div>'
+      : '<form data-voucher-form novalidate>' +
+          '<label class="vbox__label" for="voucherCode">' + (vi ? 'Mã voucher' : 'Voucher code') + '</label>' +
+          '<div class="vbox__row"><input id="voucherCode" class="input" name="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="40" placeholder="' + (vi ? 'Nhập mã voucher' : 'Enter voucher code') + '">' +
+          '<button type="submit" class="btn btn--dark">' + (vi ? 'Áp dụng' : 'Apply') + '</button></div></form>';
+    return '<div class="vbox' + (voucher ? ' vbox--applied' : '') + '" data-voucher-box>' + top +
+      '<p class="vbox__msg' + (notice ? ' is-error' : '') + '" role="status" aria-live="polite">' + (notice ? U.esc(notice) : '') + '</p>' +
+      '<div class="vlist" data-voucher-list><p class="vlist__title">' + (vi ? 'Voucher dành cho bạn' : 'Vouchers for you') + '</p>' +
+        '<p class="vlist__empty">' + (vi ? 'Đang tải voucher…' : 'Loading vouchers…') + '</p></div>' +
+      '<p class="vbox__note">' + (vi ? 'Mỗi đơn sử dụng tối đa 1 voucher. Voucher trừ vào tiền phòng, trước thuế.' : 'Each booking can use at most 1 voucher. It comes off the room amount, before tax.') + '</p></div>';
+  }
+
+  /** KAS points: how many the member holds and may use here; 1 point = 1 VND, room part only. */
+  function pointsBoxHTML(m, notice) {
+    var vi = isVi();
+    var max = Math.min(m.pointsAvailable, m.pointsMax);
+    return '<form class="vbox pbox" data-points-form novalidate>' +
+      '<label class="vbox__label" for="pointsToUse">' + (vi ? 'Dùng điểm KAS' : 'Use KAS points') + '</label>' +
+      '<p class="vbox__note" style="margin-top:0">' + (vi ? 'Bạn có ' : 'You have ') + '<b>' + U.vnd(m.pointsAvailable) + '</b>' +
+        (vi ? ' điểm. Đơn này dùng tối đa ' : ' points. This stay can use up to ') + '<b>' + U.vnd(max) + '</b>' +
+        (vi ? ' điểm (1 điểm = 1 VND, không trừ vào thuế).' : ' points (1 point = 1 VND, not against tax).') + '</p>' +
+      '<div class="vbox__row"><input id="pointsToUse" class="input" type="number" min="0" max="' + max + '" step="1000" value="' + (m.pointsUsed || '') + '" placeholder="0">' +
+      '<button type="submit" class="btn btn--dark">' + (vi ? 'Áp dụng' : 'Apply') + '</button></div>' +
+      (max > 0 ? '<button type="button" class="vbox__remove" style="color:var(--gold-dk)" data-points-max="' + max + '">' + (vi ? 'Dùng tối đa' : 'Use the maximum') + '</button>' : '') +
+      (m.pointsUsed > 0 ? ' <button type="button" class="vbox__remove" data-points-clear>' + (vi ? 'Bỏ dùng điểm' : 'Stop using points') + '</button>' : '') +
+      '<p class="vbox__msg' + (notice ? ' is-error' : '') + '" role="status" aria-live="polite">' + (notice ? U.esc(notice) : '') + '</p></form>';
+  }
+
+  /** Wires the points box; the backend re-checks the amount on every quote. */
+  function bindPoints(container, repaint) {
+    var form = container && container.querySelector('form[data-points-form]');
+    if (!form) return;
+    if (draft().pointsNotice) S.patchCurrent({ pointsNotice: '' });
+    function apply(n) {
+      S.patchCurrent({ pointsToUse: Math.max(0, Math.floor(+n || 0)), pointsNotice: '' });
+      refreshQuote().then(function () { repaint(); });
+    }
+    form.addEventListener('submit', function (e) { e.preventDefault(); apply(form.querySelector('input').value); });
+    var max = form.querySelector('[data-points-max]');
+    if (max) max.addEventListener('click', function () { apply(max.getAttribute('data-points-max')); });
+    var clear = form.querySelector('[data-points-clear]');
+    if (clear) clear.addEventListener('click', function () { apply(0); });
+  }
+
+  function fmtDay(iso) { return iso ? iso.split('-').reverse().join('/') : ''; }
+
+  /** The available vouchers as cards: eligible ones can be picked, the others say why not. */
+  function voucherListHTML(views, applied) {
+    var vi = isVi();
+    var rows = views.map(function (v) { return { view: v, voucher: voucherFromView(v), saving: money(v.saving) || 0 }; });
+    rows.sort(function (a, b) { return (b.view.eligible - a.view.eligible) || (b.saving - a.saving); });
+    var best = rows.length && rows[0].view.eligible && rows[0].saving > 0 ? rows[0].voucher.code : null;
+    var html = '<p class="vlist__title">' + (vi ? 'Voucher dành cho bạn' : 'Vouchers for you') + '</p>';
+    if (!rows.length) return html + '<p class="vlist__empty">' + (vi ? 'Hiện chưa có voucher phù hợp.' : 'No vouchers available right now.') + '</p>';
+    return html + rows.map(function (r) {
+      var v = r.voucher, on = applied && applied.code === v.code;
+      var action = on
+        ? '<span class="vcard__state">' + (vi ? 'Đang dùng' : 'Applied') + '</span>'
+        : (r.view.eligible ? '<button type="button" class="vcard__pick" data-voucher-pick="' + U.esc(v.code) + '">' + (vi ? 'Chọn' : 'Use') + '</button>' : '');
+      var badge = v.type === 'PERCENTAGE' ? '−' + v.value + '%' : v.type === 'FIXED_AMOUNT'
+        ? '−' + (v.value >= 1000 ? Math.round(v.value / 1000) + 'K' : U.vnd(v.value)) : (vi ? 'Quà' : 'Gift');
+      return '<div class="vcard' + (r.view.eligible ? '' : ' is-off') + (on ? ' is-on' : '') + '">' +
+        '<div class="vcard__val">' + U.esc(badge) + '</div>' +
+        '<div class="vcard__body">' +
+          (best === v.code ? '<span class="vcard__best">' + (vi ? 'Tiết kiệm nhất' : 'Best saving') + '</span>' : '') +
+          '<b>' + U.esc(v.name) + '</b>' +
+          '<span class="vcard__meta">' + U.esc(v.code) + (v.validTo ? (vi ? ' · HSD ' : ' · Valid to ') + fmtDay(v.validTo) : '') + '</span>' +
+          (r.view.eligible
+            ? (r.saving > 0 ? '<span class="vcard__save">' + (vi ? 'Tiết kiệm ' : 'Save ') + U.vnd(r.saving) + ' VND</span>'
+               : (v.valueAdd ? '<span class="vcard__save">' + U.esc(v.valueAdd) + '</span>' : ''))
+            : '<span class="vcard__why">' + U.esc(voucherMessage(r.view.reason, r.view)) + '</span>') +
+        '</div>' + action + '</div>';
+    }).join('');
+  }
+
+  /** Tries a code against the backend quote; on success the draft holds the voucher and its price. */
+  function applyVoucher(code) {
+    var vi = isVi();
+    code = String(code || '').trim().toUpperCase();
+    if (!code) return Promise.resolve({ ok: false, message: vi ? 'Vui lòng nhập mã voucher.' : 'Please enter a voucher code.' });
+    var c = draft();
+    return postQuote(c, code).then(function (quote) {
+      if (!quote.voucher) return { ok: false, message: voucherMessage('', null) };
+      S.patchCurrent({ voucher: voucherFromView(quote.voucher), voucherNotice: '', price: priceFromQuote(quote, c), quoteError: '' });
+      return { ok: true };
+    }, function (error) {
+      var why = voucherReason(error);
+      if (why) return { ok: false, message: voucherMessage(why.code, null) };
+      return { ok: false, message: describeBookingError(error).message };
+    });
+  }
+  function removeVoucher() {
+    S.patchCurrent({ voucher: null, voucherNotice: '' });
+    return refreshQuote();
+  }
+  /** The vouchers the backend offers for this stay (VoucherView[]). */
+  function listVouchers() {
+    var body = quoteBody(draft(), null);
+    if (!body) return Promise.resolve([]);
+    return global.KAS_API.request('/api/v1/public/request-pricing/vouchers', { method: 'POST', body: body });
+  }
+
+  /** Wires the voucher field and list rendered by priceBreakdownHTML; repaint redraws the summary. */
+  function bindVoucher(container, repaint) {
+    if (!container) return;
+    bindPoints(container, repaint);
+    var box = container.querySelector('[data-voucher-box]');
+    if (!box) return;
+    var msg = box.querySelector('.vbox__msg');
+    if (draft().voucherNotice) S.patchCurrent({ voucherNotice: '' }); /* shown once */
+    function fail(res, focus) {
+      msg.textContent = (res && res.message) || '';
+      msg.classList.add('is-error');
+      if (focus) focus.focus();
+    }
+    var form = box.querySelector('form[data-voucher-form]');
+    if (form) form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input'), btn = form.querySelector('button');
+      btn.disabled = true; msg.textContent = ''; msg.classList.remove('is-error');
+      applyVoucher(input.value).then(function (res) {
+        btn.disabled = false;
+        if (res && res.ok) repaint(); else fail(res, input);
+      });
+    });
+    var remove = box.querySelector('[data-voucher-remove]');
+    if (remove) remove.addEventListener('click', function () {
+      remove.disabled = true;
+      removeVoucher().then(function () { repaint(); });
+    });
+
+    var list = box.querySelector('[data-voucher-list]');
+    if (!list) return;
+    listVouchers().then(function (views) {
+      list.innerHTML = voucherListHTML(views || [], draft().voucher);
+      list.addEventListener('click', function (e) {
+        var pick = e.target.closest('[data-voucher-pick]');
+        if (!pick) return;
+        pick.disabled = true; msg.textContent = ''; msg.classList.remove('is-error');
+        applyVoucher(pick.getAttribute('data-voucher-pick')).then(function (res) {
+          if (res && res.ok) repaint(); else { pick.disabled = false; fail(res); }
+        });
+      });
+    }, function () { list.remove(); });
   }
   function rateNoteHTML() { return ''; }
 
@@ -433,7 +762,7 @@
 
   var TRUST = [
     ['shield', 'Best Rate Guarantee', 'Always the best rate when you book direct.'],
-    ['rot',    'Free Cancellation',   'Cancel up to 24 hours before check-in.'],
+    ['rot',    'Free Cancellation',   'Members until 12:00 on check-in day; guests 24h before check-in.'],
     ['lock',   'Secure Payment',      'Your payment information is always protected.'],
     ['crown',  'Member Privileges',   'Exclusive benefits for KAS Privilege members.']
   ];
@@ -461,6 +790,7 @@
     requireRoom: requireRoom, requireGuest: requireGuest,
     validateGuest: validateGuest, confirmBooking: confirmBooking, cancelBooking: cancelBooking,
     stayPanelHTML: stayPanelHTML, priceBreakdownHTML: priceBreakdownHTML,
+    priceTotals: priceTotals, taxNote: taxNote, applyVoucher: applyVoucher, removeVoucher: removeVoucher, bindVoucher: bindVoucher,
     guestLabel: guestLabel, assistHTML: assistHTML,
     trustStripHTML: trustStripHTML, trustBadgesHTML: trustBadgesHTML
   };

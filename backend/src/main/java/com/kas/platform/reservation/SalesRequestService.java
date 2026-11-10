@@ -303,7 +303,43 @@ public class SalesRequestService {
                         o.message(), o.sentAt()))
                 .orElse(null);
 
-        return new SalesRequestDetailView(summary(row), lines, guest, timeline, alternative);
+        SalesRequestDetailView.Price price = requests.price(row.reservationId(), scope)
+                .map(this::price).orElse(null);
+
+        return new SalesRequestDetailView(summary(row), lines, guest, timeline, alternative, price);
+    }
+
+    /** The recorded breakdown; tax lines come from the S1 snapshot, amounts from the columns. */
+    private SalesRequestDetailView.Price price(SalesRequestRepository.SalesRequestPriceRow p) {
+        String currency = p.currency();
+        List<SalesRequestDetailView.Price.Tax> taxes = new java.util.ArrayList<>();
+        try {
+            for (var t : json.readTree(p.taxesJson())) {
+                taxes.add(new SalesRequestDetailView.Price.Tax(t.path("type").asText(),
+                        t.path("ratePercent").decimalValue(),
+                        money(t.path("amountMinor").asLong(), currency), t.path("inclusive").asBoolean()));
+            }
+        } catch (com.fasterxml.jackson.core.JsonProcessingException unreadable) {
+            // A snapshot without readable taxes still shows the recorded tax total below.
+        }
+        if (taxes.isEmpty() && p.taxMinor() != null && p.taxMinor() > 0) {
+            taxes.add(new SalesRequestDetailView.Price.Tax("TAX", null, money(p.taxMinor(), currency), false));
+        }
+        boolean voucher = p.voucherCode() != null;
+        Long subtotal = p.subtotalMinor();
+        return new SalesRequestDetailView.Price(
+                money(subtotal, currency),
+                voucher ? p.voucherCode() : null,
+                voucher ? p.voucherName() : null,
+                voucher && "PERCENTAGE".equals(p.voucherType()) ? p.voucherPercent() : null,
+                money(p.discountMinor(), currency),
+                subtotal == null ? null : money(subtotal - p.discountMinor() - p.memberDiscountMinor(), currency),
+                taxes,
+                money(p.totalMinor(), currency),
+                p.memberDiscountMinor() > 0 ? p.tierCode() : null,
+                p.memberDiscountMinor() > 0 ? p.memberPercent() : null,
+                money(p.memberDiscountMinor(), currency),
+                p.pointsUsed());
     }
 
     /** Reservation state changes follow manual hotel review; no stock is read or changed. */

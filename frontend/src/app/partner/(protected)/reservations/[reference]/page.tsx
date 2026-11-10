@@ -19,7 +19,7 @@ export async function generateMetadata({
   const { reference } = await params;
   // The reference only. A guest's name in a browser title would follow them into
   // history, a screenshot and a shared tab.
-  return { title: `${reference} — KAS Partner` };
+  return { title: `${reference} — KAS Admin` };
 }
 
 /**

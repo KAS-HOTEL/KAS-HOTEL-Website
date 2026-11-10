@@ -52,7 +52,7 @@ class SalesRequestIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$[0].rooms").value(1))
                 .andExpect(jsonPath("$[0].adults").value(2))
                 .andExpect(jsonPath("$[0].guestName").value("Queue Guest"))
-                .andExpect(jsonPath("$[0].total.amountMinor").value(RATE * 2))
+                .andExpect(jsonPath("$[0].total.amountMinor").value(Vat.with(RATE * 2)))
                 .andExpect(jsonPath("$[0].total.currency").value("VND"))
                 .andExpect(jsonPath("$[0].slaDueAt").exists());
     }

@@ -61,7 +61,8 @@ export default async function PartnerProtectedLayout({
     rather than rejecting, so nothing is left to become an unhandled rejection
     when the redirect throws past it.
   */
-  const sessionRead = requireSession({ signInPath: '/partner/login', returnTo: '/partner' });
+  // One sign-in page for the whole console (2026-11-10): /admin/login.
+  const sessionRead = requireSession({ signInPath: '/admin/login', returnTo: '/partner' });
 
   const session = await sessionRead;
 
@@ -127,7 +128,7 @@ export default async function PartnerProtectedLayout({
             error={list.status === 'error' ? messageFor(list.error) : undefined}
           />
         )}
-        railFooterSlot={<SignOutButton redirectTo="/partner/login" />}
+        railFooterSlot={<SignOutButton redirectTo="/admin/login" />}
       >
         {children}
       </AppShell>

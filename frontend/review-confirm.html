@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/components.css">
 <link rel="stylesheet" href="css/responsive.css">
+<link rel="stylesheet" href="css/booking-price.css">
 <style>
 #assist .ct-channels{grid-template-columns:minmax(0,1fr);gap:6px}
 #assist .ct-ch{box-sizing:border-box;width:100%;min-width:0;min-height:40px;flex-direction:row;justify-content:flex-start;align-items:center;gap:9px;padding:8px 10px;text-align:left}
@@ -156,7 +157,7 @@
           '<div style="display:flex;flex-direction:column;gap:6px">' +
             pk(room.breakfast ? 'Breakfast for ' + Math.min(2, room.maxGuests) + ' guests' : 'Breakfast not included', room.breakfast) +
             pk('Free Wi-Fi', true) +
-            pk('Free cancellation until ' + U.cancelBy(c.checkIn), true) +
+            pk('Free cancellation: members until 12:00 on check-in day, guests until 24h before check-in', true) +
           '</div></div></div>') +
 
     card('chat', 'Special requests', 'guest-details.html',
@@ -167,8 +168,7 @@
 
     card('shield', 'Cancellation policy', null,
       '<div class="alert alert--ok">' + U.icon('checkC', 18) +
-        '<div><b>Free cancellation</b>Cancel for free until ' + U.cancelBy(c.checkIn) +
-        ' (local time). After that, 1 night is charged.</div></div>') +
+        '<div><b>Free cancellation</b>KAS members (signed in when booking) cancel free until 12:00 on the check-in day; other guests until 24 hours before check-in (hotel time). After that, the cancellation fee shown before you confirm applies.</div></div>') +
 
     card('info', 'Important information', null,
       '<ul style="margin:0;padding-left:20px;font-size:.86rem;color:var(--tx-2);line-height:1.9">' +
@@ -197,8 +197,12 @@
   }), { header: false });
   var _q = window.KAS_RATES && window.KAS_RATES.hasSheetRate(room.id)
     ? window.KAS_RATES.quote(room.id, c.checkIn, c.checkOut) : null;
-  U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(c.price, {
-    nights: _q ? _q.nights : null, rateSource: room.rateSource });
+  function paintPrice() {
+    U.$('#sidePrice').innerHTML = B.priceBreakdownHTML(B.draft().price, {
+      nights: _q ? _q.nights : null, rateSource: room.rateSource, voucherBox: true });
+    B.bindVoucher(U.$('#sidePrice'), paintPrice);
+  }
+  paintPrice();
   U.$('#assist').innerHTML = B.assistHTML();
   U.$('#trustBadges').innerHTML = B.trustBadgesHTML();
   U.$('#trustStrip').outerHTML = B.trustStripHTML();

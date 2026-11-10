@@ -12,7 +12,7 @@ import styles from '@/features/property/Property.module.css';
 export const metadata: Metadata = {
   // Constant, like every property screen: a title built from the record would
   // differ between "absent" and "someone else's hotel" the moment either resolved.
-  title: 'Chính sách — KAS Partner',
+  title: 'Chính sách — KAS Admin',
 };
 
 /**

@@ -6,7 +6,7 @@ import { ErrorState } from '@/ui/primitives';
 import styles from '@/features/property/Property.module.css';
 
 export const metadata: Metadata = {
-  title: 'Thêm khách sạn — KAS Partner',
+  title: 'Thêm khách sạn — KAS Admin',
 };
 
 /**

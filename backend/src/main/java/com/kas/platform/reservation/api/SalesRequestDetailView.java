@@ -47,12 +47,47 @@ public record SalesRequestDetailView(
         Guest guest,
         List<Event> timeline,
         /** The latest alternative stay proposed for this request, or null (2026-11-07). */
-        AlternativeOffer alternativeOffer) {
+        AlternativeOffer alternativeOffer,
+        /** How the total is made up: rooms, voucher, taxes (2026-11-10). Null if not recorded. */
+        Price price) {
 
     /** The pre-2026-11-07 shape, without the alternative offer. */
     public SalesRequestDetailView(SalesRequestSummaryView summary, List<Line> lines, Guest guest,
                                   List<Event> timeline) {
-        this(summary, lines, guest, timeline, null);
+        this(summary, lines, guest, timeline, null, null);
+    }
+
+    /** The 2026-11-07 shape, without the price breakdown. */
+    public SalesRequestDetailView(SalesRequestSummaryView summary, List<Line> lines, Guest guest,
+                                  List<Event> timeline, AlternativeOffer alternativeOffer) {
+        this(summary, lines, guest, timeline, alternativeOffer, null);
+    }
+
+    /**
+     * The recorded price: {@code roomsSubtotal − discount + taxes = total}. Figures are the
+     * reservation's own; nothing is recomputed for display.
+     */
+    public record Price(
+            Money roomsSubtotal,
+            /** The voucher used, or null. */
+            String voucherCode,
+            String voucherName,
+            /** e.g. 50 for a 50% voucher; null for a fixed amount or a gift. */
+            java.math.BigDecimal voucherPercent,
+            Money discount,
+            /** Rooms after the voucher, the base the taxes were charged on. */
+            Money roomsAfterDiscount,
+            List<Tax> taxes,
+            Money total,
+            /** Member discount frozen at booking (2026-11-10): tier, percent, amount; null without membership. */
+            String memberTier,
+            java.math.BigDecimal memberDiscountPercent,
+            Money memberDiscount,
+            /** KAS points spent on the booking (1 point = 1 VND). */
+            long pointsUsed) {
+
+        public record Tax(String type, java.math.BigDecimal ratePercent, Money amount, boolean inclusive) {
+        }
     }
 
     /**

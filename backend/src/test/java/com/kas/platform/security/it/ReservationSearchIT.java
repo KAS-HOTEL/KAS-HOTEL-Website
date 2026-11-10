@@ -481,7 +481,8 @@ class ReservationSearchIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$.summary.rooms").value(3))
                 // Two lines, never collapsed into one invented room.
                 .andExpect(jsonPath("$.lines.length()").value(2))
-                .andExpect(jsonPath("$.amounts.total.amountMinor").value(expected))
+                .andExpect(jsonPath("$.amounts.subtotal.amountMinor").value(expected))
+                .andExpect(jsonPath("$.amounts.total.amountMinor").value(Vat.with(expected)))
                 .andExpect(jsonPath("$.guest.fullName").value("Detail Guest"))
                 .andExpect(jsonPath("$.guest.phone").value("0900000222"))
                 // Both lifecycles are recorded, and each says which it is.

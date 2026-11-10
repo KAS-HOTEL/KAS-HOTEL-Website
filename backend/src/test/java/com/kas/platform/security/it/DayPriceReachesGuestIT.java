@@ -109,7 +109,7 @@ class DayPriceReachesGuestIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$.lines[0].nightlyFrom.amountMinor").value(DAY_PRICE))
                 // One night, one room — so the subtotal is the night's price.
                 .andExpect(jsonPath("$.lines[0].subtotal.amountMinor").value(DAY_PRICE))
-                .andExpect(jsonPath("$.total.amountMinor").value(DAY_PRICE));
+                .andExpect(jsonPath("$.total.amountMinor").value(Vat.with(DAY_PRICE)));
     }
 
     @Test

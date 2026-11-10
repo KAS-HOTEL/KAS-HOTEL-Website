@@ -5,7 +5,11 @@ import { SignInLayout } from '@/features/auth/SignInLayout';
 
 export const metadata = { title: 'KAS Admin — Đăng nhập', robots: { index: false } };
 
-/** Platform-operator sign-in using the current owner-approved auth policy. */
+/**
+ * The console's one sign-in page (owner decision 2026-11-10): Admin and Super Admin both
+ * sign in here. `/admin` then sends each to their own overview — Admin stays on `/admin`,
+ * Super Admin goes on to `/partner` (`requireConsole`). `/partner/login` redirects here.
+ */
 export default async function AdminLoginPage({
   searchParams,
 }: {
@@ -17,7 +21,7 @@ export default async function AdminLoginPage({
   return (
     <SignInLayout
       title="KAS Admin"
-      subtitle="Bảng điều khiển vận hành nền tảng."
+      subtitle="Đăng nhập cho tài khoản Admin và Super Admin."
     >
       <SessionRenewal returnTo={safeReturnTo(returnTo, '/admin')} attempt={returnTo !== undefined}>
         <SignInForm returnTo={safeReturnTo(returnTo, '/admin')} submitLabel="Đăng nhập" />

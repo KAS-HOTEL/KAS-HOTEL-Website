@@ -568,9 +568,21 @@
         String(stay.guest && stay.guest.email || '').toLowerCase() === em.toLowerCase();
     });
     if (!bk) {
-      U.setErr(refEl, 'No booking found for this account and email.');
-      U.$('#result').innerHTML = '';
-      U.toast('Booking not found.');
+      /* Not one of this account's bookings (or not signed in): booked as a guest. The backend can email a
+         one-time cancellation link to the booking's own address; the answer is the same either way. */
+      var vi = myKasLang() === 'vi';
+      U.$('#result').innerHTML = '<div class="mykas-note" role="status"><p>' + (vi
+        ? 'Không tìm thấy đặt phòng này trong tài khoản. Nếu bạn đặt phòng không đăng nhập, KAS có thể gửi liên kết huỷ tới email của đặt phòng.'
+        : 'This booking is not in your account. If you booked without signing in, KAS can email a cancellation link to the address on the booking.')
+        + '</p><button type="button" class="btn btn--ghost" id="sendCancelLink">' + (vi ? 'Gửi liên kết huỷ qua email' : 'Email me a cancellation link') + '</button></div>';
+      U.$('#sendCancelLink').onclick = function () {
+        var b = this; b.disabled = true;
+        window.KAS_API.requestCancellationLink(ref, em).then(function () {
+          U.$('#result').innerHTML = '<p class="mykas-note" role="status">' + (vi
+            ? 'Nếu mã đặt phòng và email khớp, KAS đã gửi liên kết huỷ tới email đó. Liên kết dùng một lần.'
+            : 'If the booking number and email match, KAS has sent a cancellation link to that address. The link works once.') + '</p>';
+        }).catch(function (error) { U.toast(error.message); b.disabled = false; });
+      };
       return;
     }
     render(bk);
@@ -591,12 +603,31 @@
     var actions=U.$('#mbActions');
     var closed=['CANCELLED','COMPLETED','CHECKED_OUT','NO_SHOW','LOST','DECLINED','EXPIRED'].indexOf(bk.status)>=0;
     if(!closed){
-      var button=document.createElement('button');button.className='btn btn--ghost';button.textContent=vi?'Gửi yêu cầu hủy':'Request cancellation';
+      /* The backend decides the free window, the fee and the refund (2026-11-10); the page shows them before the guest confirms. */
+      var button=document.createElement('button');button.className='btn btn--ghost';button.id='canBtn';button.textContent=vi?'Hủy đặt phòng':'Cancel booking';
       button.onclick=function(){
-        App.modal({title:vi?'Gửi yêu cầu hủy?':'Request cancellation?',body:vi?'Khách sạn sẽ thông báo mức phí nếu có trước khi bạn quyết định.':'The hotel will quote any fee before you decide.',ok:vi?'Gửi yêu cầu':'Send request',cancel:vi?'Quay lại':'Back',onOk:function(){
-          button.disabled=true;
-          window.KAS_API.requestCancellation(bk.bookingNumber).then(function(){return loadProfile();}).catch(function(error){U.toast(error.message);button.disabled=false;});
-        }});
+        button.disabled=true;
+        window.KAS_API.previewCancellation(bk.bookingNumber).then(function(t){
+          button.disabled=false;
+          var money=function(m){return view.money(m,t.currency);};
+          var deadline=t.freeUntil?new Date(t.freeUntil).toLocaleString(vi?'vi-VN':'en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}):'';
+          var policy=t.policy==='MEMBER_NOON_CHECK_IN_DAY'?(vi?'Thành viên KAS: hủy miễn phí đến 12:00 ngày nhận phòng':'KAS member: free cancellation until 12:00 on the check-in day'):(vi?'Hủy miễn phí trước giờ nhận phòng 24 giờ':'Free cancellation until 24 hours before check-in');
+          var head=U.esc(policy)+(deadline?' ('+(vi?'hạn: ':'deadline: ')+U.esc(deadline)+')':'')+'.';
+          var paidLine=t.paidMinor>0?'<br>'+(vi?'Đã thanh toán: ':'Paid: ')+U.esc(money(t.paidMinor)):'';
+          var body, ok, accept=false, fee=null;
+          if(t.outcome==='NOT_CANCELLABLE'){App.modal({title:vi?'Không thể hủy trực tuyến':'Cannot cancel online',body:vi?'Đặt phòng này không thể hủy trực tuyến nữa. Vui lòng liên hệ KAS.':'This booking can no longer be cancelled online. Please contact KAS.',ok:vi?'Đóng':'Close',cancel:vi?'Đóng':'Close'});return;}
+          if(t.outcome==='OPEN_REQUEST'){U.toast(vi?'Yêu cầu hủy đang được xử lý.':'Your cancellation request is being handled.');return;}
+          if(t.outcome==='CANCEL_FREE'){body=head+'<br>'+(vi?'Bạn đang trong thời hạn hủy miễn phí.':'You are within the free-cancellation period.');ok=vi?'Hủy miễn phí':'Cancel free of charge';}
+          else if(t.outcome==='PAID_REVIEW'){body=head+paidLine+'<br>'+(vi?'Đặt phòng đã thanh toán: KAS sẽ xem xét và gửi email để bạn xác nhận trước khi hủy và hoàn tiền.':'This booking is paid: KAS will review and email you to confirm before it is cancelled and refunded.');ok=vi?'Gửi yêu cầu hủy':'Send request';}
+          else if(t.outcome==='CONFIRM_FEE'){accept=true;fee=t.feeMinor;body=head+paidLine+'<br>'+(vi?'Phí hủy: ':'Cancellation fee: ')+'<strong>'+U.esc(money(t.feeMinor))+'</strong><br>'+(vi?'Dự kiến hoàn lại: ':'Expected refund: ')+'<strong>'+U.esc(money(t.refundDueMinor))+'</strong><br>'+(vi?'Đặt phòng chỉ bị hủy khi bạn xác nhận.':'Nothing is cancelled unless you confirm.');ok=vi?'Đồng ý phí và hủy':'Accept fee and cancel';}
+          else {body=head+'<br>'+(vi?'Đã quá hạn hủy miễn phí. KAS sẽ xem xét và báo mức phí để bạn quyết định; đặt phòng chưa bị hủy.':'The free-cancellation deadline has passed. KAS will review and tell you the fee so you can decide; nothing is cancelled yet.');ok=vi?'Gửi yêu cầu hủy':'Send request';}
+          App.modal({title:vi?'Hủy đặt phòng?':'Cancel booking?',body:body,ok:ok,cancel:vi?'Giữ đặt phòng':'Keep booking',danger:accept,onOk:function(){
+            button.disabled=true;
+            window.KAS_API.requestCancellation(bk.bookingNumber,fee).then(function(res){
+              return res&&res.status==='QUOTED'&&accept?window.KAS_API.decideCancellation(bk.bookingNumber,true):res;
+            }).then(function(){return loadProfile();}).catch(function(error){U.toast(error.message);button.disabled=false;});
+          }});
+        }).catch(function(error){U.toast(error.message);button.disabled=false;});
       };actions.appendChild(button);
     }
     /* Check-out (V59): the guest asks; SUPER_ADMIN confirms. After the check-out time the request is filed automatically. */
@@ -616,9 +647,18 @@
         actions.insertBefore(out, actions.firstChild);
       }
     }
-    if(bk.cancellationRequestStatus==='QUOTED'){
-      var note=document.createElement('p');note.textContent=(vi?'Phí hủy khách sạn đề nghị: ':'Hotel cancellation fee: ')+view.money(bk.cancellationFeeMinor,bk.cancellationFeeCurrency);actions.appendChild(note);
+    var st=bk.cancellationRequestStatus;
+    if(st==='QUOTED'){
+      var note=document.createElement('p');note.textContent=(vi?'Phí hủy: ':'Cancellation fee: ')+view.money(bk.cancellationFeeMinor,bk.cancellationFeeCurrency)+(bk.refundDueMinor!=null?' · '+(vi?'Dự kiến hoàn: ':'Expected refund: ')+view.money(bk.refundDueMinor,bk.cancellationFeeCurrency):'');actions.appendChild(note);
       [true,false].forEach(function(accept){var btn=document.createElement('button');btn.className='btn btn--ghost';btn.textContent=accept?(vi?'Đồng ý phí và hủy':'Accept fee and cancel'):(vi?'Giữ đặt phòng':'Keep booking');btn.onclick=function(){btn.disabled=true;window.KAS_API.decideCancellation(bk.bookingNumber,accept).then(loadProfile).catch(function(error){U.toast(error.message);btn.disabled=false;});};actions.appendChild(btn);});
+    } else if(st==='PENDING_HOTEL_FEE'||st==='REFUND_PENDING'||st==='REFUNDED'||st==='REFUND_REJECTED'){
+      var info=document.createElement('p');info.className='mykas-note';info.setAttribute('role','status');
+      var cur=bk.cancellationFeeCurrency||'VND';
+      info.textContent=st==='PENDING_HOTEL_FEE'?(vi?'KAS đang xem xét yêu cầu hủy và sẽ gửi email cho bạn.':'KAS is reviewing your cancellation request and will email you.')
+        :st==='REFUND_PENDING'?(vi?'Đã hủy. KAS đang hoàn ':'Cancelled. KAS is refunding ')+view.money(bk.refundDueMinor,cur)+(vi?' (thủ công).':' (by hand).')
+        :st==='REFUNDED'?(vi?'Đã hoàn ':'Refunded ')+view.money(bk.refundAmountMinor,cur)+'.'
+        :(vi?'KAS chưa thể hoàn tiền; vui lòng xem email hoặc liên hệ KAS.':'KAS could not make the refund; please check your email or contact KAS.');
+      actions.appendChild(info);
     }
   }
 

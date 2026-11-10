@@ -1,0 +1,47 @@
+/* Price summary: taxes, fees and voucher (booking steps 2-4). */
+.prow .prow__sub{display:block;font-size:.72rem;color:var(--tx-3);font-weight:400;margin-top:1px}
+.prow__code{font-weight:600;color:var(--tx);letter-spacing:.04em;margin-left:4px}
+.prow--discount span:last-child{color:var(--ok);font-weight:600}
+.prow--sub{border-top:1px dashed var(--line);margin-top:4px;padding-top:10px}
+
+.vbox{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface,#fff)}
+.vbox__label{display:block;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--tx-2);margin-bottom:8px}
+.vbox__row{display:flex;gap:8px}
+.vbox__row .input{flex:1;min-width:0;text-transform:uppercase;letter-spacing:.06em}
+.vbox__row .input::placeholder{text-transform:none;letter-spacing:0}
+.vbox__row .btn{flex-shrink:0;padding-inline:18px}
+.vbox__msg{margin:8px 0 0;font-size:.78rem;min-height:0}
+.vbox__msg:empty{display:none}
+.vbox__msg.is-error{color:var(--err)}
+.vbox__note{margin:8px 0 0;font-size:.72rem;color:var(--tx-3);line-height:1.5}
+.vbox--applied{background:var(--ok-bg);border-color:#CFE0D0}
+.vbox__applied{display:flex;align-items:center;gap:10px}
+.vbox__applied svg{color:var(--ok);flex-shrink:0}
+.vbox__applied div{flex:1;min-width:0}
+.vbox__applied b{display:block;font-size:.88rem;letter-spacing:.05em}
+.vbox__applied span{display:block;font-size:.76rem;color:var(--tx-2)}
+.vbox__remove{appearance:none;border:0;background:none;color:var(--err);font:600 .78rem var(--sans);cursor:pointer;padding:6px 4px;text-decoration:underline}
+
+.price__incl{display:flex;justify-content:space-between;gap:10px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:.8rem;color:var(--tx-2)}
+.price__incl b{color:var(--tx);font-weight:600;white-space:nowrap}
+
+/* Available vouchers */
+.vbox--applied .vlist{border-top-color:#CFE0D0}
+.vlist{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:8px}
+.vlist__title{margin:0;font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--tx-2)}
+.vlist__empty{margin:0;font-size:.78rem;color:var(--tx-3)}
+.vcard{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:var(--r-sm);background:var(--paper,#fffdf9)}
+.vcard.is-on{border-color:var(--ok);background:#fff;box-shadow:inset 3px 0 0 var(--ok)}
+.vcard.is-off{opacity:.62;background:transparent}
+.vcard__val{flex-shrink:0;width:52px;height:52px;display:grid;place-items:center;border-radius:var(--r-sm);background:var(--gold-dk);color:#fff;font:600 .9rem var(--sans);letter-spacing:.02em}
+.vcard.is-off .vcard__val{background:var(--tx-3)}
+.vcard__body{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.vcard__body b{font-size:.8rem;line-height:1.35;color:var(--tx)}
+.vcard__meta{font-size:.7rem;color:var(--tx-3);letter-spacing:.03em}
+.vcard__save{font-size:.72rem;color:var(--ok);font-weight:600}
+.vcard__why{font-size:.72rem;color:var(--tx-2)}
+.vcard__best{align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gold-dk);border:1px solid currentColor;border-radius:999px;padding:1px 7px;margin-bottom:3px}
+.vcard__pick{flex-shrink:0;appearance:none;border:1px solid var(--tx);background:#fff;color:var(--tx);font:600 .74rem var(--sans);padding:7px 12px;border-radius:var(--r-sm);cursor:pointer}
+.vcard__pick:hover{background:var(--tx);color:#fff}
+.vcard__pick:disabled{opacity:.5;cursor:default}
+.vcard__state{flex-shrink:0;font-size:.72rem;font-weight:600;color:var(--ok)}
