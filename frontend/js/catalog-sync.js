@@ -162,11 +162,20 @@
     return true;
   }
 
-  /* What a visitor would see change: the hotels in order, and each hotel's set of rooms. */
+  /* What a visitor would see change: the hotels in order, each hotel's set of rooms, and its
+     cover photo. The website ships no hotel photos (js/images.js), so a first visit or a cache
+     written while the media call failed draws placeholders; the cover in the signature makes
+     the page draw again once the console's photos arrive (2026-11-10, seen on webdemo). */
+  function coverOf(payload, slug) {
+    var entry = (payload.media || []).find(function (m) { return m && m.slug === slug; });
+    var first = entry && (entry.gallery || []).find(function (m) { return m && m.url; });
+    return first ? first.url : '-';
+  }
   function signature(payload) {
     return (payload.cards || []).map(function (c) {
       var rts = (payload.rooms || {})[c.slug];
-      return c.slug + ':' + (Array.isArray(rts) ? rts.map(function (r) { return r.slug; }).sort().join(',') : '?');
+      return c.slug + ':' + (Array.isArray(rts) ? rts.map(function (r) { return r.slug; }).sort().join(',') : '?')
+        + '@' + coverOf(payload, c.slug);
     }).join('|');
   }
   /* The same for data.js as shipped, used when no catalogue was cached yet. */
@@ -174,7 +183,7 @@
     var m = map();
     return BASE.map(function (h) {
       var rooms = (BASE_ROOMS[h.id] || []).map(function (r) { return m[r.id] && m[r.id].roomTypeSlug; }).filter(Boolean);
-      return baseSlug(h) + ':' + rooms.sort().join(',');
+      return baseSlug(h) + ':' + rooms.sort().join(',') + '@-'; // shipped hotels have no photo
     }).join('|');
   }
 
