@@ -39,7 +39,11 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
         : 'Đã lưu quyết định của khách sạn.');
     } catch (caught) {
       setConfirm(null);
-      setError(caught instanceof ApiError ? messageFor(caught) : 'Không thể kết nối. Vui lòng thử lại.');
+      setError(caught instanceof ApiError
+        ? caught.code === 'CONFIG_MISSING'
+          ? 'Chưa có cách thanh toán nào để gửi cho khách: cổng SePay chưa bật và chưa có QR trong Tài khoản thanh toán. Hãy bật SePay hoặc nhập QR rồi thử lại.'
+          : messageFor(caught)
+        : 'Không thể kết nối. Vui lòng thử lại.');
     } finally { inFlight.current = false; setBusy(false); }
   }
   async function chooseHotel(slug: string, options = hotels) {
@@ -67,7 +71,7 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
     {error && <p role="alert">{error}</p>}
     <div className={styles.actions}>
       {reviewable && <>
-        <Button disabled={busy} onClick={() => setConfirm('approve')}>Còn phòng — xác nhận và gửi QR</Button>
+        <Button disabled={busy} onClick={() => setConfirm('approve')}>Còn phòng — xác nhận và gửi link thanh toán</Button>
         <Button variant="secondary" disabled={busy} onClick={() => void openOffer()}>Hết phòng — đề xuất phòng khác</Button>
       </>}
       {request.salesStatus === 'PAYMENT_PENDING' && <Button disabled={busy} onClick={() => setConfirm('paid')}>Xác nhận đã nhận tiền</Button>}
@@ -91,7 +95,7 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
       <label>Lời nhắn<textarea disabled={busy} maxLength={2000} value={offer.message} onChange={(event) => setOffer({ ...offer, message: event.target.value })} /></label>
       <Button type="submit" loading={busy} disabled={busy || !offer.roomTypeSlug}>Xem lại đề xuất</Button>
     </form>}
-    <ConfirmDialog open={confirm !== null} title={confirm === 'paid' ? 'Xác nhận tiền đã vào tài khoản?' : confirm === 'offer' ? 'Gửi đề xuất phòng khác?' : 'Xác nhận còn phòng và gửi QR?'}
+    <ConfirmDialog open={confirm !== null} title={confirm === 'paid' ? 'Xác nhận tiền đã vào tài khoản?' : confirm === 'offer' ? 'Gửi đề xuất phòng khác?' : 'Xác nhận còn phòng và gửi link thanh toán?'}
       onCancel={() => { if (!busy) setConfirm(null); }}
       onConfirm={() => { if (confirm) void run(() => confirm === 'paid' ? salesRequestsApi.confirmPayment(request.reference) : confirm === 'offer' ? salesRequestsApi.proposeAlternative(request.reference, offer) : salesRequestsApi.approvePayment(request.reference)); }}
       confirmLabel={confirm === 'offer' ? 'Gửi đề xuất và kết thúc yêu cầu' : 'Xác nhận'} busy={busy}>
@@ -101,7 +105,7 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
         <p>Tổng giá: {formatMoney({ amountMinor: offer.totalMinor, currency: request.total?.currency ?? 'VND', exponent: request.total?.exponent ?? 0 })}</p>
         {offer.message && <p>{offer.message}</p>}
         <p>Yêu cầu này sẽ kết thúc ngay khi gửi đề xuất. Không giữ phòng và không tạo yêu cầu mới; nếu khách muốn lưu trú theo phương án này, khách tạo yêu cầu mới trên website.</p>
-      </> : confirm === 'paid' ? 'Chỉ xác nhận sau khi đã đối chiếu giao dịch ngân hàng. Đặt phòng sẽ được xác nhận cho khách.' : 'Bạn đã kiểm tra và xác nhận còn phòng thủ công. Hệ thống chuyển yêu cầu sang chờ thanh toán và gửi QR riêng của khách sạn cho khách. Chưa xác nhận đã nhận tiền.'}
+      </> : confirm === 'paid' ? 'Chỉ xác nhận sau khi đã đối chiếu giao dịch ngân hàng. Đặt phòng sẽ được xác nhận cho khách.' : 'Bạn đã kiểm tra và xác nhận còn phòng thủ công. Hệ thống chuyển yêu cầu sang chờ thanh toán và gửi email có link thanh toán (SePay) cùng hạn thanh toán cho khách. Chưa xác nhận đã nhận tiền.'}
     </ConfirmDialog>
   </Card>;
 }

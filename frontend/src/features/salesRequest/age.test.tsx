@@ -187,7 +187,7 @@ describe('the request workspace', () => {
     expect(screen.getByRole('heading', { name: 'KAS-260912-4F7A' })).toBeTruthy();
     expect(screen.queryByText('Nguồn khách')).toBeNull();
     expect(screen.getByText(/Deluxe Room × 1/)).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeTruthy();
   });
 
   it('exposes no internal identifier alongside it', () => {

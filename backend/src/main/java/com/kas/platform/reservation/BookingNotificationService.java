@@ -69,9 +69,13 @@ public class BookingNotificationService {
         // for a future template button without changing the business flow.
         params.put("paymentReportUrl", actionUrl(request.guestToken()));
         params.put("paymentUrl", actionUrl(request.guestToken()));
-        params.put("paymentDescription", (request.instructions() == null ? "" : request.instructions())
-                + (vi ? " Đã chuyển khoản? Mở liên kết để báo khách sạn kiểm tra: " : " Already transferred? Open this link to notify the hotel: ")
-                + actionUrl(request.guestToken()));
+        // The transfer hint only when a manual transfer is offered (a static QR is kept); with
+        // SePay alone the email's payment button is the whole story (owner 2026-11-10).
+        boolean manualTransfer = request.qrUrl() != null && !request.qrUrl().isBlank();
+        params.put("paymentDescription", !manualTransfer ? ""
+                : (request.instructions() == null ? "" : request.instructions())
+                        + (vi ? " Đã chuyển khoản? Mở liên kết để báo khách sạn kiểm tra: " : " Already transferred? Open this link to notify the hotel: ")
+                        + actionUrl(request.guestToken()));
         // KAS-014: the shared KAS bank details (payment_account, V51); "see the QR" only where one is missing.
         String qrDetails = vi ? "Xem thông tin trên mã QR" : "See the payment QR details";
         params.put("bankName", orElse(request.bankName(), qrDetails));
@@ -302,20 +306,16 @@ public class BookingNotificationService {
      */
     public void paymentDeadlinePassed(String reference, java.time.OffsetDateTime dueAt, String hotelEmail,
                                       String hotelName) {
+        // Guest: Brevo template PAYMENT_DEADLINE_PASSED (owner 2026-11-12), or its local design.
         guestOf(reference, "r.sales_status='EXPIRED'").ifPresent(guest -> {
+            if (guest.email() == null || guest.email().isBlank()) return;
             boolean vi = "vi".equals(EmailLanguage.forCountry(guest.country()));
-            String due = dueAt == null ? "" : PaymentDeadline.format(dueAt, vi);
-            String again = siteBaseUrl + "/hotels.html?lang=" + (vi ? "vi" : "en");
-            guestInline(reference, "payment-deadline-guest-" + reference, guest,
-                    vi ? "Đặt phòng " + reference + " đã hết hạn thanh toán" : "Booking " + reference + " was not paid in time",
-                    vi ? "<p>Đặt phòng <strong>" + esc(reference) + "</strong> chưa được thanh toán trước hạn " + esc(due)
-                            + " nên đã hết hạn. Phòng không còn được giữ cho bạn; voucher và điểm KAS (nếu có) đã được trả lại.</p>"
-                            + "<p>Nếu bạn vẫn muốn lưu trú, vui lòng gửi yêu cầu mới:</p>" + button(again, "Gửi yêu cầu đặt phòng mới")
-                            + "<p>Nếu bạn đã chuyển tiền, đừng lo: KAS sẽ kiểm tra và liên hệ bạn để xác nhận lại hoặc hoàn tiền.</p>"
-                       : "<p>Booking <strong>" + esc(reference) + "</strong> was not paid by " + esc(due)
-                            + ", so it has expired. The rooms are no longer held for you; any voucher or KAS points were given back.</p>"
-                            + "<p>If you still want to stay, please send a new request:</p>" + button(again, "Send a new booking request")
-                            + "<p>If you already paid, don't worry: KAS will check and contact you to confirm again or refund you.</p>");
+            Map<String, Object> params = guest.params();
+            params.put("reference", reference);
+            params.put("paymentDeadline", dueAt == null ? "" : PaymentDeadline.format(dueAt, vi));
+            params.put("newBookingUrl", siteBaseUrl + "/hotels.html?lang=" + (vi ? "vi" : "en"));
+            outbox.templateForReservation(reference, "payment-deadline-guest-" + reference, "PAYMENT_DEADLINE_PASSED",
+                    guest.country(), guest.email(), guest.name(), params);
         });
         hotelInline(reference, "payment-deadline-hotel-" + reference, hotelEmail, hotelName,
                 "Đặt phòng " + reference + " đã hết hạn thanh toán",

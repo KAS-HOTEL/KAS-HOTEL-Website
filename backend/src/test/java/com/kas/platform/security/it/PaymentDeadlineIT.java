@@ -6,7 +6,10 @@ import com.kas.platform.reservation.SePayGatewayService;
 import com.kas.platform.reservation.SePayOrderApi;
 import com.kas.platform.reservation.UnmatchedPaymentService;
 import com.kas.platform.reservation.VoucherHoldService;
+import com.kas.platform.shared.EmailOutboxCipher;
 import com.kas.platform.shared.NotFoundException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kas.platform.shared.scope.AuthorizationScope;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -36,6 +39,8 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
 
     @Autowired JdbcClient jdbc;
     @Autowired PaymentDeadlineService deadlines;
+    @Autowired EmailOutboxCipher outboxCipher;
+    @Autowired ObjectMapper json;
     @Autowired VoucherHoldService holds;
     @Autowired SePayGatewayService gateway;
     @Autowired SePayCheckoutCanceller checkouts;
@@ -114,6 +119,33 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
                 """).param("id", overdue).query(String.class).single()).isEqualTo("PAYMENT_DEADLINE");
         // The freed use can be held by the next booking (limit 1).
         assertThat(holds.hold(voucherId, inTime, null, 100_000, OffsetDateTime.now().plusDays(5))).isTrue();
+    }
+
+    @Test
+    @DisplayName("an expired booking emails the guest with the PAYMENT_DEADLINE_PASSED template")
+    void expiryEmailsGuestWithTemplate() {
+        UUID overdue = pending(OffsetDateTime.now().minusMinutes(1));
+        assertThat(deadlines.expireOverdue()).contains(reference(overdue));
+
+        JsonNode mail = outboxEvent("payment-deadline-guest-" + reference(overdue));
+        assertThat(mail.path("templateKey").asText()).isEqualTo("PAYMENT_DEADLINE_PASSED");
+        JsonNode params = mail.path("params");
+        assertThat(params.path("bookingReference").asText()).isEqualTo(reference(overdue));
+        assertThat(params.path("reference").asText()).isEqualTo(reference(overdue));
+        assertThat(params.path("paymentDeadline").asText()).isNotBlank();
+        assertThat(params.path("newBookingUrl").asText()).endsWith("/hotels.html?lang=vi");
+        // A booking still in time gets no such email.
+        UUID inTime = pending(OffsetDateTime.now().plusHours(3));
+        deadlines.expireOverdue();
+        assertThat(jdbc.sql("SELECT count(*) FROM email_delivery_outbox WHERE event_key = :key")
+                .param("key", "payment-deadline-guest-" + reference(inTime)).query(Long.class).single()).isZero();
+    }
+
+    private JsonNode outboxEvent(String eventKey) {
+        var row = jdbc.sql("SELECT payload_nonce, payload_ciphertext FROM email_delivery_outbox WHERE event_key = :key ORDER BY created_at DESC LIMIT 1")
+                .param("key", eventKey).query((rs, n) -> new byte[][]{rs.getBytes("payload_nonce"), rs.getBytes("payload_ciphertext")}).single();
+        try { return json.readTree(outboxCipher.decrypt(row[0], row[1])); }
+        catch (java.io.IOException ex) { throw new AssertionError("Outbox payload should be valid JSON", ex); }
     }
 
     @Test

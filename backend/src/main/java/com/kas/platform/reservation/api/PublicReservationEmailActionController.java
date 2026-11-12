@@ -179,7 +179,7 @@ public class PublicReservationEmailActionController {
                         facts("Yêu cầu " + view.reference() + " · " + view.propertyName() + " · "
                                 + view.checkIn() + " – " + view.checkOut()),
                         "Hãy kiểm tra phòng thực tế trước khi gửi thông tin thanh toán.",
-                        button(token, "approve", "Xác nhận còn phòng và gửi QR", false) + proposal);
+                        button(token, "approve", "Xác nhận còn phòng và gửi link thanh toán", false) + proposal);
             }
             case "GUEST_MARK_PAID" -> {
                 // V66 layer 1: the payment gate is open only while the booking waits for payment
@@ -190,19 +190,23 @@ public class PublicReservationEmailActionController {
                     return paymentClosedPage(view, vi);
                 }
                 String online = sePayForm(token, view, vi);
+                // Manual bank transfer is offered only when KAS keeps a static QR in the payment
+                // account (owner 2026-11-10): with SePay on and no static QR, SePay is the only way.
+                String manual = actions.manualTransfer().map(account -> manualTransferBlock(token, view, account, vi,
+                        !online.isEmpty())).orElse("");
                 String deadline = dueAt.map(due -> facts((vi ? "Hạn thanh toán: " : "Pay by: ")
                         + com.kas.platform.reservation.PaymentDeadline.format(due, vi))).orElse("");
-                return vi
-                        ? page("vi", "Thanh toán đặt phòng",
-                                facts("Yêu cầu " + view.reference() + " tại " + view.propertyName()) + deadline,
-                                online.isEmpty() ? "Thao tác này chỉ báo khách sạn kiểm tra giao dịch, chưa xác nhận đặt phòng."
-                                        : "Thanh toán online qua SePay để đặt phòng được xác nhận tự động. Nếu đã chuyển khoản theo mã QR trong email, hãy bấm nút bên dưới để khách sạn kiểm tra.",
-                                online + button(token, "paid", "Tôi đã chuyển khoản", !online.isEmpty()))
-                        : page("en", "Pay for your booking",
-                                facts("Request " + view.reference() + " at " + view.propertyName()) + deadline,
-                                online.isEmpty() ? "This only asks the hotel to check the transfer; it does not confirm the booking."
-                                        : "Pay online with SePay and your booking is confirmed automatically. If you already transferred with the QR in the email, use the button below so the hotel checks it.",
-                                online + button(token, "paid", "I have made the transfer", !online.isEmpty()));
+                String text = !online.isEmpty()
+                        ? (vi ? "Bấm nút bên dưới để thanh toán qua SePay (quét QR ngân hàng hoặc thẻ). Đặt phòng được xác nhận tự động ngay khi thanh toán thành công."
+                              : "Use the button below to pay with SePay (bank QR or card). Your booking is confirmed automatically as soon as the payment succeeds.")
+                        : manual.isEmpty()
+                                ? (vi ? "Hiện chưa thể thanh toán trực tuyến. Vui lòng liên hệ KAS." : "Online payment is not available right now. Please contact KAS.")
+                                : (vi ? "Chuyển khoản theo thông tin bên dưới rồi bấm \"Tôi đã chuyển khoản\" để khách sạn kiểm tra."
+                                      : "Transfer using the details below, then press \"I have made the transfer\" so the hotel checks it.");
+                return page(vi ? "vi" : "en", vi ? "Thanh toán đặt phòng" : "Pay for your booking",
+                        facts((vi ? "Yêu cầu " : "Request ") + view.reference() + (vi ? " tại " : " at ")
+                                + view.propertyName()) + deadline,
+                        text, online + manual);
             }
             case "HOTEL_CONFIRM_PAYMENT" -> {
                 return page("vi", "Xác nhận đã nhận thanh toán",
@@ -230,7 +234,24 @@ public class PublicReservationEmailActionController {
     public String approve(@PathVariable String token) {
         var request = actions.approveAndSendQr(token);
         notifications.paymentRequestSent(request);
-        return page("vi", "Đã gửi thông tin thanh toán", "", "Email QR và hướng dẫn thanh toán đã được gửi cho khách.", "");
+        return page("vi", "Đã gửi thông tin thanh toán", "", "Email thanh toán (link thanh toán và hạn thanh toán) đã được gửi cho khách.", "");
+    }
+
+    /** Bank details for a manual transfer, with "I have made the transfer"; secondary when SePay is offered. */
+    private static String manualTransferBlock(String token, ReservationEmailActionService.EmailActionView view,
+                                              ReservationEmailActionService.ManualTransfer account, boolean vi,
+                                              boolean secondary) {
+        StringBuilder html = new StringBuilder();
+        if (secondary) html.append("<hr><h2>").append(esc(vi ? "Hoặc chuyển khoản" : "Or bank transfer")).append("</h2>");
+        html.append("<p class=\"facts\">");
+        if (account.bankName() != null) html.append(esc((vi ? "Ngân hàng: " : "Bank: ") + account.bankName())).append("<br>");
+        if (account.accountHolder() != null) html.append(esc((vi ? "Chủ tài khoản: " : "Account holder: ") + account.accountHolder())).append("<br>");
+        if (account.accountNumber() != null) html.append(esc((vi ? "Số tài khoản: " : "Account number: ") + account.accountNumber())).append("<br>");
+        if (view.totalMinor() != null) html.append(esc((vi ? "Số tiền: " : "Amount: ") + money(view.totalMinor()))).append("<br>");
+        html.append(esc((vi ? "Nội dung chuyển khoản: " : "Transfer reference: ") + view.reference())).append("</p>");
+        if (account.instructions() != null) html.append("<p class=\"muted\">").append(esc(account.instructions())).append("</p>");
+        html.append(button(token, "paid", vi ? "Tôi đã chuyển khoản" : "I have made the transfer", secondary));
+        return html.toString();
     }
 
     /**
@@ -363,8 +384,8 @@ public class PublicReservationEmailActionController {
             vi = "Liên kết này đã được sử dụng hoặc đã hết hạn.";
             en = "This link has already been used or has expired.";
         } else if (code == ApiErrorCode.CONFIG_MISSING || String.valueOf(ex.getMessage()).contains("QR")) {
-            vi = "Chưa thể gửi thông tin thanh toán vì khách sạn chưa có mã QR thanh toán. Vui lòng nhập mã QR trong trang quản trị rồi mở lại liên kết này.";
-            en = "Payment details cannot be sent yet because the hotel has no payment QR. Please add it in the console, then open this link again.";
+            vi = "Chưa thể gửi thông tin thanh toán vì chưa có cách thanh toán nào: cổng SePay chưa bật và chưa có QR trong Tài khoản thanh toán. Vui lòng báo KAS cấu hình rồi mở lại liên kết này.";
+            en = "Payment details cannot be sent yet: the SePay gateway is off and no payment QR is set. Please ask KAS to configure one, then open this link again.";
         } else if (code.httpStatus() == 409) {
             vi = "Yêu cầu này đã được xử lý trước đó. Không cần thao tác thêm.";
             en = "This request has already been handled. Nothing else is needed.";

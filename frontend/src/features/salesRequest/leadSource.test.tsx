@@ -98,7 +98,7 @@ describe('the request detail', () => {
     render(<SalesRequestDetailView request={detail()} now={NOW} />);
     expect(screen.getByRole('heading', { name: 'KAS-260912-4F7A' })).toBeTruthy();
     expect(screen.getByText(/Deluxe Room × 1/)).toBeTruthy();
-    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Từ chối yêu cầu' })).toBeTruthy();
   });
 

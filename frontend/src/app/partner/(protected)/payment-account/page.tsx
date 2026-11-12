@@ -11,7 +11,7 @@ export default function Page() {
       <PageHeader
         eyebrow="Thanh toán"
         title="Tài khoản thanh toán"
-        description="Một QR và một tài khoản ngân hàng cho mọi khách sạn, in vào email thanh toán gửi khách."
+        description="Khách trả qua cổng SePay (SePay tự tạo QR). Tài khoản chuyển khoản tay dưới đây là tuỳ chọn, dùng chung cho mọi khách sạn."
       />
       <PaymentAccountEditor />
     </div>

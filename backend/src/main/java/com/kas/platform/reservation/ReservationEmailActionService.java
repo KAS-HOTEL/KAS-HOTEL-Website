@@ -28,6 +28,7 @@ public class ReservationEmailActionService {
     private final com.kas.platform.customer.LoyaltyPointsService loyaltyPoints;
     private final Duration paymentWindow;
     private final Duration sameDayPaymentWindow;
+    private final SePayProperties sePay;
 
     public ReservationEmailActionService(JdbcClient jdbc, ReservationEmailActionTokenService tokens,
                                          com.kas.platform.settings.SystemSettingService settings,
@@ -36,7 +37,8 @@ public class ReservationEmailActionService {
                                          @org.springframework.beans.factory.annotation.Value("${kas.booking.payment-window:PT24H}")
                                          Duration paymentWindow,
                                          @org.springframework.beans.factory.annotation.Value("${kas.booking.same-day-payment-window:PT2H}")
-                                         Duration sameDayPaymentWindow) {
+                                         Duration sameDayPaymentWindow,
+                                         SePayProperties sePay) {
         this.jdbc = jdbc;
         this.tokens = tokens;
         this.settings = settings;
@@ -44,6 +46,31 @@ public class ReservationEmailActionService {
         this.loyaltyPoints = loyaltyPoints;
         this.paymentWindow = paymentWindow;
         this.sameDayPaymentWindow = sameDayPaymentWindow;
+        this.sePay = sePay;
+    }
+
+    /**
+     * Whether the guest has a way to pay (owner 2026-11-10): the SePay gateway — which makes
+     * its own QR for every order — or, without it, the static QR of the manual transfer.
+     * Package-visible for the test.
+     */
+    static boolean hasPaymentMethod(boolean sePayCheckout, String staticQrUrl) {
+        return sePayCheckout || (staticQrUrl != null && !staticQrUrl.isBlank());
+    }
+
+    /** Bank details for paying by hand; offered only while a static QR is kept in the payment account. */
+    public record ManualTransfer(String bankName, String accountHolder, String accountNumber, String instructions) {}
+
+    /** The manual bank transfer, or empty when KAS does not offer one (no static QR: SePay only). */
+    @Transactional(readOnly = true)
+    public Optional<ManualTransfer> manualTransfer() {
+        return jdbc.sql("""
+                SELECT bank_name, account_holder, account_number, instructions FROM payment_account
+                 WHERE qr_url IS NOT NULL AND btrim(qr_url) <> ''
+                """)
+                .query((rs, n) -> new ManualTransfer(rs.getString("bank_name"), rs.getString("account_holder"),
+                        rs.getString("account_number"), rs.getString("instructions")))
+                .optional();
     }
 
     /** The booking's payment deadline (V66); empty when none was set (approved before V66). */
@@ -196,9 +223,11 @@ public class ReservationEmailActionService {
                 .query((rs, n) -> new PaymentProfile(rs.getString("qr_url"),
                         rs.getString("instructions"), rs.getString("bank_name"),
                         rs.getString("account_holder"), rs.getString("account_number"))).single();
-        if (profile.qrUrl() == null || profile.qrUrl().isBlank()) {
+        // With SePay on, SePay makes the QR for each order: the static QR is optional and only
+        // offered as a manual-transfer fallback. Without SePay the static QR is the only way to pay.
+        if (!hasPaymentMethod(sePay.checkoutEnabled(), profile.qrUrl())) {
             throw new BusinessRuleException(ApiErrorCode.CONFIG_MISSING,
-                    "The KAS payment QR is not configured in the payment account.");
+                    "No way to pay is configured: turn on the SePay gateway or add the payment QR in the payment account.");
         }
         // V66: the payment deadline — 24h, 2h for a stay starting today, never past check-in.
         OffsetDateTime now = OffsetDateTime.now(PaymentDeadline.HOTEL_ZONE);

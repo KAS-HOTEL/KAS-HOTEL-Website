@@ -99,6 +99,10 @@ services:
         sync: false
       - key: BREVO_TEMPLATE_BOOKING_REQUEST_REJECTED_EN
         sync: false
+      - key: BREVO_TEMPLATE_PAYMENT_DEADLINE_PASSED_VI
+        sync: false
+      - key: BREVO_TEMPLATE_PAYMENT_DEADLINE_PASSED_EN
+        sync: false
       # Starts ON: mail leaves only for the listed addresses until the owner
       # approves real customer email (then set it to "false").
       - key: KAS_EMAIL_REQUIRE_ALLOWLIST

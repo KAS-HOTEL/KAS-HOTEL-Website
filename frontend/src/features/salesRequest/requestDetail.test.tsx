@@ -76,19 +76,19 @@ describe('detail view — manual payment workflow', () => {
   it('offers QR approval before payment and bank verification only at PAYMENT_PENDING', () => {
     for (const status of ['REQUESTED', 'ASSIGNED', 'AVAILABILITY_CHECK', 'CUSTOMER_CONTACTED']) {
       render(<SalesRequestDetailView request={detail(status)} now={NOW} />);
-      expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeTruthy();
       expect(screen.queryByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeNull();
       cleanup();
     }
     render(<SalesRequestDetailView request={detail('PAYMENT_PENDING')} now={NOW} />);
     expect(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeTruthy();
-    expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeNull();
   });
   it('offers neither payment action after an offer or a terminal decision', () => {
     for (const status of ['ALTERNATIVE_OFFERED', 'WON', 'DECLINED', 'CANCELLED', 'EXPIRED']) {
       render(<SalesRequestDetailView request={detail(status)} now={NOW} />);
       expect(screen.queryByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeNull();
-      expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeNull();
+      expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeNull();
       cleanup();
     }
   });
@@ -107,7 +107,9 @@ describe('detail view — manual payment workflow', () => {
   it('introduces no payment control — B12 was answered pay-at-hotel', () => {
     render(<SalesRequestDetailView request={detail('AVAILABILITY_CHECK')} now={NOW} />);
 
-    const text = document.body.textContent ?? '';
+    // The approve button names what it sends (the SePay payment link, 2026-11-10); beyond that
+    // label the detail view still collects no payment, deposit, cash or invoice data.
+    const text = (document.body.textContent ?? '').replace('Còn phòng — xác nhận và gửi link thanh toán', '');
     expect(text).not.toMatch(/thanh toán|đặt cọc|chuyển khoản|tiền mặt|hoá đơn/i);
     expect(document.querySelectorAll('input[type="number"]')).toHaveLength(0);
   });

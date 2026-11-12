@@ -135,7 +135,7 @@ describe('the detail page', () => {
   it('leaves the existing action panels working', () => {
     render(<SalesRequestDetailView request={detail('REQUESTED')} now={NOW} />);
 
-    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Từ chối yêu cầu' })).toBeTruthy();
   });
 

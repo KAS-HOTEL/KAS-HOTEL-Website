@@ -1,0 +1,1 @@
+Đặt phòng {{ params.reference }} đã hết hạn thanh toán

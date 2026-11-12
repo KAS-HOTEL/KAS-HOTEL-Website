@@ -74,8 +74,9 @@ export function PaymentAccountEditor() {
     <section className={styles.section} aria-labelledby="payment-account-title">
       <h2 className={styles.title} id="payment-account-title">Tài khoản nhận tiền chung</h2>
       <p className={styles.note}>
-        Mọi khách sạn dùng chung một tài khoản. Sau khi xác nhận còn phòng, hệ thống gửi QR và thông tin chuyển khoản này
-        cho khách qua email. Đặt phòng chỉ được xác nhận sau khi kiểm tra đã nhận tiền.
+        Khách thanh toán qua cổng SePay: SePay tự tạo QR cho từng đơn và đặt phòng được xác nhận tự động khi tiền về.
+        Thông tin dưới đây <strong>không bắt buộc</strong>: chỉ điền khi muốn cho khách thêm lựa chọn chuyển khoản tay
+        (khách bấm “Tôi đã chuyển khoản”, khách sạn kiểm tra rồi xác nhận). Để trống QR thì khách chỉ thấy SePay.
       </p>
       {loading ? <p className={styles.note}>Đang tải thông tin…</p> : (
         <form className={styles.form} onSubmit={submit}>
@@ -89,7 +90,7 @@ export function PaymentAccountEditor() {
               value={qrImageUrl}
               onChange={(event) => { setQrImageUrl(event.target.value); setSaved(false); }}
             />
-            <small>Đưa ảnh QR lên nơi lưu trữ công khai rồi dán đường dẫn ảnh vào đây. Thiếu QR thì không gửi được email thanh toán.</small>
+            <small>Có QR thì bật thêm lựa chọn chuyển khoản tay. Khi cổng SePay chưa bật, QR là bắt buộc — thiếu cả hai thì không gửi được email thanh toán.</small>
           </label>
           {qrImageUrl ? <img className={styles.qrPreview} src={qrImageUrl} alt="Xem trước QR thanh toán" /> : null}
           <label className={styles.field}>

@@ -42,6 +42,10 @@ public final class EmailTemplates {
                 "checkIn", "checkOut", "guests", "accountUrl"));
         all.put("BOOKING_CANCELLED", List.of("firstName", "bookingReference", "hotelName",
                 "checkIn", "checkOut", "cancellationDate", "accountUrl"));
+        // V66: the payment deadline passed and the booking expired (Brevo templates 24 VI / 25 EN).
+        // "reference" duplicates bookingReference because the Brevo subject line uses it.
+        all.put("PAYMENT_DEADLINE_PASSED", List.of("firstName", "bookingReference", "reference", "hotelName",
+                "checkIn", "checkOut", "paymentDeadline", "newBookingUrl"));
         all.put("ALTERNATIVE_STAY_SUGGESTION", List.of("firstName", "requestedHotelName", "alternativeHotelName",
                 "alternativeBranch", "roomType", "checkIn", "checkOut", "guests", "priceSummary",
                 "availabilityUrl", "rejectUrl"));

@@ -34,7 +34,13 @@
 
 stages: [test, build, deploy, verify]
 
+# Security scans set up by the project admin (SAST + Secret Detection); both run in the test stage.
+include:
+  - template: Security/SAST.gitlab-ci.yml
+  - template: Security/Secret-Detection.gitlab-ci.yml
+
 variables:
+  SECRET_DETECTION_ENABLED: "true"
   STAGING_BRANCH: "staging"
   PRODUCTION_BRANCH: "main"
   WEBDEMO_HOST: "202.143.110.15"

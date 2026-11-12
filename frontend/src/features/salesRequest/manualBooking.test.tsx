@@ -24,7 +24,7 @@ afterEach(cleanup);
 
 it('requires an explicit confirmation before approving and refreshing the request', async () => {
   render(<ManualBookingActions request={request} />);
-  await userEvent.click(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' }));
+  await userEvent.click(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' }));
   expect(calls.approve).not.toHaveBeenCalled();
   await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
   await waitFor(() => expect(calls.approve).toHaveBeenCalledWith('KAS-TEST'));
@@ -34,7 +34,7 @@ it('requires an explicit confirmation before approving and refreshing the reques
 
 it('only offers bank verification while payment is pending', async () => {
   render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }} />);
-  expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' })).toBeNull();
+  expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeNull();
   await userEvent.click(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' }));
   expect(calls.confirm).not.toHaveBeenCalled();
   await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
@@ -44,7 +44,7 @@ it('only offers bank verification while payment is pending', async () => {
 it('reports a failed approval without claiming success or refreshing', async () => {
   calls.approve.mockRejectedValue(new Error('offline'));
   render(<ManualBookingActions request={request} />);
-  await userEvent.click(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi QR' }));
+  await userEvent.click(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' }));
   await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
   await waitFor(() => expect(screen.getByRole('alert')).toBeTruthy());
   expect(calls.show).not.toHaveBeenCalled(); expect(calls.refresh).not.toHaveBeenCalled();
