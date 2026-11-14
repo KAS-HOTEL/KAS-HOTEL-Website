@@ -54,6 +54,10 @@
 .rating { display: inline-flex; align-items: baseline; gap: 2px; padding: 7px 9px; border-radius: 7px; background: var(--surface-sunken); color: var(--text-primary); font-size: 19px; font-weight: 600; }
 .rating small { font-size: 11px; color: var(--text-muted); font-weight: 400; }
 .reviewMeta { margin: 3px 0 0; color: var(--text-muted); font-size: 11px; }
+.reviewTrace { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 14px 0 0; padding: 10px 12px; border-radius: 7px; background: var(--surface-sunken); }
+.reviewTrace div { min-width: 0; }
+.reviewTrace dt { color: var(--text-muted); font-size: 11px; }
+.reviewTrace dd { margin: 1px 0 0; color: var(--text-primary); font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
 .reviewTitle { margin: 16px 0 6px; font-size: 14px; font-weight: 600; }
 .reviewBody { margin: 12px 0 16px; color: var(--text-secondary); font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .reviewActions { border-top: 1px solid var(--border-subtle); padding-top: 10px; }
@@ -129,3 +133,60 @@
 .tierGold { border-color: #d9be86; background: #fbf3e2; color: #7a5617; }
 .tierPlatinum { border-color: #25241f; background: #25241f; color: #f3ead8; }
 .tierNone { color: #8b8172; font-size: 12px; }
+
+/* Voucher for chosen customers (2026-11-14): search results and the chosen list. */
+.linkButton {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid var(--line, #e3dccf);
+  border-radius: 6px;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.linkButton:hover, .linkButton:focus-visible { background: var(--surface-2, #f6f2ea); }
+.chosenList {
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 4px;
+}
+.chosenList li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--surface-2, #f6f2ea);
+  font-size: 13px;
+}
+.chosenList button {
+  border: 0;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* Cancellation request card (2026-11-14): booking facts, then the fee form on its own grid. */
+.cancelFacts { display: flex; flex-wrap: wrap; gap: 10px 32px; margin: 0 0 20px; padding: 12px 14px; border-radius: 7px; background: var(--surface-sunken); }
+.cancelFacts div { min-width: 0; }
+.cancelFacts dt { color: var(--text-muted); font-size: 11px; }
+.cancelFacts dd { margin: 1px 0 0; color: var(--text-primary); font-size: 13px; font-weight: 600; overflow-wrap: anywhere; }
+.cancelForm { display: grid; gap: 16px; }
+.cancelFieldset { min-width: 0; margin: 0; padding: 0; border: 0; }
+.cancelFieldset legend { margin-bottom: 12px; padding: 0; color: var(--text-primary); font-size: 13px; font-weight: 600; }
+.cancelFieldset .form { align-items: start; }
+.cancelWide { grid-column: 1 / -1; margin: 0; }
+.cancelFooter { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 20px; padding-top: 14px; border-top: 1px solid var(--border-subtle); }
+.cancelFee { margin: 0; color: var(--text-secondary); font-size: 12px; }
+.cancelFee strong { display: block; color: var(--text-primary); font-size: 20px; font-weight: 600; line-height: 1.3; }
+.cancelPolicy, .cancelPolicyFree { padding: 12px 14px; border-left: 3px solid var(--border-default, #ccc); border-radius: 6px; background: var(--surface-sunken); color: var(--text-primary); font-size: 13px; }
+.cancelPolicy p, .cancelPolicyFree p { margin: 4px 0 0; color: var(--text-secondary); font-size: 12px; }
+.cancelPolicyFree { border-left-color: #356052; background: #f2f7f4; color: #2f5a4c; }
+.cancelFee span { display: block; margin-top: 2px; color: var(--text-secondary); font-size: 12px; }

@@ -46,3 +46,26 @@ it('supports a fixed currency amount and preserves errors for retry', async () =
   expect(screen.queryByText(/Đã báo phí/)).toBeNull();
   expect((screen.getByLabelText('Số tiền (VND)') as HTMLInputElement).value).toBe('250000');
 });
+
+it('charges nothing for a cancellation inside the free window and asks for no fee', async () => {
+  calls.list.mockResolvedValue([{ ...row, paidMinor: 1500000, policyFeeBasis: 'FREE_WINDOW', policyFeeMinor: 0, policyFeeType: 'NONE' }]);
+  render(<CancellationQueue />);
+  await screen.findByText(/KAS-FEE · Hotel A/);
+  expect(screen.queryByLabelText('Loại phí')).toBeNull();
+  expect(screen.queryByLabelText('Số tiền (VND)')).toBeNull();
+  await userEvent.click(screen.getByRole('button', { name: 'Xác nhận hủy miễn phí' }));
+  expect(screen.getByRole('dialog').textContent).toContain('1.500.000');
+  await userEvent.click(screen.getByRole('button', { name: 'Xác nhận' }));
+  await waitFor(() => expect(calls.quote).toHaveBeenCalledWith('KAS-FEE', 'request-1', { note: '' }));
+});
+
+it('takes the fee from the configured policy instead of a typed amount', async () => {
+  calls.list.mockResolvedValue([{ ...row, paidMinor: 1500000, policyFeeBasis: 'RULE', policyFeeMinor: 750000, policyFeeType: 'PERCENT_OF_TOTAL', policyFeePercent: 50 }]);
+  render(<CancellationQueue />);
+  await screen.findByText(/Phí hủy theo chính sách: 50% giá trị đặt phòng/);
+  expect(screen.queryByLabelText('Loại phí')).toBeNull();
+  await userEvent.click(screen.getByRole('button', { name: 'Xem lại phí hủy' }));
+  expect(screen.getByRole('dialog').textContent).toContain('750.000');
+  await userEvent.click(screen.getByRole('button', { name: 'Gửi phí hủy' }));
+  await waitFor(() => expect(calls.quote).toHaveBeenCalledWith('KAS-FEE', 'request-1', { note: '' }));
+});

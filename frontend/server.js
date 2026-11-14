@@ -77,6 +77,9 @@ if (API_ORIGIN) {
       [apiBoundary.SURFACE_HEADER]: apiBoundary.SURFACE_VALUE
     });
     delete headers.connection;
+    /* RFC 7239 "Forwarded" is never written by our proxies, and Spring would prefer it to
+       X-Forwarded-For: a browser that typed it picked its own client address (SEC-01). */
+    delete headers.forwarded;
     const upstream = transport.request(target, { method: req.method, headers }, (response) => {
       res.writeHead(response.statusCode || 502, response.headers);
       response.pipe(res);

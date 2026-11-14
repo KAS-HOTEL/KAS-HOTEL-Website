@@ -88,7 +88,10 @@ public class SecurityConfig {
                                 "/api/v1/public/local-media/upload",
                                 // SePay's server-to-server IPN: no browser, no cookie; the
                                 // order is read back from SePay before anything is confirmed.
-                                "/api/v1/public/payments/sepay/ipn"))
+                                "/api/v1/public/payments/sepay/ipn",
+                                // Guest back from SePay: only makes KAS read SePay's own order
+                                // record; changes nothing a forged request could choose.
+                                "/api/v1/public/payments/sepay/return/*"))
                 .addFilterAfter(new CsrfCookieFilter(), CsrfFilter.class)
 
                 // Establishes the identity. Never refuses — the rules below do that.
@@ -107,8 +110,18 @@ public class SecurityConfig {
                         .httpStrictTransportSecurity(hsts -> hsts
                                 .includeSubDomains(true)
                                 .maxAgeInSeconds(31_536_000L))
-                        .referrerPolicy(referrer -> referrer
-                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
+                        // no-referrer everywhere except the email action pages. Their buttons are
+                        // plain form POSTs to this same host, and under no-referrer a browser sends
+                        // such a POST with "Origin: null", which the CORS filter below refuses
+                        // ("Invalid CORS request") — the guest could not reach SePay (2026-11-14).
+                        // same-origin keeps the token in the URL from leaving this host (nothing is
+                        // sent to SePay or any other site) while the form carries its real origin.
+                        .addHeaderWriter(new org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter(
+                                new org.springframework.security.web.util.matcher.NegatedRequestMatcher(EMAIL_ACTION_PAGES),
+                                new ReferrerPolicyHeaderWriter(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER)))
+                        .addHeaderWriter(new org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter(
+                                EMAIL_ACTION_PAGES,
+                                new ReferrerPolicyHeaderWriter(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)))
                         .addHeaderWriter(new org.springframework.security.web.header.writers.DelegatingRequestMatcherHeaderWriter(
                                 new org.springframework.security.web.util.matcher.NegatedRequestMatcher(EMAIL_ACTION_PAGES),
                                 new org.springframework.security.web.header.writers.ContentSecurityPolicyHeaderWriter(

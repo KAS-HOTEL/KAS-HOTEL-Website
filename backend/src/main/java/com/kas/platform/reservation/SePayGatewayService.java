@@ -213,6 +213,13 @@ public class SePayGatewayService {
                     "SEPAY-" + (txId != null ? txId : invoice), method);
             status = result.match().name();
             reservationId = result.reservationId();
+            // The same SePay order reported a second time (the IPN after the order-API poll,
+            // or the reverse, with differently shaped transaction ids): not new money, so it is
+            // kept as IGNORED rather than ALREADY_PAID, which would raise an unmatched alert.
+            if (result.match() == ReservationEmailActionService.GatewayMatch.ALREADY_PAID
+                    && confirmedBefore(invoice, eventId)) {
+                status = "IGNORED";
+            }
             if (result.match() == ReservationEmailActionService.GatewayMatch.CONFIRMED) {
                 notifications.bookingConfirmed(result.booking());
             }
@@ -236,6 +243,14 @@ public class SePayGatewayService {
                 .param("alerted", unmatched).param("id", eventId).update();
         log.info("SePay IPN type={} invoice={} result={}", type, invoice, status);
         return status;
+    }
+
+    /** Whether an earlier notification for this very invoice already confirmed its booking. */
+    private boolean confirmedBefore(String invoice, java.util.UUID eventId) {
+        return invoice != null && jdbc.sql("""
+                SELECT count(*) FROM sepay_ipn_event
+                 WHERE order_invoice_number = :invoice AND match_status = 'CONFIRMED' AND id <> :id
+                """).param("invoice", invoice).param("id", eventId).query(Long.class).single() > 0;
     }
 
     /**

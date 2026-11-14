@@ -119,6 +119,11 @@
       return request('/api/v1/public/auth/reset-password', { method: 'POST', body: { token: token, newPassword: newPassword } });
     },
     logout: function () { return request('/api/v1/public/auth/logout', { method: 'POST' }); },
+    /* Back from SePay (2026-11-14): KAS asks SePay now whether this booking's order is paid
+       and confirms it if so. Always 204; the result shows in the booking itself. */
+    sePayReturned: function (reference) {
+      return request('/api/v1/public/payments/sepay/return/' + encodeURIComponent(reference), { method: 'POST' });
+    },
     profile: function () { return request('/api/v1/me/profile'); },
     updateProfile: function (data) { return request('/api/v1/me/profile', { method: 'PUT', body: data }); },
     /* Profile photo, stored with the account. `image` is a data URL (JPEG/PNG/WebP, at most 512 KB). */
@@ -136,6 +141,8 @@
     /* A guest without an account: a one-time cancellation link to the booking's own email. */
     requestCancellationLink: function (reference, email) { return request('/api/v1/public/cancellations/link', { method: 'POST', body: { reference: reference, email: email } }); },
     decideCancellation: function (reference, accept) { return request('/api/v1/me/stays/' + encodeURIComponent(reference) + '/cancel/decision', { method: 'POST', body: { accept: !!accept } }); },
+    /* The guest's review of a completed stay: once per reservation, published after moderation. */
+    createReview: function (review) { return request('/api/v1/me/reviews', { method: 'POST', body: review }); },
     submitReservation: function (body, key, locale) {
       return request('/api/v1/public/reservations/requests?locale=' + encodeURIComponent(locale || 'en'), {
         method: 'POST', headers: { 'Idempotency-Key': key }, body: body

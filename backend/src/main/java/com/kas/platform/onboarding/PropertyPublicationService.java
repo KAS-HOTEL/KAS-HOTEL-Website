@@ -155,6 +155,7 @@ public class PropertyPublicationService {
         }
 
         requireComplete(propertyId, scope);
+        requireBranchCode(propertyId, scope);
 
         /*
           Publishing from DRAFT publishes the rooms with it.
@@ -229,6 +230,21 @@ public class PropertyPublicationService {
                 List.of(new KasException.ErrorDetail("at least one published room type",
                         "REQUIRED",
                         "Room types are published when the property's submission is approved.")));
+    }
+
+    /**
+     * BUG-002: an OPEN hotel with no branch code is listed but refuses every booking
+     * request ({@code ReservationReference}). Creation assigns one, so this only fires
+     * when codes 01-99 are all taken; it fails here, in the console, not at the guest.
+     */
+    private void requireBranchCode(UUID propertyId, AuthorizationScope scope) {
+        if (properties.hasBranchCode(propertyId, scope)) {
+            return;
+        }
+        throw new KasException(ApiErrorCode.VALIDATION_FAILED,
+                "This property is not yet complete enough to publish.",
+                List.of(new KasException.ErrorDetail("branchCode", "REQUIRED",
+                        "The property has no two-digit branch code, so it could not take bookings.")));
     }
 
     /** The checklist doc 52 §3.1 and doc 23 §12 freeze, unchanged and unduplicated. */

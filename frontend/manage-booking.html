@@ -101,6 +101,8 @@
 .mykas-tabs button .mykas-count{margin-left:6px;color:#a39a8c;font-weight:400}
 .mykas-drawer{position:fixed;inset:0;z-index:10050;display:flex;justify-content:flex-end}
 .mykas-drawer[hidden]{display:none}
+/* Confirmations (cancel, check-out) open from the drawer too: always above it (2026-11-14). */
+.modal{z-index:10100}
 .mykas-drawer__backdrop{position:absolute;inset:0;background:rgba(22,21,18,.48);animation:mykasFade .2s ease}
 .mykas-drawer__panel{position:relative;width:min(720px,100%);height:100%;overflow-y:auto;overscroll-behavior:contain;background:#fbf9f4;box-shadow:-18px 0 48px rgba(0,0,0,.18);padding:28px 32px 40px;animation:mykasSlide .25s ease}
 .mykas-drawer__bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid #e3dccf}
@@ -117,6 +119,142 @@ body.mykas-drawer-open{overflow:hidden}
 @keyframes mykasFade{from{opacity:0}to{opacity:1}}@keyframes mykasSlide{from{transform:translateX(32px);opacity:.6}to{transform:none;opacity:1}}
 @media(max-width:620px){.mykas-drawer__panel{padding:18px 16px 32px}.mykas-drawer__panel .dl{grid-template-columns:1fr}.mykas-pills{justify-content:flex-start}}
 @media (prefers-reduced-motion:reduce){.mykas-drawer__backdrop,.mykas-drawer__panel{animation:none}}
+
+/* 2026-11-14: My bookings list redesign (approved from design-preview-my-bookings-v1).
+   Readable sizes, one card per live booking, compact rows for history, review prompt. */
+.mykas-eyebrow{font-size:11px}
+.mykas-heading p{font:400 14px/1.5 Inter,Arial,sans-serif;color:#6d665b}
+.mykas-view-switch{gap:26px;margin:0;overflow-x:auto}
+.mykas-view-switch a{padding:12px 0;font-size:12px;font-weight:500;letter-spacing:.12em;border-bottom-width:2px;white-space:nowrap}
+.mykas-tabs{gap:8px;margin:18px 0 22px;justify-content:flex-start;scroll-margin-top:calc(var(--nav-h,58px) + 24px)}
+.mykas-tabs button{display:inline-flex;align-items:center;gap:8px;border:1px solid #d9d0c1;border-radius:999px;padding:8px 14px;font:500 13px/1.2 Inter,Arial,sans-serif;letter-spacing:0;color:#4f493f}
+.mykas-tabs button[hidden]{display:none}
+.mykas-tabs button:hover{border-color:#b49358}
+.mykas-tabs button.is-active{background:#25241f;border-color:#25241f;color:#fff}
+.mykas-tabs button .mykas-count{margin-left:0;font-size:12px;font-weight:600;color:#8b8172}
+.mykas-tabs button.is-active .mykas-count{color:#d9c79f}
+.mykas-tabs button:focus-visible,.mkb-btn:focus-visible,.mkb-link:focus-visible,.mkb-copy:focus-visible,.mkb-more:focus-visible,.mkb-stars button:focus-visible{outline:2px solid #b49358;outline-offset:2px}
+.mykas-bookings{gap:18px;font:400 14px/1.55 Inter,Arial,sans-serif}
+.mkb-card{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid #d9d0c1;background:#fbf9f4}
+.mkb-card__img{background:#e1dbd0;min-height:100%;overflow:hidden}
+.mkb-card__img img{display:block;width:100%;height:100%;object-fit:cover}
+.mkb-card__body{padding:20px 24px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.mkb-card__top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px 20px;flex-wrap:wrap}
+.mkb-card__top .mykas-pills{margin-top:0;justify-content:flex-start}
+.mkb-ref{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#786e5e;white-space:nowrap}
+.mkb-ref b{font-weight:600;color:#25241f;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+.mkb-copy{border:1px solid #d7cdbd;background:#fff;border-radius:4px;padding:2px 8px;font:400 11px/1.5 Inter,Arial,sans-serif;color:#625c52;cursor:pointer}
+.mkb-card__hotel{font:400 clamp(26px,2.4vw,32px)/1.1 "Cormorant Garamond",Georgia,serif;margin:0}
+.mkb-card__addr{margin:4px 0 0;font-size:13px;color:#7c7468}
+.mkb-stay{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:16px;align-items:center;padding:14px 0;border-top:1px solid #e3dccf;border-bottom:1px solid #e3dccf}
+.mkb-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#8b8172}
+.mkb-stay__date{font:500 21px/1.2 "Cormorant Garamond",Georgia,serif;margin-top:2px}
+.mkb-stay__time{font-size:12px;color:#7c7468}
+.mkb-stay__nights{font-size:12px;color:#625c52;border:1px solid #d9d0c1;border-radius:999px;padding:3px 12px;white-space:nowrap}
+.mkb-stay__out{text-align:right}
+.mkb-facts{display:grid;grid-template-columns:1.5fr 1fr auto;gap:18px;margin:0}
+.mkb-facts dd{margin:3px 0 0;font-size:14px;overflow-wrap:anywhere}
+.mkb-facts .mkb-total{text-align:right}
+.mkb-facts .mkb-total dd{font:500 22px/1.15 "Cormorant Garamond",Georgia,serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mkb-facts small{display:block;font:400 12px/1.4 Inter,Arial,sans-serif;color:#8b8172}
+.mkb-card .mykas-timeline{margin-top:0;padding:4px 0 0}
+.mkb-card .mykas-timeline:before{top:11px}
+.mkb-next{display:flex;justify-content:space-between;align-items:center;gap:12px 20px;flex-wrap:wrap;padding:14px 16px;border-left:3px solid #c08a2c;background:#fbf5e9;color:#5c4416}
+.mkb-next--ok{border-color:#356052;background:#f2f7f4;color:#2f5a4c}
+.mkb-next--info{border-color:#a39a8c;background:#f6f3ee;color:#4f493f}
+.mkb-next>div:first-child{flex:1 1 300px;min-width:0}
+.mkb-next__title{font-weight:600;font-size:14px}
+.mkb-next__text{font-size:13px;margin-top:2px}
+.mkb-next__due{text-align:right;white-space:nowrap}
+.mkb-next__due b{display:block;font:600 20px/1.15 "Cormorant Garamond",Georgia,serif;font-variant-numeric:tabular-nums}
+.mkb-next__due span{font-size:12px}
+.mkb-actions{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap}
+.mkb-actions .mkb-spacer{flex:1}
+.mkb-btn{display:inline-flex;align-items:center;gap:10px;border:1px solid #25241f;background:#25241f;color:#fff;padding:12px 20px;font:600 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+.mkb-btn:hover{background:#3a382f}
+.mkb-btn[disabled]{opacity:.6;cursor:default}
+.mkb-link{border:0;background:none;padding:6px 0;font:400 13px/1.4 Inter,Arial,sans-serif;color:#625c52;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.mkb-link:hover{color:#25241f}
+.mkb-link--danger{color:#8a3a2a}.mkb-link--danger:hover{color:#6b2416}
+.mkb-link--gold{color:#6b4b1b;font-weight:600;text-decoration:none}.mkb-link--gold:hover{color:#25241f;text-decoration:underline}
+.mkb-past-h{font-size:13px;color:#7c7468;margin-bottom:-6px}
+.mkb-card__booked{margin:2px 0 0;font-size:12px;color:#8b8172}
+.mkb-card--ended .mkb-card__img img{filter:grayscale(.6);opacity:.8}
+.mkb-pager{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.mkb-pager button{min-width:38px;height:38px;padding:0 12px;border:1px solid #d9d0c1;background:transparent;font:400 13px/1 Inter,Arial,sans-serif;color:#4f493f;cursor:pointer}
+.mkb-pager button:hover:not([disabled]){border-color:#b49358}
+.mkb-pager button.is-on{background:#25241f;border-color:#25241f;color:#fff;font-weight:600}
+.mkb-pager button[disabled]{opacity:.4;cursor:default}
+.mkb-pager button:focus-visible{outline:2px solid #b49358;outline-offset:2px}
+.mkb-past{border:1px solid #d9d0c1;background:#fbf9f4}
+.mkb-row{display:grid;grid-template-columns:64px minmax(0,1.5fr) minmax(0,1.2fr) 130px auto;gap:18px;align-items:center;padding:14px 18px;border-top:1px solid #e9e2d5}
+.mkb-row:first-child{border-top:0}
+.mkb-row__img{width:64px;height:52px;overflow:hidden;background:#e1dbd0}
+.mkb-row__img img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(.6);opacity:.8}
+.mkb-row--done .mkb-row__img img{filter:none;opacity:1}
+.mkb-row__hotel{font:500 19px/1.2 "Cormorant Garamond",Georgia,serif}
+.mkb-row__sub{font-size:12.5px;color:#7c7468;margin-top:3px}
+.mkb-row__sub b{font-weight:500;color:#5d5547;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+.mkb-row__why{font-size:13px;color:#5d5547}
+.mkb-row__why .mykas-pill{margin-bottom:4px}
+.mkb-row__total{text-align:right;font-size:13px;color:#7c7468;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mkb-row__total small{display:block;font-size:11px;color:#a39a8c;white-space:normal}
+.mkb-row__act{display:flex;gap:18px;align-items:center;justify-content:flex-end;white-space:nowrap}
+.mkb-more{display:block;width:100%;border:0;border-top:1px solid #e9e2d5;background:transparent;padding:13px;font:600 13px/1.4 Inter,Arial,sans-serif;color:#6b4b1b;cursor:pointer}
+.mkb-more:hover{background:#f6f3ee}
+.mkb-review{grid-column:1/-1;display:flex;align-items:center;gap:8px 16px;flex-wrap:wrap;padding:10px 14px;background:#fbf5e9;border-left:3px solid #b49358;font-size:13px;color:#5c4416}
+.mkb-review b{font-weight:600}
+.mkb-review--sent{background:#f2f7f4;border-color:#356052;color:#2f5a4c}
+.mkb-review .mkb-spacer{flex:1}
+.mkb-stars{display:inline-flex;gap:2px}
+.mkb-stars button,.mkb-stars span{border:0;background:none;padding:0 1px;font-size:22px;line-height:1;color:#d3c8b4}
+.mkb-stars button{cursor:pointer}
+.mkb-stars button:hover,.mkb-stars .is-on{color:#b98a2e}
+.mkb-stars--sm span{font-size:15px}
+.mkb-sk{display:grid;grid-template-columns:260px minmax(0,1fr);border:1px solid #e3dccf;background:#fbf9f4;min-height:300px}
+.mkb-sk__img,.mkb-sk i{background:linear-gradient(90deg,#ece6da 25%,#f5f1e8 50%,#ece6da 75%);background-size:200% 100%;animation:mkbSk 1.4s linear infinite}
+.mkb-sk__body{padding:24px;display:grid;gap:14px;align-content:start}
+.mkb-sk i{display:block;height:14px;border-radius:3px}
+@keyframes mkbSk{from{background-position:200% 0}to{background-position:-200% 0}}
+.mkb-rv{border:0;padding:0;width:min(560px,calc(100vw - 24px));max-height:calc(100vh - 24px);background:#fbf9f4;color:#25241f;box-shadow:0 24px 60px rgba(0,0,0,.28);font:400 14px/1.55 Inter,Arial,sans-serif}
+.mkb-rv::backdrop{background:rgba(22,21,18,.5)}
+.mkb-rv form{padding:26px 28px 24px;display:grid;gap:16px}
+.mkb-rv h2{font:400 30px/1.1 "Cormorant Garamond",Georgia,serif;margin:0}
+.mkb-rv__sub{margin:-10px 0 0;font-size:13px;color:#7c7468}
+.mkb-rv .mkb-label{display:block;margin-bottom:6px}
+.mkb-rv__overall .mkb-stars button{font-size:34px}
+.mkb-rv__grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+.mkb-rv__grid div{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+.mkb-rv__grid .mkb-stars button{font-size:18px}
+.mkb-rv input,.mkb-rv textarea{width:100%;box-sizing:border-box;border:1px solid #d7cdbd;background:#fff;padding:10px 12px;font:inherit;color:inherit}
+.mkb-rv textarea{min-height:110px;resize:vertical}
+.mkb-rv input:focus,.mkb-rv textarea:focus{outline:2px solid #b49358;outline-offset:1px}
+.mkb-rv__err{margin:0;font-size:13px;color:#8a3a2a;min-height:1em}
+.mkb-rv__note{margin:0;font-size:12px;color:#8b8172}
+.mkb-rv__foot{display:flex;justify-content:flex-end;align-items:center;gap:18px}
+@media(max-width:820px){
+  .mkb-card,.mkb-sk{grid-template-columns:1fr}
+  .mkb-card__img,.mkb-sk__img{height:190px;min-height:0}
+  .mkb-row{grid-template-columns:64px minmax(0,1fr);row-gap:10px}
+  .mkb-row__why{grid-column:1/-1}
+  .mkb-row__total{grid-column:1;grid-row:3;text-align:left}
+  .mkb-row__total small{display:inline;margin-left:6px}
+  .mkb-row__act{grid-column:2;grid-row:3}
+}
+@media(max-width:620px){
+  .mykas-tabs{flex-wrap:nowrap;overflow-x:auto;width:auto;margin-right:-16px;padding-right:16px}
+  .mykas-tabs button{font-size:13px;letter-spacing:0;white-space:nowrap}
+  .mkb-card__body{padding:16px}
+  .mkb-stay{gap:8px}.mkb-stay__date{font-size:18px}
+  .mkb-facts{grid-template-columns:1fr 1fr}
+  .mkb-facts .mkb-total{grid-column:1/-1;text-align:left;border-top:1px solid #e3dccf;padding-top:12px}
+  .mkb-next__due{text-align:left}
+  .mkb-actions .mkb-btn{width:100%;justify-content:space-between}
+  .mkb-actions .mkb-spacer{display:none}
+  .mkb-rv form{padding:20px 16px}.mkb-rv__grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){.mkb-sk__img,.mkb-sk i{animation:none}}
+@media print{.mkb-actions,.mkb-review,.mkb-pager,.mkb-more,.mkb-copy{display:none!important}.mkb-card{break-inside:avoid}}
 </style>
 
 <script src="js/site-images.js" defer></script><link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
@@ -227,6 +365,8 @@ body.mykas-drawer-open{overflow:hidden}
       <div id="mbDrawerBody"></div>
     </aside>
   </div>
+  <!-- Review of a completed stay (2026-11-14): POST /api/v1/me/reviews, once per stay, moderated. -->
+  <dialog id="mkbReview" class="mkb-rv" aria-labelledby="mkbReviewTitle"><form novalidate></form></dialog>
 </main>
 
 <div id="trustStrip"></div>
@@ -324,6 +464,9 @@ body.mykas-drawer-open{overflow:hidden}
       var main = U.$('main');
       if (main) main.hidden = false;
       if (myKasView !== 'bookings') return;
+      /* First load only: placeholders while the list is on its way (a reload keeps the current list). */
+      var listHost = U.$('#myKasBookings');
+      if (listHost && !listHost.children.length) { listHost.setAttribute('aria-busy', 'true'); listHost.innerHTML = bookingsSkeleton(); }
       return window.KAS_API.stays(profile.locale || 'en').then(function (rows) {
         liveStays = (rows || []).map(function (stay) {
           var mapped = window.KAS_REQUEST_VIEW.map(stay, profile);
@@ -452,7 +595,7 @@ body.mykas-drawer-open{overflow:hidden}
       banner:'Meaningful places<br>for a more inspired you.', title:'My bookings',
       profileTitle:'My profile', profileSubtitle:'Manage your KAS member details.',
       savedTitle:'Saved hotels', savedSubtitle:'The hotels you have saved to your KAS account.',
-      subtitle:'View, manage and revisit your KAS stays.', all:'ALL', upcoming:'UPCOMING', processingTab:'IN PROGRESS', completed:'COMPLETED', cancelled:'CANCELLED / UNSUCCESSFUL',
+      subtitle:'View, manage and revisit your KAS stays.', all:'All', upcoming:'Upcoming', processingTab:'In progress', completed:'Completed', cancelled:'Cancelled / unsuccessful',
       lookupTitle:'Look up a booking with booking number and email', lookupIntro:'Use this option to retrieve a reservation by its reference.',
       bookingNumber:'Booking number', email:'Email address', formatHint:'Format: KAS + 2-digit branch code + 5 digits.', findBooking:'Find my booking',
       noBookings:'Your stays will appear here', noBookingsText:'There are no bookings saved in this browser yet. Find a stay to make your first reservation.',
@@ -467,7 +610,7 @@ body.mykas-drawer-open{overflow:hidden}
       banner:'Những điểm đến ý nghĩa<br>khơi nguồn cảm hứng.', title:'Đặt phòng của tôi',
       profileTitle:'Hồ sơ của tôi', profileSubtitle:'Quản lý thông tin thành viên KAS của bạn.',
       savedTitle:'Khách sạn đã lưu', savedSubtitle:'Những khách sạn bạn đã lưu vào tài khoản KAS.',
-      subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'TẤT CẢ', upcoming:'SẮP TỚI', processingTab:'ĐANG XỬ LÝ', completed:'ĐÃ HOÀN TẤT', cancelled:'ĐÃ HỦY / KHÔNG THÀNH CÔNG',
+      subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'Tất cả', upcoming:'Sắp tới', processingTab:'Đang xử lý', completed:'Đã hoàn tất', cancelled:'Đã hủy / không thành công',
       lookupTitle:'Tra cứu đặt phòng bằng mã đặt phòng và email', lookupIntro:'Dùng chức năng này để tìm đặt phòng bằng mã xác nhận.',
       bookingNumber:'Mã đặt phòng', email:'Địa chỉ email', formatHint:'Định dạng: KAS + mã chi nhánh 2 chữ số + 5 chữ số.', findBooking:'Tìm đặt phòng',
       noBookings:'Các kỳ nghỉ của bạn sẽ hiển thị tại đây', noBookingsText:'Chưa có đặt phòng nào được lưu trong trình duyệt này. Hãy tìm khách sạn để bắt đầu đặt phòng.',
@@ -495,12 +638,6 @@ body.mykas-drawer-open{overflow:hidden}
     var avatarHint = U.$('[data-profile-avatar-hint]');
     if (avatarHint) avatarHint.textContent = myKasLang() === 'vi' ? 'Chọn ảnh rồi nhấn Lưu thay đổi để lưu trên thiết bị này.' : 'Choose a photo, then save it on this device.';
   }
-  function dateLabel(value) {
-    if (!value) return '—';
-    var d = new Date(value + 'T12:00:00');
-    if (isNaN(d.getTime())) return U.esc(value);
-    return d.toLocaleDateString(myKasLang() === 'vi' ? 'vi-VN' : 'en-GB', {day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
-  }
   /* Tab group (2026-11-12): upcoming = confirmed stays, processing = requests still moving,
      cancelled = cancelled or unsuccessful (expired, declined, closed), completed = stayed. */
   function statusKey(b) { return window.KAS_REQUEST_VIEW.group(b); }
@@ -517,54 +654,279 @@ body.mykas-drawer-open{overflow:hidden}
     });
     if (activeFilter !== 'all' && all.length && !counts[activeFilter]) { activeFilter = 'all'; U.$$('.mykas-tabs [data-filter]').forEach(function (b) { var a = b.getAttribute('data-filter') === 'all'; b.classList.toggle('is-active', a); b.setAttribute('aria-selected', a ? 'true' : 'false'); }); }
   }
+  /* ---- My bookings list (2026-11-14 redesign) ----
+     Live bookings (in progress, upcoming) are cards; completed and cancelled / unsuccessful ones are
+     compact rows on their own tabs, reached from "All" by one link each. Every status, amount and
+     deadline is the server's; nothing is recomputed here. */
+  var HISTORY_PAGE = 5, historyShown = HISTORY_PAGE, renderedFilter = null, ALL_PAGE = 5, allPage = 1;
+  function hhmm(t) { return t ? String(t).slice(0, 5) : ''; }
+  function localDay(value, options) {
+    if (!value) return '—';
+    var d = new Date(value + 'T12:00:00');
+    if (isNaN(d.getTime())) return U.esc(value);
+    return d.toLocaleDateString(myKasLang() === 'vi' ? 'vi-VN' : 'en-GB', options);
+  }
+  function dayLabel(value) { return localDay(value, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }); }
+  function shortDay(value) { return localDay(value, { day: '2-digit', month: '2-digit', year: 'numeric' }); }
+  function dueLabel(b, vi) {
+    return b.paymentDueAt ? new Date(b.paymentDueAt).toLocaleString(vi ? 'vi-VN' : 'en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+  }
+  function timeLeft(due, vi) {
+    var m = Math.round((new Date(due).getTime() - Date.now()) / 60000);
+    if (!(m > 0)) return '';
+    var h = Math.floor(m / 60), d = Math.floor(h / 24);
+    if (d >= 1) return vi ? 'Còn ' + d + ' ngày ' + (h % 24) + ' giờ' : d + 'd ' + (h % 24) + 'h left';
+    return vi ? 'Còn ' + h + ' giờ ' + (m % 60) + ' phút' : h + 'h ' + (m % 60) + 'm left';
+  }
+  function bookingImage(b, alt) {
+    var hotel = D.getHotel(b.hotelId) || {};
+    var image = b.roomImage || (hotel.images && hotel.images[0]) || hotel.image || '';
+    return image ? U.img(image, alt) : '';
+  }
+  function nightsOf(b) { return Number(b.nights || U.nights(b.checkIn, b.checkOut) || 1); }
+  function nightsLabel(b, vi) { var n = nightsOf(b); return n + ' ' + (vi ? 'đêm' : n === 1 ? 'night' : 'nights'); }
+  /* What the guest has to do, or wait for, right now. */
+  function nextStep(b, vi) {
+    var view = window.KAS_REQUEST_VIEW, st = view.state(b, vi), pay = view.payment(b, vi), g = view.group(b), cr = b.cancellationRequestStatus;
+    function box(tone, title, text, extra) {
+      return '<div class="mkb-next' + (tone ? ' mkb-next--' + tone : '') + '" role="status"><div><div class="mkb-next__title">' + U.esc(title) + '</div>' +
+        (text ? '<div class="mkb-next__text">' + U.esc(text) + '</div>' : '') + '</div>' + (extra || '') + '</div>';
+    }
+    if (cr === 'QUOTED') return box('', vi ? 'KAS đã báo phí hủy' : 'KAS has quoted a cancellation fee',
+      vi ? 'Mở chi tiết để đồng ý phí và hủy, hoặc giữ đặt phòng.' : 'Open the details to accept the fee and cancel, or to keep the booking.');
+    if (cr === 'PENDING_HOTEL_FEE') return box('info', vi ? 'Yêu cầu hủy đang được xem xét' : 'Your cancellation request is under review',
+      vi ? 'Đặt phòng chưa bị hủy. KAS sẽ gửi email cho bạn.' : 'Nothing is cancelled yet. KAS will email you.');
+    if (pay.code === 'UNPAID') {
+      var due = dueLabel(b, vi), left = b.paymentDueAt ? timeLeft(b.paymentDueAt, vi) : '';
+      return box('', vi ? 'Khách sạn đã xác nhận còn phòng — vui lòng thanh toán' : 'The hotel confirmed availability — please pay',
+        vi ? 'Dùng liên kết SePay trong email KAS đã gửi. Đặt phòng được xác nhận tự động khi thanh toán thành công.'
+           : 'Use the SePay link in the email from KAS. Your booking is confirmed automatically once the payment succeeds.',
+        due ? '<div class="mkb-next__due"><span>' + (vi ? 'Hạn thanh toán' : 'Pay by') + '</span><b>' + U.esc(due) + '</b><span data-due="' + U.esc(b.paymentDueAt) + '">' + U.esc(left) + '</span></div>' : '');
+    }
+    if (pay.code === 'PENDING') return box('info', vi ? 'Bạn đã báo chuyển khoản' : 'You reported a transfer',
+      vi ? 'Khách sạn đang kiểm tra giao dịch. Đặt phòng sẽ được xác nhận ngay sau đó.' : 'The hotel is checking it. Your booking is confirmed right after.');
+    if (g === 'processing') return st.code === 'CUSTOMER_CONTACTED'
+      ? box('info', vi ? 'Khách sạn đang liên hệ với bạn' : 'The hotel is contacting you', vi ? 'Vui lòng kiểm tra email hoặc điện thoại.' : 'Please check your email or phone.')
+      : box('info', vi ? 'Khách sạn đang xem xét yêu cầu' : 'The hotel is reviewing your request',
+          vi ? 'Bạn chưa cần làm gì. KAS sẽ gửi email ngay khi khách sạn phản hồi.' : 'Nothing to do yet. KAS will email you as soon as the hotel replies.');
+    if (st.code === 'CHECKED_IN') return b.checkoutRequestedAt
+      ? box('info', vi ? 'Đã gửi yêu cầu trả phòng' : 'Check-out requested', vi ? 'KAS sẽ xác nhận trong thời gian sớm nhất.' : 'KAS will confirm it shortly.')
+      : box('ok', vi ? 'Bạn đang lưu trú tại khách sạn' : 'You are staying at the hotel',
+          (vi ? 'Trả phòng ' : 'Check-out ') + (hhmm(b.checkOutTime) ? (vi ? 'trước ' : 'by ') + hhmm(b.checkOutTime) + ', ' : '') + dayLabel(b.checkOut) + '.');
+    return box('ok', vi ? 'Đặt phòng đã được xác nhận' : 'Your booking is confirmed',
+      (vi ? 'Nhận phòng ' : 'Check-in ') + (hhmm(b.checkInTime) ? (vi ? 'từ ' : 'from ') + hhmm(b.checkInTime) + ', ' : '') + dayLabel(b.checkIn) + '.');
+  }
+  function bookingCard(b, vi) {
+    var view = window.KAS_REQUEST_VIEW, st = statusKey(b), hotel = D.getHotel(b.hotelId) || {};
+    var pay = view.payment(b, vi), ref = U.esc(b.bookingNumber || '');
+    var hotelName = b.hotelName || hotel.name || 'KAS', roomName = b.roomName || (vi ? 'Phòng đã đặt' : 'Reserved room');
+    var guests = B.guestLabel ? B.guestLabel(b) : ((b.adults == null ? '—' : b.adults) + ' ' + (vi ? 'khách' : 'guests'));
+    var code = view.state(b, vi).code, ended = st === 'completed' || st === 'cancelled';
+    var stateLabel = ended && SHORT_STATUS[code] ? SHORT_STATUS[code][vi ? 0 : 1] : view.state(b, vi).label;
+    var booked = b.createdAt ? new Date(b.createdAt).toLocaleDateString(vi ? 'vi-VN' : 'en-GB', { timeZone: 'Asia/Ho_Chi_Minh', day: '2-digit', month: '2-digit', year: 'numeric' }) : '';
+    /* A booking that ended: why it ended (cancelled / unsuccessful) or the review prompt (completed). */
+    var closing = st === 'cancelled' ? '<div class="mkb-next mkb-next--info" role="status"><div><div class="mkb-next__title">' + U.esc(stateLabel) + '</div><div class="mkb-next__text">' + U.esc(view.endedReason(b, vi) || view.state(b, vi).label) + '</div></div></div>'
+      : st === 'completed' ? reviewStrip(b, vi) : '';
+    /* One status on the card (owner 2026-11-14): the booking's own. It already says when payment is
+       due ("Chờ thanh toán") or done (confirmed); the payment detail stays in "Xem chi tiết". */
+    var pills = '<div class="mykas-pills">' + pill(stateLabel, st === 'cancelled' ? 'muted' : st === 'processing' ? 'warn' : 'ok') + '</div>';
+    var inTime = hhmm(b.checkInTime), outTime = hhmm(b.checkOutTime);
+    return '<article class="mkb-card' + (st === 'cancelled' ? ' mkb-card--ended' : '') + '" data-booking="' + ref + '"><div class="mkb-card__img">' + bookingImage(b, hotelName) + '</div><div class="mkb-card__body">' +
+      '<div class="mkb-card__top">' + pills + '<div class="mkb-ref">' + (vi ? 'Mã đặt phòng' : 'Booking') + ' <b>' + ref + '</b>' +
+        '<button type="button" class="mkb-copy" data-copy="' + ref + '">' + (vi ? 'Sao chép' : 'Copy') + '</button></div></div>' +
+      '<div><h2 class="mkb-card__hotel">' + U.esc(hotelName) + '</h2><p class="mkb-card__addr">' + U.esc(b.hotelAddress || hotel.city || '') + '</p>' +
+        (booked ? '<p class="mkb-card__booked">' + (vi ? 'Đặt ngày ' : 'Booked on ') + booked + '</p>' : '') + '</div>' +
+      '<div class="mkb-stay"><div><div class="mkb-label">' + (vi ? 'Nhận phòng' : 'Check-in') + '</div><div class="mkb-stay__date">' + dayLabel(b.checkIn) + '</div>' +
+          (inTime ? '<div class="mkb-stay__time">' + (vi ? 'từ ' : 'from ') + U.esc(inTime) + '</div>' : '') + '</div>' +
+        '<div class="mkb-stay__nights">' + nightsLabel(b, vi) + '</div>' +
+        '<div class="mkb-stay__out"><div class="mkb-label">' + (vi ? 'Trả phòng' : 'Check-out') + '</div><div class="mkb-stay__date">' + dayLabel(b.checkOut) + '</div>' +
+          (outTime ? '<div class="mkb-stay__time">' + (vi ? 'trước ' : 'by ') + U.esc(outTime) + '</div>' : '') + '</div></div>' +
+      '<dl class="mkb-facts"><div><dt class="mkb-label">' + (vi ? 'Phòng' : 'Room') + '</dt><dd>' + U.esc(roomName) + '</dd></div>' +
+        '<div><dt class="mkb-label">' + (vi ? 'Khách' : 'Guests') + '</dt><dd>' + U.esc(guests) + '</dd></div>' +
+        '<div class="mkb-total"><dt class="mkb-label">' + (vi ? 'Tổng cộng' : 'Total') + '</dt><dd>' + U.esc(view.money(b.total, b.currency)) +
+          '<small>' + (vi ? 'Đã gồm thuế và phí' : 'Taxes and fees included') + '</small></dd></div></dl>' +
+      (ended ? closing : view.timeline(b, vi) + nextStep(b, vi)) +
+      '<div class="mkb-actions"><button type="button" class="mkb-btn" data-view="' + ref + '">' + (vi ? 'Xem chi tiết' : 'View details') + ' <span aria-hidden="true">⟶</span></button>' +
+        '<a class="mkb-link" href="support.html#contact">' + (vi ? 'Liên hệ hỗ trợ' : 'Contact support') + '</a><span class="mkb-spacer"></span>' +
+        (!ended ? '<button type="button" class="mkb-link mkb-link--danger" data-cancel="' + ref + '">' + (vi ? 'Hủy đặt phòng' : 'Cancel booking') + '</button>'
+          : b.hotelId ? '<a class="mkb-link mkb-link--gold" href="hotel-detail.html?hotel=' + encodeURIComponent(b.hotelId) + '">' + (vi ? 'Đặt lại' : 'Book again') + ' ⟶</a>' : '') + '</div>' +
+      '</div></article>';
+  }
+  function fixedStars(n, vi) {
+    return '<span class="mkb-stars mkb-stars--sm" role="img" aria-label="' + (vi ? n + ' trên 5 sao' : n + ' out of 5 stars') + '">' +
+      [1, 2, 3, 4, 5].map(function (i) { return '<span class="' + (i <= n ? 'is-on' : '') + '" aria-hidden="true">★</span>'; }).join('') + '</span>';
+  }
+  function starButtons(n, attrs, vi) {
+    return [1, 2, 3, 4, 5].map(function (i) {
+      return '<button type="button" class="' + (i <= n ? 'is-on' : '') + '" ' + attrs + '="' + i + '" aria-label="' + i + (vi ? ' sao' : i === 1 ? ' star' : ' stars') + '" aria-pressed="' + (i === n) + '">★</button>';
+    }).join('');
+  }
+  /* A completed stay asks for a review until one exists; afterwards it shows what was sent.
+     The API takes one review per reservation, once the stay is checked out (CHECKED_OUT or COMPLETED, V70). */
+  function canReview(b) { return !b.reviewStatus && !!b.reservationId && (b.status === 'CHECKED_OUT' || b.status === 'COMPLETED'); }
+  function reviewStrip(b, vi) {
+    if (b.reviewStatus) {
+      /* The guest only needs to know the stay is reviewed; moderation is KAS's own step (owner, 2026-11-14). */
+      return '<div class="mkb-review mkb-review--sent"><b>' + (vi ? 'Bạn đã đánh giá' : 'You reviewed this stay') + '</b>' + fixedStars(Number(b.reviewOverall) || 0, vi) + '</div>';
+    }
+    if (!canReview(b)) return '';
+    var ref = U.esc(b.bookingNumber || '');
+    return '<div class="mkb-review"><b>' + (vi ? 'Kỳ nghỉ của bạn thế nào?' : 'How was your stay?') + '</b>' +
+      '<span class="mkb-stars" role="group" aria-label="' + (vi ? 'Chọn số sao' : 'Choose a rating') + '">' + starButtons(0, 'data-ref="' + ref + '" data-rate', vi) + '</span>' +
+      '<span class="mkb-spacer"></span><button type="button" class="mkb-link mkb-link--gold" data-review="' + ref + '">' + (vi ? 'Viết đánh giá' : 'Write a review') + ' ⟶</button></div>';
+  }
+  var SHORT_STATUS = {
+    CANCELLED: ['Đã hủy', 'Cancelled'], EXPIRED: ['Hết hạn', 'Expired'], DECLINED: ['Bị từ chối', 'Declined'], LOST: ['Đã kết thúc', 'Closed'],
+    ALTERNATIVE_OFFERED: ['Đã kết thúc', 'Closed'], NO_SHOW: ['Không đến', 'No-show'], COMPLETED: ['Đã hoàn tất', 'Completed'], CHECKED_OUT: ['Đã hoàn tất', 'Completed']
+  };
+  function historyRow(b, vi) {
+    var view = window.KAS_REQUEST_VIEW, st = view.state(b, vi), pay = view.payment(b, vi), done = statusKey(b) === 'completed';
+    var hotel = D.getHotel(b.hotelId) || {}, hotelName = b.hotelName || hotel.name || 'KAS', ref = U.esc(b.bookingNumber || '');
+    var label = SHORT_STATUS[st.code] ? SHORT_STATUS[st.code][vi ? 0 : 1] : st.label;
+    var why = done ? (b.roomName || '') : (view.endedReason(b, vi) || st.label);
+    return '<div class="mkb-row' + (done ? ' mkb-row--done' : '') + '" data-booking="' + ref + '"><div class="mkb-row__img">' + bookingImage(b, '') + '</div>' +
+      '<div><div class="mkb-row__hotel">' + U.esc(hotelName) + '</div><div class="mkb-row__sub">' + shortDay(b.checkIn) + ' → ' + shortDay(b.checkOut) + ' · ' + nightsLabel(b, vi) + ' · <b>' + ref + '</b></div></div>' +
+      '<div class="mkb-row__why">' + pill(label, done ? 'ok' : 'muted') + '<div>' + U.esc(why) + '</div></div>' +
+      '<div class="mkb-row__total">' + U.esc(view.money(b.total, b.currency)) + (pay.code === 'NONE' ? '' : '<small>' + U.esc(pay.label) + '</small>') + '</div>' +
+      '<div class="mkb-row__act"><button type="button" class="mkb-link" data-view="' + ref + '">' + (vi ? 'Chi tiết' : 'Details') + '</button>' +
+        (b.hotelId ? '<a class="mkb-link mkb-link--gold" href="hotel-detail.html?hotel=' + encodeURIComponent(b.hotelId) + '">' + (vi ? 'Đặt lại' : 'Book again') + ' ⟶</a>' : '') + '</div>' +
+      (done ? reviewStrip(b, vi) : '') + '</div>';
+  }
+  function emptyState(title, text) {
+    return '<div class="mykas-empty"><h2>' + title + '</h2><p>' + text + '</p><a class="btn btn--gold" href="hotels.html">' + mt('findStay') + '</a></div>';
+  }
+  function bookingsSkeleton() {
+    return [0, 1].map(function () {
+      return '<div class="mkb-sk" aria-hidden="true"><div class="mkb-sk__img"></div><div class="mkb-sk__body"><i style="width:30%"></i><i style="width:55%;height:26px"></i><i style="width:70%"></i><i style="width:100%;height:60px"></i><i style="width:85%"></i></div></div>';
+    }).join('');
+  }
   function renderMyKas(filter) {
     var host = U.$('#myKasBookings');
     if (!host) return;
-    var all = liveStays;
-    var now = U.today();
+    host.removeAttribute('aria-busy');
+    var all = liveStays, vi = myKasLang() === 'vi';
     paintTabCounts(all);
     filter = activeFilter;
-    var list = all.filter(function (b) {
-      if (filter === 'all') return true;
-      if (filter === 'upcoming') return statusKey(b) === 'upcoming';
-      return statusKey(b) === filter;
-    });
-    if (!list.length) {
-      host.innerHTML = '<div class="mykas-empty"><h2>' + (all.length ? (myKasLang()==='vi'?'Không có đặt phòng trong mục này':'No bookings in this category') : mt('noBookings')) + '</h2><p>' + (all.length ? '' : mt('noBookingsText')) + '</p><a class="btn btn--gold" href="hotels.html">' + mt('findStay') + '</a></div>';
+    if (filter !== renderedFilter) { historyShown = HISTORY_PAGE; allPage = 1; renderedFilter = filter; }
+    if (!all.length) { host.innerHTML = emptyState(mt('noBookings'), mt('noBookingsText')); return; }
+    function newestFirst(group) {
+      return all.filter(function (b) { return statusKey(b) === group; })
+        .sort(function (a, b) { return String(a.checkIn || '') < String(b.checkIn || '') ? 1 : -1; });
+    }
+    if (filter === 'completed' || filter === 'cancelled') {
+      var rows = newestFirst(filter), shown = Math.min(historyShown, rows.length);
+      host.innerHTML = '<div class="mkb-past-h">' + (vi ? 'Hiển thị ' + shown + ' trên ' + rows.length + ' đặt phòng · mới nhất trước' : 'Showing ' + shown + ' of ' + rows.length + ' bookings · newest first') + '</div>' +
+        '<div class="mkb-past">' + rows.slice(0, shown).map(function (b) { return historyRow(b, vi); }).join('') +
+        (rows.length > shown ? '<button type="button" class="mkb-more" data-more>' + (vi ? 'Xem thêm ' + Math.min(HISTORY_PAGE, rows.length - shown) + ' đặt phòng' : 'Show ' + Math.min(HISTORY_PAGE, rows.length - shown) + ' more') + '</button>' : '') + '</div>';
       return;
     }
-    host.innerHTML = list.map(function (b) {
-      var st = statusKey(b), cancelled = st === 'cancelled';
-      var hotel = D.getHotel(b.hotelId) || {};
-      var image = b.roomImage || (hotel.images && hotel.images[0]) || (hotel.image || '');
-      var roomName = b.roomName || (myKasLang()==='vi'?'Phòng đã đặt':'Reserved room');
-      var nights = Number(b.nights || U.nights(b.checkIn,b.checkOut) || 1);
-      var guestCount = B.guestLabel ? B.guestLabel(b) : ((b.adults == null ? '—' : b.adults) + ' ' + (myKasLang()==='vi'?'khách':'guests'));
-      var amount = U.vnd ? U.vnd(b.total) : String(b.total == null ? "—" : b.total);
-      var vi = myKasLang()==='vi', view = window.KAS_REQUEST_VIEW;
-      var statusText = view.state(b, vi).label, pay = view.payment(b, vi), ended = view.endedReason(b, vi);
-      var bookingTone = st === 'cancelled' ? 'muted' : st === 'processing' ? 'warn' : 'ok';
-      var payTone = pay.code === 'PAID' ? 'ok' : pay.code === 'UNPAID' || pay.code === 'PENDING' ? 'warn' : 'muted';
-      var pills = '<div class="mykas-pills">' + pill(statusText, bookingTone) + (pay.code === 'NONE' && st !== 'processing' ? '' : pill(pay.label, payTone)) + '</div>';
-      var due = b.paymentDueAt ? new Date(b.paymentDueAt).toLocaleString(vi?'vi-VN':'en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}) : '';
-      var payNote = pay.code === 'UNPAID' ? '<p class="mykas-paynote" role="status">' + U.esc(vi ? 'Khách sạn đã xác nhận còn phòng. Vui lòng thanh toán qua liên kết SePay trong email' + (due ? ' trước ' + due : '') + ' — đặt phòng được xác nhận tự động khi thanh toán thành công.' : 'The hotel confirmed availability. Please pay with the SePay link in your email' + (due ? ' by ' + due : '') + ' — your booking is confirmed automatically once the payment succeeds.') + '</p>' : pay.code === 'PENDING' ? '<p class="mykas-paynote" role="status">' + U.esc(vi ? 'Bạn đã báo chuyển khoản. Khách sạn đang kiểm tra giao dịch.' : 'You reported a transfer. The hotel is checking it.') + '</p>' : '';
-      var bookingNo = b.bookingNumber || '';
-      var imgHtml = image ? U.img(image, roomName) : '<div class="mykas-image-fallback"></div>';
-      var timeline = window.KAS_REQUEST_VIEW.timeline(b, myKasLang()==='vi');
-      var cancelledInfo = '<p class="mykas-ended" role="status">'+U.esc(ended || statusText)+'</p>';
-      return '<article class="mykas-booking" data-booking="'+U.esc(bookingNo)+'"><div class="mykas-booking__image">'+imgHtml+'</div><div class="mykas-booking__content">'+
-        '<div class="mykas-booking__top"><div><h2 class="mykas-booking__hotel">'+U.esc(b.hotelName || hotel.name || 'KAS')+'</h2><p class="mykas-booking__location">'+U.esc(b.hotelAddress || hotel.city || '')+'</p></div><div class="mykas-booking__ref">'+mt('booking')+'<br>'+U.esc(bookingNo)+'</div></div>'+pills+
-        '<div class="mykas-dates"><div><div class="mykas-date-label">'+mt('checkIn')+'</div><div class="mykas-date-value">'+dateLabel(b.checkIn)+'</div><div class="mykas-date-time">'+U.esc(b.checkInTime || '—')+'</div></div><div class="mykas-night-line"><span>'+nights+' '+mt('nights')+'</span></div><div style="text-align:right"><div class="mykas-date-label">'+mt('checkOut')+'</div><div class="mykas-date-value">'+dateLabel(b.checkOut)+'</div><div class="mykas-date-time">'+U.esc(b.checkOutTime || '—')+'</div></div></div>'+
-        '<div class="mykas-booking__meta"><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('room')+'</div><div class="mykas-meta-value">'+U.esc(roomName)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('guests')+'</div><div class="mykas-meta-value">'+U.esc(guestCount)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('total')+'</div><div class="mykas-meta-value">VND '+amount+'<small>' + (myKasLang()==='vi'?'Giá trị yêu cầu':'Request amount') + '</small></div></div><div class="mykas-booking__actions"><button class="mykas-action-main" type="button" data-view="'+U.esc(bookingNo)+'">'+mt('view')+' <span>⟶</span></button><div class="mykas-action-links">'+(cancelled?'<button type="button" data-refund="'+U.esc(bookingNo)+'">'+mt('refund')+'</button>':'<button type="button" data-view="'+U.esc(bookingNo)+'">'+mt('manage')+'</button>'+(st==='upcoming'||st==='processing'?'<button type="button" data-cancel="'+U.esc(bookingNo)+'">'+mt('cancel')+'</button>':''))+'</div></div></div>'+
-        (cancelled ? cancelledInfo : timeline + payNote)+'</div></article>';
-    }).join('');
-    host.querySelectorAll('[data-view],[data-refund]').forEach(function(btn){btn.addEventListener('click',function(){
-      openDetail(btn.getAttribute('data-view') || btn.getAttribute('data-refund'), btn);
-    });});
-    host.querySelectorAll('[data-cancel]').forEach(function(btn){btn.addEventListener('click',function(){
-      if(openDetail(btn.getAttribute('data-cancel'), btn)) setTimeout(function(){var c=U.$('#canBtn');if(c)c.click();},60);
-    });});
+    if (filter === 'all') {
+      /* Every booking as a card, in the order it was booked (newest first), a page at a time (owner, 2026-11-14). */
+      var ordered = all.slice().sort(function (a, b) { return (Date.parse(b.createdAt) || 0) - (Date.parse(a.createdAt) || 0); });
+      var pages = Math.ceil(ordered.length / ALL_PAGE); allPage = Math.min(Math.max(1, allPage), pages);
+      var from = (allPage - 1) * ALL_PAGE, pageRows = ordered.slice(from, from + ALL_PAGE), numbers = '';
+      for (var p = 1; p <= pages; p++) numbers += '<button type="button" data-page="' + p + '"' + (p === allPage ? ' class="is-on" aria-current="page"' : '') + ' aria-label="' + (vi ? 'Trang ' : 'Page ') + p + '">' + p + '</button>';
+      var range = (from + 1) + '–' + (from + pageRows.length);
+      host.innerHTML = '<div class="mkb-past-h">' + (vi ? 'Hiển thị ' + range + ' trên ' + ordered.length + ' đặt phòng · đặt gần nhất trước' : 'Showing ' + range + ' of ' + ordered.length + ' bookings · most recently booked first') + '</div>' +
+        pageRows.map(function (b) { return bookingCard(b, vi); }).join('') +
+        (pages > 1 ? '<nav class="mkb-pager" aria-label="' + (vi ? 'Phân trang' : 'Pagination') + '"><button type="button" data-page="' + (allPage - 1) + '"' + (allPage === 1 ? ' disabled' : '') + '>‹ ' + (vi ? 'Trước' : 'Previous') + '</button>' + numbers +
+          '<button type="button" data-page="' + (allPage + 1) + '"' + (allPage === pages ? ' disabled' : '') + '>' + (vi ? 'Sau' : 'Next') + ' ›</button></nav>' : '');
+      return;
+    }
+    /* Live bookings: what needs the guest first (in progress), then confirmed stays. */
+    var live = all.filter(function (b) { var g = statusKey(b); return (g === 'processing' || g === 'upcoming') && (filter === 'all' || g === filter); })
+      .sort(function (a, b) { return (statusKey(a) === 'processing' ? 0 : 1) - (statusKey(b) === 'processing' ? 0 : 1); });
+    var html = live.length ? live.map(function (b) { return bookingCard(b, vi); }).join('')
+      : emptyState(vi ? 'Bạn không có kỳ nghỉ nào đang chờ' : 'You have no stays in progress', vi ? 'Các đặt phòng đang xử lý và sắp tới sẽ hiển thị tại đây.' : 'Bookings in progress and upcoming stays appear here.');
+    host.innerHTML = html;
   }
+  /* One listener for the whole list: it is re-rendered on every load, filter and language change. */
+  U.$('#myKasBookings').addEventListener('click', function (event) {
+    var el = event.target.closest('[data-view],[data-cancel],[data-copy],[data-page],[data-more],[data-rate],[data-review]');
+    if (!el) return;
+    var vi = myKasLang() === 'vi';
+    if (el.hasAttribute('data-view')) openDetail(el.getAttribute('data-view'), el);
+    else if (el.hasAttribute('data-cancel')) {
+      /* Only the cancel confirmation (owner 2026-11-14): opening the detail drawer too put it
+         over the confirmation and scrolled it to its own cancel button. */
+      var toCancel = liveStays.find(function (row) { return String(row.bookingNumber || '').toUpperCase() === String(el.getAttribute('data-cancel') || '').toUpperCase(); });
+      if (toCancel) startCancel(toCancel, el);
+    }
+    else if (el.hasAttribute('data-copy')) {
+      var ref = el.getAttribute('data-copy');
+      var copied = function () { U.toast((vi ? 'Đã sao chép mã ' : 'Copied ') + ref); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(ref).then(copied, function () { U.toast(ref); });
+      else U.toast(ref);
+    }
+    else if (el.hasAttribute('data-page')) { allPage = Number(el.getAttribute('data-page')) || 1; renderMyKas(activeFilter); U.$('.mykas-tabs').scrollIntoView({ block: 'start' }); }
+    else if (el.hasAttribute('data-more')) { historyShown += HISTORY_PAGE; renderMyKas(activeFilter); }
+    else if (el.hasAttribute('data-rate')) openReview(el.getAttribute('data-ref'), Number(el.getAttribute('data-rate')), el);
+    else if (el.hasAttribute('data-review')) openReview(el.getAttribute('data-review'), 0, el);
+  });
+  /* "Còn 3 giờ 12 phút" under the payment deadline stays current while the page is open. */
+  setInterval(function () {
+    var vi = myKasLang() === 'vi';
+    U.$$('#myKasBookings [data-due]').forEach(function (el) { el.textContent = timeLeft(el.getAttribute('data-due'), vi); });
+  }, 60000);
+
+  /* ---- review of a completed stay ---- */
+  var reviewDialog = U.$('#mkbReview'), reviewDraft = null;
+  var REVIEW_PARTS = [['cleanliness', 'Sạch sẽ', 'Cleanliness'], ['service', 'Dịch vụ', 'Service'], ['location', 'Vị trí', 'Location'], ['room', 'Phòng', 'Room'], ['value', 'Đáng giá tiền', 'Value for money']];
+  function paintReviewStars() {
+    var vi = myKasLang() === 'vi';
+    U.$$('[data-set]', reviewDialog).forEach(function (group) { group.innerHTML = starButtons(reviewDraft.scores[group.getAttribute('data-set')] || 0, 'data-score', vi); });
+  }
+  function openReview(ref, overall, trigger) {
+    var bk = liveStays.find(function (row) { return row.bookingNumber === ref; });
+    if (!bk || !bk.reservationId || !reviewDialog.showModal) return;
+    var vi = myKasLang() === 'vi';
+    reviewDraft = { booking: bk, scores: { overall: overall || 0 }, trigger: trigger };
+    U.$('form', reviewDialog).innerHTML =
+      '<h2 id="mkbReviewTitle">' + (vi ? 'Đánh giá kỳ nghỉ' : 'Review your stay') + '</h2>' +
+      '<p class="mkb-rv__sub">' + U.esc(bk.hotelName || 'KAS') + ' · ' + shortDay(bk.checkIn) + ' → ' + shortDay(bk.checkOut) + ' · ' + U.esc(bk.bookingNumber) + '</p>' +
+      '<div class="mkb-rv__overall"><span class="mkb-label">' + (vi ? 'Đánh giá chung *' : 'Overall rating *') + '</span><span class="mkb-stars" data-set="overall" role="group" aria-label="' + (vi ? 'Đánh giá chung' : 'Overall rating') + '"></span></div>' +
+      '<div><span class="mkb-label">' + (vi ? 'Chi tiết (không bắt buộc)' : 'Details (optional)') + '</span><div class="mkb-rv__grid">' +
+        REVIEW_PARTS.map(function (p) { return '<div>' + p[vi ? 1 : 2] + ' <span class="mkb-stars" data-set="' + p[0] + '" role="group" aria-label="' + p[vi ? 1 : 2] + '"></span></div>'; }).join('') + '</div></div>' +
+      '<div><label class="mkb-label" for="mkbReviewHead">' + (vi ? 'Tiêu đề (không bắt buộc)' : 'Title (optional)') + '</label><input id="mkbReviewHead" maxlength="180" autocomplete="off"></div>' +
+      '<div><label class="mkb-label" for="mkbReviewBody">' + (vi ? 'Chia sẻ của bạn *' : 'Your review *') + '</label><textarea id="mkbReviewBody" maxlength="5000" placeholder="' +
+        (vi ? 'Điều gì khiến bạn hài lòng? Điều gì KAS có thể làm tốt hơn?' : 'What did you enjoy? What could KAS do better?') + '"></textarea></div>' +
+      '<p class="mkb-rv__err" id="mkbReviewErr" role="alert"></p>' +
+      '<p class="mkb-rv__note">' + (vi ? 'Mỗi kỳ nghỉ chỉ đánh giá một lần.' : 'Each stay can be reviewed once.') + '</p>' +
+      '<div class="mkb-rv__foot"><button type="button" class="mkb-link" data-review-close>' + (vi ? 'Để sau' : 'Later') + '</button><button type="submit" class="mkb-btn">' + (vi ? 'Gửi đánh giá' : 'Send review') + '</button></div>';
+    paintReviewStars();
+    reviewDialog.showModal();
+    (overall ? U.$('#mkbReviewBody') : U.$('[data-set="overall"] button', reviewDialog)).focus();
+  }
+  reviewDialog.addEventListener('click', function (event) {
+    var star = event.target.closest('[data-score]');
+    if (star) {
+      var set = star.parentNode.getAttribute('data-set');
+      reviewDraft.scores[set] = Number(star.getAttribute('data-score'));
+      paintReviewStars(); U.$('#mkbReviewErr').textContent = '';
+      var again = U.$('[data-set="' + set + '"] [aria-pressed="true"]', reviewDialog); if (again) again.focus();
+    } else if (event.target.closest('[data-review-close]')) reviewDialog.close();
+  });
+  reviewDialog.addEventListener('close', function () { if (reviewDraft && reviewDraft.trigger && document.contains(reviewDraft.trigger)) reviewDraft.trigger.focus(); });
+  reviewDialog.addEventListener('submit', function (event) {
+    event.preventDefault();
+    var vi = myKasLang() === 'vi', scores = reviewDraft.scores, body = U.$('#mkbReviewBody').value.trim(), title = U.$('#mkbReviewHead').value.trim();
+    var problem = !scores.overall ? (vi ? 'Vui lòng chọn số sao cho đánh giá chung.' : 'Please choose an overall rating.')
+      : !body ? (vi ? 'Vui lòng viết vài dòng chia sẻ về kỳ nghỉ.' : 'Please write a few words about your stay.') : '';
+    U.$('#mkbReviewErr').textContent = problem;
+    if (problem) return;
+    var send = U.$('button[type="submit"]', reviewDialog); send.disabled = true;
+    var review = { reservationId: reviewDraft.booking.reservationId, overall: scores.overall, body: body, language: vi ? 'vi' : 'en' };
+    if (title) review.title = title;
+    REVIEW_PARTS.forEach(function (p) { if (scores[p[0]]) review[p[0]] = scores[p[0]]; });
+    window.KAS_API.createReview(review).then(function () {
+      reviewDraft.trigger = null; reviewDialog.close();
+      U.toast(vi ? 'Cảm ơn bạn! Đánh giá của bạn đã được gửi.' : 'Thank you! Your review has been sent.');
+      return loadProfile();
+    }).catch(function (error) {
+      send.disabled = false;
+      U.$('#mkbReviewErr').textContent = error && error.message ? error.message : (vi ? 'Chưa gửi được đánh giá. Vui lòng thử lại.' : 'The review could not be sent. Please try again.');
+    });
+  });
   var activeFilter = 'all';
   applyMyKasText();
 
@@ -648,10 +1010,20 @@ body.mykas-drawer-open{overflow:hidden}
     if(!closed){
       /* The backend decides the free window, the fee and the refund (2026-11-10); the page shows them before the guest confirms. */
       var button=document.createElement('button');button.className='btn btn--ghost';button.id='canBtn';button.textContent=vi?'Hủy đặt phòng':'Cancel booking';
-      button.onclick=function(){
-        button.disabled=true;
+      button.onclick=function(){ startCancel(bk, button); };actions.appendChild(button);
+    }
+    renderStayActions(bk, vi, view, actions);
+  }
+
+  /* Cancel one booking: the backend decides the free window, the fee and the refund (2026-11-10);
+     the confirmation shows them before the guest confirms. `button` is the control that started it
+     (the drawer's or the card's), disabled while a request runs. */
+  function startCancel(bk, button) {
+    var vi=myKasLang()==='vi', view=window.KAS_REQUEST_VIEW;
+    var busy=function(on){ if(button) button.disabled=on; };
+        busy(true);
         window.KAS_API.previewCancellation(bk.bookingNumber).then(function(t){
-          button.disabled=false;
+          busy(false);
           var money=function(m){return view.money(m,t.currency);};
           var deadline=t.freeUntil?new Date(t.freeUntil).toLocaleString(vi?'vi-VN':'en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}):'';
           var policy=t.policy==='MEMBER_NOON_CHECK_IN_DAY'?(vi?'Thành viên KAS: hủy miễn phí đến 12:00 ngày nhận phòng':'KAS member: free cancellation until 12:00 on the check-in day'):(vi?'Hủy miễn phí trước giờ nhận phòng 24 giờ':'Free cancellation until 24 hours before check-in');
@@ -665,14 +1037,16 @@ body.mykas-drawer-open{overflow:hidden}
           else if(t.outcome==='CONFIRM_FEE'){accept=true;fee=t.feeMinor;body=head+paidLine+'<br>'+(vi?'Phí hủy: ':'Cancellation fee: ')+'<strong>'+U.esc(money(t.feeMinor))+'</strong><br>'+(vi?'Dự kiến hoàn lại: ':'Expected refund: ')+'<strong>'+U.esc(money(t.refundDueMinor))+'</strong><br>'+(vi?'Đặt phòng chỉ bị hủy khi bạn xác nhận.':'Nothing is cancelled unless you confirm.');ok=vi?'Đồng ý phí và hủy':'Accept fee and cancel';}
           else {body=head+'<br>'+(vi?'Đã quá hạn hủy miễn phí. KAS sẽ xem xét và báo mức phí để bạn quyết định; đặt phòng chưa bị hủy.':'The free-cancellation deadline has passed. KAS will review and tell you the fee so you can decide; nothing is cancelled yet.');ok=vi?'Gửi yêu cầu hủy':'Send request';}
           App.modal({title:vi?'Hủy đặt phòng?':'Cancel booking?',body:body,ok:ok,cancel:vi?'Giữ đặt phòng':'Keep booking',danger:accept,onOk:function(){
-            button.disabled=true;
+            busy(true);
             window.KAS_API.requestCancellation(bk.bookingNumber,fee).then(function(res){
               return res&&res.status==='QUOTED'&&accept?window.KAS_API.decideCancellation(bk.bookingNumber,true):res;
-            }).then(function(){return loadProfile();}).catch(function(error){U.toast(error.message);button.disabled=false;});
+            }).then(function(){return loadProfile();}).catch(function(error){U.toast(error.message);busy(false);});
           }});
-        }).catch(function(error){U.toast(error.message);button.disabled=false;});
-      };actions.appendChild(button);
-    }
+        }).catch(function(error){U.toast(error.message);busy(false);});
+  }
+
+  /* The rest of the drawer's actions (check-out request, cancellation follow-up). */
+  function renderStayActions(bk, vi, view, actions) {
     /* Check-out (V59): the guest asks; SUPER_ADMIN confirms. After the check-out time the request is filed automatically. */
     if(bk.status==='CHECKED_IN'){
       if(bk.checkoutRequestedAt){
@@ -737,6 +1111,12 @@ body.mykas-drawer-open{overflow:hidden}
   var q = U.qs();
   var pendingRef = q.ref || null, paymentReturn = q.payment || null, paymentPolls = 0;
   if (q.ref) { U.$('#ref').value = q.ref; if (q.email) U.$('#email').value = q.email; }
+  /* Back from SePay: ask KAS to read the result from SePay now (signed in or not), so the
+     booking is confirmed even when SePay's notification is late or cannot reach the server. */
+  function askSePay(ref) {
+    return window.KAS_API && window.KAS_API.sePayReturned ? window.KAS_API.sePayReturned(ref).catch(function () {}) : Promise.resolve();
+  }
+  if (paymentReturn === 'success' && q.ref) askSePay(q.ref);
   document.addEventListener('kas:stays-loaded', function () {
     if (!pendingRef) return;
     var ref = pendingRef;
@@ -745,9 +1125,9 @@ body.mykas-drawer-open{overflow:hidden}
         var vi = myKasLang() === 'vi', bk = liveStays.find(function (r) { return r.bookingNumber === openRef; });
         var paid = bk && window.KAS_REQUEST_VIEW.payment(bk, vi).code === 'PAID';
         if (paymentReturn === 'success' && !paid && paymentPolls < 6) {
-          /* SePay's IPN can land a few seconds after the guest returns: re-read the stays a few times. */
+          /* Ask SePay again, then re-read the stays, a few times: the order can take a moment to settle. */
           if (paymentPolls === 0) U.toast(vi ? 'Đang chờ SePay xác nhận thanh toán…' : 'Waiting for SePay to confirm the payment…');
-          paymentPolls++; setTimeout(function () { loadProfile(); }, 5000); return;
+          paymentPolls++; setTimeout(function () { askSePay(ref).then(function () { loadProfile(); }); }, 4000); return;
         }
         U.toast(paid ? (vi ? 'Thanh toán thành công. Đặt phòng đã được xác nhận.' : 'Payment received. Your booking is confirmed.')
           : paymentReturn === 'success' ? (vi ? 'SePay chưa báo kết quả. Trạng thái sẽ tự cập nhật khi SePay xác nhận.' : 'SePay has not reported yet. The status updates as soon as SePay confirms.')

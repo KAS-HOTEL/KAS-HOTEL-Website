@@ -127,4 +127,15 @@ export const opsReservationsApi = {
     api.post<StayTransition>(
       `/api/v1/admin/ops/reservations/${encodeURIComponent(reference)}/${action}`,
     ),
+
+  /**
+   * `POST /api/v1/admin/ops/reservations/{reference}/complete-stay` (2026-11-14): a stay never
+   * checked in by check-out time is NO_SHOW; the real times finish it as CHECKED_OUT.
+   * Times are ISO-8601 with offset, e.g. `2026-11-10T14:30:00+07:00`.
+   */
+  completeStay: (reference: string, checkedInAt: string, checkedOutAt: string) =>
+    api.post<StayTransition>(
+      `/api/v1/admin/ops/reservations/${encodeURIComponent(reference)}/complete-stay`,
+      { checkedInAt, checkedOutAt },
+    ),
 } as const;

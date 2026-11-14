@@ -308,8 +308,7 @@ public class SalesRequestService {
         SalesRequestDetailView.Price price = requests.price(row.reservationId(), scope)
                 .map(this::price).orElse(null);
 
-        var payment = new SalesRequestDetailView.Payment(sePay.checkoutEnabled(),
-                bookingDecisions.manualTransfer().isPresent());
+        var payment = new SalesRequestDetailView.Payment(sePay.checkoutEnabled());
         return new SalesRequestDetailView(summary(row), lines, guest, timeline, alternative, price, payment);
     }
 
@@ -730,29 +729,8 @@ public class SalesRequestService {
         return proposal;
     }
 
-    /** The hotel has the money: payment VERIFIED, request WON, stay CONFIRMED. */
-    @Transactional
-    public ReservationEmailActionService.EmailActionView confirmPaymentReceived(String reference,
-                                                                               ResolvedActor actor) {
-        return confirmPaymentReceived(reference, actor, null);
-    }
-
-    /** As above, with the bank transaction reference staff typed (optional, stored on the payment). */
-    @Transactional
-    public ReservationEmailActionService.EmailActionView confirmPaymentReceived(String reference,
-                                                                               ResolvedActor actor,
-                                                                               String transactionReference) {
-        AuthorizationScope scope = actor.scope();
-        SalesRequestRepository.LockedRequest locked = requests.lockForTransition(reference, scope)
-                .orElseThrow(() -> NotFoundException.outOfScope("Reservation"));
-        var booking = bookingDecisions.confirmPaymentForStaff(locked.reservationId(), actor.userId(), transactionReference);
-        audit.record(event(actor, PAYMENT_VERIFIED_ACTION, locked.reservationId(),
-                Map.of("salesStatus", locked.salesStatus()),
-                Map.of("salesStatus", WON, "paymentVerified", true), null, scope));
-        audit.record(event(actor, CONFIRMED_ACTION, locked.reservationId(),
-                null, Map.of("stayStatus", CONFIRMED), null, scope));
-        return booking;
-    }
+    // No "payment received" for staff (owner 2026-11-14): only SePay confirms a payment
+    // (ReservationEmailActionService.confirmPaymentByGateway).
 
     /** Moves the owner and appends the history row, in that order. */
     private void applyAssignment(SalesRequestRepository.LockedRequest locked, UUID toOwnerId,

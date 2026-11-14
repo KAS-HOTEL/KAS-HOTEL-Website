@@ -78,6 +78,8 @@ public class MeStayController {
                                cr.fee_amount_minor, cr.fee_currency, cr.fee_note,
                                cr.refund_due_minor, cr.refund_amount_minor,
                                r.payment_due_at,
+                               r.id AS reservation_id,
+                               rv.status::text AS review_status, rv.overall AS review_overall,
                                EXISTS (SELECT 1 FROM payment pm
                                         WHERE pm.reservation_id = r.id AND pm.status = 'VERIFIED') AS has_verified_payment,
                                EXISTS (SELECT 1 FROM reservation_email_action_token tk
@@ -102,6 +104,7 @@ public class MeStayController {
                                 WHERE reservation_id = r.id
                                 ORDER BY created_at DESC, id DESC LIMIT 1
                           ) cr ON true
+                          LEFT JOIN review rv ON rv.reservation_id = r.id
                          WHERE c.user_id = :userId AND c.merged_into_id IS NULL
                          ORDER BY r.created_at DESC, r.id DESC
                         """)
@@ -133,7 +136,10 @@ public class MeStayController {
                                 rs.getObject("payment_verified_at") != null || rs.getBoolean("has_verified_payment"),
                                 rs.getBoolean("transfer_reported"), (Long) rs.getObject("refund_amount_minor")),
                         rs.getObject("payment_due_at", java.time.OffsetDateTime.class),
-                        rs.getString("sales_status_reason")))
+                        rs.getString("sales_status_reason"),
+                        rs.getObject("reservation_id", UUID.class),
+                        rs.getString("review_status"),
+                        (Integer) rs.getObject("review_overall", Integer.class)))
                 .list();
     }
 
@@ -212,6 +218,10 @@ public class MeStayController {
                        /** When payment is due (V66); null when no deadline applies. */
                        java.time.OffsetDateTime paymentDueAt,
                        /** Why the booking reached its current sales status, e.g. SLA_EXPIRED, PAYMENT_DEADLINE. */
-                       String salesStatusReason) { }
+                       String salesStatusReason,
+                       /** Reservation id, as POST /api/v1/me/reviews expects it (2026-11-14). */
+                       UUID reservationId,
+                       /** The guest's own review of this stay: its moderation status and overall score; null when none. */
+                       String reviewStatus, Integer reviewOverall) { }
     public record CancellationDecision(boolean accept) { }
 }

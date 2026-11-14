@@ -59,39 +59,23 @@ public class BookingNotificationService {
         String amount = formatAmount(booking.totalMinor(), booking.currency(), booking.guestCountry());
         params.put("totalAmount", amount);
         params.put("paymentAmount", amount);
-        params.put("qrImageUrl", request.qrUrl());
         // V66: the real deadline; past it the booking expires and the payment link closes.
         params.put("paymentDeadline", request.paymentDueAt() == null
                 ? (vi ? "Vui lòng liên hệ khách sạn" : "Please contact the hotel")
                 : PaymentDeadline.format(request.paymentDueAt(), vi));
-        // The VI QR template has no button slot. Preserve the payment-report
-        // action as a complete URL in the visible description, and expose it separately
-        // for a future template button without changing the business flow.
-        params.put("paymentReportUrl", actionUrl(request.guestToken()));
+        // The payment page: the SePay button. SePay is the only way to pay (owner 2026-11-14).
         params.put("paymentUrl", actionUrl(request.guestToken()));
-        // The transfer hint only when a manual transfer is offered (a static QR is kept); with
-        // SePay alone the email's payment button is the whole story (owner 2026-11-10).
-        boolean manualTransfer = request.qrUrl() != null && !request.qrUrl().isBlank();
-        params.put("paymentDescription", !manualTransfer ? ""
-                : (request.instructions() == null ? "" : request.instructions())
-                        + (vi ? " Đã chuyển khoản? Mở liên kết để báo khách sạn kiểm tra: " : " Already transferred? Open this link to notify the hotel: ")
-                        + actionUrl(request.guestToken()));
-        // KAS-014: the shared KAS bank details (payment_account, V51); "see the QR" only where one is missing.
-        String qrDetails = vi ? "Xem thông tin trên mã QR" : "See the payment QR details";
-        params.put("bankName", orElse(request.bankName(), qrDetails));
-        params.put("accountHolder", orElse(request.accountHolder(), qrDetails));
-        params.put("accountNumber", orElse(request.accountNumber(), qrDetails));
+        params.put("paymentReportUrl", actionUrl(request.guestToken()));
+        // No static QR / bank transfer any more. The keys stay, empty, so a Brevo template that
+        // still names them keeps rendering.
+        params.put("qrImageUrl", "");
+        params.put("paymentDescription", "");
+        params.put("bankName", "");
+        params.put("accountHolder", "");
+        params.put("accountNumber", "");
         params.put("transferContent", booking.reference());
         outbox.templateForReservation(booking.reference(), "booking-payment-request-" + booking.reference(), "BOOKING_AVAILABILITY_PAYMENT",
                 booking.guestCountry(), booking.guestEmail(), booking.guestName(), params);
-    }
-
-    public void guestReportedPayment(ReservationEmailActionService.HotelPaymentCheck check) {
-        var booking = check.booking();
-        hotelInline(booking.reference(), "booking-payment-reported-" + booking.reference(), booking.hotelEmail(), booking.propertyName(), "Khách báo đã thanh toán " + booking.reference(),
-                "<p>Khách " + esc(booking.guestName()) + " báo đã thanh toán cho " + esc(booking.reference())
-                        + ". Hãy đối chiếu ngân hàng trước khi xác nhận.</p>"
-                        + button(actionUrl(check.hotelToken()), "Xác nhận đã nhận tiền"));
     }
 
     public void bookingConfirmed(ReservationEmailActionService.EmailActionView booking) {
@@ -437,10 +421,6 @@ public class BookingNotificationService {
     private String propertyName(String slug, String lang) {
         return jdbc.sql("SELECT name FROM property_translation WHERE property_id=(SELECT id FROM property WHERE slug=:slug) AND locale=:locale")
                 .param("slug", slug).param("locale", lang).query(String.class).optional().orElse(slug);
-    }
-
-    private static String orElse(String value, String fallback) {
-        return value == null || value.isBlank() ? fallback : value;
     }
 
     private String actionUrl(String token) { return actionBaseUrl + "/api/v1/public/reservation-actions/" + token; }

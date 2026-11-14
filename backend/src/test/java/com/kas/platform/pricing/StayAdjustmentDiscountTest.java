@@ -13,7 +13,7 @@ class StayAdjustmentDiscountTest {
     private static StayAdjustmentService.Voucher voucher(String type, BigDecimal pct, Long amount) {
         return new StayAdjustmentService.Voucher(null, "KAS-TEST", "Test", null, type, pct, amount,
                 "VALUE_ADD".equals(type) ? "Welcome drink" : null, "VND", null, null, null, null, null, null,
-                List.of(), List.of(), null, 0, "ACTIVE", 0);
+                List.of(), List.of(), null, 0, "ACTIVE", 0, null, null, "ALL", List.of());
     }
 
     @Test

@@ -5,9 +5,9 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import type { SalesRequestSummary } from '@/lib/domain/salesRequest';
 import type * as Primitives from '@/ui/primitives';
 
-const calls = vi.hoisted(() => ({ approve: vi.fn(), confirm: vi.fn(), offer: vi.fn(), refresh: vi.fn(), show: vi.fn() }));
+const calls = vi.hoisted(() => ({ approve: vi.fn(), offer: vi.fn(), refresh: vi.fn(), show: vi.fn() }));
 vi.mock('@/lib/api/endpoints/salesRequests', () => ({ salesRequestsApi: {
-  approvePayment: calls.approve, confirmPayment: calls.confirm, proposeAlternative: calls.offer,
+  approvePayment: calls.approve, proposeAlternative: calls.offer,
 } }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ refresh: calls.refresh }) }));
 vi.mock('@/lib/api/endpoints/publicHotels', () => ({ publicHotelsApi: {
@@ -19,7 +19,7 @@ import { ManualBookingActions } from './ManualBookingActions';
 const request: SalesRequestSummary = { reference: 'KAS-TEST', salesStatus: 'REQUESTED', propertySlug: 'hotel-a', propertyName: 'Hotel A',
   leadSource: 'WEBSITE', checkIn: '2027-01-01', checkOut: '2027-01-03', rooms: 1, adults: 2, children: 0, nights: 2,
   guestName: 'Guest', requestedAt: '2026-10-24T01:00:00Z', slaDueAt: null, total: { amountMinor: 1000000, currency: 'VND', exponent: 0 } };
-beforeEach(() => { vi.clearAllMocks(); calls.approve.mockResolvedValue(undefined); calls.confirm.mockResolvedValue(undefined); });
+beforeEach(() => { vi.clearAllMocks(); calls.approve.mockResolvedValue(undefined); });
 afterEach(cleanup);
 
 it('requires an explicit confirmation before approving and refreshing the request', async () => {
@@ -29,34 +29,20 @@ it('requires an explicit confirmation before approving and refreshing the reques
   await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
   await waitFor(() => expect(calls.approve).toHaveBeenCalledWith('KAS-TEST'));
   expect(calls.refresh).toHaveBeenCalled();
-  expect(calls.confirm).not.toHaveBeenCalled();
 });
 
-it('only offers bank verification while payment is pending', async () => {
-  render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }} />);
-  expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeNull();
-  await userEvent.click(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' }));
-  expect(calls.confirm).not.toHaveBeenCalled();
-  await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
-  await waitFor(() => expect(calls.confirm).toHaveBeenCalledWith('KAS-TEST'));
-});
-
-it('with SePay on, says payment confirms itself and keeps only a secondary manual confirmation', async () => {
+it('while payment is pending, says SePay confirms it and offers no manual confirmation (2026-11-14)', () => {
   render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }}
-    payment={{ onlineGateway: true, manualTransfer: false }} />);
+    payment={{ onlineGateway: true }} />);
   expect(screen.getByText(/tự động xác nhận/)).toBeTruthy();
-  expect(screen.queryByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeNull();
-  await userEvent.click(screen.getByRole('button', { name: 'Xác nhận thủ công' }));
-  expect(calls.confirm).not.toHaveBeenCalled();
-  await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
-  await waitFor(() => expect(calls.confirm).toHaveBeenCalledWith('KAS-TEST'));
+  expect(screen.queryByRole('button')).toBeNull();
 });
 
-it('without SePay keeps the bank-verification wording', () => {
+it('with SePay off, says the guest cannot pay yet and still offers no manual confirmation', () => {
   render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }}
-    payment={{ onlineGateway: false, manualTransfer: true }} />);
-  expect(screen.getByText(/đối chiếu tiền trong tài khoản ngân hàng/)).toBeTruthy();
-  expect(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeTruthy();
+    payment={{ onlineGateway: false }} />);
+  expect(screen.getByRole('alert').textContent).toContain('Cổng SePay đang tắt');
+  expect(screen.queryByRole('button')).toBeNull();
 });
 
 it('reports a failed approval without claiming success or refreshing', async () => {
@@ -86,5 +72,4 @@ it('offers another room only after the admin reviews the proposal', async () => 
     quantity: 1, totalMinor: 1400000, message: 'Phòng khác cùng kỳ nghỉ',
   }));
   expect(calls.approve).not.toHaveBeenCalled();
-  expect(calls.confirm).not.toHaveBeenCalled();
 });

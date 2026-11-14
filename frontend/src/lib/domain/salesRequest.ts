@@ -69,12 +69,11 @@ export interface SalesRequestDetail {
 }
 
 /**
- * onlineGateway: SePay is on, a paid order confirms the booking by itself.
- * manualTransfer: a static QR is kept, the guest may also transfer by hand.
+ * onlineGateway: SePay is on. It is the only way to pay and the only thing that confirms a
+ * payment (2026-11-14); there is no manual transfer or staff confirmation any more.
  */
 export interface SalesRequestPayment {
   readonly onlineGateway: boolean;
-  readonly manualTransfer: boolean;
 }
 
 /** The recorded price: roomsSubtotal − discount + taxes = total. Nothing is recomputed. */

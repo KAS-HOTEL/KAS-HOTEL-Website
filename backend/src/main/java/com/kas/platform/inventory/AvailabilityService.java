@@ -49,11 +49,19 @@ public class AvailabilityService {
                                                              LocalDate checkOut, int adults, int children,
                                                              List<Integer> childAges, List<QuoteLine> lines,
                                                              String locale) {
+        return vouchers(propertySlug, checkIn, checkOut, adults, children, childAges, lines, locale, null);
+    }
+
+    /** As above for the signed-in customer: vouchers meant for them or their tier are listed too (V72). */
+    public List<StayAdjustmentService.VoucherCheck> vouchers(String propertySlug, LocalDate checkIn,
+                                                             LocalDate checkOut, int adults, int children,
+                                                             List<Integer> childAges, List<QuoteLine> lines,
+                                                             String locale, UUID customerUserId) {
         PricedRequest priced = pricePublishedRequest(propertySlug, checkIn, checkOut, adults, children,
                 childAges, lines, null, locale, null, 0);
         return adjustments.vouchersFor(propertySlug, checkIn, checkOut,
                 priced.lines().stream().map(PricedLine::roomTypeId).toList(),
-                priced.roomsSubtotalMinor(), priced.currency());
+                priced.roomsSubtotalMinor(), priced.currency(), adjustments.audienceForUser(customerUserId));
     }
 
     /** Manual hotel review (owner decision 153). Room stock is not stored or inferred. */
@@ -194,7 +202,8 @@ public class AvailabilityService {
         StayAdjustmentService.VoucherCheck voucher = null;
         if (offerCode != null && !offerCode.isBlank()) {
             voucher = adjustments.checkCode(offerCode, propertySlug, checkIn, checkOut,
-                    priced.stream().map(PricedLine::roomTypeId).toList(), roomsSubtotal, currency);
+                    priced.stream().map(PricedLine::roomTypeId).toList(), roomsSubtotal, currency,
+                    adjustments.audienceForUser(customerUserId));
             if (!voucher.eligible()) throw voucherRefused(voucher);
         }
         // Member discount and points (2026-11-10): from the signed-in account only.

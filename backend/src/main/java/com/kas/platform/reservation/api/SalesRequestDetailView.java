@@ -60,11 +60,11 @@ public record SalesRequestDetailView(
     }
 
     /**
-     * {@code onlineGateway}: the SePay gateway is on, so a paid order confirms the booking by
-     * itself (IPN). {@code manualTransfer}: a static QR is kept, so the guest may also pay by
-     * hand and staff confirm it.
+     * {@code onlineGateway}: the SePay gateway is on. It is the only way to pay and the only
+     * thing that confirms a payment (owner 2026-11-14); without it a request cannot be sent
+     * for payment.
      */
-    public record Payment(boolean onlineGateway, boolean manualTransfer) {
+    public record Payment(boolean onlineGateway) {
     }
 
     /** The pre-2026-11-07 shape, without the alternative offer. */

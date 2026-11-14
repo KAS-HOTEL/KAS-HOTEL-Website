@@ -38,7 +38,17 @@ public class StayAdjustmentService {
     /** Why a voucher cannot be used on this stay. Stable codes: the website words them. */
     public enum VoucherReason {
         NOT_FOUND, INACTIVE, NOT_STARTED, EXPIRED, USED_UP, WRONG_HOTEL, WRONG_ROOM,
-        STAY_OUT_OF_RANGE, MIN_NIGHTS, MIN_TOTAL, WRONG_CURRENCY
+        STAY_OUT_OF_RANGE, MIN_NIGHTS, MIN_TOTAL, WRONG_CURRENCY,
+        /** The voucher is for chosen customers or member tiers, not this guest (2026-11-14). */
+        NOT_FOR_YOU
+    }
+
+    /**
+     * Who is asking, for vouchers meant for chosen customers or tiers (2026-11-14): the signed-in
+     * customer and their current member tier. Both null for a guest who is not signed in.
+     */
+    public record Audience(UUID customerId, UUID tierId) {
+        public static final Audience NONE = new Audience(null, null);
     }
 
     public record Voucher(UUID id, String code, String name, String description, String type,
@@ -46,7 +56,11 @@ public class StayAdjustmentService {
                           String currency, LocalDate validFrom, LocalDate validTo, LocalDate stayFrom,
                           LocalDate stayTo, Integer minNights, Long minTotalMinor,
                           List<UUID> propertyIds, List<UUID> roomTypeIds,
-                          Integer usageLimitTotal, int usedCount, String status, long activeHolds) {
+                          Integer usageLimitTotal, int usedCount, String status, long activeHolds,
+                          /** Real start / end (V72); null for older, date-only vouchers. */
+                          java.time.OffsetDateTime validFromAt, java.time.OffsetDateTime validToAt,
+                          /** ALL, TIERS or CUSTOMERS (V72). */
+                          String audience, List<UUID> audienceTierIds) {
     }
 
     /** A voucher judged against one stay. {@code reason} is null when it can be used. */
@@ -125,6 +139,14 @@ public class StayAdjustmentService {
      */
     public List<VoucherCheck> vouchersFor(String propertySlug, LocalDate checkIn, LocalDate checkOut,
                                           Collection<UUID> roomTypeIds, long subtotalMinor, String currency) {
+        return vouchersFor(propertySlug, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, Audience.NONE);
+    }
+
+    /** As above; a voucher for chosen customers or tiers is listed only to them. */
+    public List<VoucherCheck> vouchersFor(String propertySlug, LocalDate checkIn, LocalDate checkOut,
+                                          Collection<UUID> roomTypeIds, long subtotalMinor, String currency,
+                                          Audience audience) {
+        Audience who = audience == null ? Audience.NONE : audience;
         UUID propertyId = propertyId(propertySlug).orElse(null);
         if (propertyId == null) return List.of();
         LocalDate today = today();
@@ -133,13 +155,22 @@ public class StayAdjustmentService {
                  WHERE status = 'ACTIVE'
                    AND (valid_to IS NULL OR valid_to >= :today)
                    AND (valid_from IS NULL OR valid_from <= :today)
+                   AND (valid_from_at IS NULL OR valid_from_at <= :now)
+                   AND (valid_to_at IS NULL OR valid_to_at > :now)
+                   AND (audience = 'ALL'
+                        OR (audience = 'TIERS' AND CAST(:tierId AS uuid) = ANY (audience_tier_ids))
+                        OR (audience = 'CUSTOMERS' AND EXISTS (SELECT 1 FROM voucher_customer vc
+                             WHERE vc.voucher_id = voucher.id AND vc.customer_id = CAST(:customerId AS uuid))))
                    AND (usage_limit_total IS NULL OR used_count + (SELECT count(*) FROM voucher_hold h WHERE h.voucher_id = voucher.id AND h.status = 'ACTIVE' AND h.expires_at > now()) < usage_limit_total)
                    AND (applicable_property_ids IS NULL OR cardinality(applicable_property_ids) = 0
                         OR :propertyId = ANY (applicable_property_ids))
                  ORDER BY created_at DESC
                  LIMIT 50
-                """).param("today", today).param("propertyId", propertyId).query(this::voucher).list()) {
-            out.add(judge(v, propertyId, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, today));
+                """).param("today", today).param("propertyId", propertyId)
+                .param("now", java.time.OffsetDateTime.now(clock))
+                .param("tierId", who.tierId()).param("customerId", who.customerId())
+                .query(this::voucher).list()) {
+            out.add(judge(v, propertyId, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, today, who));
         }
         return out;
     }
@@ -147,25 +178,39 @@ public class StayAdjustmentService {
     /** One code typed by the guest, judged against this stay. */
     public VoucherCheck checkCode(String code, String propertySlug, LocalDate checkIn, LocalDate checkOut,
                                   Collection<UUID> roomTypeIds, long subtotalMinor, String currency) {
+        return checkCode(code, propertySlug, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, Audience.NONE);
+    }
+
+    /** As above, for the guest asking: a voucher for chosen customers or tiers is NOT_FOR_YOU to others. */
+    public VoucherCheck checkCode(String code, String propertySlug, LocalDate checkIn, LocalDate checkOut,
+                                  Collection<UUID> roomTypeIds, long subtotalMinor, String currency,
+                                  Audience audience) {
         String trimmed = code == null ? "" : code.trim();
         Optional<Voucher> found = trimmed.isEmpty() || trimmed.length() > 64 ? Optional.empty()
                 : jdbc.sql(SELECT_VOUCHER + " WHERE code = CAST(:code AS citext)")
                         .param("code", trimmed).query(this::voucher).optional();
         if (found.isEmpty()) return new VoucherCheck(null, VoucherReason.NOT_FOUND, 0);
         UUID propertyId = propertyId(propertySlug).orElse(null);
-        return judge(found.get(), propertyId, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, today());
+        return judge(found.get(), propertyId, checkIn, checkOut, roomTypeIds, subtotalMinor, currency, today(),
+                audience == null ? Audience.NONE : audience);
     }
 
     private VoucherCheck judge(Voucher v, UUID propertyId, LocalDate checkIn, LocalDate checkOut,
-                               Collection<UUID> roomTypeIds, long subtotal, String currency, LocalDate today) {
+                               Collection<UUID> roomTypeIds, long subtotal, String currency, LocalDate today,
+                               Audience who) {
         VoucherReason reason = null;
         long nights = ChronoUnit.DAYS.between(checkIn, checkOut);
-        if ("EXPIRED".equals(v.status()) || (v.validTo() != null && v.validTo().isBefore(today))) {
+        java.time.OffsetDateTime now = java.time.OffsetDateTime.now(clock);
+        if ("EXPIRED".equals(v.status()) || (v.validTo() != null && v.validTo().isBefore(today))
+                || (v.validToAt() != null && !now.isBefore(v.validToAt()))) {
             reason = VoucherReason.EXPIRED;
         } else if (!"ACTIVE".equals(v.status())) {
             reason = VoucherReason.INACTIVE;
-        } else if (v.validFrom() != null && v.validFrom().isAfter(today)) {
+        } else if ((v.validFrom() != null && v.validFrom().isAfter(today))
+                || (v.validFromAt() != null && now.isBefore(v.validFromAt()))) {
             reason = VoucherReason.NOT_STARTED;
+        } else if (!forAudience(v, who)) {
+            reason = VoucherReason.NOT_FOR_YOU;
         } else if (v.usageLimitTotal() != null && v.usedCount() + v.activeHolds() >= v.usageLimitTotal()) {
             // Uses held by unpaid bookings count too (V65), so the last use cannot be promised twice.
             reason = VoucherReason.USED_UP;
@@ -184,6 +229,37 @@ public class StayAdjustmentService {
             reason = VoucherReason.WRONG_CURRENCY;
         }
         return new VoucherCheck(v, reason, discount(v, subtotal));
+    }
+
+    /** Whether this guest is one the voucher is meant for. */
+    private boolean forAudience(Voucher v, Audience who) {
+        return switch (v.audience() == null ? "ALL" : v.audience()) {
+            case "TIERS" -> who.tierId() != null && v.audienceTierIds().contains(who.tierId());
+            case "CUSTOMERS" -> who.customerId() != null && jdbc.sql("""
+                    SELECT count(*) FROM voucher_customer WHERE voucher_id = :voucher AND customer_id = :customer
+                    """).param("voucher", v.id()).param("customer", who.customerId()).query(Long.class).single() > 0;
+            default -> true;
+        };
+    }
+
+    /**
+     * The signed-in customer and their current member tier (ACTIVE membership, open tier
+     * history row), for targeted vouchers. NONE for a guest or a staff session.
+     */
+    public Audience audienceForUser(UUID userId) {
+        if (userId == null) return Audience.NONE;
+        return jdbc.sql("""
+                SELECT c.id AS customer_id,
+                       (SELECT th.tier_id FROM customer_membership cm
+                          JOIN customer_membership_tier_history th ON th.membership_id = cm.id AND th.effective_to IS NULL
+                         WHERE cm.customer_id = c.id AND cm.status = 'ACTIVE'
+                         LIMIT 1) AS tier_id
+                  FROM customer c
+                 WHERE c.user_id = :userId AND c.merged_into_id IS NULL
+                 LIMIT 1
+                """).param("userId", userId)
+                .query((rs, n) -> new Audience(rs.getObject("customer_id", UUID.class), rs.getObject("tier_id", UUID.class)))
+                .optional().orElse(Audience.NONE);
     }
 
     /** The amount a voucher takes off this subtotal; a gift (VALUE_ADD) takes nothing off. */
@@ -337,6 +413,7 @@ public class StayAdjustmentService {
                    value_percent, value_minor, value_add_description, currency, valid_from, valid_to,
                    stay_from, stay_to, min_nights, min_total_minor, applicable_property_ids,
                    applicable_room_type_ids, usage_limit_total, used_count, status::text AS status,
+                   valid_from_at, valid_to_at, audience, audience_tier_ids,
                    (SELECT count(*) FROM voucher_hold h WHERE h.voucher_id = voucher.id
                        AND h.status = 'ACTIVE' AND h.expires_at > now()) AS active_holds
               FROM voucher
@@ -351,7 +428,10 @@ public class StayAdjustmentService {
                 rs.getObject("stay_to", LocalDate.class), (Integer) rs.getObject("min_nights"),
                 rs.getObject("min_total_minor", Long.class), uuids(rs.getArray("applicable_property_ids")),
                 uuids(rs.getArray("applicable_room_type_ids")), (Integer) rs.getObject("usage_limit_total"),
-                rs.getInt("used_count"), rs.getString("status"), rs.getLong("active_holds"));
+                rs.getInt("used_count"), rs.getString("status"), rs.getLong("active_holds"),
+                rs.getObject("valid_from_at", java.time.OffsetDateTime.class),
+                rs.getObject("valid_to_at", java.time.OffsetDateTime.class),
+                rs.getString("audience"), uuids(rs.getArray("audience_tier_ids")));
     }
 
     private static List<UUID> uuids(Array array) throws SQLException {

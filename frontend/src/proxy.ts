@@ -103,6 +103,9 @@ export function proxy(request: NextRequest) {
     }
     const headers = new Headers(request.headers);
     headers.set(SURFACE_HEADER, SURFACE_VALUE);
+    /* RFC 7239 "Forwarded" is never written by our proxies, and the backend would prefer it
+       to X-Forwarded-For: a browser that typed it picked its own client address (SEC-01). */
+    headers.delete('forwarded');
     const origin = runtimeApiOrigin();
     if (origin.kind === 'invalid') {
       return apiError(503, 'API_ORIGIN_INVALID', `KAS_API_ORIGIN is invalid: ${origin.reason}.`);

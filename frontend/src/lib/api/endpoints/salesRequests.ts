@@ -114,8 +114,6 @@ export const salesRequestsApi = {
     api.post<void>(`/api/v1/admin/sales/requests/${encodeURIComponent(reference)}/approve-payment`),
   proposeAlternative: (reference: string, body: AlternativeOffer) =>
     api.post<void>(`/api/v1/admin/sales/requests/${encodeURIComponent(reference)}/propose-alternative`, body),
-  confirmPayment: (reference: string) =>
-    api.post<void>(`/api/v1/admin/sales/requests/${encodeURIComponent(reference)}/confirm-payment`),
   /**
    * `GET /api/v1/admin/sales/requests?locale=` — permission `sales.request.view`.
    *

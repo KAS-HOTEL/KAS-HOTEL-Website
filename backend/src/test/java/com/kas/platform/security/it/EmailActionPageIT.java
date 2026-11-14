@@ -26,7 +26,7 @@ class EmailActionPageIT extends SecurityIntegrationTest {
     }
 
     @Test void aPostOnAnUnknownLinkIsAlsoAPage() throws Exception {
-        MvcResult result = mockMvc.perform(post("/api/v1/public/reservation-actions/qa-not-a-token-0000000000/paid").with(csrf()))
+        MvcResult result = mockMvc.perform(post("/api/v1/public/reservation-actions/qa-not-a-token-0000000000/approve").with(csrf()))
                 .andExpect(status().isNotFound()).andReturn();
         assertThat(result.getResponse().getContentAsString(StandardCharsets.UTF_8)).contains("<main>");
     }

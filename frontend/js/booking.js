@@ -537,6 +537,9 @@
       case 'USED_UP': return vi ? 'Voucher đã hết lượt sử dụng.' : 'This voucher has been fully used.';
       case 'WRONG_HOTEL': return vi ? 'Voucher không áp dụng cho khách sạn này.' : 'This voucher is not valid at this hotel.';
       case 'WRONG_ROOM': return vi ? 'Voucher không áp dụng cho hạng phòng này.' : 'This voucher is not valid for this room type.';
+      /* 2026-11-14: a voucher meant for chosen customers or member tiers. */
+      case 'NOT_FOR_YOU': return vi ? 'Voucher này chỉ dành cho một số tài khoản hoặc hạng thành viên. Vui lòng đăng nhập đúng tài khoản được tặng.'
+        : 'This voucher is only for certain accounts or member tiers. Please sign in with the account it was given to.';
       case 'STAY_OUT_OF_RANGE':
         return (vi ? 'Áp dụng cho kỳ nghỉ' : 'Valid for stays') + (view && view.stayFrom ? (vi ? ' từ ' : ' from ') + fmt(view.stayFrom) : '') +
           (view && view.stayTo ? (vi ? ' đến ' : ' to ') + fmt(view.stayTo) : '') + '.';

@@ -195,6 +195,15 @@
       onPopupOpen: function (type) { if (type !== 'destination') setQuickSearchOpen(false); },
       onSearch: function (s) {
         B.saveSearch(s);
+        /* The URL's dates win over the saved search on the next page load: keep them in step
+           so a reload or the back button does not bring the old stay back (2026-11-14). */
+        try {
+          var u = new URL(window.location.href);
+          ['checkIn', 'checkOut', 'adults', 'children', 'rooms'].forEach(function (k) {
+            if (s[k] != null && s[k] !== '') u.searchParams.set(k, s[k]); else u.searchParams.delete(k);
+          });
+          history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+        } catch (_) { /* old browser: links below still carry the new stay */ }
         search = s;
         paintSearch();
         setQuickSearchOpen(false);

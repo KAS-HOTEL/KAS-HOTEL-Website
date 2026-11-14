@@ -20,9 +20,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Owner 2026-11-10: SePay makes its own QR for every order, so with the gateway on the static
- * QR of the payment account is optional. Approval goes through without it; the guest page
- * offers SePay alone, and manual transfer only when a static QR is kept. Rolled back.
+ * Owner 2026-11-14: SePay is the only way to pay. Approval needs no static QR, the guest page
+ * offers SePay alone even when a QR is still kept in the payment account, and the retired
+ * manual buttons ("I have made the transfer", the hotel's "payment received") change nothing.
+ * Rolled back.
  *
  * <p>SePay is "on" here only by configuration (fake sandbox keys); nothing calls SePay: the
  * deadline sweep that could cancel checkouts is off for this context.
@@ -91,17 +92,41 @@ class SePayOnlyPaymentIT extends SecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("a static QR kept alongside SePay adds the manual transfer, with the bank details on the page")
-    void sePayPlusManualTransfer() throws Exception {
+    @DisplayName("a static QR still kept in the payment account offers no manual transfer: SePay only")
+    void staticQrIsNotOffered() throws Exception {
         jdbc.sql("""
                 UPDATE payment_account SET qr_url = 'https://images.example.invalid/qr.png', bank_name = 'Vietcombank',
                        account_holder = 'KAS HOTEL', account_number = '0123456789'
                 """).update();
         mockMvc.perform(post(SALES + reference + "/approve-payment").cookie(session).with(csrf()))
                 .andExpect(status().isNoContent());
+        assertThat(jdbc.sql("SELECT payment_qr_url_snapshot FROM reservation WHERE id = :id")
+                .param("id", reservationId).query(String.class).optional().orElse(null)).isNull();
 
         String page = guestPage();
-        assertThat(page).contains("/sepay\"").contains("Hoặc chuyển khoản").contains("Số tài khoản: 0123456789")
-                .contains("Nội dung chuyển khoản: " + reference).contains("Tôi đã chuyển khoản");
+        assertThat(page).contains("/sepay\"");
+        assertThat(page).doesNotContain("Hoặc chuyển khoản").doesNotContain("0123456789").doesNotContain("Tôi đã chuyển khoản");
+    }
+
+    @Test
+    @DisplayName("the retired manual buttons answer a page and change nothing")
+    void retiredManualButtonsChangeNothing() throws Exception {
+        mockMvc.perform(post(SALES + reference + "/approve-payment").cookie(session).with(csrf()))
+                .andExpect(status().isNoContent());
+        String token = tokens.issue(reservationId, "GUEST_MARK_PAID", "guest@example.invalid", Duration.ofHours(2));
+        String hotelToken = tokens.issue(reservationId, "HOTEL_CONFIRM_PAYMENT", "hotel@example.invalid", Duration.ofHours(2));
+        for (String path : new String[]{token + "/paid", hotelToken + "/confirm-payment"}) {
+            String page = mockMvc.perform(post(ACTIONS + path)).andExpect(status().isOk())
+                    .andReturn().getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
+            assertThat(page).contains("Không còn xác nhận thủ công");
+        }
+        String oldHotelPage = mockMvc.perform(get(ACTIONS + hotelToken)).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
+        assertThat(oldHotelPage).contains("Không còn xác nhận thủ công").doesNotContain("<form");
+        assertThat(salesStatus()).isEqualTo("PAYMENT_PENDING");
+        assertThat(jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id = :id").param("id", reservationId)
+                .query(Long.class).single()).isZero();
+        assertThat(jdbc.sql("SELECT count(*) FROM reservation_email_action_token WHERE reservation_id = :id AND used_at IS NOT NULL")
+                .param("id", reservationId).query(Long.class).single()).isZero();
     }
 }

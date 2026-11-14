@@ -189,32 +189,25 @@ public class PublicReservationEmailActionController {
                         java.time.OffsetDateTime.now())) {
                     return paymentClosedPage(view, vi);
                 }
+                // SePay is the only way to pay (owner 2026-11-14); it confirms the booking by itself.
                 String online = sePayForm(token, view, vi);
-                // Manual bank transfer is offered only when KAS keeps a static QR in the payment
-                // account (owner 2026-11-10): with SePay on and no static QR, SePay is the only way.
-                String manual = actions.manualTransfer().map(account -> manualTransferBlock(token, view, account, vi,
-                        !online.isEmpty())).orElse("");
                 String deadline = dueAt.map(due -> facts((vi ? "Hạn thanh toán: " : "Pay by: ")
                         + com.kas.platform.reservation.PaymentDeadline.format(due, vi))).orElse("");
                 String text = !online.isEmpty()
-                        ? (vi ? "Bấm nút bên dưới để thanh toán qua SePay (quét QR ngân hàng hoặc thẻ). Đặt phòng được xác nhận tự động ngay khi thanh toán thành công."
-                              : "Use the button below to pay with SePay (bank QR or card). Your booking is confirmed automatically as soon as the payment succeeds.")
-                        : manual.isEmpty()
-                                ? (vi ? "Hiện chưa thể thanh toán trực tuyến. Vui lòng liên hệ KAS." : "Online payment is not available right now. Please contact KAS.")
-                                : (vi ? "Chuyển khoản theo thông tin bên dưới rồi bấm \"Tôi đã chuyển khoản\" để khách sạn kiểm tra."
-                                      : "Transfer using the details below, then press \"I have made the transfer\" so the hotel checks it.");
+                        ? (vi ? "Bấm nút bên dưới để thanh toán qua SePay (quét QR ngân hàng hoặc thẻ). Đặt phòng được xác nhận tự động ngay khi SePay báo thanh toán thành công."
+                              : "Use the button below to pay with SePay (bank QR or card). Your booking is confirmed automatically as soon as SePay reports the payment.")
+                        : (vi ? "Hiện chưa thể thanh toán trực tuyến. Vui lòng liên hệ KAS." : "Online payment is not available right now. Please contact KAS.");
                 return page(vi ? "vi" : "en", vi ? "Thanh toán đặt phòng" : "Pay for your booking",
                         facts((vi ? "Yêu cầu " : "Request ") + view.reference() + (vi ? " tại " : " at ")
                                 + view.propertyName()) + deadline,
-                        text, online + manual);
+                        text, online);
             }
             case "HOTEL_CONFIRM_PAYMENT" -> {
-                return page("vi", "Xác nhận đã nhận thanh toán",
+                // Links from emails sent before 2026-11-14: confirming a payment by hand was
+                // retired; SePay confirms it. Nothing changes here.
+                return page("vi", "Không còn xác nhận thủ công",
                         facts("Yêu cầu " + view.reference() + " tại " + view.propertyName()),
-                        "Chỉ tiếp tục nếu đã kiểm tra tài khoản và nhận được tiền.",
-                        "<form method=\"post\" action=\"" + BASE + esc(token) + "/confirm-payment\">"
-                                + "<label>Mã giao dịch ngân hàng (không bắt buộc)<input name=\"transactionReference\" maxlength=\"120\" autocomplete=\"off\"></label>"
-                                + "<button type=\"submit\">Đã kiểm tra, xác nhận đặt phòng</button></form>");
+                        "Thanh toán giờ chỉ qua SePay và được xác nhận tự động khi SePay báo đã nhận tiền. Liên kết này không còn dùng để xác nhận đặt phòng.", "");
             }
             case "GUEST_CANCEL" -> {
                 return guestCancelPage(token, view, vi);
@@ -235,23 +228,6 @@ public class PublicReservationEmailActionController {
         var request = actions.approveAndSendQr(token);
         notifications.paymentRequestSent(request);
         return page("vi", "Đã gửi thông tin thanh toán", "", "Email thanh toán (link thanh toán và hạn thanh toán) đã được gửi cho khách.", "");
-    }
-
-    /** Bank details for a manual transfer, with "I have made the transfer"; secondary when SePay is offered. */
-    private static String manualTransferBlock(String token, ReservationEmailActionService.EmailActionView view,
-                                              ReservationEmailActionService.ManualTransfer account, boolean vi,
-                                              boolean secondary) {
-        StringBuilder html = new StringBuilder();
-        if (secondary) html.append("<hr><h2>").append(esc(vi ? "Hoặc chuyển khoản" : "Or bank transfer")).append("</h2>");
-        html.append("<p class=\"facts\">");
-        if (account.bankName() != null) html.append(esc((vi ? "Ngân hàng: " : "Bank: ") + account.bankName())).append("<br>");
-        if (account.accountHolder() != null) html.append(esc((vi ? "Chủ tài khoản: " : "Account holder: ") + account.accountHolder())).append("<br>");
-        if (account.accountNumber() != null) html.append(esc((vi ? "Số tài khoản: " : "Account number: ") + account.accountNumber())).append("<br>");
-        if (view.totalMinor() != null) html.append(esc((vi ? "Số tiền: " : "Amount: ") + money(view.totalMinor()))).append("<br>");
-        html.append(esc((vi ? "Nội dung chuyển khoản: " : "Transfer reference: ") + view.reference())).append("</p>");
-        if (account.instructions() != null) html.append("<p class=\"muted\">").append(esc(account.instructions())).append("</p>");
-        html.append(button(token, "paid", vi ? "Tôi đã chuyển khoản" : "I have made the transfer", secondary));
-        return html.toString();
     }
 
     /**
@@ -300,25 +276,18 @@ public class PublicReservationEmailActionController {
                 again);
     }
 
-    @PostMapping(value = "/{token}/paid", produces = MediaType.TEXT_HTML_VALUE)
-    @PublicEndpoint(reason = "Explicit POST with an expiring, single-use guest payment report token")
-    @org.springframework.transaction.annotation.Transactional
-    public String paid(@PathVariable String token) {
-        var check = actions.guestReportedPaid(token);
-        notifications.guestReportedPayment(check);
-        return "vi".equals(EmailLanguage.forCountry(check.booking().guestCountry()))
-                ? page("vi", "Đã báo khách sạn", "", "Khách sạn sẽ kiểm tra giao dịch. Đặt phòng chưa được xác nhận cho tới khi khách sạn xác nhận đã nhận tiền.", "")
-                : page("en", "The hotel has been told", "", "The hotel will check the transfer. Your booking is confirmed only after the hotel confirms the payment.", "");
-    }
-
-    @PostMapping(value = "/{token}/confirm-payment", produces = MediaType.TEXT_HTML_VALUE)
-    @PublicEndpoint(reason = "Explicit POST with an expiring, single-use hotel payment verification token")
-    @org.springframework.transaction.annotation.Transactional
-    public String confirmPayment(@PathVariable String token,
-                                 @org.springframework.web.bind.annotation.RequestParam(required = false) String transactionReference) {
-        var booking = actions.confirmPayment(token, transactionReference);
-        notifications.bookingConfirmed(booking);
-        return page("vi", "Đặt phòng đã xác nhận", "", "Khách sạn đã xác nhận thanh toán và đặt phòng. Khách đã nhận email xác nhận.", "");
+    /*
+     * Retired 2026-11-14 (SePay only): "I have made the transfer" (/paid) and the hotel's
+     * "payment received" (/confirm-payment). Buttons on pages opened before the change still
+     * POST here; they change nothing and say so. Same answer for any token, so nothing about
+     * a booking is disclosed.
+     */
+    @PostMapping(value = {"/{token}/paid", "/{token}/confirm-payment"}, produces = MediaType.TEXT_HTML_VALUE)
+    @PublicEndpoint(reason = "Retired manual payment buttons from older pages; answers an explanatory page only")
+    public String manualPaymentRetired(@PathVariable String token) {
+        return page("vi", "Không còn xác nhận thủ công · Manual confirmation retired", "",
+                "Thanh toán giờ chỉ qua SePay và đặt phòng được xác nhận tự động khi SePay báo đã nhận tiền. Thao tác này không thay đổi gì. "
+                        + "Payment is now through SePay only and the booking is confirmed automatically when SePay reports it. This action changed nothing.", "");
     }
 
     @PostMapping(value = "/{token}/propose", produces = MediaType.TEXT_HTML_VALUE)
@@ -384,8 +353,8 @@ public class PublicReservationEmailActionController {
             vi = "Liên kết này đã được sử dụng hoặc đã hết hạn.";
             en = "This link has already been used or has expired.";
         } else if (code == ApiErrorCode.CONFIG_MISSING || String.valueOf(ex.getMessage()).contains("QR")) {
-            vi = "Chưa thể gửi thông tin thanh toán vì chưa có cách thanh toán nào: cổng SePay chưa bật và chưa có QR trong Tài khoản thanh toán. Vui lòng báo KAS cấu hình rồi mở lại liên kết này.";
-            en = "Payment details cannot be sent yet: the SePay gateway is off and no payment QR is set. Please ask KAS to configure one, then open this link again.";
+            vi = "Chưa thể gửi thông tin thanh toán vì cổng thanh toán SePay chưa được cấu hình. Vui lòng báo KAS cấu hình rồi mở lại liên kết này.";
+            en = "Payment details cannot be sent yet: the SePay payment gateway is not configured. Please ask KAS to configure it, then open this link again.";
         } else if (code.httpStatus() == 409) {
             vi = "Yêu cầu này đã được xử lý trước đó. Không cần thao tác thêm.";
             en = "This request has already been handled. Nothing else is needed.";

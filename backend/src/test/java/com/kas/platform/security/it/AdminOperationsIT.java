@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.Duration;
@@ -24,7 +25,16 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/** HTTP, permission, persistence and publication regression tests on kas_web_test; rolled back. */
+/**
+ * HTTP, permission, persistence and publication regression tests on kas_web_test; rolled back.
+ * SePay is "on" by configuration only (fake sandbox keys; it is the only way to pay since
+ * 2026-11-14); nothing calls it: the sweep that polls and cancels checkouts is off here.
+ */
+@TestPropertySource(properties = {
+        "kas.sepay.environment=sandbox",
+        "kas.sepay.merchant-id=SP-TEST-IT",
+        "kas.sepay.secret-key=spsk_it_dummy",
+        "kas.booking.payment-deadline-sweep.enabled=false"})
 class AdminOperationsIT extends SecurityIntegrationTest {
     @Autowired JdbcClient jdbc;
     @Autowired ReservationEmailActionTokenService tokens;
@@ -59,28 +69,19 @@ class AdminOperationsIT extends SecurityIntegrationTest {
         reservationId = jdbc.sql("SELECT id FROM reservation WHERE reference=:ref").param("ref", reference).query(UUID.class).single();
         jdbc.sql("UPDATE property SET email='hotel@example.invalid' WHERE id=:id")
                 .param("id", propertyId).update();
-        jdbc.sql("UPDATE payment_account SET qr_url='https://images.example.invalid/qr.png'").update();
     }
 
-    @Test void approvalAndBankVerificationAreSeparateAndCannotRepeat() throws Exception {
+    @Test void approvalSendsThePaymentLinkAndStaffCannotConfirmAPayment() throws Exception {
         tokens.issue(reservationId, "REVIEW", "hotel@example.invalid", Duration.ofDays(1));
-        mockMvc.perform(post(SALES + reference + "/confirm-payment").cookie(session).with(csrf())).andExpect(status().isConflict());
         mockMvc.perform(post(SALES + reference + "/approve-payment").cookie(session).with(csrf())).andExpect(status().isNoContent());
         assertThat(salesStatus()).isEqualTo("PAYMENT_PENDING");
         assertThat(jdbc.sql("SELECT count(*) FROM reservation_email_action_token WHERE reservation_id=:id AND action='REVIEW' AND invalidated_at IS NOT NULL")
                 .param("id", reservationId).query(Long.class).single()).isEqualTo(1);
-        mockMvc.perform(post(SALES + reference + "/confirm-payment").cookie(session).with(csrf())).andExpect(status().isNoContent());
-        mockMvc.perform(post(SALES + reference + "/confirm-payment").cookie(session).with(csrf())).andExpect(status().isConflict());
-        assertThat(salesStatus()).isEqualTo("WON");
-        assertThat(jdbc.sql("SELECT stay_status::text FROM reservation WHERE id=:id").param("id", reservationId).query(String.class).single()).isEqualTo("CONFIRMED");
-        assertThat(jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id=:id AND status='VERIFIED'").param("id", reservationId).query(Long.class).single()).isEqualTo(1);
-    }
-
-    @Test void missingQrRefusesApprovalWithoutMovingTheRequest() throws Exception {
-        jdbc.sql("UPDATE payment_account SET qr_url=NULL").update();
-        mockMvc.perform(post(SALES + reference + "/approve-payment").cookie(session).with(csrf()))
-                .andExpect(status().isUnprocessableEntity()).andExpect(jsonPath("$.code").value("CONFIG_MISSING"));
-        assertThat(salesStatus()).isEqualTo("REQUESTED");
+        // Owner 2026-11-14: only SePay confirms a payment; the console route is gone.
+        mockMvc.perform(post(SALES + reference + "/confirm-payment").cookie(session).with(csrf()))
+                .andExpect(status().is4xxClientError());
+        assertThat(salesStatus()).isEqualTo("PAYMENT_PENDING");
+        assertThat(jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id=:id").param("id", reservationId).query(Long.class).single()).isZero();
     }
 
     @Test void alternativeIsAnOfferAndDoesNotConfirmTheStay() throws Exception {
@@ -465,10 +466,13 @@ class AdminOperationsIT extends SecurityIntegrationTest {
         String tag = "TEST_VSTATE_" + UUID.randomUUID().toString().substring(0, 8);
         java.time.LocalDate today = java.time.LocalDate.now(com.kas.platform.shared.TimeConfiguration.PROPERTY_ZONE);
         String body = "{\"name\":\"%s\",\"type\":\"PERCENTAGE\",\"valuePercent\":10,\"currency\":\"VND\",\"status\":\"ACTIVE\",\"usageLimitTotal\":1,\"validFrom\":\"%s\",\"validTo\":\"%s\"}";
+        // A voucher cannot be created already over (2026-11-14): this one runs out afterwards.
         String expired = com.jayway.jsonpath.JsonPath.read(mockMvc.perform(post("/api/v1/admin/vouchers").cookie(session).with(csrf()).contentType(MediaType.APPLICATION_JSON)
-                        .content(body.formatted(tag + "_EXP", today.minusDays(3), today.minusDays(1))))
-                .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("ACTIVE")).andExpect(jsonPath("$.displayStatus").value("EXPIRED"))
+                        .content(body.formatted(tag + "_EXP", today, today)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("ACTIVE"))
                 .andReturn().getResponse().getContentAsString(), "$.id");
+        jdbc.sql("UPDATE voucher SET valid_from = :from, valid_to = :to, valid_from_at = NULL WHERE id = :id")
+                .param("from", today.minusDays(3)).param("to", today.minusDays(1)).param("id", UUID.fromString(expired)).update();
         String lastDay = com.jayway.jsonpath.JsonPath.read(mockMvc.perform(post("/api/v1/admin/vouchers").cookie(session).with(csrf()).contentType(MediaType.APPLICATION_JSON)
                         .content(body.formatted(tag + "_TODAY", today.minusDays(1), today)))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.displayStatus").value("ACTIVE"))

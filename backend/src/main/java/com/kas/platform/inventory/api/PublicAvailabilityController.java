@@ -131,7 +131,8 @@ public class PublicAvailabilityController {
                 .map(line -> new AvailabilityService.QuoteLine(line.roomTypeSlug(), line.quantity()))
                 .toList();
         var checks = availability.vouchers(request.propertySlug(), request.checkIn(), request.checkOut(),
-                request.adults(), request.children(), request.childAgesOrEmpty(), lines, locale);
+                request.adults(), request.children(), request.childAgesOrEmpty(), lines, locale,
+                signedInCustomerUserId());
         String currency = Money.VND;
         return checks.stream().map(c -> VoucherView.of(c, c.voucher().currency() == null ? currency
                 : c.voucher().currency().trim())).toList();

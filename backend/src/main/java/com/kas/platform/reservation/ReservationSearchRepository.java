@@ -394,9 +394,11 @@ public class ReservationSearchRepository implements ScopedRepository {
         return jdbc.sql("""
                         SELECT r.guest_email, r.guest_phone, r.guest_country,
                                r.preferred_channel::text AS preferred_channel,
-                               r.arrival_time_est, r.special_requests, r.children_ages
+                               r.arrival_time_est, r.special_requests, r.children_ages,
+                               c.customer_code
                           FROM reservation r
                           JOIN property p ON p.id = r.property_id
+                          LEFT JOIN customer c ON c.id = r.customer_id
                          WHERE r.reference = ? AND %s
                         """.formatted(filter.sql()))
                 .params(params)
@@ -407,7 +409,8 @@ public class ReservationSearchRepository implements ScopedRepository {
                         rs.getString("preferred_channel"),
                         rs.getObject("arrival_time_est", LocalTime.class),
                         rs.getString("special_requests"),
-                        childrenAges(rs)))
+                        childrenAges(rs),
+                        rs.getString("customer_code")))
                 .optional();
     }
 
@@ -545,7 +548,9 @@ public class ReservationSearchRepository implements ScopedRepository {
     /** Guest contact detail — disclosed only through the audited path. */
     public record GuestContactRow(
             String email, String phone, String country, String preferredChannel,
-            LocalTime arrivalTimeEst, String specialRequests, List<Integer> childrenAges) {
+            LocalTime arrivalTimeEst, String specialRequests, List<Integer> childrenAges,
+            /** {@code customer.customer_code} of the linked account; null for a booking made without one. */
+            String customerCode) {
     }
 
     /** One recorded transition, either lifecycle. */

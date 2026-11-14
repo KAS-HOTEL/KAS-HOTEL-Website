@@ -15,14 +15,15 @@ import java.util.UUID;
  *
  * <p>Skipped, deliberately:
  * <ul>
- *   <li>a booking whose guest already reported a bank transfer (used "I have made the
- *       transfer" link) — the money may be in the account; the hotel checks it first;</li>
  *   <li>a booking with a VERIFIED payment (cannot be PAYMENT_PENDING anyway, belt and braces);</li>
  *   <li>bookings approved before V66 ({@code payment_due_at} NULL) — they were never given a
  *       deadline, so none is enforced on them.</li>
  * </ul>
  * Expiring releases the voucher use and the KAS points at once, retires the booking's email
- * links and emails the guest and the hotel. SePay checkouts still open for it are cancelled
+ * links and emails the guest and the hotel. Just before each sweep SePayPaymentPoller asks
+ * SePay about open checkouts, so money paid shortly before the deadline confirms the booking
+ * instead of expiring with it. (A guest's "I have made the transfer" report no longer holds a
+ * booking open: manual transfer was retired on 2026-11-14.) SePay checkouts still open for it are cancelled
  * by {@link SePayCheckoutCanceller} (layer 2); money arriving afterwards is layer 3.
  */
 @Service
@@ -56,9 +57,6 @@ public class PaymentDeadlineService {
                          WHERE r.sales_status = 'PAYMENT_PENDING'
                            AND r.payment_due_at IS NOT NULL
                            AND r.payment_due_at <= now()
-                           AND NOT EXISTS (SELECT 1 FROM reservation_email_action_token tk
-                                            WHERE tk.reservation_id = r.id AND tk.action = 'GUEST_MARK_PAID'
-                                              AND tk.used_at IS NOT NULL)
                            AND NOT EXISTS (SELECT 1 FROM payment pm
                                             WHERE pm.reservation_id = r.id AND pm.status = 'VERIFIED')
                          ORDER BY r.payment_due_at

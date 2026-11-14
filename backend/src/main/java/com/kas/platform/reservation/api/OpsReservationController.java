@@ -193,6 +193,23 @@ public class OpsReservationController {
     }
 
     /**
+     * The "complete the stay" form (owner 2026-11-14): a stay nobody checked in before the
+     * hotel's check-out time became NO_SHOW; with the real check-in and check-out times it is
+     * finished as CHECKED_OUT instead. 422 VALIDATION_FAILED names each wrong field.
+     */
+    @PostMapping("/{reference}/complete-stay")
+    @PreAuthorize("hasAuthority('" + Permissions.RESERVATION_CHECKIN + "')")
+    public StayTransitionView completeStay(@PathVariable String reference,
+                                           @org.springframework.web.bind.annotation.RequestBody CompleteStayBody body) {
+        return stayTransitions.completeStay(reference, body == null ? null : body.checkedInAt(),
+                body == null ? null : body.checkedOutAt(), CurrentActor.require().actor());
+    }
+
+    /** The real times, ISO-8601 with offset (e.g. 2026-11-10T14:30:00+07:00). */
+    public record CompleteStayBody(java.time.OffsetDateTime checkedInAt, java.time.OffsetDateTime checkedOutAt) {
+    }
+
+    /**
      * Undoes a check-out confirmed by mistake (back to CHECKED_IN). The booking stops counting
      * towards the membership tier review and the member's tier drops at once if the quarter
      * falls below its threshold (owner decision 2026-11-09).

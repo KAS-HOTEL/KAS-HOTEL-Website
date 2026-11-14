@@ -2352,3 +2352,46 @@ button.kas-date-cell:disabled{color:#c9c3ba;cursor:not-allowed}
 .kas-save.is-saved svg,.find-page-save.is-saved svg{fill:currentColor}
 /* Staff accounts only: the way into the Admin/Partner console. */
 .kas-user-menu__panel a.kas-user-menu__admin{font-weight:600;color:var(--gold-dk,#9a7b3c)}
+
+/* ==========================================================================
+   SITE FOOTER (approved 2026-11-14) - one footer for every page.
+   Rendered by App.boot() -> renderFooter() into <footer id="ftr">.
+   Was the homepage V3 footer (home-v3.css 3.9); every rule is anchored on
+   #ftr.ftr-v3 so the older .ftr / .ftr__* rules cannot leak in.
+   ========================================================================== */
+#ftr.ftr-v3{
+  --ftr-bg:var(--kas-charcoal,#20241F);--ftr-ink:var(--kas-ivory,#F7F2EA);--ftr-gold:var(--kas-champagne,#BDA275);
+  background:var(--ftr-bg);color:var(--ftr-ink);padding:72px 0 0;border-top:1px solid rgba(189,162,117,.14);width:100%;overflow:hidden
+}
+#ftr.ftr-v3 .ftr-v3__wrap{width:min(1320px,calc(100% - 64px));margin-inline:auto}
+#ftr.ftr-v3 .ftr-v3__top{display:grid;grid-template-columns:minmax(220px,1.3fr) repeat(5,minmax(0,1fr));gap:36px}
+#ftr.ftr-v3 .ftr-v3__brand .logo img{width:190px!important;max-width:100%!important}
+#ftr.ftr-v3 .ftr-v3__brand p{margin:20px 0 0;color:rgba(247,242,234,.7);font-size:13px;line-height:21px;max-width:250px}
+#ftr.ftr-v3 .ftr-v3__col h5{margin:0 0 16px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ftr-gold)}
+#ftr.ftr-v3 .ftr-v3__col ul{list-style:none;margin:0;padding:0}
+#ftr.ftr-v3 .ftr-v3__col li{margin:0}
+#ftr.ftr-v3 .ftr-v3__col a,#ftr.ftr-v3 .ftr-v3__col span{display:inline-block;padding:6px 0;font-size:13px;line-height:20px;color:rgba(247,242,234,.78)}
+#ftr.ftr-v3 .ftr-v3__col a:hover{color:var(--ftr-gold)}
+#ftr.ftr-v3 .ftr-v3__contact{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:48px;padding-top:24px;border-top:1px solid rgba(189,162,117,.16);font-size:13px;color:rgba(247,242,234,.78)}
+#ftr.ftr-v3 .ftr-v3__contact a{display:inline-flex;align-items:center;gap:8px;min-height:32px;color:inherit}
+#ftr.ftr-v3 .ftr-v3__contact a:hover{color:var(--ftr-gold)}
+#ftr.ftr-v3 .ftr-v3__contact svg{color:var(--ftr-gold)}
+#ftr.ftr-v3 .ftr-v3__bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px;padding:22px 0 28px;border-top:1px solid rgba(189,162,117,.16);font-size:12px;color:rgba(247,242,234,.6)}
+#ftr.ftr-v3 .ftr-v3__legal{display:flex;gap:24px;flex-wrap:wrap}
+#ftr.ftr-v3 .ftr-v3__legal a{color:rgba(247,242,234,.7)}
+#ftr.ftr-v3 .ftr-v3__legal a:hover{color:var(--ftr-gold)}
+@media (max-width:1280px){
+  #ftr.ftr-v3 .ftr-v3__top{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #ftr.ftr-v3 .ftr-v3__brand{grid-column:1 / -1}
+}
+@media (max-width:900px){
+  #ftr.ftr-v3 .ftr-v3__wrap{width:calc(100% - 48px)}
+  #ftr.ftr-v3 .ftr-v3__top{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  #ftr.ftr-v3 .ftr-v3__wrap{width:calc(100% - 40px)}
+  #ftr.ftr-v3 .ftr-v3__top{grid-template-columns:1fr 1fr;gap:28px 20px}
+  #ftr.ftr-v3 .ftr-v3__col a,#ftr.ftr-v3 .ftr-v3__col span{padding:12px 0}
+  #ftr.ftr-v3 .ftr-v3__contact a{min-height:44px}
+  #ftr.ftr-v3 .ftr-v3__bottom{flex-direction:column;align-items:flex-start}
+}

@@ -29,9 +29,25 @@ import java.util.Map;
 public class PublicSePayIpnController {
     private static final Logger log = LoggerFactory.getLogger(PublicSePayIpnController.class);
     private final SePayGatewayService gateway;
+    private final com.kas.platform.reservation.SePayPaymentPoller poller;
 
-    public PublicSePayIpnController(SePayGatewayService gateway) {
+    public PublicSePayIpnController(SePayGatewayService gateway,
+                                    com.kas.platform.reservation.SePayPaymentPoller poller) {
         this.gateway = gateway;
+        this.poller = poller;
+    }
+
+    /**
+     * The guest is back on the website from SePay ({@code success_url}): KAS asks SePay's order
+     * API now about that booking's open checkouts, so a paid booking is confirmed without
+     * waiting for the IPN (which may never reach the server). Always 204: nothing about the
+     * booking is disclosed; the page reads the result through the guest's own booking view.
+     */
+    @PostMapping("/return/{reference}")
+    @PublicEndpoint(reason = "Guest back from SePay; triggers a read of SePay's own order record, discloses nothing")
+    public ResponseEntity<Void> returned(@org.springframework.web.bind.annotation.PathVariable String reference) {
+        poller.syncReference(reference);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/ipn", produces = MediaType.APPLICATION_JSON_VALUE)

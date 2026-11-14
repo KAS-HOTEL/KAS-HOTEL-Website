@@ -105,16 +105,36 @@ public class PropertyRepository implements ScopedRepository {
             return Optional.empty();
         }
         return jdbc.sql("""
-                        INSERT INTO property (partner_id, slug, lifecycle_state, sort_order)
+                        INSERT INTO property (partner_id, slug, lifecycle_state, sort_order, branch_code)
                         VALUES (:partnerId, :slug, 'DRAFT',
                                 coalesce((SELECT max(sort_order) + 1 FROM property
-                                           WHERE partner_id = :partnerId), 1))
+                                           WHERE partner_id = :partnerId), 1),
+                                -- The partner's lowest free two-digit branch code (BUG-002): without
+                                -- one the hotel could be published but never booked. NULL once 01-99
+                                -- are all taken; publishing then refuses (PropertyPublicationService).
+                                (SELECT to_char(n, 'FM00') FROM generate_series(1, 99) AS n
+                                  WHERE NOT EXISTS (SELECT 1 FROM property p
+                                                     WHERE p.partner_id = :partnerId
+                                                       AND p.branch_code = to_char(n, 'FM00'))
+                                  ORDER BY n LIMIT 1))
                         RETURNING id
                         """)
                 .param("partnerId", partnerId)
                 .param("slug", slug)
                 .query(UUID.class)
                 .optional();
+    }
+
+    /** Whether the property carries the branch code its booking references are built from. */
+    public boolean hasBranchCode(UUID propertyId, AuthorizationScope scope) {
+        if (findById(propertyId, scope).isEmpty()) {
+            return false;
+        }
+        return jdbc.sql("SELECT branch_code IS NOT NULL FROM property WHERE id = :id")
+                .param("id", propertyId)
+                .query(Boolean.class)
+                .optional()
+                .orElse(false);
     }
 
     /** Partner-authored display name, per locale. */

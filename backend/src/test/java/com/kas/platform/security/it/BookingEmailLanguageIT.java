@@ -16,6 +16,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,8 +30,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
+/** SePay is "on" by configuration only (fake keys): since 2026-11-14 it is the only way to pay. */
+@TestPropertySource(properties = {
+        "kas.sepay.environment=sandbox",
+        "kas.sepay.merchant-id=SP-TEST-IT",
+        "kas.sepay.secret-key=spsk_it_dummy",
+        "kas.booking.payment-deadline-sweep.enabled=false"})
 class BookingEmailLanguageIT extends SecurityIntegrationTest {
     @Autowired JdbcClient jdbc;
+    @Autowired com.kas.platform.reservation.ReservationEmailActionService actions;
     @Autowired EmailOutboxCipher outboxCipher;
     @Autowired ObjectMapper json;
     @Autowired BookingNotificationService notifications;
@@ -51,8 +59,6 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
         reference = "TEST-" + UUID.randomUUID().toString().substring(0, 8);
         fixtures.insertRawReservation(property, reference);
         jdbc.sql("UPDATE property SET email='hotel@example.invalid' WHERE id=:id").param("id", property).update();
-        // V51: every hotel is paid into the one shared KAS account.
-        jdbc.sql("UPDATE payment_account SET qr_url='https://example.invalid/hotel-qr.png', instructions=NULL, bank_name=NULL, account_holder=NULL, account_number=NULL").update();
         jdbc.sql("UPDATE reservation SET guest_name='Synthetic Guest', guest_email='guest@example.invalid', total_minor=1500000 WHERE reference=:ref").param("ref", reference).update();
         slug = jdbc.sql("SELECT slug FROM property WHERE id=:id").param("id", property).query(String.class).single();
     }
@@ -102,9 +108,12 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
         mockMvc.perform(post("/api/v1/admin/sales/requests/" + reference + "/approve-payment").cookie(session).with(csrf())).andExpect(status().isNoContent());
         JsonNode params = event("booking-payment-request-" + reference).path("params");
         assertThat(params.fieldNames()).toIterable().contains("paymentUrl", "accountHolder", "accountNumber", "bankName", "bookingReference", "checkIn", "checkOut", "firstName", "guests", "hotelName", "paymentAmount", "paymentDeadline", "paymentDescription", "qrImageUrl", "roomType", "totalAmount", "transferContent");
-        assertThat(params.path("qrImageUrl").asText()).isEqualTo("https://example.invalid/hotel-qr.png");
-        assertThat(params.path("paymentDescription").asText()).contains("/api/v1/public/reservation-actions/");
-        mockMvc.perform(post("/api/v1/admin/sales/requests/" + reference + "/confirm-payment").cookie(session).with(csrf())).andExpect(status().isNoContent());
+        // SePay only (2026-11-14): the payment link, no static QR or transfer hint.
+        assertThat(params.path("paymentUrl").asText()).contains("/api/v1/public/reservation-actions/");
+        assertThat(params.path("qrImageUrl").asText()).isEmpty();
+        assertThat(params.path("paymentDescription").asText()).isEmpty();
+        var paid = actions.confirmPaymentByGateway(reference, 1_500_000, "VND", "SEPAY-LANG-" + country, "BANK_TRANSFER");
+        notifications.bookingConfirmed(paid.booking());
         assertThat(event("booking-confirmed-" + reference).path("templateKey").asText()).isEqualTo("BOOKING_CONFIRMED");
     }
 
@@ -114,8 +123,8 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
         return login(fixtures.emailOf(admin), "email-language-admin-456!");
     }
 
-    /** KAS-014 + V51: the payment email carries the shared KAS bank details, set by SUPER_ADMIN. */
-    @Test void paymentEmailUsesTheSharedKasBankAccount() throws Exception {
+    /** V51: SUPER_ADMIN keeps the account; since 2026-11-14 (SePay only) the email carries no bank details. */
+    @Test void paymentEmailCarriesNoManualBankDetails() throws Exception {
         mockMvc.perform(put(PAYMENT_ACCOUNT).cookie(session).with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"qrImageUrl\":\"https://example.invalid/hotel-qr.png\",\"instructions\":\"Ghi mã đặt phòng\","
@@ -128,9 +137,10 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
         mockMvc.perform(post("/api/v1/admin/sales/requests/" + reference + "/approve-payment").cookie(session).with(csrf()))
                 .andExpect(status().isNoContent());
         JsonNode params = event("booking-payment-request-" + reference).path("params");
-        assertThat(params.path("bankName").asText()).isEqualTo("Vietcombank");
-        assertThat(params.path("accountHolder").asText()).isEqualTo("CONG TY KAS");
-        assertThat(params.path("accountNumber").asText()).isEqualTo("0123456789");
+        assertThat(params.path("bankName").asText()).isEmpty();
+        assertThat(params.path("accountHolder").asText()).isEmpty();
+        assertThat(params.path("accountNumber").asText()).isEmpty();
+        assertThat(params.path("qrImageUrl").asText()).isEmpty();
         assertThat(jdbc.sql("SELECT count(*) FROM audit_log WHERE action='PAYMENT_ACCOUNT_UPDATED'")
                 .query(Long.class).single()).isPositive();
     }
@@ -151,15 +161,13 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /** KAS-022: the transaction reference is stored, and one bank transaction cannot confirm two bookings. */
+    /** KAS-022: the SePay transaction is stored, and one transaction cannot confirm two bookings. */
     @Test void confirmationStoresTheTransactionReferenceAndRefusesItTwice() throws Exception {
         mockMvc.perform(post("/api/v1/admin/sales/requests/" + reference + "/approve-payment").cookie(session).with(csrf()))
                 .andExpect(status().isNoContent());
-        mockMvc.perform(post("/api/v1/admin/sales/requests/" + reference + "/confirm-payment").cookie(session).with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON).content("{\"transactionReference\":\" FT2611050001 \"}"))
-                .andExpect(status().isNoContent());
+        actions.confirmPaymentByGateway(reference, 1_500_000, "VND", " SEPAY-FT2611050001 ", "BANK_TRANSFER");
         assertThat(jdbc.sql("SELECT external_reference FROM payment p JOIN reservation r ON r.id=p.reservation_id WHERE r.reference=:ref AND p.status='VERIFIED'")
-                .param("ref", reference).query(String.class).single()).isEqualTo("FT2611050001");
+                .param("ref", reference).query(String.class).single()).isEqualTo("SEPAY-FT2611050001");
 
         String second = "TEST-" + UUID.randomUUID().toString().substring(0, 8);
         UUID property = jdbc.sql("SELECT id FROM property WHERE slug=:slug").param("slug", slug).query(UUID.class).single();
@@ -167,10 +175,10 @@ class BookingEmailLanguageIT extends SecurityIntegrationTest {
         jdbc.sql("UPDATE reservation SET guest_email='guest2@example.invalid', total_minor=900000 WHERE reference=:ref").param("ref", second).update();
         mockMvc.perform(post("/api/v1/admin/sales/requests/" + second + "/approve-payment").cookie(session).with(csrf()))
                 .andExpect(status().isNoContent());
-        mockMvc.perform(post("/api/v1/admin/sales/requests/" + second + "/confirm-payment").cookie(session).with(csrf())
-                        .contentType(MediaType.APPLICATION_JSON).content("{\"transactionReference\":\"FT2611050001\"}"))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.message").value("This transaction reference already confirms another booking."));
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                        actions.confirmPaymentByGateway(second, 900_000, "VND", "SEPAY-FT2611050001", "BANK_TRANSFER"))
+                .isInstanceOf(com.kas.platform.shared.ConflictException.class)
+                .hasMessage("This transaction reference already confirms another booking.");
         assertThat(jdbc.sql("SELECT sales_status::text FROM reservation WHERE reference=:ref").param("ref", second)
                 .query(String.class).single()).isEqualTo("PAYMENT_PENDING");
     }

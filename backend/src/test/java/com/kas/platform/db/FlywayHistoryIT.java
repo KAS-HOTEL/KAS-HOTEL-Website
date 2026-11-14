@@ -31,8 +31,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @EnabledIf("com.kas.platform.db.FlywayHistoryIT#databaseIsReachable")
 class FlywayHistoryIT {
 
-    /** V1–V67, two repeatables (distribution channels, amenities) and Flyway's schema row. */
-    private static final int EXPECTED_MIGRATIONS = 70;
+    /** V1–V72, two repeatables (distribution channels, amenities) and Flyway's schema row. */
+    private static final int EXPECTED_MIGRATIONS = 75;
 
     /**
      * The highest versioned migration. V24–V26 were added in Phase 7.5F Step 16A;
@@ -47,8 +47,12 @@ class FlywayHistoryIT {
      * payment account; V52 renames the Silver tier to Classic; V53 adds surcharges; V54 removes the Find Your KAS image slots; V55 aligns the website image slots with Homepage V3 and the Guidebook.
      * V61 SePay IPN log; V62 VAT 8%; V63/V64 cancellation fee rules and the manual refund workflow; V65 voucher holds;
      * V66 payment deadline, SePay checkout sessions and unmatched-payment follow-up; V67 the Eliana gallery photos.
+     * V68 fills SALES_FIRST_CONTACT_SLA (PT24H) where empty; V69 gives hotels without a branch code one.
+     * V70 lets a guest review a stay once it is checked out (the V33 trigger asked for COMPLETED, which no stay reaches).
+     * V71 records the real check-in / check-out times (auto check-out, auto no-show, complete-the-stay form).
+     * V72 vouchers for chosen customers or member tiers, starting the moment they are created.
      */
-    private static final int HIGHEST_VERSION = 67;
+    private static final int HIGHEST_VERSION = 72;
 
     static boolean databaseIsReachable() {
         return LocalDatabase.isReachable();

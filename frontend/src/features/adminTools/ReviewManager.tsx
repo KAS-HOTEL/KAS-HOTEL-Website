@@ -106,8 +106,9 @@ export function ReviewManager() {
                     <div className={styles.reviewIdentity}>
                       <span className={styles.rating}>{row.rating}<small>/5</small></span>
                       <div>
-                        <strong>{row.hotelKey}</strong>
+                        <strong>{row.hotelName || row.hotelKey}</strong>
                         <p className={styles.reviewMeta}>
+                          {row.hotelName ? `${row.hotelKey} · ` : ''}
                           {row.language === 'vi' ? 'Tiếng Việt' : row.language === 'en' ? 'English' : row.language}
                           {row.stayMonth ? ` · Lưu trú ${row.stayMonth.substring(0, 7)}` : ''}
                         </p>
@@ -115,6 +116,26 @@ export function ReviewManager() {
                     </div>
                     <Badge tone={status.tone}>{status.label}</Badge>
                   </div>
+                  {/* Tracing: which booking and which customer this review came from. */}
+                  <dl className={styles.reviewTrace}>
+                    <div><dt>Mã đặt phòng</dt><dd>{row.bookingReference || '—'}</dd></div>
+                    <div>
+                      <dt>Khách hàng</dt>
+                      <dd>{row.customerName || '—'}{row.customerCode ? ` (${row.customerCode})` : ''}</dd>
+                    </div>
+                    {row.guestName && row.guestName !== row.customerName && (
+                      <div><dt>Tên trên đặt phòng</dt><dd>{row.guestName}</dd></div>
+                    )}
+                    {row.submittedAt && (
+                      <div>
+                        <dt>Gửi lúc</dt>
+                        <dd>{new Date(row.submittedAt).toLocaleString('vi-VN', {
+                          timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit',
+                          day: '2-digit', month: '2-digit', year: 'numeric',
+                        })}</dd>
+                      </div>
+                    )}
+                  </dl>
                   {row.title && <h3 className={styles.reviewTitle}>{row.title}</h3>}
                   <p className={styles.reviewBody}>{row.body}</p>
                   {!row.deletedAt && (

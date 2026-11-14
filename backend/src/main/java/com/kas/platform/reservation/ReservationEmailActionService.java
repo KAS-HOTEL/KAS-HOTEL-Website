@@ -49,29 +49,13 @@ public class ReservationEmailActionService {
         this.sePay = sePay;
     }
 
-    /**
-     * Whether the guest has a way to pay (owner 2026-11-10): the SePay gateway — which makes
-     * its own QR for every order — or, without it, the static QR of the manual transfer.
-     * Package-visible for the test.
+    /*
+     * Owner 2026-11-14: SePay is the only way to pay and the only thing that confirms a payment.
+     * The manual paths are gone: the static QR / bank transfer, the guest's "I have made the
+     * transfer" report, the hotel's email link and the console's "payment received" button.
+     * A booking becomes WON only through confirmPaymentByGateway (SePay IPN, or the order-API
+     * poll in SePayPaymentPoller when an IPN is late or cannot reach the server).
      */
-    static boolean hasPaymentMethod(boolean sePayCheckout, String staticQrUrl) {
-        return sePayCheckout || (staticQrUrl != null && !staticQrUrl.isBlank());
-    }
-
-    /** Bank details for paying by hand; offered only while a static QR is kept in the payment account. */
-    public record ManualTransfer(String bankName, String accountHolder, String accountNumber, String instructions) {}
-
-    /** The manual bank transfer, or empty when KAS does not offer one (no static QR: SePay only). */
-    @Transactional(readOnly = true)
-    public Optional<ManualTransfer> manualTransfer() {
-        return jdbc.sql("""
-                SELECT bank_name, account_holder, account_number, instructions FROM payment_account
-                 WHERE qr_url IS NOT NULL AND btrim(qr_url) <> ''
-                """)
-                .query((rs, n) -> new ManualTransfer(rs.getString("bank_name"), rs.getString("account_holder"),
-                        rs.getString("account_number"), rs.getString("instructions")))
-                .optional();
-    }
 
     /** The booking's payment deadline (V66); empty when none was set (approved before V66). */
     @Transactional(readOnly = true)
@@ -114,19 +98,20 @@ public class ReservationEmailActionService {
             throw ConflictException.illegalTransition("salesStatus", action.salesStatus(), "PAYMENT_PENDING");
         }
         PaymentRequest request = applyApproval(action, "SYSTEM", null,
-                "Hotel approved availability and sent its payment QR by email.");
+                "Hotel approved availability; the SePay payment link was sent by email.");
         consume(rawToken);
         return request;
     }
 
     // ------------------------------------------------- signed-in staff actions
     //
-    // The same three hotel decisions the email links make, for staff working in
-    // the console. The caller (SalesRequestService) has already locked the
+    // The two hotel decisions the email links make, for staff working in the
+    // console. The caller (SalesRequestService) has already locked the
     // reservation inside the actor's scope. Each one retires the matching email
     // link, so a decision cannot be made twice through the other door.
+    // (Confirming a payment is not a staff decision: only SePay does it.)
 
-    /** Staff confirm availability: PAYMENT_PENDING, and the guest is sent the hotel's QR. */
+    /** Staff confirm availability: PAYMENT_PENDING, and the guest is sent the SePay payment link. */
     @Transactional
     public PaymentRequest approveForStaff(UUID reservationId, UUID actorId) {
         EmailActionView action = viewOf(reservationId);
@@ -134,7 +119,7 @@ public class ReservationEmailActionService {
             throw ConflictException.illegalTransition("salesStatus", action.salesStatus(), "PAYMENT_PENDING");
         }
         PaymentRequest request = applyApproval(action, "ADMIN", actorId,
-                "Hotel staff approved availability and sent the payment QR.");
+                "Hotel staff approved availability; the SePay payment link was sent.");
         invalidateTokens(reservationId, "REVIEW");
         return request;
     }
@@ -154,27 +139,6 @@ public class ReservationEmailActionService {
                 "Hotel staff proposed an alternative stay.");
         invalidateTokens(reservationId, "REVIEW");
         return proposal;
-    }
-
-    /** Staff verified the money arrived: the payment is recorded and the stay confirmed. */
-    @Transactional
-    public EmailActionView confirmPaymentForStaff(UUID reservationId, UUID actorId) {
-        return confirmPaymentForStaff(reservationId, actorId, null);
-    }
-
-    /** As above, recording the bank transaction reference staff typed (optional). */
-    @Transactional
-    public EmailActionView confirmPaymentForStaff(UUID reservationId, UUID actorId, String transactionReference) {
-        EmailActionView action = viewOf(reservationId);
-        if (!"PAYMENT_PENDING".equals(action.salesStatus())) {
-            throw ConflictException.illegalTransition("salesStatus", action.salesStatus(), "WON");
-        }
-        applyPaymentConfirmation(action, "ADMIN", actorId,
-                "Hotel staff verified receipt in the console.", "Hotel staff verified payment; reservation confirmed.",
-                transactionReference);
-        invalidateTokens(reservationId, "GUEST_MARK_PAID");
-        invalidateTokens(reservationId, "HOTEL_CONFIRM_PAYMENT");
-        return action;
     }
 
     /** What a gateway notification did to the booking it names. */
@@ -213,21 +177,13 @@ public class ReservationEmailActionService {
     }
 
     private PaymentRequest applyApproval(EmailActionView action, String actorType, UUID actorId, String note) {
-        // V51: every hotel is paid into the one KAS account (payment_account, a single row).
         jdbc.sql("SELECT id FROM reservation WHERE id = :reservationId FOR UPDATE")
                 .param("reservationId", action.reservationId()).query(UUID.class).single();
-        PaymentProfile profile = jdbc.sql("""
-                SELECT qr_url, instructions, bank_name, account_holder, account_number
-                  FROM payment_account
-                """)
-                .query((rs, n) -> new PaymentProfile(rs.getString("qr_url"),
-                        rs.getString("instructions"), rs.getString("bank_name"),
-                        rs.getString("account_holder"), rs.getString("account_number"))).single();
-        // With SePay on, SePay makes the QR for each order: the static QR is optional and only
-        // offered as a manual-transfer fallback. Without SePay the static QR is the only way to pay.
-        if (!hasPaymentMethod(sePay.checkoutEnabled(), profile.qrUrl())) {
+        // SePay is the only way to pay (owner 2026-11-14): it makes the bank QR for every order
+        // and reports the result. Without it there is nothing to send the guest.
+        if (!sePay.checkoutEnabled()) {
             throw new BusinessRuleException(ApiErrorCode.CONFIG_MISSING,
-                    "No way to pay is configured: turn on the SePay gateway or add the payment QR in the payment account.");
+                    "The SePay payment gateway is not configured (KAS_SEPAY_MERCHANT_ID / KAS_SEPAY_SECRET_KEY).");
         }
         // V66: the payment deadline — 24h, 2h for a stay starting today, never past check-in.
         OffsetDateTime now = OffsetDateTime.now(PaymentDeadline.HOTEL_ZONE);
@@ -239,12 +195,11 @@ public class ReservationEmailActionService {
                 paymentWindow, sameDayPaymentWindow);
         jdbc.sql("""
                 UPDATE reservation SET sales_status = 'PAYMENT_PENDING',
-                       payment_qr_url_snapshot = :qr,
-                       payment_instructions_snapshot = :instructions,
+                       payment_qr_url_snapshot = NULL,
+                       payment_instructions_snapshot = NULL,
                        payment_requested_at = now(), payment_due_at = :dueAt, updated_at = now()
                  WHERE id = :reservationId AND sales_status = CAST(:fromStatus AS sales_status)
                 """)
-                .param("qr", profile.qrUrl()).param("instructions", profile.instructions())
                 .param("dueAt", dueAt)
                 .param("reservationId", action.reservationId())
                 .param("fromStatus", action.salesStatus()).update();
@@ -254,20 +209,7 @@ public class ReservationEmailActionService {
         Duration linkLifetime = Duration.between(now, dueAt);
         String guestToken = tokens.issue(action.reservationId(), "GUEST_MARK_PAID", action.guestEmail(),
                 linkLifetime.compareTo(Duration.ofMinutes(1)) < 0 ? Duration.ofMinutes(1) : linkLifetime);
-        return new PaymentRequest(action, profile.qrUrl(), profile.instructions(), guestToken,
-                profile.bankName(), profile.accountHolder(), profile.accountNumber(), dueAt);
-    }
-
-    @Transactional
-    public HotelPaymentCheck guestReportedPaid(String rawToken) {
-        EmailActionView action = find(rawToken, true);
-        if (!"GUEST_MARK_PAID".equals(action.action()) || !"PAYMENT_PENDING".equals(action.salesStatus())) {
-            throw ConflictException.illegalTransition("salesStatus", action.salesStatus(), "PAYMENT_PENDING");
-        }
-        consume(rawToken);
-        String hotelToken = tokens.issue(action.reservationId(), "HOTEL_CONFIRM_PAYMENT",
-                action.hotelEmail(), Duration.ofDays(3));
-        return new HotelPaymentCheck(action, hotelToken);
+        return new PaymentRequest(action, guestToken, dueAt);
     }
 
     @Transactional
@@ -348,30 +290,6 @@ public class ReservationEmailActionService {
      * website. Old email links answer an explanatory page and change nothing
      * (PublicReservationEmailActionController).
      */
-
-    @Transactional
-    public EmailActionView confirmPayment(String rawToken) {
-        return confirmPayment(rawToken, null);
-    }
-
-    /** As above, recording the bank transaction reference the hotel typed (optional). */
-    @Transactional
-    public EmailActionView confirmPayment(String rawToken, String transactionReference) {
-        EmailActionView action = find(rawToken, true);
-        if (!"HOTEL_CONFIRM_PAYMENT".equals(action.action()) || !"PAYMENT_PENDING".equals(action.salesStatus())) {
-            throw ConflictException.illegalTransition("salesStatus", action.salesStatus(), "WON");
-        }
-        applyPaymentConfirmation(action, "SYSTEM", null,
-                "Hotel verified receipt through the booking email action.",
-                "Hotel verified payment; reservation confirmed.", transactionReference);
-        consume(rawToken);
-        return action;
-    }
-
-    private void applyPaymentConfirmation(EmailActionView action, String actorType, UUID actorId,
-                                          String paymentNote, String historyNote, String transactionReference) {
-        applyPaymentConfirmation(action, actorType, actorId, paymentNote, historyNote, transactionReference, "QR");
-    }
 
     private void applyPaymentConfirmation(EmailActionView action, String actorType, UUID actorId,
                                           String paymentNote, String historyNote, String transactionReference,
@@ -552,9 +470,6 @@ public class ReservationEmailActionService {
                 .param("ref", reference).param("id", reservationId).query(Long.class).single() > 0;
     }
 
-    private record PaymentProfile(String qrUrl, String instructions, String bankName,
-                                  String accountHolder, String accountNumber) {}
-
     public record EmailActionView(UUID reservationId, String action, String salesStatus,
                                   String reference, String guestName, String guestEmail,
                                   java.time.LocalDate checkIn, java.time.LocalDate checkOut,
@@ -566,12 +481,9 @@ public class ReservationEmailActionService {
                                   Long offerTotalMinor, String offerMessage, Integer offerQuantity,
                                   int adults, int children, String guestCountry) {}
 
-    public record PaymentRequest(EmailActionView booking, String qrUrl,
-                                 String instructions, String guestToken,
-                                 String bankName, String accountHolder, String accountNumber,
-                                 /** The payment deadline (V66). */
+    /** The SePay payment link (guest token) and its deadline (V66), for the payment email. */
+    public record PaymentRequest(EmailActionView booking, String guestToken,
                                  OffsetDateTime paymentDueAt) {}
-    public record HotelPaymentCheck(EmailActionView booking, String hotelToken) {}
     public record AlternativeOfferInput(String propertySlug, String roomTypeSlug,
                                         LocalDate checkIn, LocalDate checkOut, int quantity,
                                         long totalMinor, String message) {}

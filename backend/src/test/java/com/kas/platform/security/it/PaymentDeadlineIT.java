@@ -4,6 +4,7 @@ import com.kas.platform.reservation.PaymentDeadlineService;
 import com.kas.platform.reservation.SePayCheckoutCanceller;
 import com.kas.platform.reservation.SePayGatewayService;
 import com.kas.platform.reservation.SePayOrderApi;
+import com.kas.platform.reservation.SePayPaymentPoller;
 import com.kas.platform.reservation.UnmatchedPaymentService;
 import com.kas.platform.reservation.VoucherHoldService;
 import com.kas.platform.shared.EmailOutboxCipher;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.time.OffsetDateTime;
@@ -33,8 +35,15 @@ import static org.mockito.Mockito.when;
  * V66 against the real schema: the payment deadline expires a booking and gives its voucher
  * use back (layer 1), a paid SePay checkout is never cancelled (layer 2), and money SePay
  * reports for a booking that can no longer take it is alerted and settled by SUPER_ADMIN
- * (layer 3). Rolled back.
+ * (layer 3). Since 2026-11-14 KAS also asks SePay's order API about open checkouts, so a paid
+ * order confirms its booking without an IPN. Rolled back. SePay is "on" by configuration only
+ * (fake keys; the order API is a mock); the background sweep is off.
  */
+@TestPropertySource(properties = {
+        "kas.sepay.environment=sandbox",
+        "kas.sepay.merchant-id=SP-TEST-IT",
+        "kas.sepay.secret-key=spsk_it_dummy",
+        "kas.booking.payment-deadline-sweep.enabled=false"})
 class PaymentDeadlineIT extends SecurityIntegrationTest {
 
     @Autowired JdbcClient jdbc;
@@ -45,6 +54,7 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
     @Autowired SePayGatewayService gateway;
     @Autowired SePayCheckoutCanceller checkouts;
     @Autowired UnmatchedPaymentService unmatched;
+    @Autowired SePayPaymentPoller poller;
     /** SePay's order API, answering that every order asked about was paid 972,000 VND. */
     @MockitoBean SePayOrderApi orderApi;
 
@@ -149,8 +159,8 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
     }
 
     @Test
-    @DisplayName("a booking whose guest reported a transfer is left for the hotel to check, not expired")
-    void reportedTransferIsNotExpired() {
+    @DisplayName("a guest's old 'I have made the transfer' report no longer holds a booking open (SePay only)")
+    void reportedTransferStillExpires() {
         UUID reported = pending(OffsetDateTime.now().minusMinutes(5));
         jdbc.sql("""
                 INSERT INTO reservation_email_action_token (reservation_id, action, token_hash, recipient_email,
@@ -158,8 +168,8 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
                 VALUES (:id, 'GUEST_MARK_PAID', :hash, 'guest@example.com', now() - interval '1 hour',
                         now() - interval '1 minute', now() - interval '10 minutes')
                 """).param("id", reported).param("hash", UUID.randomUUID().toString()).update();
-        assertThat(deadlines.expireOverdue()).doesNotContain(reference(reported));
-        assertThat(salesStatus(reported)).isEqualTo("PAYMENT_PENDING");
+        assertThat(deadlines.expireOverdue()).contains(reference(reported));
+        assertThat(salesStatus(reported)).isEqualTo("EXPIRED");
     }
 
     @Test
@@ -214,5 +224,50 @@ class PaymentDeadlineIT extends SecurityIntegrationTest {
         assertThat(salesStatus(booking)).isEqualTo("WON");
         assertThat(jdbc.sql("SELECT status FROM sepay_checkout WHERE invoice_number = :i").param("i", invoice)
                 .query(String.class).single()).isEqualTo("PAID");
+    }
+
+    @Test
+    @DisplayName("asking SePay confirms a paid checkout with no IPN; the IPN arriving later is not unmatched money")
+    void orderPollConfirmsWithoutIpn() throws Exception {
+        UUID booking = pending(OffsetDateTime.now().plusHours(2));
+        String invoice = reference(booking) + "-P1";
+        checkouts.record(invoice, booking, 972_000);
+
+        poller.syncReference(reference(booking));
+
+        assertThat(salesStatus(booking)).isEqualTo("WON");
+        assertThat(jdbc.sql("SELECT status FROM sepay_checkout WHERE invoice_number = :i").param("i", invoice)
+                .query(String.class).single()).isEqualTo("PAID");
+        assertThat(jdbc.sql("SELECT match_status FROM sepay_ipn_event WHERE order_invoice_number = :i")
+                .param("i", invoice).query(String.class).single()).isEqualTo("CONFIRMED");
+        assertThat(jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id = :id AND status = 'VERIFIED'")
+                .param("id", booking).query(Long.class).single()).isEqualTo(1);
+        assertThat(outboxEvent("booking-confirmed-" + reference(booking)).path("templateKey").asText())
+                .isEqualTo("BOOKING_CONFIRMED");
+
+        // SePay's IPN for the same order, with its own transaction id shape: nothing new.
+        assertThat(gateway.handleIpn(ipn(invoice, 972_000, "ipn-" + UUID.randomUUID()))).isEqualTo("IGNORED");
+        assertThat(jdbc.sql("SELECT count(*) FROM sepay_ipn_event WHERE reservation_id = :id AND alert_sent_at IS NOT NULL")
+                .param("id", booking).query(Long.class).single()).isZero();
+        assertThat(jdbc.sql("SELECT count(*) FROM payment WHERE reservation_id = :id")
+                .param("id", booking).query(Long.class).single()).isEqualTo(1);
+    }
+
+    @Test
+    @DisplayName("an order SePay has not captured yet changes nothing and records nothing")
+    void unpaidOrderChangesNothing() {
+        UUID booking = pending(OffsetDateTime.now().plusHours(2));
+        String invoice = reference(booking) + "-P2";
+        checkouts.record(invoice, booking, 972_000);
+        when(orderApi.order(invoice)).thenReturn(Optional.of(new SePayOrderApi.Order(
+                invoice, "PENDING", 972_000L, "VND", List.of())));
+
+        poller.syncReference(reference(booking));
+
+        assertThat(salesStatus(booking)).isEqualTo("PAYMENT_PENDING");
+        assertThat(jdbc.sql("SELECT status FROM sepay_checkout WHERE invoice_number = :i").param("i", invoice)
+                .query(String.class).single()).isEqualTo("OPEN");
+        assertThat(jdbc.sql("SELECT count(*) FROM sepay_ipn_event WHERE order_invoice_number = :i")
+                .param("i", invoice).query(Long.class).single()).isZero();
     }
 }

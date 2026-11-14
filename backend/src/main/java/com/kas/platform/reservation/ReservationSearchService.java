@@ -337,7 +337,7 @@ public class ReservationSearchService {
         return new ReservationDetailView.Guest(
                 row.guestName(), contact.email(), contact.phone(), contact.country(),
                 contact.preferredChannel(), contact.arrivalTimeEst(), contact.specialRequests(),
-                contact.childrenAges());
+                contact.childrenAges(), contact.customerCode());
     }
 
     private static ReservationSummaryView summary(ReservationSearchRepository.ReservationRow row,

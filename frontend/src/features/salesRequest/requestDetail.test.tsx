@@ -73,7 +73,7 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe('detail view — manual payment workflow', () => {
-  it('offers QR approval before payment and bank verification only at PAYMENT_PENDING', () => {
+  it('offers approval before payment and no manual payment confirmation at PAYMENT_PENDING (SePay only)', () => {
     for (const status of ['REQUESTED', 'ASSIGNED', 'AVAILABILITY_CHECK', 'CUSTOMER_CONTACTED']) {
       render(<SalesRequestDetailView request={detail(status)} now={NOW} />);
       expect(screen.getByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeTruthy();
@@ -81,7 +81,9 @@ describe('detail view — manual payment workflow', () => {
       cleanup();
     }
     render(<SalesRequestDetailView request={detail('PAYMENT_PENDING')} now={NOW} />);
-    expect(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Xác nhận thủ công' })).toBeNull();
+    expect(screen.getByText(/tự động xác nhận/)).toBeTruthy();
     expect(screen.queryByRole('button', { name: 'Còn phòng — xác nhận và gửi link thanh toán' })).toBeNull();
   });
   it('offers neither payment action after an offer or a terminal decision', () => {

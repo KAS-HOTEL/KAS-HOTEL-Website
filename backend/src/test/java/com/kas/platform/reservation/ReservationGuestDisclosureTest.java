@@ -222,7 +222,7 @@ class ReservationGuestDisclosureTest {
         @Override
         public Optional<GuestContactRow> guestContact(String reference, AuthorizationScope scope) {
             return Optional.of(new GuestContactRow(
-                    "an@example.invalid", "0901234567", "VN", "PHONE", null, null, null));
+                    "an@example.invalid", "0901234567", "VN", "PHONE", null, null, null, null));
         }
 
         @Override

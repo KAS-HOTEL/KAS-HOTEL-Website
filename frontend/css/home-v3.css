@@ -266,44 +266,11 @@
 .home-v3 .hv3-invite__inner{padding-block:clamp(72px,8vw,104px);display:flex;flex-direction:column;align-items:center}
 .home-v3 .hv3-invite__inner p{color:rgba(247,242,234,.78);margin:18px 0 32px}
 
-/* ==========================================================================
-   3.9 FOOTER V3 (rendered by App.boot({footer:'v3'}) on the homepage only)
-   ========================================================================== */
-.home-v3 #ftr.ftr-v3{background:var(--hv3-charcoal);color:var(--hv3-ivory);padding:72px 0 0;border-top:1px solid rgba(189,162,117,.14)}
-.home-v3 .ftr-v3__wrap{width:min(1320px,calc(100% - 64px));margin-inline:auto}
-.home-v3 .ftr-v3__top{display:grid;grid-template-columns:minmax(220px,1.3fr) repeat(5,minmax(0,1fr));gap:36px}
-.home-v3 .ftr-v3__brand .logo img{width:190px!important;max-width:100%!important}
-.home-v3 .ftr-v3__brand p{margin:20px 0 0;color:rgba(247,242,234,.7);font-size:13px;line-height:21px;max-width:250px}
-.home-v3 .ftr-v3__col h5{
-  margin:0 0 16px;font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--hv3-gold);
-}
-.home-v3 .ftr-v3__col ul{list-style:none;margin:0;padding:0}
-.home-v3 .ftr-v3__col li{margin:0}
-.home-v3 .ftr-v3__col a,.home-v3 .ftr-v3__col span{display:inline-block;padding:6px 0;font-size:13px;line-height:20px;color:rgba(247,242,234,.78)}
-.home-v3 .ftr-v3__col a:hover{color:var(--hv3-gold)}
-.home-v3 .ftr-v3__contact{
-  display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:48px;padding-top:24px;border-top:1px solid rgba(189,162,117,.16);
-  font-size:13px;color:rgba(247,242,234,.78);
-}
-.home-v3 .ftr-v3__contact a{display:inline-flex;align-items:center;gap:8px;min-height:32px}
-.home-v3 .ftr-v3__contact a:hover{color:var(--hv3-gold)}
-.home-v3 .ftr-v3__contact svg{color:var(--hv3-gold)}
-.home-v3 .ftr-v3__bottom{
-  display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
-  margin-top:20px;padding:22px 0 28px;border-top:1px solid rgba(189,162,117,.16);
-  font-size:12px;color:rgba(247,242,234,.6);
-}
-.home-v3 .ftr-v3__legal{display:flex;gap:24px;flex-wrap:wrap}
-.home-v3 .ftr-v3__legal a{color:rgba(247,242,234,.7)}
-.home-v3 .ftr-v3__legal a:hover{color:var(--hv3-gold)}
+/* 3.9 Footer: moved to components.css (#ftr.ftr-v3) on 2026-11-14 - it is the footer of every page now. */
 
 /* ==========================================================================
    RESPONSIVE
    ========================================================================== */
-@media (max-width:1280px){
-  .home-v3 .ftr-v3__top{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .home-v3 .ftr-v3__brand{grid-column:1 / -1}
-}
 @media (max-width:1100px){
   .home-v3 .hv3-carousel__arrow--prev{left:-14px}
   .home-v3 .hv3-carousel__arrow--next{right:-14px}
@@ -315,7 +282,7 @@
   .home-v3 .hv3-timeline__stop p{font-size:12px;line-height:17px}
 }
 @media (max-width:900px){
-  .home-v3 .hv3-wrap,.home-v3 .ftr-v3__wrap{width:calc(100% - 48px)}
+  .home-v3 .hv3-wrap{width:calc(100% - 48px)}
   .home-v3 .hv3-head{grid-template-columns:1fr;gap:16px}
   .home-v3 .hv3-head p{justify-self:start}
   .home-v3 .hv3-benefits__list{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -339,10 +306,9 @@
   .home-v3 .hv3-guide::after{background:linear-gradient(180deg,rgba(32,36,31,.55) 0%,rgba(32,36,31,.92) 70%)}
   .home-v3 .hv3-guide__inner{min-height:460px;align-items:flex-end}
   .home-v3 .hv3-rooms__grid{grid-template-columns:1fr}
-  .home-v3 .ftr-v3__top{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 @media (max-width:640px){
-  .home-v3 .hv3-wrap,.home-v3 .ftr-v3__wrap{width:calc(100% - 40px)}
+  .home-v3 .hv3-wrap{width:calc(100% - 40px)}
   .home-v3 .hv3-hero{height:auto;min-height:clamp(560px,100svh,720px);align-items:flex-end}
   .home-v3 .hv3-hero__inner{padding-block:calc(var(--nav-h,76px) + 40px) 56px}
   .home-v3 .hv3-hero__shade{
@@ -362,8 +328,4 @@
   .home-v3 .hv3-carousel__arrow{width:40px;height:40px;font-size:22px}
   .home-v3 .hv3-carousel__arrow--prev{left:8px}
   .home-v3 .hv3-carousel__arrow--next{right:8px}
-  .home-v3 .ftr-v3__top{grid-template-columns:1fr 1fr;gap:28px 20px}
-  .home-v3 .ftr-v3__col a,.home-v3 .ftr-v3__col span{padding:12px 0}
-  .home-v3 .ftr-v3__contact a{min-height:44px}
-  .home-v3 .ftr-v3__bottom{flex-direction:column;align-items:flex-start}
 }

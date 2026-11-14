@@ -139,6 +139,8 @@ export interface ReservationGuest {
   readonly arrivalTimeEst: string | null;
   readonly specialRequests: string | null;
   readonly childrenAges: readonly number[] | null;
+  /** The linked account's staff-facing code (KAS-…); absent for a booking made without an account. */
+  readonly customerCode?: string | null;
 }
 
 /**

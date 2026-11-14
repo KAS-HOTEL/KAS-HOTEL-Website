@@ -324,24 +324,8 @@ public class AdminSalesRequestController {
                 requests.proposeAlternative(reference, body.toInput(), CurrentActor.require().actor()));
     }
 
-    /**
-     * Doc 152 §4 — the hotel has checked its bank account and the money arrived:
-     * the payment is recorded as VERIFIED, the request is {@code WON} and the stay
-     * {@code CONFIRMED}. A guest's "I have paid" report never does this.
-     */
-    @PostMapping("/{reference}/confirm-payment")
-    @PreAuthorize("hasAuthority('" + Permissions.RESERVATION_WIN + "')")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @org.springframework.transaction.annotation.Transactional
-    public void confirmPayment(@PathVariable String reference,
-                               @org.springframework.web.bind.annotation.RequestBody(required = false) ConfirmPaymentBody body) {
-        notifications.bookingConfirmed(requests.confirmPaymentReceived(reference, CurrentActor.require().actor(),
-                body == null ? null : body.transactionReference()));
-    }
-
-    /** Optional: the bank transaction reference, stored on the VERIFIED payment (V50 keeps it unique). */
-    public record ConfirmPaymentBody(@jakarta.validation.constraints.Size(max = 120) String transactionReference) {
-    }
+    // POST /{reference}/confirm-payment ("payment received") was removed on 2026-11-14:
+    // SePay is the only way to pay and only SePay confirms a payment (IPN or order-API poll).
 
     @PostMapping("/{reference}/win")
     @PreAuthorize("hasAuthority('" + Permissions.RESERVATION_WIN + "')")

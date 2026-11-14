@@ -1,5 +1,5 @@
 import { api } from '../client';
-import type { GuestReview, ReviewAction, Voucher, CreateVoucher, Customer, UpdateCustomer } from '@/lib/domain/adminTools';
+import type { GuestReview, ReviewAction, Voucher, CreateVoucher, Customer, UpdateCustomer, VoucherCustomer, VoucherTier } from '@/lib/domain/adminTools';
 
 export const ADMIN_LIST_PAGE_SIZE = 50;
 
@@ -11,6 +11,10 @@ export const vouchersApi = {
   list: (q: string, status: string) => api.get<Voucher[]>('/api/v1/admin/vouchers', { query: { q, status } }),
   create: (body: CreateVoucher) => api.post<Voucher>('/api/v1/admin/vouchers', body),
   setStatus: (id: string, status: string) => api.patch<Voucher>(`/api/v1/admin/vouchers/${encodeURIComponent(id)}/status`, { status }),
+  /** Active member tiers, for a voucher meant for some tiers. */
+  tiers: () => api.get<VoucherTier[]>('/api/v1/admin/vouchers/tiers'),
+  /** Customers by customer code, email or name (at least 2 characters), at most 10. */
+  searchCustomers: (q: string) => api.get<VoucherCustomer[]>('/api/v1/admin/vouchers/customers', { query: { q } }),
 };
 /** Customer list filters; dates are YYYY-MM-DD in the business time zone, inclusive. */
 export interface CustomerFilter {

@@ -40,6 +40,7 @@ import java.util.regex.Pattern;
  * {@code forward-headers-strategy: framework} takes from {@code X-Forwarded-For}. The
  * website's proxy ({@code frontend/server.js}) replaces that header with the address its
  * own trusted proxy reported, so a value typed by the client does not reach this filter.
+ * The RFC 7239 {@code Forwarded} header is ignored altogether ({@link ProxyAddressConfig}).
  *
  * <p>Limits are per window ({@code kas.rate-limit.window}, default one minute) and
  * configurable; {@code kas.rate-limit.enabled=false} removes the filter (tests do).

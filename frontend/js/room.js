@@ -42,7 +42,29 @@
   }
 
   /* ---------- reviews block ---------- */
-  function reviewsHTML(h) {
+  function isVi() { return !!(global.KAS_I18N && global.KAS_I18N.getLanguage() === 'vi'); }
+
+  /* Approved reviews written by KAS guests (/api/v1/public/reviews, 2026-11-14), first in the list. */
+  function kasReviewCard(r, vi) {
+    var name = r.reviewerName || (vi ? 'Khách KAS' : 'KAS guest');
+    var stay = '';
+    if (r.stayMonth) {
+      var p = String(r.stayMonth).split('-');
+      stay = vi ? 'Đã lưu trú tháng ' + (+p[1]) + '/' + p[0]
+        : 'Stayed ' + new Date(+p[0], +p[1] - 1, 1).toLocaleString('en', { month: 'long' }) + ' ' + p[0];
+    }
+    return '<div class="revcard revcard--kas" data-kas-review>' +
+      '<div class="revcard__hd"><span class="avatar">' + U.initials(name) + '</span>' +
+        '<div style="min-width:0"><b style="font-size:.85rem;display:block">' + U.esc(name) + '</b>' +
+        '<span class="tiny muted">' + U.esc(stay) + (stay ? ' · ' : '') + U.esc(vi ? 'Khách KAS đã lưu trú' : 'Verified KAS stay') + '</span></div>' +
+        '<span style="margin-left:auto;color:var(--gold)">' + U.stars(r.rating, 12) + '</span></div>' +
+      (r.title ? '<p style="font-size:.88rem;font-weight:600;margin:0 0 4px">' + U.esc(r.title) + '</p>' : '') +
+      '<p style="font-size:.86rem;line-height:1.65;margin:0;white-space:pre-line">“' + U.esc(r.body || '') + '”</p></div>';
+  }
+
+  function reviewsHTML(h, kasReviews) {
+    var kas = kasReviews || [];
+    var vi = isVi();
     var revs = h.guestReviews || [];
     var subs = h.subRatings;
     // Distribution derived from the property's published average + volume.
@@ -50,9 +72,12 @@
 
     return '<div class="between" style="margin-bottom:22px;flex-wrap:wrap">' +
         '<div><h2 style="font-size:1.5rem">Guest reviews</h2>' +
-        '<p class="tiny muted" style="margin:3px 0 0">Verified reviews from ' + U.esc(h.ratingSource) +
-        '' +
-        '</p></div>' +
+        (kas.length
+          ? '<p class="tiny muted" style="margin:3px 0 0">' + U.esc(vi
+              ? 'Đánh giá của khách đã lưu trú tại KAS · điểm tổng hợp từ ' + h.ratingSource
+              : 'Reviews by guests who stayed with KAS · overall score from ' + h.ratingSource) + '</p></div>'
+          : '<p class="tiny muted" style="margin:3px 0 0">Verified reviews from ' + U.esc(h.ratingSource) +
+            '</p></div>') +
       '</div>' +
       '<div style="display:grid;grid-template-columns:300px 1fr;gap:26px;align-items:start" class="revgrid">' +
         '<div class="card">' +
@@ -61,6 +86,7 @@
               '<span style="font-size:1.1rem;color:var(--tx-3)">/10</span></div>' +
             '<div style="color:var(--gold);margin:9px 0 5px;display:flex;justify-content:center">' + U.stars(h.rating / 2, 15) + '</div>' +
             '<div class="tiny muted">Based on ' + h.reviews + ' reviews</div>' +
+            (kas.length ? kasSummary(kas, vi) : '') +
           '</div>' +
           '<div style="padding-top:16px;display:flex;flex-direction:column;gap:7px">' +
             dist.map(function (d) {
@@ -78,6 +104,7 @@
             }).join('') : '') +
         '</div>' +
         '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px" class="revlist">' +
+          kas.map(function (r) { return kasReviewCard(r, vi); }).join('') +
           (revs.length ? revs.map(function (r) {
             return '<div class="revcard">' +
               '<div class="revcard__hd"><span class="avatar">' + U.initials(r.name) + '</span>' +
@@ -85,10 +112,33 @@
                 '<span class="tiny muted">' + 'Stayed ' + U.esc(r.date) + '</span></div>' +
                 '<span style="margin-left:auto;color:var(--gold)">' + U.stars(r.stars, 12) + '</span></div>' +
               '<p style="font-size:.86rem;line-height:1.65;margin:0">“' + U.esc(r.text) + '”</p></div>';
-          }).join('') :
+          }).join('') : kas.length ? '' :
             '<p class="muted">Individual review text is not available from source for this property.</p>') +
         '</div>' +
       '</div>';
+  }
+
+  /* The KAS guests' own score (1–5), under the OTA aggregate. */
+  function kasSummary(kas, vi) {
+    var avg = kas.reduce(function (a, r) { return a + (+r.rating || 0); }, 0) / kas.length;
+    return '<div class="kas-review-summary" style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);font-size:.8rem">' +
+      '<b>' + U.esc(vi ? 'Khách KAS' : 'KAS guests') + ': ' + avg.toFixed(1) + '/5</b> · ' +
+      U.esc(vi ? kas.length + ' đánh giá' : kas.length + ' review' + (kas.length === 1 ? '' : 's')) + '</div>';
+  }
+
+  /**
+   * Paints the block at once (OTA content), then adds the approved KAS reviews when they arrive.
+   * A failed request leaves the OTA content as it is.
+   */
+  function mountReviews(host, h) {
+    if (!host) return;
+    host.innerHTML = reviewsHTML(h);
+    if (!global.KAS_API || !global.KAS_API.request || !h || !h.id) return;
+    global.KAS_API.request('/api/v1/public/reviews?hotelKey=' + encodeURIComponent(h.id)).then(function (list) {
+      if (!Array.isArray(list) || !list.length) return;
+      host.innerHTML = reviewsHTML(h, list);
+      if (global.KAS_I18N) global.KAS_I18N.apply();
+    }).catch(function () { /* OTA content stays */ });
   }
 
   /** Plausible 1–5 star split reconstructed from the published mean + count. */
@@ -113,6 +163,6 @@
 
   global.RoomUI = {
     specStripHTML: specStripHTML, policiesHTML: policiesHTML,
-    reviewsHTML: reviewsHTML, distribution: distribution
+    reviewsHTML: reviewsHTML, mountReviews: mountReviews, distribution: distribution
   };
 })(window);

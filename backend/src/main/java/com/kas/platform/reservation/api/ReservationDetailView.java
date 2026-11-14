@@ -95,10 +95,14 @@ public record ReservationDetailView(
     /**
      * The guest, as they submitted themselves.
      *
-     * <p>{@code customerId} is intentionally not exposed. Anonymous bookings
+     * <p>{@code customerId} (the internal uuid) is intentionally not exposed. Anonymous bookings
      * leave {@code reservation.customer_id} NULL, while authenticated bookings
      * can link it to the customer's account; in both cases the contact details
      * on the reservation are the booking-time guest record.
+     *
+     * <p>{@code customerCode} is the account's staff-facing code (KAS-…), the one the customer
+     * list shows, so a booking can be traced to its customer (owner, 2026-11-14). It is null for
+     * a booking made without an account.
      */
     public record Guest(
             String fullName,
@@ -115,7 +119,8 @@ public record ReservationDetailView(
              * <p>V12's {@code reservation_children_ages_match} makes the array's
              * length equal {@code children}, so this is never a partial list.
              */
-            List<Integer> childrenAges) {
+            List<Integer> childrenAges,
+            String customerCode) {
     }
 
     /**

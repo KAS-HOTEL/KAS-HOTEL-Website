@@ -97,6 +97,24 @@ class PropertyCreationIT extends SecurityIntegrationTest {
         assertThat(intField(second, "sortOrder")).isGreaterThan(intField(first, "sortOrder"));
     }
 
+    @Test
+    @DisplayName("a new property gets the partner's next free branch code, so it can take bookings (BUG-002)")
+    void createdPropertyGetsABranchCode() throws Exception {
+        Partner partner = partnerAccount();
+
+        String first = mockMvc.perform(create(partner, uniqueSlug(), "Kas First"))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        String second = mockMvc.perform(create(partner, uniqueSlug(), "Kas Second"))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        UUID firstId = UUID.fromString(com.jayway.jsonpath.JsonPath.read(first, "$.id"));
+        UUID secondId = UUID.fromString(com.jayway.jsonpath.JsonPath.read(second, "$.id"));
+        assertThat(fixtures.branchCodeOf(firstId)).isEqualTo("01");
+        assertThat(fixtures.branchCodeOf(secondId)).isEqualTo("02");
+    }
+
     // ------------------------------------------------------------ authorization
 
     @Test

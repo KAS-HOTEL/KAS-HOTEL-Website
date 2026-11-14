@@ -15,14 +15,14 @@ import styles from '@/features/adminTools/AdminTools.module.css';
 
 export function ManualBookingActions({ request, payment = null }: {
   readonly request: SalesRequestSummary;
-  /** Payment options from the detail (2026-11-12); null from older servers = manual flow. */
+  /** Payment options from the detail (2026-11-12); null from older servers. */
   readonly payment?: SalesRequestPayment | null;
 }) {
   const router = useRouter();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const [confirm, setConfirm] = useState<'approve' | 'paid' | 'offer' | null>(null);
+  const [confirm, setConfirm] = useState<'approve' | 'offer' | null>(null);
   const inFlight = useRef(false);
   const [offering, setOffering] = useState(false);
   const [hotels, setHotels] = useState<PublishedProperty[]>([]);
@@ -70,24 +70,25 @@ export function ManualBookingActions({ request, payment = null }: {
   }
   const reviewable = MANUAL_REVIEW_STATUSES.has(request.salesStatus);
   if (!reviewable && request.salesStatus !== 'PAYMENT_PENDING') return null;
-  // SePay on: a paid order confirms the booking by itself (IPN); staff confirm by hand only a
-  // manual transfer, so that button becomes secondary (owner 2026-11-12).
-  const online = payment?.onlineGateway === true;
+  // SePay is the only way to pay and the only thing that confirms a payment (owner 2026-11-14):
+  // there is no "payment received" button. Without payment options (older server) the card
+  // only says what to check.
+  const gateway = payment?.onlineGateway;
   const pending = request.salesStatus === 'PAYMENT_PENDING';
   return <Card title="Trả lời yêu cầu đặt phòng">
-    {pending && online
-      ? <p>Khách thanh toán qua cổng SePay. Đặt phòng <strong>tự động xác nhận</strong> ngay khi SePay báo đã nhận tiền — không cần thao tác.
-        {' Chỉ bấm "Xác nhận thủ công" khi '}{payment?.manualTransfer ? 'khách chuyển khoản tay, hoặc ' : ''}{'SePay không tự xác nhận dù tiền đã vào tài khoản.'}</p>
-      : reviewable && online
-        ? <p>Kiểm tra phòng thực tế rồi xác nhận: khách nhận email có link thanh toán SePay, đặt phòng tự xác nhận khi tiền về.</p>
-        : <p>Khách sạn tự kiểm tra phòng và đối chiếu tiền trong tài khoản ngân hàng trước khi xác nhận.</p>}
+    {gateway === false
+      ? <p role="alert">{pending ? 'Cổng SePay đang tắt nên khách chưa thể thanh toán.' : 'Cổng SePay đang tắt: chưa thể gửi link thanh toán cho khách.'} Vui lòng báo quản trị kỹ thuật KAS kiểm tra cấu hình SePay.</p>
+      : pending
+        ? <p>Khách thanh toán qua cổng SePay. Đặt phòng <strong>tự động xác nhận</strong> ngay khi SePay báo đã nhận tiền. Không có xác nhận thủ công.</p>
+        : gateway === true
+          ? <p>Kiểm tra phòng thực tế rồi xác nhận: khách nhận email có link thanh toán SePay, đặt phòng tự xác nhận khi SePay báo đã nhận tiền.</p>
+          : <p>Kiểm tra phòng thực tế trước khi xác nhận còn phòng.</p>}
     {error && <p role="alert">{error}</p>}
     <div className={styles.actions}>
       {reviewable && <>
         <Button disabled={busy} onClick={() => setConfirm('approve')}>Còn phòng — xác nhận và gửi link thanh toán</Button>
         <Button variant="secondary" disabled={busy} onClick={() => void openOffer()}>Hết phòng — đề xuất phòng khác</Button>
       </>}
-      {pending && <Button variant={online ? 'secondary' : 'primary'} disabled={busy} onClick={() => setConfirm('paid')}>{online ? 'Xác nhận thủ công' : 'Xác nhận đã nhận tiền'}</Button>}
     </div>
     {offering && <form className={styles.form} onSubmit={(event) => {
       event.preventDefault();
@@ -108,9 +109,9 @@ export function ManualBookingActions({ request, payment = null }: {
       <label>Lời nhắn<textarea disabled={busy} maxLength={2000} value={offer.message} onChange={(event) => setOffer({ ...offer, message: event.target.value })} /></label>
       <Button type="submit" loading={busy} disabled={busy || !offer.roomTypeSlug}>Xem lại đề xuất</Button>
     </form>}
-    <ConfirmDialog open={confirm !== null} title={confirm === 'paid' ? 'Xác nhận tiền đã vào tài khoản?' : confirm === 'offer' ? 'Gửi đề xuất phòng khác?' : 'Xác nhận còn phòng và gửi link thanh toán?'}
+    <ConfirmDialog open={confirm !== null} title={confirm === 'offer' ? 'Gửi đề xuất phòng khác?' : 'Xác nhận còn phòng và gửi link thanh toán?'}
       onCancel={() => { if (!busy) setConfirm(null); }}
-      onConfirm={() => { if (confirm) void run(() => confirm === 'paid' ? salesRequestsApi.confirmPayment(request.reference) : confirm === 'offer' ? salesRequestsApi.proposeAlternative(request.reference, offer) : salesRequestsApi.approvePayment(request.reference)); }}
+      onConfirm={() => { if (confirm) void run(() => confirm === 'offer' ? salesRequestsApi.proposeAlternative(request.reference, offer) : salesRequestsApi.approvePayment(request.reference)); }}
       confirmLabel={confirm === 'offer' ? 'Gửi đề xuất và kết thúc yêu cầu' : 'Xác nhận'} busy={busy}>
       {confirm === 'offer' ? <>
         <p>{hotels.find((hotel) => hotel.slug === offer.propertySlug)?.name ?? offer.propertySlug} · {rooms.find((room) => room.slug === offer.roomTypeSlug)?.name ?? offer.roomTypeSlug}</p>
@@ -118,7 +119,7 @@ export function ManualBookingActions({ request, payment = null }: {
         <p>Tổng giá: {formatMoney({ amountMinor: offer.totalMinor, currency: request.total?.currency ?? 'VND', exponent: request.total?.exponent ?? 0 })}</p>
         {offer.message && <p>{offer.message}</p>}
         <p>Yêu cầu này sẽ kết thúc ngay khi gửi đề xuất. Không giữ phòng và không tạo yêu cầu mới; nếu khách muốn lưu trú theo phương án này, khách tạo yêu cầu mới trên website.</p>
-      </> : confirm === 'paid' ? 'Chỉ xác nhận sau khi đã đối chiếu giao dịch ngân hàng. Đặt phòng sẽ được xác nhận cho khách.' : 'Bạn đã kiểm tra và xác nhận còn phòng thủ công. Hệ thống chuyển yêu cầu sang chờ thanh toán và gửi email có link thanh toán (SePay) cùng hạn thanh toán cho khách. Chưa xác nhận đã nhận tiền.'}
+      </> : 'Bạn đã kiểm tra và xác nhận còn phòng thủ công. Hệ thống chuyển yêu cầu sang chờ thanh toán và gửi email có link thanh toán (SePay) cùng hạn thanh toán cho khách. Chưa xác nhận đã nhận tiền.'}
     </ConfirmDialog>
   </Card>;
 }

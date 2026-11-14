@@ -21,7 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/** A signed-in guest may review their own completed reservation exactly once. */
+/** A signed-in guest may review their own checked-out (or completed) reservation exactly once. */
 @RestController
 @RequestMapping("/api/v1/me/reviews")
 @PreAuthorize("hasAuthority('" + Permissions.REVIEW_CREATE + "')")
@@ -52,7 +52,8 @@ public class MeGuestReviewController {
         if (!userId.equals(stay.userId())) {
             throw new org.springframework.security.access.AccessDeniedException("Reservation does not belong to this customer");
         }
-        if (!"COMPLETED".equals(stay.stayStatus())) {
+        // Check-out ends a stay at CHECKED_OUT; COMPLETED is kept for stays that carry it (V70).
+        if (!"CHECKED_OUT".equals(stay.stayStatus()) && !"COMPLETED".equals(stay.stayStatus())) {
             throw new ResponseStatusException(org.springframework.http.HttpStatus.CONFLICT,
                     "A review can be submitted only after the stay is completed");
         }

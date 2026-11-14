@@ -27,7 +27,7 @@ class StayAdjustmentComputeTest {
     private static StayAdjustmentService.VoucherCheck voucher10(long subtotal) {
         var v = new StayAdjustmentService.Voucher(UUID.randomUUID(), "KAS-TEN", "Ten", null, "PERCENTAGE",
                 BigDecimal.TEN, null, null, "VND", null, null, null, null, null, null, List.of(), List.of(),
-                null, 0, "ACTIVE", 0);
+                null, 0, "ACTIVE", 0, null, null, "ALL", List.of());
         return new StayAdjustmentService.VoucherCheck(v, null, StayAdjustmentService.discount(v, subtotal));
     }
 

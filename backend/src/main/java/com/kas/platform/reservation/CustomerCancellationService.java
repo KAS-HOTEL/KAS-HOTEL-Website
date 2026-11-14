@@ -297,7 +297,13 @@ public class CustomerCancellationService {
 
     // ================================================================ SUPER_ADMIN
 
-    /** No fee rule: SUPER_ADMIN quotes the fee; the guest then decides. */
+    /**
+     * SUPER_ADMIN releases the fee of a waiting request to the guest, who then decides. The fee
+     * is the one the policy sets when there is one ({@link #policyFee}): 0 for a paid booking
+     * cancelled inside the free window, the configured fee rule after it. Only with neither does
+     * SUPER_ADMIN name the fee ({@code amountMinor} or {@code percentage}); with a policy both
+     * may be omitted, and a different amount is refused.
+     */
     @Transactional
     public CancellationResult quoteFee(String reference, UUID requestId, long feeMinor, String note, ResolvedActor actor) {
         return quoteFee(reference, requestId, feeMinor, null, note, actor);
@@ -306,17 +312,6 @@ public class CustomerCancellationService {
     @Transactional
     public CancellationResult quoteFee(String reference, UUID requestId, Long amountMinor,
                                        BigDecimal percentage, String note, ResolvedActor actor) {
-        if ((amountMinor == null) == (percentage == null)) {
-            throw invalidFee("feeMinor", "Supply either feeMinor or percentage");
-        }
-        if (amountMinor != null && amountMinor < 0) {
-            throw invalidFee("feeMinor", "feeMinor must be non-negative");
-        }
-        if (percentage != null && (percentage.signum() < 0
-                || percentage.compareTo(BigDecimal.valueOf(100)) > 0
-                || percentage.stripTrailingZeros().scale() > 2)) {
-            throw invalidFee("percentage", "percentage must be between 0 and 100 with at most two decimal places");
-        }
         OffsetDateTime quotedAt = OffsetDateTime.now(clock);
         expiry.expireDueRequest(requestId, quotedAt);
         ScopedRequest request = lockScopedRequest(reference, requestId, actor.scope())
@@ -325,25 +320,53 @@ public class CustomerCancellationService {
         if (!PENDING.equals(currentRequestStatus)) {
             throw ConflictException.illegalTransition("cancellationRequest", currentRequestStatus, QUOTED);
         }
-        if (percentage != null && (request.totalMinor() == null || request.totalMinor() < 0)) {
-            throw invalidFee("percentage", "Reservation total is required for percentage fees");
-        }
         long total = request.totalMinor() == null ? 0 : request.totalMinor();
-        long feeMinor = percentage == null ? amountMinor : BigDecimal.valueOf(total)
-                .multiply(percentage).movePointLeft(2).setScale(0, RoundingMode.HALF_UP).longValueExact();
+        // Owner rule 2026-11-14: the fee follows the policy. Inside the free window it is 0; after
+        // it, the configured fee rule decides. SUPER_ADMIN names a fee only when neither applies.
+        PolicyFee policy = policyFee(request.feeSource(), request.propertyId(), total);
+        long feeMinor;
+        if (policy != null) {
+            if (percentage != null || (amountMinor != null && amountMinor != policy.feeMinor())) {
+                throw invalidFee("feeMinor", "The fee for this request is set by the cancellation policy: "
+                        + policy.feeMinor());
+            }
+            feeMinor = policy.feeMinor();
+        } else {
+            if ((amountMinor == null) == (percentage == null)) {
+                throw invalidFee("feeMinor", "Supply either feeMinor or percentage");
+            }
+            if (amountMinor != null && amountMinor < 0) {
+                throw invalidFee("feeMinor", "feeMinor must be non-negative");
+            }
+            if (percentage != null && (percentage.signum() < 0
+                    || percentage.compareTo(BigDecimal.valueOf(100)) > 0
+                    || percentage.stripTrailingZeros().scale() > 2)) {
+                throw invalidFee("percentage", "percentage must be between 0 and 100 with at most two decimal places");
+            }
+            if (percentage != null && (request.totalMinor() == null || request.totalMinor() < 0)) {
+                throw invalidFee("percentage", "Reservation total is required for percentage fees");
+            }
+            feeMinor = percentage == null ? amountMinor : BigDecimal.valueOf(total)
+                    .multiply(percentage).movePointLeft(2).setScale(0, RoundingMode.HALF_UP).longValueExact();
+        }
+        String feeSource = policy == null ? "STAFF" : policy.source();
+        String feeType = policy != null ? policy.feeType() : percentage == null ? "FIXED_AMOUNT" : "PERCENT_OF_TOTAL";
+        BigDecimal feePercent = policy != null ? policy.percent() : percentage;
         long paid = paidAmount(request.reservationId());
         jdbc.sql("""
                 UPDATE reservation_cancellation_request
                    SET status = 'QUOTED', fee_amount_minor = :fee, fee_currency = :currency, fee_note = :note,
-                       fee_source = 'STAFF', fee_type = :feeType, fee_percent = :percent, fee_base_minor = :base,
+                       fee_source = :feeSource, fee_rule_id = :ruleId, fee_type = :feeType, fee_percent = :percent,
+                       fee_base_minor = :base,
                        paid_amount_minor = :paid, refund_due_minor = :refundDue,
                        quoted_by = :actor, quoted_at = :at, updated_at = :at
                  WHERE id = :id AND status = 'PENDING_HOTEL_FEE'
                 """)
                 .param("fee", feeMinor).param("currency", request.currency())
                 .param("note", note == null || note.isBlank() ? null : note.trim())
-                .param("feeType", percentage == null ? "FIXED_AMOUNT" : "PERCENT_OF_TOTAL")
-                .param("percent", percentage).param("base", total).param("paid", paid)
+                .param("feeSource", feeSource).param("ruleId", policy == null ? null : policy.ruleId())
+                .param("feeType", feeType)
+                .param("percent", feePercent).param("base", total).param("paid", paid)
                 .param("refundDue", Math.max(0, paid - feeMinor))
                 .param("actor", actor.userId()).param("at", quotedAt).param("id", requestId).update();
         Map<String, Object> feeDetails = new HashMap<>();
@@ -351,6 +374,7 @@ public class CustomerCancellationService {
         feeDetails.put("feeMinor", feeMinor);
         feeDetails.put("currency", request.currency());
         feeDetails.put("feeType", percentage == null ? "AMOUNT" : "PERCENTAGE");
+        feeDetails.put("feeSource", feeSource);
         if (percentage != null) {
             feeDetails.put("percentage", percentage);
             feeDetails.put("baseTotalMinor", total);
@@ -466,7 +490,7 @@ public class CustomerCancellationService {
                        r.guest_name, r.check_in, r.check_out, cr.created_at, r.currency, r.total_minor,
                        cr.status::text AS status, cr.free_policy, cr.free_until, cr.fee_amount_minor,
                        cr.fee_source, cr.paid_amount_minor, cr.refund_due_minor, cr.refund_amount_minor,
-                       cr.refund_reference, cr.refund_note, cr.refunded_at, cr.customer_decided_at,
+                       cr.refund_reference, cr.refund_note, cr.refunded_at, cr.customer_decided_at, r.property_id,
                        (SELECT pm.external_reference FROM payment pm
                          WHERE pm.reservation_id = r.id AND pm.status = 'VERIFIED' LIMIT 1) AS payment_reference
                   FROM reservation_cancellation_request cr
@@ -477,7 +501,14 @@ public class CustomerCancellationService {
                  ORDER BY (cr.status IN ('PENDING_HOTEL_FEE', 'REFUND_PENDING')) DESC, cr.updated_at DESC, cr.id
                  LIMIT 300
                 """.formatted(where, filter.sql())).params(params)
-                .query((rs, row) -> new PendingCancellation(
+                .query((rs, row) -> {
+                    Long totalMinor = (Long) rs.getObject("total_minor");
+                    // Only a request still waiting for its fee has a policy fee to show.
+                    PolicyFee policy = PENDING.equals(rs.getString("status"))
+                            ? policyFee(rs.getString("fee_source"), rs.getObject("property_id", UUID.class),
+                                    totalMinor == null ? 0 : totalMinor)
+                            : null;
+                    return new PendingCancellation(
                         rs.getObject("id", UUID.class), rs.getString("reference"),
                         rs.getString("property_slug"), rs.getString("property_name"),
                         rs.getString("guest_name"), rs.getObject("check_in", LocalDate.class),
@@ -489,7 +520,10 @@ public class CustomerCancellationService {
                         (Long) rs.getObject("refund_due_minor"), (Long) rs.getObject("refund_amount_minor"),
                         rs.getString("refund_reference"), rs.getString("refund_note"),
                         rs.getObject("refunded_at", OffsetDateTime.class),
-                        rs.getObject("customer_decided_at", OffsetDateTime.class), rs.getString("payment_reference")))
+                        rs.getObject("customer_decided_at", OffsetDateTime.class), rs.getString("payment_reference"),
+                        policy == null ? null : policy.feeMinor(), policy == null ? null : policy.source(),
+                        policy == null ? null : policy.feeType(), policy == null ? null : policy.percent());
+                })
                 .list();
     }
 
@@ -518,6 +552,21 @@ public class CustomerCancellationService {
                 .param("decidedAt", REFUND_PENDING.equals(status) ? at : null).param("at", at).update();
         return id;
     }
+
+    /**
+     * The fee the policy sets for a waiting request, or null when no policy applies and
+     * SUPER_ADMIN decides. A request opened inside the free window ({@code FREE_WINDOW}, a paid
+     * booking under review) is free whatever rules exist; otherwise the active fee rule of the hotel.
+     */
+    private PolicyFee policyFee(String feeSource, UUID propertyId, long totalMinor) {
+        if ("FREE_WINDOW".equals(feeSource)) return new PolicyFee("FREE_WINDOW", 0, null, "NONE", null);
+        return feeRules.activeFor(propertyId)
+                .map(rule -> new PolicyFee("RULE", CancellationFeeRuleService.fee(rule, totalMinor).feeMinor(),
+                        rule.id(), rule.feeType(), rule.percent()))
+                .orElse(null);
+    }
+
+    private record PolicyFee(String source, long feeMinor, UUID ruleId, String feeType, BigDecimal percent) { }
 
     /** What the guest actually paid: VERIFIED payments, net of reversals (V50: at most one verified). */
     long paidAmount(UUID reservationId) {
@@ -626,7 +675,8 @@ public class CustomerCancellationService {
                 """.formatted(filter.sql())).params(params).query(UUID.class).optional().orElse(null);
         if (reservationId == null) return Optional.empty();
         return jdbc.sql("""
-                SELECT cr.id, cr.reservation_id, cr.status::text AS status, r.currency, r.check_in, r.total_minor
+                SELECT cr.id, cr.reservation_id, cr.status::text AS status, r.currency, r.check_in, r.total_minor,
+                       cr.fee_source, r.property_id
                   FROM reservation_cancellation_request cr JOIN reservation r ON r.id = cr.reservation_id
                  WHERE cr.id = :requestId AND cr.reservation_id = :reservationId
                  FOR UPDATE OF cr
@@ -634,7 +684,8 @@ public class CustomerCancellationService {
                 .query((rs, row) -> new ScopedRequest(rs.getObject("id", UUID.class),
                         rs.getObject("reservation_id", UUID.class), rs.getString("status"),
                         rs.getString("currency"), rs.getObject("check_in", LocalDate.class),
-                        (Long) rs.getObject("total_minor")))
+                        (Long) rs.getObject("total_minor"), rs.getString("fee_source"),
+                        rs.getObject("property_id", UUID.class)))
                 .optional();
     }
 
@@ -752,7 +803,15 @@ public class CustomerCancellationService {
                                       String freePolicy, OffsetDateTime freeUntil, Long feeMinor, String feeSource,
                                       Long paidMinor, Long refundDueMinor, Long refundAmountMinor,
                                       String refundReference, String refundNote, OffsetDateTime refundedAt,
-                                      OffsetDateTime confirmedAt, String paymentReference) { }
+                                      OffsetDateTime confirmedAt, String paymentReference,
+                                      /**
+                                       * For a request waiting for its fee: what the policy sets (2026-11-14).
+                                       * {@code policyFeeBasis} is FREE_WINDOW (fee 0) or RULE (the configured
+                                       * fee rule); all four are null when no policy applies and SUPER_ADMIN
+                                       * names the fee.
+                                       */
+                                      Long policyFeeMinor, String policyFeeBasis, String policyFeeType,
+                                      BigDecimal policyFeePercent) { }
 
     public record RefundView(UUID requestId, String reference, String status, String currency, Long paidMinor,
                              Long feeMinor, Long refundDueMinor, Long refundAmountMinor, String refundReference,
@@ -770,6 +829,6 @@ public class CustomerCancellationService {
 
     private record CancellationRequest(UUID id, String status, Long feeMinor, String currency) { }
     private record ScopedRequest(UUID id, UUID reservationId, String status, String currency,
-                                 LocalDate checkIn, Long totalMinor) { }
+                                 LocalDate checkIn, Long totalMinor, String feeSource, UUID propertyId) { }
     private record RefundRow(UUID id, UUID reservationId, String status, Long paidMinor, Long refundDueMinor) { }
 }

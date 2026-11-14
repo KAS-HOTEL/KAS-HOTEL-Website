@@ -321,7 +321,7 @@
   liveReady.then(function(){ paintRooms(); });
 
   /* ---- reviews ---- */
-  U.$('#reviews').innerHTML = R.reviewsHTML(hotel);
+  R.mountReviews(U.$('#reviews'), hotel);
   if (window.KAS_I18N) window.KAS_I18N.apply();
 
   U.$('#btnCall').addEventListener('click', function () { U.toast('Call us on ' + D.config.phone); });

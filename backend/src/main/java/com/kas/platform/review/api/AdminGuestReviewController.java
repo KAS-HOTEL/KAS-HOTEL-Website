@@ -44,8 +44,14 @@ public class AdminGuestReviewController {
                                 @RequestParam(defaultValue = "50") int size) {
         return jdbc.sql("""
                 SELECT r.id, p.frontend_key, r.overall, r.title, r.body, r.language,
-                       r.stay_month, r.status::text AS status, r.hidden_at, r.deleted_at, r.published_at
+                       r.stay_month, r.status::text AS status, r.hidden_at, r.deleted_at, r.published_at,
+                       COALESCE((SELECT pt.name FROM property_translation pt WHERE pt.property_id = p.id
+                                  ORDER BY (pt.locale = 'vi') DESC, pt.locale LIMIT 1), p.slug) AS hotel_name,
+                       res.reference AS booking_reference, res.guest_name,
+                       c.full_name AS customer_name, c.customer_code, r.created_at
                   FROM review r JOIN property p ON p.id = r.property_id
+                  JOIN reservation res ON res.id = r.reservation_id
+                  JOIN customer c ON c.id = r.customer_id
                  WHERE (CAST(:hotelKey AS text) IS NULL OR p.frontend_key = :hotelKey)
                    AND (:includeHidden OR (r.hidden_at IS NULL AND r.deleted_at IS NULL))
                  ORDER BY r.created_at DESC, r.id DESC LIMIT :limit OFFSET :offset
@@ -58,7 +64,9 @@ public class AdminGuestReviewController {
                         rs.getString("frontend_key"), rs.getInt("overall"), rs.getString("title"),
                         rs.getString("body"), rs.getString("language"),
                         rs.getObject("stay_month", java.time.LocalDate.class), rs.getString("status"),
-                        instant(rs, "hidden_at"), instant(rs, "deleted_at"), instant(rs, "published_at")))
+                        instant(rs, "hidden_at"), instant(rs, "deleted_at"), instant(rs, "published_at"),
+                        rs.getString("hotel_name"), rs.getString("booking_reference"), rs.getString("customer_name"),
+                        rs.getString("customer_code"), rs.getString("guest_name"), instant(rs, "created_at")))
                 .list();
     }
 
@@ -125,8 +133,14 @@ public class AdminGuestReviewController {
     private ReviewRow get(UUID id, boolean includeDeleted) {
         return jdbc.sql("""
                 SELECT r.id, p.frontend_key, r.overall, r.title, r.body, r.language,
-                       r.stay_month, r.status::text AS status, r.hidden_at, r.deleted_at, r.published_at
+                       r.stay_month, r.status::text AS status, r.hidden_at, r.deleted_at, r.published_at,
+                       COALESCE((SELECT pt.name FROM property_translation pt WHERE pt.property_id = p.id
+                                  ORDER BY (pt.locale = 'vi') DESC, pt.locale LIMIT 1), p.slug) AS hotel_name,
+                       res.reference AS booking_reference, res.guest_name,
+                       c.full_name AS customer_name, c.customer_code, r.created_at
                   FROM review r JOIN property p ON p.id = r.property_id
+                  JOIN reservation res ON res.id = r.reservation_id
+                  JOIN customer c ON c.id = r.customer_id
                  WHERE r.id = :id AND (:includeDeleted OR r.deleted_at IS NULL) FOR UPDATE OF r
                 """)
                 .param("id", id).param("includeDeleted", includeDeleted)
@@ -134,7 +148,9 @@ public class AdminGuestReviewController {
                         rs.getString("frontend_key"), rs.getInt("overall"), rs.getString("title"),
                         rs.getString("body"), rs.getString("language"),
                         rs.getObject("stay_month", java.time.LocalDate.class), rs.getString("status"),
-                        instant(rs, "hidden_at"), instant(rs, "deleted_at"), instant(rs, "published_at")))
+                        instant(rs, "hidden_at"), instant(rs, "deleted_at"), instant(rs, "published_at"),
+                        rs.getString("hotel_name"), rs.getString("booking_reference"), rs.getString("customer_name"),
+                        rs.getString("customer_code"), rs.getString("guest_name"), instant(rs, "created_at")))
                 .optional().orElseThrow(() -> new com.kas.platform.shared.KasException(com.kas.platform.shared.ApiErrorCode.NOT_FOUND, "Review not found"));
     }
 
@@ -147,5 +163,8 @@ public class AdminGuestReviewController {
     public record ReviewRow(UUID id, String hotelKey, int rating, String title, String body,
                             String language, java.time.LocalDate stayMonth, String status,
                             java.time.Instant hiddenAt, java.time.Instant deletedAt,
-                            java.time.Instant publishedAt) {}
+                            java.time.Instant publishedAt,
+                            /** Tracing (owner, 2026-11-14): the hotel, booking and customer a review belongs to. */
+                            String hotelName, String bookingReference, String customerName,
+                            String customerCode, String guestName, java.time.Instant submittedAt) {}
 }

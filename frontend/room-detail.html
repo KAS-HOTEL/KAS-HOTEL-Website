@@ -203,7 +203,7 @@
 
   var verified = room.photoCategory === 'VERIFIED_ROOM_PHOTO';
   /* ---- reviews ---- */
-  U.$('#reviews').innerHTML = R.reviewsHTML(hotel);
+  R.mountReviews(U.$('#reviews'), hotel);
   if (window.KAS_I18N) window.KAS_I18N.apply();
 
   /* ---- sidebar ---- */
@@ -246,7 +246,13 @@
   liveCatalogPromise.then(function(){ paintSide(); });
 
   function goBook() {
-    var search = B.readSearch();
+    /* Book the stay this page shows (the draft), not whatever the URL still says: after
+       "Chỉnh sửa" the URL could keep the old dates and send the guest to another day (2026-11-14). */
+    var shown = B.draft();
+    var search = shown.hotelId === hotel.id && shown.roomId === room.id && shown.checkIn && shown.checkOut
+      ? { hotelId: hotel.id, checkIn: shown.checkIn, checkOut: shown.checkOut,
+          adults: shown.adults, children: shown.children, rooms: shown.rooms }
+      : B.readSearch();
     search.hotelId = hotel.id;
     B.saveSearch(search);
     /* Keep the backend quote already in the draft for this exact stay;
@@ -263,6 +269,18 @@
   }
   U.$('#bookBtn').addEventListener('click', goBook);
 
+  /* The URL's dates win over the saved search (B.readSearch), so a changed stay is written
+     back into the address too: a reload or the back button then shows the same stay. */
+  function syncUrl(s) {
+    try {
+      var u = new URL(window.location.href);
+      ['checkIn', 'checkOut', 'adults', 'children', 'rooms'].forEach(function (k) {
+        if (s[k] != null && s[k] !== '') u.searchParams.set(k, s[k]); else u.searchParams.delete(k);
+      });
+      history.replaceState(history.state, '', u.pathname + u.search + u.hash);
+    } catch (_) { /* old browser: the draft still holds the right stay */ }
+  }
+
   /* ---- edit stay (inline) ---- */
   U.$('#editStay').addEventListener('click', function () {
     var wrap = U.el('div', { style: 'padding:20px;border-top:1px solid var(--line)' });
@@ -275,6 +293,7 @@
       solid: true, cta: 'Update', lockHotel: true, values: B.readSearch(),
       onSearch: function (s) {
         s.hotelId = hotel.id; B.saveSearch(s);
+        syncUrl(s);
         B.startBooking(hotel.id, room.id, s);
         wrap.remove(); B.refreshQuote().then(function(){paintSide();});
         App.renderSteps(U.$('#steps'), 1, [U.fmtDate(s.checkIn) + ' – ' + U.fmtDate(s.checkOut), room.name]);

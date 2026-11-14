@@ -115,7 +115,8 @@ export function ReservationDetailView({
             {copy.otaReference}: {summary.otaReference}
           </p>
         ) : null}
-        <StayActions reference={summary.reference} stayStatus={summary.stayStatus} />
+        <StayActions reference={summary.reference} stayStatus={summary.stayStatus}
+          checkIn={summary.checkIn} checkOut={summary.checkOut} />
       </header>
 
       <div className={styles.detailGrid}>
@@ -154,6 +155,12 @@ export function ReservationDetailView({
                 tall and told the reader nothing: a guest who left no country is
                 not a guest whose country is a dash.
               */}
+              {/*
+                The customer account this booking belongs to, by the code the
+                customer list shows. A booking with no customer record says so:
+                when tracing a mistake, "not linked" is an answer, not a blank.
+              */}
+              <Fact label={copy.customerCode} value={present(guest.customerCode) ? guest.customerCode : copy.noAccount} />
               {present(guest.fullName) ? (
                 <Fact label={copy.fullName} value={guest.fullName} />
               ) : null}
@@ -295,6 +302,8 @@ export interface ReservationDetailCopy {
   readonly childrenAges: string;
   readonly rooms: string;
   readonly otaReference: string;
+  readonly customerCode: string;
+  readonly noAccount: string;
   readonly fullName: string;
   readonly email: string;
   readonly phone: string;
@@ -325,6 +334,8 @@ export const RESERVATION_DETAIL_COPY: ReservationDetailCopy = {
   childrenAges: 'Tuổi trẻ em',
   rooms: 'Số phòng',
   otaReference: 'Mã OTA',
+  customerCode: 'Mã khách hàng',
+  noAccount: 'Chưa gắn với hồ sơ khách hàng',
   fullName: 'Họ và tên',
   email: 'Email',
   phone: 'Điện thoại',

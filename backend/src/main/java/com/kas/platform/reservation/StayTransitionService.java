@@ -87,6 +87,14 @@ public class StayTransitionService {
         if (updated != 1) {
             throw ConflictException.illegalTransition("stayStatus", from, to);
         }
+        // V71: when the guest really arrived / left. A console button records the moment it is pressed.
+        String timeSql = switch (action) {
+            case CHECK_IN -> "UPDATE reservation SET checked_in_at = clock_timestamp() WHERE id = ?";
+            case CHECK_OUT -> "UPDATE reservation SET checked_out_at = clock_timestamp() WHERE id = ?";
+            case UNDO_CHECK_OUT -> "UPDATE reservation SET checked_out_at = NULL WHERE id = ?";
+            case NO_SHOW -> null;
+        };
+        if (timeSql != null) jdbc.sql(timeSql).params(rows.id()).update();
         jdbc.sql("""
                         INSERT INTO reservation_status_history
                             (reservation_id, field, from_status, to_status, actor_id, actor_type,
@@ -109,6 +117,87 @@ public class StayTransitionService {
             loyaltyPoints.reverseEarn(rows.id());
         }
         return new StayTransitionView(reference, from, to);
+    }
+
+    /**
+     * The "complete the stay" form (owner 2026-11-14). A stay nobody checked in before the
+     * hotel's check-out time is NO_SHOW (StayAutoTransitionService); the only way back is this
+     * form, which records the real check-in and check-out times and finishes the stay as
+     * CHECKED_OUT, so it counts for the membership tier and KAS points like any check-out.
+     * Also accepted for a confirmed stay the sweep has not reached yet.
+     */
+    @Transactional
+    public StayTransitionView completeStay(String reference, java.time.OffsetDateTime checkedInAt,
+                                           java.time.OffsetDateTime checkedOutAt, ResolvedActor actor) {
+        var scope = actor.scope();
+        ScopeFilter filter = ScopeFilter.forProperties(scope, "p.partner_id", "p.id");
+        var rows = jdbc.sql("""
+                        SELECT r.id, r.stay_status::text AS stay_status, r.check_in, r.check_out
+                          FROM reservation r JOIN property p ON p.id = r.property_id
+                         WHERE r.reference = ? AND %s
+                         FOR UPDATE OF r
+                        """.formatted(filter.sql()))
+                .params(join(reference, filter.parameters()))
+                .query((rs, row) -> new StayRow(rs.getObject("id", UUID.class),
+                        rs.getString("stay_status"), rs.getObject("check_in", LocalDate.class),
+                        rs.getObject("check_out", LocalDate.class)))
+                .optional().orElseThrow(() -> NotFoundException.outOfScope("Reservation"));
+        String from = rows.stayStatus();
+        if (!java.util.Set.of("NO_SHOW", "CONFIRMED", "CHECK_IN_READY").contains(from)) {
+            throw ConflictException.illegalTransition("stayStatus", from, "CHECKED_OUT");
+        }
+        java.util.List<com.kas.platform.shared.KasException.ErrorDetail> problems = new java.util.ArrayList<>();
+        java.time.ZoneId zone = TimeConfiguration.PROPERTY_ZONE;
+        if (checkedInAt == null) {
+            problems.add(new com.kas.platform.shared.KasException.ErrorDetail("checkedInAt", "REQUIRED", "Nhập giờ check-in thực tế."));
+        }
+        if (checkedOutAt == null) {
+            problems.add(new com.kas.platform.shared.KasException.ErrorDetail("checkedOutAt", "REQUIRED", "Nhập giờ check-out thực tế."));
+        }
+        if (checkedInAt != null && checkedOutAt != null) {
+            if (!checkedOutAt.isAfter(checkedInAt)) {
+                problems.add(new com.kas.platform.shared.KasException.ErrorDetail("checkedOutAt", "BEFORE_CHECK_IN",
+                        "Giờ check-out phải sau giờ check-in."));
+            }
+            if (checkedInAt.atZoneSameInstant(zone).toLocalDate().isBefore(rows.checkIn())) {
+                problems.add(new com.kas.platform.shared.KasException.ErrorDetail("checkedInAt", "BEFORE_ARRIVAL_DATE",
+                        "Giờ check-in không được trước ngày nhận phòng của đơn."));
+            }
+            if (checkedOutAt.isAfter(java.time.OffsetDateTime.now(clock))) {
+                problems.add(new com.kas.platform.shared.KasException.ErrorDetail("checkedOutAt", "IN_THE_FUTURE",
+                        "Giờ check-out không được ở tương lai."));
+            }
+        }
+        if (!problems.isEmpty()) {
+            throw new com.kas.platform.shared.KasException(com.kas.platform.shared.ApiErrorCode.VALIDATION_FAILED,
+                    "The real check-in and check-out times are not valid.", problems);
+        }
+        int updated = jdbc.sql("""
+                        UPDATE reservation SET stay_status = 'CHECKED_OUT', checked_in_at = ?, checked_out_at = ?
+                         WHERE id = ? AND stay_status = CAST(? AS stay_status)
+                        """)
+                .params(checkedInAt, checkedOutAt, rows.id(), from).update();
+        if (updated != 1) throw ConflictException.illegalTransition("stayStatus", from, "CHECKED_OUT");
+        java.time.format.DateTimeFormatter shown = java.time.format.DateTimeFormatter.ofPattern("HH:mm dd/MM/yyyy");
+        String note = "Hoàn thành đơn bằng biểu mẫu: check-in " + checkedInAt.atZoneSameInstant(zone).format(shown)
+                + ", check-out " + checkedOutAt.atZoneSameInstant(zone).format(shown) + ".";
+        for (String[] step : new String[][]{{from, "CHECKED_IN"}, {"CHECKED_IN", "CHECKED_OUT"}}) {
+            jdbc.sql("""
+                            INSERT INTO reservation_status_history
+                                (reservation_id, field, from_status, to_status, actor_id, actor_type,
+                                 reason, note, created_at)
+                            VALUES (?, 'STAY', ?, ?, ?, 'ADMIN', 'STAY_COMPLETED_BY_FORM', ?, clock_timestamp())
+                            """)
+                    .params(rows.id(), step[0], step[1], actor.userId(), note).update();
+        }
+        audit.record(new AuditEvent(actor.userId(), highestRole(actor), "stay.completed_by_form",
+                "reservation", rows.id(), Map.of("stayStatus", from),
+                Map.of("stayStatus", "CHECKED_OUT", "checkedInAt", checkedInAt.toString(),
+                        "checkedOutAt", checkedOutAt.toString()),
+                "STAY_COMPLETED_BY_FORM", null, null, CorrelationId.current(), scope.toString()));
+        tiers.recordCheckout(rows.id(), actor.userId());
+        loyaltyPoints.earnForCheckout(rows.id());
+        return new StayTransitionView(reference, from, "CHECKED_OUT");
     }
 
     private LocalTime cutoff() {

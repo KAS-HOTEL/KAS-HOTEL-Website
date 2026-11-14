@@ -204,81 +204,12 @@
   function openDrawer() { var d = U.$('#drawer'); if (d) { d.classList.add('open'); document.body.style.overflow = 'hidden'; } }
   function closeDrawer() { var d = U.$('#drawer'); if (d) { d.classList.remove('open'); document.body.style.overflow = ''; } }
 
-  /* ---------------- footer ---------------- */
-  var FOOT_COLS = [
-    { h: 'Hotels',       l: [['KAS Passion Boutique','hotel-detail.html?hotel=hotel-01'],['KAS Elegance','hotel-detail.html?hotel=hotel-02'],['KAS Ancient Boutique','hotel-detail.html?hotel=hotel-03'],['KAS Milestone Premium','hotel-detail.html?hotel=hotel-04'],['KAS Zody Boutique','hotel-detail.html?hotel=hotel-05'],['KAS Sonata Luxury','hotel-detail.html?hotel=hotel-06'],['KAS Eliana Luxury','hotel-detail.html?hotel=hotel-07'],['KAS Dilly Luxury','hotel-detail.html?hotel=hotel-08']] },
-    { h: 'Experiences',  l: [['Dining','experiences.html#dining'],['Rooftop bars','experiences.html#rooftops'],['Wellness & spa','experiences.html#wellness'],['Local experiences','experiences.html#local'],['Airport transfer','experiences.html#transfer']] },
-    { h: 'Support',      l: [['FAQ','support.html#faq'],['Booking information','support.html#booking'],['Cancellation policy','support.html#cancellation'],['Payment methods','support.html#payment'],['Contact us','support.html#contact']] },
-    { h: 'My KAS',       l: [['My bookings','manage-booking.html'],['Manage booking','manage-booking.html'],['Member benefits','offers.html#member'],['Sign in / Join','manage-booking.html']] },
-    { h: '__CONTACT__',  l: [] },
-    { h: '__TRADE__',    l: [] }
-  ];
-
+  /* ---------------- footer (one footer for the whole website) ----------------
+     Approved 2026-11-14: the homepage V3 footer is the footer of every page.
+     Five groups + phone/email row; styles in components.css (#ftr.ftr-v3).
+     Booking partners and social channels have no verified URL in the code or
+     config yet, so they are labels, not links. */
   function renderFooter() {
-    var host = U.$('#ftr'); if (!host) return;
-    var CT = D.config.contact || {};
-    /* Names follow KAS_DATA; each of the 8 properties appears exactly once. */
-    var footerLinks = [
-      ['KAS Milestone','hotel-detail.html?hotel=hotel-04'],
-      ['KAS Ancient','hotel-detail.html?hotel=hotel-03'],
-      ['KAS Premium','hotel-detail.html?hotel=hotel-02'],
-      ['KAS Sonata','hotel-detail.html?hotel=hotel-06']
-    ];
-    var moreLinks = [
-      ['KAS Eliana','hotel-detail.html?hotel=hotel-07'],
-      ['KAS Passion','hotel-detail.html?hotel=hotel-01'],
-      ['KAS Dilly','hotel-detail.html?hotel=hotel-08'],
-      ['KAS Zody','hotel-detail.html?hotel=hotel-05']
-    ];
-    host.className = 'ftr ftr--dark';
-    host.innerHTML =
-      '<div class="container">' +
-        '<div class="ftr__main">' +
-          '<div class="ftr__brand">' + logo(false) +
-            '<p>Distinctive stays in the heart of Ho Chi Minh City, created with thoughtful service and memorable experiences.</p>' +
-            '<div class="social">' +
-              ['ig','fb','phone'].map(function (s) {
-                var label = { ig: 'Instagram', fb: 'Facebook', phone: 'Call KAS' }[s];
-                if (s === 'phone') return '<a href="' + CT.tel + '" aria-label="' + label + '">' + U.icon(s, 15) + '</a>';
-                return '<a href="#" aria-label="' + label + '" onclick="return false">' + U.icon(s, 15) + '</a>';
-              }).join('') +
-            '</div>' +
-          '</div>' +
-          '<div class="ftr__col"><h5>KAS Hotels</h5>' +
-            footerLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
-          '</div>' +
-          '<div class="ftr__col"><h5>More KAS Hotels</h5>' +
-            moreLinks.map(function(x){return '<a href="'+x[1]+'">'+x[0]+'</a>';}).join('') +
-          '</div>' +
-          '<div class="ftr__col"><h5>Discover</h5>' +
-            '<a href="about.html">About KAS</a><a href="city-guide.html">City Guide</a><a href="experiences.html">Experiences</a><a href="experiences.html#dining">Dining</a><a href="experiences.html#wellness">Wellness</a><a href="support.html#events">Meetings &amp; Events</a>' +
-          '</div>' +
-          '<div class="ftr__col"><h5>Guest Services</h5>' +
-            '<a href="hotels.html">Book a Room</a><a href="manage-booking.html">Manage Booking</a><a href="offers.html#member">KAS Member</a><a href="offers.html">Special Offers</a><a href="support.html">Gift Cards</a>' +
-          '</div>' +
-          '<div class="ftr__col ftr__contact"><h5>Contact</h5>' +
-            '<div class="ftr-contact-group"><span class="ftr-contact-label" data-i18n="Travel Partners &amp; Corporate Partners">Travel Partners &amp; Corporate Partners</span>' +
-              '<a href="' + CT.tel + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(CT.displayPhone) + '</span></a></div>' +
-            (Array.isArray(CT.reservationPhones) && CT.reservationPhones.length ? '<div class="ftr-contact-group"><span class="ftr-contact-label" data-i18n="Room Reservations / Sales">Room Reservations / Sales</span>' + CT.reservationPhones.map(function (p) {
-              return '<a href="' + U.esc(p.tel) + '" class="ftr-contact-row">' + U.icon('phone', 15) + '<span>' + U.esc(p.displayPhone) + '</span></a>';
-            }).join('') + '</div>' : '') +
-            '<a href="mailto:' + CT.email + '" class="ftr-contact-row">' + U.icon('mail', 15) + '<span>' + U.esc(CT.email) + '</span></a>' +
-            (CT.hqAddress ? '<p class="ftr-contact-address">' + U.icon('map-pin', 15) + '<span>' + U.esc(CT.hqAddress) + '</span></p>' : '') +
-          '</div>' +
-          '<div class="ftr__col ftr__news"><h5>Stay in the know</h5>' +
-            '<p>Seasonal offers, new openings, and stories from the KAS collection.</p>' +
-            '<form class="news" onsubmit="return false"><input type="email" aria-label="Email address" placeholder="Email của bạn"><button type="submit" aria-label="Subscribe">' + U.icon('send', 15) + '</button></form>' +
-          '</div>' +
-        '</div>' +
-        '<div class="ftr__btm"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><div class="ftr__legal"><a href="support.html#contact">Contact</a></div></div>' +
-      '</div>';
-  }
-
-  /* ---------------- footer V3 (homepage only) ----------------
-     Homepage V3 footer: five groups. Other pages keep renderFooter() so their
-     layout is untouched. Booking partners and social channels have no verified
-     URL in the code or config yet, so they are labels, not links. */
-  function renderFooterV3() {
     var host = U.$('#ftr'); if (!host) return;
     var CT = D.config.contact || {};
     function col(title, items) {
@@ -1086,7 +1017,7 @@
     renderHeader(opts);
     bindAuthButtons();
     hydrateMemberSession();
-    if (opts.footer === 'v3') renderFooterV3(); else renderFooter();
+    renderFooter();
     renderFloat();
     reveal();
     if (global.KAS_I18N) global.KAS_I18N.init();

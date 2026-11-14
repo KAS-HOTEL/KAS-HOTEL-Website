@@ -3,14 +3,15 @@ import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
-const calls = vi.hoisted(() => ({ reviews: vi.fn(), moderate: vi.fn(), customers: vi.fn(), vouchers: vi.fn(), createVoucher: vi.fn(), push: vi.fn() }));
+const calls = vi.hoisted(() => ({ reviews: vi.fn(), moderate: vi.fn(), customers: vi.fn(), vouchers: vi.fn(), createVoucher: vi.fn(), push: vi.fn(), voucherTiers: vi.fn(), voucherCustomers: vi.fn() }));
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: calls.push, refresh: vi.fn() }) }));
 vi.mock('@/lib/api/endpoints/adminTools', () => ({
   ADMIN_LIST_PAGE_SIZE: 50,
   reviewsApi: { list: calls.reviews, moderate: calls.moderate },
   // The list reads through search() since 2026-11-07 (server-side filters + total).
   customersApi: { list: calls.customers, search: calls.customers, update: vi.fn() },
-  vouchersApi: { list: calls.vouchers, create: calls.createVoucher, setStatus: vi.fn() },
+  vouchersApi: { list: calls.vouchers, create: calls.createVoucher, setStatus: vi.fn(),
+    tiers: calls.voucherTiers, searchCustomers: calls.voucherCustomers },
 }));
 import { ReviewManager } from './ReviewManager';
 import { CustomerManager } from './CustomerManager';
@@ -21,6 +22,8 @@ beforeEach(() => {
   calls.reviews.mockResolvedValue([]);
   calls.customers.mockResolvedValue([]);
   calls.vouchers.mockResolvedValue([]);
+  calls.voucherTiers.mockResolvedValue([]);
+  calls.voucherCustomers.mockResolvedValue([]);
   calls.moderate.mockResolvedValue({});
 });
 afterEach(cleanup);
