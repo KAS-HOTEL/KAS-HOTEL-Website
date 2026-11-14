@@ -88,11 +88,9 @@ export const SUPER_ADMIN_NAV: readonly NavSection[] = [
     heading: 'Ưu đãi',
     items: [{ label: 'Voucher', href: '/admin/vouchers', status: 'available', icon: <TagIcon /> }],
   },
-  {
-    heading: 'Thanh toán',
-    // One account for every hotel (V51); SUPER_ADMIN confirms the payments made into it.
-    items: [{ label: 'Tài khoản thanh toán', href: '/partner/payment-account', status: 'available', icon: <TagIcon /> }],
-  },
+  // "Thanh toán → Tài khoản thanh toán" (static QR / manual transfer, V51) is hidden while KAS
+  // takes payments through SePay (owner 2026-11-12). The page, its API and the stored account
+  // stay as they are, so it can come back by restoring this section.
 ];
 
 /** An unknown role gets the smaller menu; the backend refuses anything beyond it. */

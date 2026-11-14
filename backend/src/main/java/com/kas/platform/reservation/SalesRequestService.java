@@ -117,13 +117,15 @@ public class SalesRequestService {
     private final AuditLogger audit;
     private final ObjectMapper json;
     private final ReservationEmailActionService bookingDecisions;
+    private final SePayProperties sePay;
 
     public SalesRequestService(SalesRequestRepository requests, AuditLogger audit, ObjectMapper json,
-                               ReservationEmailActionService bookingDecisions) {
+                               ReservationEmailActionService bookingDecisions, SePayProperties sePay) {
         this.requests = requests;
         this.audit = audit;
         this.json = json;
         this.bookingDecisions = bookingDecisions;
+        this.sePay = sePay;
     }
 
     /** The queue. Carries no guest contact detail, so it incurs no audit obligation. */
@@ -306,7 +308,9 @@ public class SalesRequestService {
         SalesRequestDetailView.Price price = requests.price(row.reservationId(), scope)
                 .map(this::price).orElse(null);
 
-        return new SalesRequestDetailView(summary(row), lines, guest, timeline, alternative, price);
+        var payment = new SalesRequestDetailView.Payment(sePay.checkoutEnabled(),
+                bookingDecisions.manualTransfer().isPresent());
+        return new SalesRequestDetailView(summary(row), lines, guest, timeline, alternative, price, payment);
     }
 
     /** The recorded breakdown; tax lines come from the S1 snapshot, amounts from the columns. */

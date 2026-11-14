@@ -49,18 +49,34 @@ public record SalesRequestDetailView(
         /** The latest alternative stay proposed for this request, or null (2026-11-07). */
         AlternativeOffer alternativeOffer,
         /** How the total is made up: rooms, voucher, taxes (2026-11-10). Null if not recorded. */
-        Price price) {
+        Price price,
+        /** How the guest can pay right now (2026-11-12). Null from older call sites. */
+        Payment payment) {
+
+    /** The 2026-11-10 shape, without the payment options. */
+    public SalesRequestDetailView(SalesRequestSummaryView summary, List<Line> lines, Guest guest,
+                                  List<Event> timeline, AlternativeOffer alternativeOffer, Price price) {
+        this(summary, lines, guest, timeline, alternativeOffer, price, null);
+    }
+
+    /**
+     * {@code onlineGateway}: the SePay gateway is on, so a paid order confirms the booking by
+     * itself (IPN). {@code manualTransfer}: a static QR is kept, so the guest may also pay by
+     * hand and staff confirm it.
+     */
+    public record Payment(boolean onlineGateway, boolean manualTransfer) {
+    }
 
     /** The pre-2026-11-07 shape, without the alternative offer. */
     public SalesRequestDetailView(SalesRequestSummaryView summary, List<Line> lines, Guest guest,
                                   List<Event> timeline) {
-        this(summary, lines, guest, timeline, null, null);
+        this(summary, lines, guest, timeline, null, null, null);
     }
 
     /** The 2026-11-07 shape, without the price breakdown. */
     public SalesRequestDetailView(SalesRequestSummaryView summary, List<Line> lines, Guest guest,
                                   List<Event> timeline, AlternativeOffer alternativeOffer) {
-        this(summary, lines, guest, timeline, alternativeOffer, null);
+        this(summary, lines, guest, timeline, alternativeOffer, null, null);
     }
 
     /**

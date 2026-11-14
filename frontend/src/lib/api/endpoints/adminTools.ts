@@ -19,6 +19,8 @@ export interface CustomerFilter {
   readonly page: number;
   readonly registeredFrom?: string;
   readonly registeredTo?: string;
+  /** Account status as shown (ACTIVE, UNVERIFIED, SUSPENDED, DISABLED, NO_ACCOUNT); absent = all. */
+  readonly status?: string;
 }
 
 export const customersApi = {
@@ -29,6 +31,7 @@ export const customersApi = {
       query: {
         q: filter.q, tier: filter.tier, page: filter.page, size: ADMIN_LIST_PAGE_SIZE,
         registeredFrom: filter.registeredFrom || undefined, registeredTo: filter.registeredTo || undefined,
+        status: filter.status || undefined,
       },
       onHeaders: (headers) => {
         const raw = headers.get('X-Total-Count');

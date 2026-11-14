@@ -2,6 +2,7 @@ package com.kas.platform.shared;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +16,14 @@ public class EmailOutboxService {
     private final JdbcClient jdbc;
     private final ObjectMapper json;
     private final EmailOutboxCipher cipher;
+    private final ApplicationEventPublisher events;
 
-    public EmailOutboxService(JdbcClient jdbc, ObjectMapper json, EmailOutboxCipher cipher) {
+    public EmailOutboxService(JdbcClient jdbc, ObjectMapper json, EmailOutboxCipher cipher,
+                              ApplicationEventPublisher events) {
         this.jdbc = jdbc;
         this.json = json;
         this.cipher = cipher;
+        this.events = events;
     }
 
     @Transactional
@@ -74,7 +78,7 @@ public class EmailOutboxService {
         }
         try {
             EmailOutboxCipher.Encrypted encrypted = cipher.encrypt(json.writeValueAsBytes(payload));
-            return jdbc.sql("""
+            boolean queued = jdbc.sql("""
                     INSERT INTO email_delivery_outbox
                         (aggregate_reference, event_key, payload_nonce, payload_ciphertext, status, attempts, next_attempt_at)
                     VALUES (:reference, :key, :nonce, :ciphertext, 'PENDING', 0, now())
@@ -82,6 +86,9 @@ public class EmailOutboxService {
                     """)
                     .param("reference", reference).param("key", eventKey.trim()).param("nonce", encrypted.nonce())
                     .param("ciphertext", encrypted.ciphertext()).update() == 1;
+            // Wakes the dispatcher after commit: the mail leaves now, not at the next poll.
+            if (queued) events.publishEvent(new EmailQueuedEvent(eventKey.trim()));
+            return queued;
         } catch (JsonProcessingException ex) {
             throw new IllegalStateException("Email outbox payload could not be serialized", ex);
         }

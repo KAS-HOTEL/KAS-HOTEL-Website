@@ -287,7 +287,8 @@
   U.$('#roomImage').innerHTML=U.img((room&&room.images&&room.images[0])||hero.images[1]||hero.images[0],hero.name,'',true,false);
   fetch('/api/v1/public/site-image-slots',{cache:'no-store',credentials:'omit'}).then(function(r){return r.ok?r.json():[];}).then(function(rows){var m={};(Array.isArray(rows)?rows:[]).forEach(function(s){if(s&&s.key&&s.enabled!==false&&s.imageReference)m[s.key]={url:s.imageReference};});return m;}).then(function(c){
     var managed=c['home.roomsSuites'];var img=U.$('#roomImage img');
-    if(managed&&managed.url&&img){img.src=managed.url;img.removeAttribute('srcset');img.setAttribute('data-admin-site-image','home.roomsSuites');}
+    /* Only an image location replaces the room photo: the slot's default is a description, not a URL. */
+    if(managed&&/^(\/|https:\/\/)/.test(managed.url||'')&&img){img.src=managed.url;img.removeAttribute('srcset');img.setAttribute('data-admin-site-image','home.roomsSuites');}
   }).catch(function(){});
 
   App.reveal();

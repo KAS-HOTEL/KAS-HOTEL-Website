@@ -149,6 +149,14 @@ app.get(['/saved-hotels', '/saved-hotels.html'], (req, res) => {
   const rest = q >= 0 ? req.originalUrl.slice(q + 1).split('&').filter((p) => p && !/^view=/.test(p)) : [];
   res.redirect(301, '/manage-booking.html?' + ['view=saved'].concat(rest).join('&'));
 });
+/* Design previews awaiting approval (2026-11-12): /design-preview/footer-v1 and /support-v1.
+   Marked DEMO on the page, kept out of search engines, never linked from the site. */
+app.get('/design-preview/:name', (req, res, next) => {
+  const file = 'design-preview-' + req.params.name + '.html';
+  if (!/^[a-z0-9-]+$/.test(req.params.name) || !PUBLIC_PAGES.has(file)) return next();
+  res.set('X-Robots-Tag', 'noindex, nofollow');
+  res.sendFile(path.join(ROOT, file));
+});
 app.get('/:page', (req, res, next) => {
   const raw = req.params.page;
   const file = /\.html$/.test(raw) ? raw : raw + '.html';   /* clean URLs: /hotels -> hotels.html */

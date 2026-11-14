@@ -9,12 +9,15 @@ import { ListState } from './ListState';
 import styles from './AdminTools.module.css';
 
 const STATUSES = ['DRAFT', 'ACTIVE', 'PAUSED', 'EXPIRED'] as const;
+/** Statuses staff can filter by: the stored ones plus USED_UP, which is derived from the uses. */
+const FILTER_STATUSES = [...STATUSES, 'USED_UP'] as const;
 
 const STATUS_LABEL: Readonly<Record<string, string>> = {
   DRAFT: 'Nháp',
   ACTIVE: 'Đang hoạt động',
   PAUSED: 'Tạm dừng',
   EXPIRED: 'Hết hạn',
+  USED_UP: 'Đã dùng hết',
 };
 
 const TYPE_LABEL: Readonly<Record<string, string>> = {
@@ -23,8 +26,21 @@ const TYPE_LABEL: Readonly<Record<string, string>> = {
   VALUE_ADD: 'Quyền lợi (cũ)',
 };
 
-function statusTone(status: string): 'success' | 'neutral' | 'warning' {
+function statusTone(status: string): 'success' | 'neutral' | 'warning' | 'danger' {
+  if (status === 'USED_UP') {
+    return 'danger';
+  }
   return status === 'ACTIVE' ? 'success' : status === 'PAUSED' ? 'warning' : 'neutral';
+}
+
+/** The status shown in the list; older responses without `displayStatus` fall back to the stored one. */
+function shownStatus(row: Voucher): string {
+  return row.displayStatus ?? row.status;
+}
+
+/** Past its last valid day: changing the stored status cannot make it usable again. */
+function expiredByDate(row: Voucher): boolean {
+  return shownStatus(row) === 'EXPIRED' && row.status !== 'EXPIRED';
 }
 
 function formatValue(row: Voucher): string {
@@ -94,7 +110,7 @@ export function VoucherManager({ hotels = [] }: { readonly hotels?: readonly { r
     {
       key: 'status',
       header: 'Trạng thái',
-      cell: (row) => <Badge tone={statusTone(row.status)}>{STATUS_LABEL[row.status] ?? row.status}</Badge>,
+      cell: (row) => <Badge tone={statusTone(shownStatus(row))}>{STATUS_LABEL[shownStatus(row)] ?? shownStatus(row)}</Badge>,
     },
     {
       key: 'actions',
@@ -104,8 +120,9 @@ export function VoucherManager({ hotels = [] }: { readonly hotels?: readonly { r
         <select
           className={styles.inlineSelect}
           aria-label={`Đổi trạng thái ${row.code}`}
-          value={row.status}
-          disabled={busy}
+          value={expiredByDate(row) ? 'EXPIRED' : row.status}
+          disabled={busy || expiredByDate(row)}
+          title={expiredByDate(row) ? 'Voucher đã quá ngày hiệu lực' : undefined}
           onChange={(event) => {
             const status = event.target.value;
             setBusy(true);
@@ -165,7 +182,7 @@ export function VoucherManager({ hotels = [] }: { readonly hotels?: readonly { r
           Trạng thái
           <select name="status">
             <option value="">Tất cả</option>
-            {STATUSES.map((status) => (
+            {FILTER_STATUSES.map((status) => (
               <option key={status} value={status}>
                 {STATUS_LABEL[status]}
               </option>

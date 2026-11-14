@@ -74,7 +74,8 @@
       var input = U.$('#' + id, host), field = input && input.closest('.sf');
       if (!input || !field) return;
       var trigger = U.$('.kas-date-trigger', field);
-      trigger.addEventListener('click', function(e){ e.stopPropagation(); openDatePicker(id); });
+      /* One panel at a time (2026-11-12): pressing the open field again closes it. */
+      trigger.addEventListener('click', function(e){ e.stopPropagation(); if (datePickerState.open === id && sharedDatePicker.classList.contains('open')) closeDatePickers(); else openDatePicker(id); });
     }
     function openDatePicker(id) {
       /* Date picker is the only search popup allowed to remain open. */
@@ -225,6 +226,14 @@
       }
     };
     document.addEventListener('click', host.__kasSearchOutside);
+    if (host.__kasSearchEsc) document.removeEventListener('keydown', host.__kasSearchEsc);
+    host.__kasSearchEsc = function (e) {
+      if (e.key !== 'Escape') return;
+      closeDatePickers();
+      pop.classList.remove('open'); btnG.setAttribute('aria-expanded', 'false');
+      if (!externalHotelPicker) { hotelPop.classList.remove('open'); hotelBtn.setAttribute('aria-expanded', 'false'); }
+    };
+    document.addEventListener('keydown', host.__kasSearchEsc);
 
     U.$$('.gpop__row', pop).forEach(function (r) {
       var key = r.dataset.k, out = U.$('output', r), lo = +r.dataset.min, hi = +r.dataset.max;

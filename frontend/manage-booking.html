@@ -88,6 +88,35 @@
 .mykas-timeline span.is-complete{color:#356052}.mykas-timeline span.is-complete i{background:#356052;color:white;border-color:#356052}
 .mykas-status{font-size:11px;line-height:1.5}.mykas-meta-label,.mykas-meta-value{font-size:11px}
 @media(max-width:620px){.mykas-timeline span{font-size:10px}.mykas-timeline{gap:6px}}
+
+/* 2026-11-12: booking / payment status pills, unsuccessful note, detail drawer */
+.mykas-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin-top:6px}
+.mykas-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #d7cdbd;border-radius:999px;background:#fbf9f4;font:600 11px/1.3 Inter,Arial,sans-serif;letter-spacing:.02em;color:#5d5547;text-transform:none}
+.mykas-pill:before{content:"";width:6px;height:6px;border-radius:50%;background:#b49358}
+.mykas-pill--ok{border-color:#b8cfc4;color:#2f5a4c;background:#f2f7f4}.mykas-pill--ok:before{background:#356052}
+.mykas-pill--warn{border-color:#e3cfa7;color:#7a5617;background:#fbf5e9}.mykas-pill--warn:before{background:#c08a2c}
+.mykas-pill--muted{border-color:#ddd6ca;color:#7c7468;background:#f6f3ee}.mykas-pill--muted:before{background:#a39a8c}
+.mykas-ended{margin:14px 0 0;padding:12px 14px;border-left:2px solid #a39a8c;background:#f6f3ee;font-size:13px;line-height:1.55;color:#4f493f}
+.mykas-paynote{margin:14px 0 0;padding:12px 14px;border-left:2px solid #c08a2c;background:#fbf5e9;font-size:13px;line-height:1.55;color:#5c4416}
+.mykas-tabs button .mykas-count{margin-left:6px;color:#a39a8c;font-weight:400}
+.mykas-drawer{position:fixed;inset:0;z-index:10050;display:flex;justify-content:flex-end}
+.mykas-drawer[hidden]{display:none}
+.mykas-drawer__backdrop{position:absolute;inset:0;background:rgba(22,21,18,.48);animation:mykasFade .2s ease}
+.mykas-drawer__panel{position:relative;width:min(720px,100%);height:100%;overflow-y:auto;overscroll-behavior:contain;background:#fbf9f4;box-shadow:-18px 0 48px rgba(0,0,0,.18);padding:28px 32px 40px;animation:mykasSlide .25s ease}
+.mykas-drawer__bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid #e3dccf}
+.mykas-drawer__back{border:0;background:none;padding:6px 0;font:600 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.08em;color:#6b4b1b;cursor:pointer}
+.mykas-drawer__close{border:1px solid #d7cdbd;background:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:#25241f}
+.mykas-drawer__panel .card{box-shadow:none;border:0;background:transparent;padding:0}
+.mykas-drawer__panel .dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+.mykas-drawer__panel .dl dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8b8172}.mykas-drawer__panel .dl dd{margin:4px 0 0;font-size:15px;color:#25241f}
+body.mykas-drawer-open{overflow:hidden}
+.mykas-detail__head{margin:0 0 6px}.mykas-detail__ref{margin:0;font-size:11px;letter-spacing:.14em;color:#8b8172}.mykas-detail__hotel{margin:4px 0 8px;font:400 34px/1.1 "Cormorant Garamond",Georgia,serif;color:#25241f}
+.mykas-detail__section{margin-top:22px;padding-top:18px;border-top:1px solid #e3dccf}.mykas-detail__h{margin:0 0 12px;font:600 11px/1.2 Inter,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8c6a32}
+.mykas-detail .prow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}.mykas-detail .prow--total{border-top:1px solid #e3dccf;margin-top:6px;padding-top:10px;font-size:16px}
+.mykas-detail__links,.mykas-detail #mbActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+@keyframes mykasFade{from{opacity:0}to{opacity:1}}@keyframes mykasSlide{from{transform:translateX(32px);opacity:.6}to{transform:none;opacity:1}}
+@media(max-width:620px){.mykas-drawer__panel{padding:18px 16px 32px}.mykas-drawer__panel .dl{grid-template-columns:1fr}.mykas-pills{justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){.mykas-drawer__backdrop,.mykas-drawer__panel{animation:none}}
 </style>
 
 <script src="js/site-images.js" defer></script><link rel="icon" href="assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
@@ -123,6 +152,7 @@
   <div class="mykas-tabs" role="tablist" aria-label="Booking status">
     <button type="button" class="is-active" data-filter="all" role="tab" aria-selected="true" data-mykas="all">ALL</button>
     <button type="button" data-filter="upcoming" role="tab" aria-selected="false" data-mykas="upcoming">UPCOMING</button>
+    <button type="button" data-filter="processing" role="tab" aria-selected="false" data-mykas="processingTab">IN PROGRESS</button>
     <button type="button" data-filter="completed" role="tab" aria-selected="false" data-mykas="completed">COMPLETED</button>
     <button type="button" data-filter="cancelled" role="tab" aria-selected="false" data-mykas="cancelled">CANCELLED</button>
   </div>
@@ -189,6 +219,14 @@
   </details>
 
   <div id="result" style="margin-top:26px"></div>
+  <!-- Booking detail (2026-11-12): its own drawer and URL (?ref=), never rendered at the bottom of the list. -->
+  <div id="mbDrawer" class="mykas-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="mbDrawerTitle">
+    <div class="mykas-drawer__backdrop" data-close-detail></div>
+    <aside class="mykas-drawer__panel" tabindex="-1">
+      <div class="mykas-drawer__bar"><button type="button" class="mykas-drawer__back" data-close-detail id="mbDrawerTitle">&larr; MY BOOKINGS</button><button type="button" class="mykas-drawer__close" data-close-detail aria-label="Close">&times;</button></div>
+      <div id="mbDrawerBody"></div>
+    </aside>
+  </div>
 </main>
 
 <div id="trustStrip"></div>
@@ -294,10 +332,13 @@
         });
         renderMyKas(activeFilter || 'all');
         paintRecent();
+        document.dispatchEvent(new CustomEvent('kas:stays-loaded'));
       });
     }).catch(function (error) {
       var main = U.$('main');
       if (main) main.hidden = false;
+      /* Not signed in: a ?ref=&email= link still falls back to the guest lookup. */
+      document.dispatchEvent(new CustomEvent('kas:stays-loaded'));
       var lookupPanel = U.$('.mykas-lookup');
       if (memberProfile) {
         if (memberArea) memberArea.hidden = false;
@@ -411,7 +452,7 @@
       banner:'Meaningful places<br>for a more inspired you.', title:'My bookings',
       profileTitle:'My profile', profileSubtitle:'Manage your KAS member details.',
       savedTitle:'Saved hotels', savedSubtitle:'The hotels you have saved to your KAS account.',
-      subtitle:'View, manage and revisit your KAS stays.', all:'ALL', upcoming:'UPCOMING', completed:'COMPLETED', cancelled:'CANCELLED',
+      subtitle:'View, manage and revisit your KAS stays.', all:'ALL', upcoming:'UPCOMING', processingTab:'IN PROGRESS', completed:'COMPLETED', cancelled:'CANCELLED / UNSUCCESSFUL',
       lookupTitle:'Look up a booking with booking number and email', lookupIntro:'Use this option to retrieve a reservation by its reference.',
       bookingNumber:'Booking number', email:'Email address', formatHint:'Format: KAS + 2-digit branch code + 5 digits.', findBooking:'Find my booking',
       noBookings:'Your stays will appear here', noBookingsText:'There are no bookings saved in this browser yet. Find a stay to make your first reservation.',
@@ -426,7 +467,7 @@
       banner:'Những điểm đến ý nghĩa<br>khơi nguồn cảm hứng.', title:'Đặt phòng của tôi',
       profileTitle:'Hồ sơ của tôi', profileSubtitle:'Quản lý thông tin thành viên KAS của bạn.',
       savedTitle:'Khách sạn đã lưu', savedSubtitle:'Những khách sạn bạn đã lưu vào tài khoản KAS.',
-      subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'TẤT CẢ', upcoming:'SẮP TỚI', completed:'ĐÃ HOÀN TẤT', cancelled:'ĐÃ HỦY',
+      subtitle:'Xem, quản lý và tìm lại những kỳ nghỉ cùng KAS.', all:'TẤT CẢ', upcoming:'SẮP TỚI', processingTab:'ĐANG XỬ LÝ', completed:'ĐÃ HOÀN TẤT', cancelled:'ĐÃ HỦY / KHÔNG THÀNH CÔNG',
       lookupTitle:'Tra cứu đặt phòng bằng mã đặt phòng và email', lookupIntro:'Dùng chức năng này để tìm đặt phòng bằng mã xác nhận.',
       bookingNumber:'Mã đặt phòng', email:'Địa chỉ email', formatHint:'Định dạng: KAS + mã chi nhánh 2 chữ số + 5 chữ số.', findBooking:'Tìm đặt phòng',
       noBookings:'Các kỳ nghỉ của bạn sẽ hiển thị tại đây', noBookingsText:'Chưa có đặt phòng nào được lưu trong trình duyệt này. Hãy tìm khách sạn để bắt đầu đặt phòng.',
@@ -460,20 +501,32 @@
     if (isNaN(d.getTime())) return U.esc(value);
     return d.toLocaleDateString(myKasLang() === 'vi' ? 'vi-VN' : 'en-GB', {day:'2-digit',month:'short',year:'numeric'}).toUpperCase();
   }
-  function statusKey(b) {
-    var s = String(b.status || '').toUpperCase();
-    if (s === 'CANCELLED') return 'cancelled';
-    if (s === 'COMPLETED' || s === 'CHECKED_OUT') return 'completed';
-    return 'upcoming';
+  /* Tab group (2026-11-12): upcoming = confirmed stays, processing = requests still moving,
+     cancelled = cancelled or unsuccessful (expired, declined, closed), completed = stayed. */
+  function statusKey(b) { return window.KAS_REQUEST_VIEW.group(b); }
+  function pill(text, tone) { return '<span class="mykas-pill mykas-pill--' + tone + '">' + U.esc(text) + '</span>'; }
+  function paintTabCounts(all) {
+    var counts = { all: all.length, upcoming: 0, processing: 0, completed: 0, cancelled: 0 };
+    all.forEach(function (b) { var g = statusKey(b); counts[g] = (counts[g] || 0) + 1; });
+    U.$$('.mykas-tabs [data-filter]').forEach(function (btn) {
+      var f = btn.getAttribute('data-filter');
+      /* Only groups that hold bookings are offered (All always). */
+      btn.hidden = f !== 'all' && all.length > 0 && !counts[f];
+      var c = btn.querySelector('.mykas-count'); if (!c) { c = document.createElement('span'); c.className = 'mykas-count'; btn.appendChild(c); }
+      c.textContent = all.length ? String(counts[f] || 0) : '';
+    });
+    if (activeFilter !== 'all' && all.length && !counts[activeFilter]) { activeFilter = 'all'; U.$$('.mykas-tabs [data-filter]').forEach(function (b) { var a = b.getAttribute('data-filter') === 'all'; b.classList.toggle('is-active', a); b.setAttribute('aria-selected', a ? 'true' : 'false'); }); }
   }
   function renderMyKas(filter) {
     var host = U.$('#myKasBookings');
     if (!host) return;
     var all = liveStays;
     var now = U.today();
+    paintTabCounts(all);
+    filter = activeFilter;
     var list = all.filter(function (b) {
       if (filter === 'all') return true;
-      if (filter === 'upcoming') return statusKey(b) === 'upcoming' && (!b.checkIn || b.checkIn >= now);
+      if (filter === 'upcoming') return statusKey(b) === 'upcoming';
       return statusKey(b) === filter;
     });
     if (!list.length) {
@@ -488,35 +541,28 @@
       var nights = Number(b.nights || U.nights(b.checkIn,b.checkOut) || 1);
       var guestCount = B.guestLabel ? B.guestLabel(b) : ((b.adults == null ? '—' : b.adults) + ' ' + (myKasLang()==='vi'?'khách':'guests'));
       var amount = U.vnd ? U.vnd(b.total) : String(b.total == null ? "—" : b.total);
-      var statusText = window.KAS_REQUEST_VIEW.state(b, myKasLang()==='vi').label;
+      var vi = myKasLang()==='vi', view = window.KAS_REQUEST_VIEW;
+      var statusText = view.state(b, vi).label, pay = view.payment(b, vi), ended = view.endedReason(b, vi);
+      var bookingTone = st === 'cancelled' ? 'muted' : st === 'processing' ? 'warn' : 'ok';
+      var payTone = pay.code === 'PAID' ? 'ok' : pay.code === 'UNPAID' || pay.code === 'PENDING' ? 'warn' : 'muted';
+      var pills = '<div class="mykas-pills">' + pill(statusText, bookingTone) + (pay.code === 'NONE' && st !== 'processing' ? '' : pill(pay.label, payTone)) + '</div>';
+      var due = b.paymentDueAt ? new Date(b.paymentDueAt).toLocaleString(vi?'vi-VN':'en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}) : '';
+      var payNote = pay.code === 'UNPAID' ? '<p class="mykas-paynote" role="status">' + U.esc(vi ? 'Khách sạn đã xác nhận còn phòng. Vui lòng thanh toán qua liên kết SePay trong email' + (due ? ' trước ' + due : '') + ' — đặt phòng được xác nhận tự động khi thanh toán thành công.' : 'The hotel confirmed availability. Please pay with the SePay link in your email' + (due ? ' by ' + due : '') + ' — your booking is confirmed automatically once the payment succeeds.') + '</p>' : pay.code === 'PENDING' ? '<p class="mykas-paynote" role="status">' + U.esc(vi ? 'Bạn đã báo chuyển khoản. Khách sạn đang kiểm tra giao dịch.' : 'You reported a transfer. The hotel is checking it.') + '</p>' : '';
       var bookingNo = b.bookingNumber || '';
       var imgHtml = image ? U.img(image, roomName) : '<div class="mykas-image-fallback"></div>';
       var timeline = window.KAS_REQUEST_VIEW.timeline(b, myKasLang()==='vi');
-      var cancelledInfo = '<p class="muted">'+U.esc(statusText)+'</p>';
+      var cancelledInfo = '<p class="mykas-ended" role="status">'+U.esc(ended || statusText)+'</p>';
       return '<article class="mykas-booking" data-booking="'+U.esc(bookingNo)+'"><div class="mykas-booking__image">'+imgHtml+'</div><div class="mykas-booking__content">'+
-        '<div class="mykas-booking__top"><div><h2 class="mykas-booking__hotel">'+U.esc(b.hotelName || hotel.name || 'KAS')+'</h2><p class="mykas-booking__location">'+U.esc(b.hotelAddress || hotel.city || '')+'</p></div><div class="mykas-booking__ref">'+mt('booking')+'<br>'+U.esc(bookingNo)+'<span class="mykas-status">'+statusText+'</span></div></div>'+
+        '<div class="mykas-booking__top"><div><h2 class="mykas-booking__hotel">'+U.esc(b.hotelName || hotel.name || 'KAS')+'</h2><p class="mykas-booking__location">'+U.esc(b.hotelAddress || hotel.city || '')+'</p></div><div class="mykas-booking__ref">'+mt('booking')+'<br>'+U.esc(bookingNo)+'</div></div>'+pills+
         '<div class="mykas-dates"><div><div class="mykas-date-label">'+mt('checkIn')+'</div><div class="mykas-date-value">'+dateLabel(b.checkIn)+'</div><div class="mykas-date-time">'+U.esc(b.checkInTime || '—')+'</div></div><div class="mykas-night-line"><span>'+nights+' '+mt('nights')+'</span></div><div style="text-align:right"><div class="mykas-date-label">'+mt('checkOut')+'</div><div class="mykas-date-value">'+dateLabel(b.checkOut)+'</div><div class="mykas-date-time">'+U.esc(b.checkOutTime || '—')+'</div></div></div>'+
-        '<div class="mykas-booking__meta"><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('room')+'</div><div class="mykas-meta-value">'+U.esc(roomName)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('guests')+'</div><div class="mykas-meta-value">'+U.esc(guestCount)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('total')+'</div><div class="mykas-meta-value">VND '+amount+'<small>' + (myKasLang()==='vi'?'Giá trị yêu cầu':'Request amount') + '</small></div></div><div class="mykas-booking__actions"><button class="mykas-action-main" type="button" data-view="'+U.esc(bookingNo)+'">'+mt('view')+' <span>⟶</span></button><div class="mykas-action-links">'+(cancelled?'<button type="button" data-refund="'+U.esc(bookingNo)+'">'+mt('refund')+'</button>':'<button type="button" data-view="'+U.esc(bookingNo)+'">'+mt('manage')+'</button>'+(st==='upcoming'?'<button type="button" data-cancel="'+U.esc(bookingNo)+'">'+mt('cancel')+'</button>':''))+'</div></div></div>'+
-        (cancelled ? cancelledInfo : timeline)+'</div></article>';
+        '<div class="mykas-booking__meta"><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('room')+'</div><div class="mykas-meta-value">'+U.esc(roomName)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('guests')+'</div><div class="mykas-meta-value">'+U.esc(guestCount)+'</div></div><div class="mykas-meta-item"><div class="mykas-meta-label">'+mt('total')+'</div><div class="mykas-meta-value">VND '+amount+'<small>' + (myKasLang()==='vi'?'Giá trị yêu cầu':'Request amount') + '</small></div></div><div class="mykas-booking__actions"><button class="mykas-action-main" type="button" data-view="'+U.esc(bookingNo)+'">'+mt('view')+' <span>⟶</span></button><div class="mykas-action-links">'+(cancelled?'<button type="button" data-refund="'+U.esc(bookingNo)+'">'+mt('refund')+'</button>':'<button type="button" data-view="'+U.esc(bookingNo)+'">'+mt('manage')+'</button>'+(st==='upcoming'||st==='processing'?'<button type="button" data-cancel="'+U.esc(bookingNo)+'">'+mt('cancel')+'</button>':''))+'</div></div></div>'+
+        (cancelled ? cancelledInfo : timeline + payNote)+'</div></article>';
     }).join('');
-    host.querySelectorAll('[data-view]').forEach(function(btn){btn.addEventListener('click',function(){
-      var b=liveStays.find(function(row){return row.bookingNumber===btn.getAttribute('data-view');}); if(!b)return;
-      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
-      var details=U.$('.mykas-lookup'); if(details)details.open=true;
-      lookup();
+    host.querySelectorAll('[data-view],[data-refund]').forEach(function(btn){btn.addEventListener('click',function(){
+      openDetail(btn.getAttribute('data-view') || btn.getAttribute('data-refund'), btn);
     });});
     host.querySelectorAll('[data-cancel]').forEach(function(btn){btn.addEventListener('click',function(){
-      var b=liveStays.find(function(row){return row.bookingNumber===btn.getAttribute('data-cancel');}); if(!b)return;
-      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
-      var details=U.$('.mykas-lookup'); if(details)details.open=true;
-      lookup();
-      setTimeout(function(){var c=U.$('#canBtn');if(c)c.click();},180);
-    });});
-    host.querySelectorAll('[data-refund]').forEach(function(btn){btn.addEventListener('click',function(){
-      var b=liveStays.find(function(row){return row.bookingNumber===btn.getAttribute('data-refund');}); if(!b)return;
-      U.$('#ref').value=b.bookingNumber; U.$('#email').value=b.guest && b.guest.email || '';
-      var details=U.$('.mykas-lookup'); if(details)details.open=true;
-      lookup();
+      if(openDetail(btn.getAttribute('data-cancel'), btn)) setTimeout(function(){var c=U.$('#canBtn');if(c)c.click();},60);
     });});
   }
   var activeFilter = 'all';
@@ -585,11 +631,8 @@
       };
       return;
     }
-    render(bk);
-    U.toast('Booking ' + bk.bookingNumber + ' found.');
-    setTimeout(function () {
-      U.$('#result').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 120);
+    U.$('#result').innerHTML = '';
+    openDetail(bk.bookingNumber);
   }
   U.$('#lookupForm').addEventListener('submit', function (e) { e.preventDefault(); lookup(); });
   ['ref','email'].forEach(function (id) {
@@ -599,9 +642,9 @@
   /* ---- render a found booking ---- */
   function render(bk) {
     var vi=myKasLang()==='vi', view=window.KAS_REQUEST_VIEW;
-    U.$('#result').innerHTML=view.details(bk,vi);
+    U.$('#mbDrawerBody').innerHTML=view.details(bk,vi);
     var actions=U.$('#mbActions');
-    var closed=['CANCELLED','COMPLETED','CHECKED_OUT','NO_SHOW','LOST','DECLINED','EXPIRED'].indexOf(bk.status)>=0;
+    var g=view.group(bk), closed=g==='cancelled'||g==='completed';
     if(!closed){
       /* The backend decides the free window, the fee and the refund (2026-11-10); the page shows them before the guest confirms. */
       var button=document.createElement('button');button.className='btn btn--ghost';button.id='canBtn';button.textContent=vi?'Hủy đặt phòng':'Cancel booking';
@@ -662,13 +705,59 @@
     }
   }
 
-  /* ---- deep link ?ref=&email= ---- */
-  var q = U.qs();
-  if (q.ref) {
-    U.$('#ref').value = q.ref;
-    if (q.email) U.$('#email').value = q.email;
-    if (q.ref && q.email) lookup();
+  /* ---- booking detail drawer (2026-11-12) ----
+     Opened from a card, the lookup form or the URL (?ref=KAS…). Only this account's own bookings
+     (from /me/stays) can open: another reference shows "not in your account", never its data. */
+  var drawer = U.$('#mbDrawer'), lastFocus = null, openRef = null;
+  function setRefInUrl(ref) {
+    try { var u = new URL(window.location.href); if (ref) u.searchParams.set('ref', ref); else { u.searchParams.delete('ref'); u.searchParams.delete('email'); u.searchParams.delete('payment'); } window.history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (e) {}
   }
+  function openDetail(ref, trigger) {
+    var bk = liveStays.find(function (row) { return String(row.bookingNumber || '').toUpperCase() === String(ref || '').toUpperCase(); });
+    if (!bk) return false;
+    lastFocus = trigger || document.activeElement; openRef = bk.bookingNumber;
+    render(bk);
+    drawer.hidden = false; document.body.classList.add('mykas-drawer-open');
+    setRefInUrl(bk.bookingNumber);
+    var panel = drawer.querySelector('.mykas-drawer__panel'); panel.scrollTop = 0; panel.focus();
+    return true;
+  }
+  function closeDetail() {
+    if (drawer.hidden) return;
+    drawer.hidden = true; document.body.classList.remove('mykas-drawer-open'); openRef = null;
+    setRefInUrl(null);
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  U.$$('[data-close-detail]', drawer).forEach(function (el) { el.addEventListener('click', closeDetail); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+  /* Re-render an open detail after the stays reload (cancellation, check-out, payment). */
+  document.addEventListener('kas:stays-loaded', function () { if (openRef && !openDetail(openRef)) closeDetail(); });
+
+  /* ---- deep link: ?ref= (signed in) or ?ref=&email= (lookup); SePay return ?payment= ---- */
+  var q = U.qs();
+  var pendingRef = q.ref || null, paymentReturn = q.payment || null, paymentPolls = 0;
+  if (q.ref) { U.$('#ref').value = q.ref; if (q.email) U.$('#email').value = q.email; }
+  document.addEventListener('kas:stays-loaded', function () {
+    if (!pendingRef) return;
+    var ref = pendingRef;
+    if (openDetail(ref)) {
+      if (paymentReturn) {
+        var vi = myKasLang() === 'vi', bk = liveStays.find(function (r) { return r.bookingNumber === openRef; });
+        var paid = bk && window.KAS_REQUEST_VIEW.payment(bk, vi).code === 'PAID';
+        if (paymentReturn === 'success' && !paid && paymentPolls < 6) {
+          /* SePay's IPN can land a few seconds after the guest returns: re-read the stays a few times. */
+          if (paymentPolls === 0) U.toast(vi ? 'Đang chờ SePay xác nhận thanh toán…' : 'Waiting for SePay to confirm the payment…');
+          paymentPolls++; setTimeout(function () { loadProfile(); }, 5000); return;
+        }
+        U.toast(paid ? (vi ? 'Thanh toán thành công. Đặt phòng đã được xác nhận.' : 'Payment received. Your booking is confirmed.')
+          : paymentReturn === 'success' ? (vi ? 'SePay chưa báo kết quả. Trạng thái sẽ tự cập nhật khi SePay xác nhận.' : 'SePay has not reported yet. The status updates as soon as SePay confirms.')
+          : (vi ? 'Thanh toán chưa hoàn tất. Bạn có thể thử lại bằng liên kết trong email.' : 'The payment was not completed. You can try again with the link in your email.'));
+        paymentReturn = null;
+      }
+      pendingRef = null;
+    } else if (q.email) { pendingRef = null; lookup(); }
+    else { pendingRef = null; U.$('#result').innerHTML = '<p class="mykas-note" role="status">' + (myKasLang() === 'vi' ? 'Không tìm thấy đặt phòng này trong tài khoản của bạn.' : 'This booking is not in your account.') + '</p>'; }
+  });
 })();
 </script>
 <script>

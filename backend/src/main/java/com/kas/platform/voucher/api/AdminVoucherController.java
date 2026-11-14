@@ -31,9 +31,26 @@ import java.util.UUID;
 @PreAuthorize("hasAuthority('" + Permissions.VOUCHER_MANAGE + "')")
 public class AdminVoucherController {
     private final JdbcClient jdbc;
+    private final java.time.Clock clock;
 
-    public AdminVoucherController(JdbcClient jdbc) {
+    public AdminVoucherController(JdbcClient jdbc, java.time.Clock clock) {
         this.jdbc = jdbc;
+        this.clock = clock;
+    }
+
+    /**
+     * The status staff see. A voucher past its last valid day (business date,
+     * Asia/Ho_Chi_Minh) shows as EXPIRED and one whose total uses are spent shows
+     * as USED_UP, whatever status is stored — the guest side already refuses both
+     * (StayAdjustmentService). The stored status is left as it is.
+     */
+    private static final String DISPLAY_STATUS = """
+            CASE WHEN status = 'EXPIRED' OR (valid_to IS NOT NULL AND valid_to < :today) THEN 'EXPIRED'
+                 WHEN usage_limit_total IS NOT NULL AND used_count >= usage_limit_total THEN 'USED_UP'
+                 ELSE status::text END""";
+
+    private java.time.LocalDate today() {
+        return java.time.LocalDate.now(clock.withZone(com.kas.platform.shared.TimeConfiguration.PROPERTY_ZONE));
     }
 
     @GetMapping
@@ -46,16 +63,17 @@ public class AdminVoucherController {
                        value_percent, value_minor, value_add_description, currency,
                        valid_from, valid_to, stay_from, stay_to, min_nights, min_total_minor,
                        usage_limit_total, usage_limit_per_customer, used_count, stackable, status::text AS status,
+                       __DISPLAY_STATUS__ AS display_status,
                        COALESCE((SELECT json_agg(json_build_object('slug', p.slug, 'name', COALESCE(t.name, p.slug)) ORDER BY p.slug)::text
                                    FROM property p LEFT JOIN property_translation t ON t.property_id = p.id AND t.locale = 'vi'
                                   WHERE p.id = ANY (voucher.applicable_property_ids)), '[]') AS properties
                   FROM voucher
                  WHERE (:q = '' OR code::text ILIKE '%' || :q || '%' OR name ILIKE '%' || :q || '%')
-                   AND (CAST(:status AS text) IS NULL OR status::text = :status)
+                   AND (CAST(:status AS text) IS NULL OR (__DISPLAY_STATUS__) = :status)
                  ORDER BY created_at DESC, id
                  LIMIT 200
-                """)
-                .param("q", search).param("status", state)
+                """.replace("__DISPLAY_STATUS__", DISPLAY_STATUS))
+                .param("q", search).param("status", state).param("today", today())
                 .query((rs, row) -> new VoucherRow(rs.getObject("id", UUID.class), rs.getString("code"),
                         rs.getString("name"), rs.getString("description"), rs.getString("voucher_type"),
                         rs.getBigDecimal("value_percent"), rs.getObject("value_minor", Long.class),
@@ -64,7 +82,7 @@ public class AdminVoucherController {
                         rs.getObject("stay_from", LocalDate.class), rs.getObject("stay_to", LocalDate.class),
                         (Integer) rs.getObject("min_nights"), rs.getObject("min_total_minor", Long.class),
                         (Integer) rs.getObject("usage_limit_total"), (Integer) rs.getObject("usage_limit_per_customer"),
-                        rs.getInt("used_count"), rs.getBoolean("stackable"), rs.getString("status"),
+                        rs.getInt("used_count"), rs.getBoolean("stackable"), rs.getString("status"), rs.getString("display_status"),
                         hotels(rs.getString("properties"))))
                 .list();
     }
@@ -187,18 +205,19 @@ public class AdminVoucherController {
                        value_percent, value_minor, value_add_description, currency,
                        valid_from, valid_to, stay_from, stay_to, min_nights, min_total_minor,
                        usage_limit_total, usage_limit_per_customer, used_count, stackable, status::text AS status,
+                       __DISPLAY_STATUS__ AS display_status,
                        COALESCE((SELECT json_agg(json_build_object('slug', p.slug, 'name', COALESCE(t.name, p.slug)) ORDER BY p.slug)::text
                                    FROM property p LEFT JOIN property_translation t ON t.property_id = p.id AND t.locale = 'vi'
                                   WHERE p.id = ANY (voucher.applicable_property_ids)), '[]') AS properties
                   FROM voucher WHERE id = :id
-                """).param("id", id).query((rs, row) -> new VoucherRow(rs.getObject("id", UUID.class),
+                """.replace("__DISPLAY_STATUS__", DISPLAY_STATUS)).param("id", id).param("today", today()).query((rs, row) -> new VoucherRow(rs.getObject("id", UUID.class),
                 rs.getString("code"), rs.getString("name"), rs.getString("description"), rs.getString("voucher_type"),
                 rs.getBigDecimal("value_percent"), rs.getObject("value_minor", Long.class), rs.getString("value_add_description"),
                 rs.getString("currency"), rs.getObject("valid_from", LocalDate.class), rs.getObject("valid_to", LocalDate.class),
                 rs.getObject("stay_from", LocalDate.class), rs.getObject("stay_to", LocalDate.class),
                 (Integer) rs.getObject("min_nights"), rs.getObject("min_total_minor", Long.class),
                 (Integer) rs.getObject("usage_limit_total"), (Integer) rs.getObject("usage_limit_per_customer"),
-                rs.getInt("used_count"), rs.getBoolean("stackable"), rs.getString("status"),
+                rs.getInt("used_count"), rs.getBoolean("stackable"), rs.getString("status"), rs.getString("display_status"),
                 hotels(rs.getString("properties")))).optional();
     }
 
@@ -224,6 +243,8 @@ public class AdminVoucherController {
                              LocalDate stayFrom, LocalDate stayTo, Integer minNights,
                              Long minTotalMinor, Integer usageLimitTotal, Integer usageLimitPerCustomer,
                              int usedCount, boolean stackable, String status,
+                             /** What staff see: {@code status}, or EXPIRED / USED_UP when the dates or uses say so. */
+                             String displayStatus,
                              /** Hotels the voucher applies to; empty means every hotel. */
                              List<VoucherHotel> properties) {}
 

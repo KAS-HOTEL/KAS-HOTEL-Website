@@ -8,11 +8,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
+
+import jakarta.annotation.PreDestroy;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /** Sends committed mail commands with bounded exponential retries. */
@@ -33,6 +39,13 @@ public class EmailOutboxDispatcher {
     private final int maxAttempts;
     private final int batchSize;
     private final AtomicBoolean pausedLogged = new AtomicBoolean();
+    /** One worker for after-commit wake-ups; claims use SKIP LOCKED, so it never doubles a send. */
+    private final ExecutorService wakeWorker = Executors.newSingleThreadExecutor(runnable -> {
+        Thread thread = new Thread(runnable, "kas-email-wake");
+        thread.setDaemon(true);
+        return thread;
+    });
+    private final AtomicBoolean wakeQueued = new AtomicBoolean();
 
     public EmailOutboxDispatcher(EmailOutboxRepository outbox, EmailOutboxCipher cipher,
             EmailTransport transport, ObjectMapper json,
@@ -44,6 +57,28 @@ public class EmailOutboxDispatcher {
         this.json = json;
         this.maxAttempts = maxAttempts;
         this.batchSize = batchSize;
+    }
+
+    /**
+     * A mail was queued and its transaction committed: deliver now (2026-11-12, emails felt
+     * slow). The poll below stays as the safety net for retries and for anything missed here.
+     */
+    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT, fallbackExecution = true)
+    public void onEmailQueued(EmailQueuedEvent event) {
+        if (!wakeQueued.compareAndSet(false, true)) return;
+        wakeWorker.execute(() -> {
+            wakeQueued.set(false);
+            try {
+                dispatchDue();
+            } catch (RuntimeException ex) {
+                log.warn("Immediate email dispatch failed; the poll retries ({})", ex.getClass().getSimpleName());
+            }
+        });
+    }
+
+    @PreDestroy
+    void stopWakeWorker() {
+        wakeWorker.shutdownNow();
     }
 
     @Scheduled(fixedDelayString = "${kas.email.outbox.poll-interval:PT5S}")

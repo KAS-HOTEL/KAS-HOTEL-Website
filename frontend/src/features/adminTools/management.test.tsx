@@ -120,7 +120,7 @@ it('lists customers with code, account status and registration date, and opens a
   for (const header of ['Mã khách hàng', 'Họ tên', 'Email', 'Số điện thoại', 'Ngày đăng ký', 'Trạng thái tài khoản']) {
     expect(screen.getByRole('columnheader', { name: header })).toBeTruthy();
   }
-  expect(screen.getByText('Chưa xác thực email')).toBeTruthy();
+  expect(screen.getByText('Chưa xác thực email', { selector: 'span' })).toBeTruthy();
   expect(screen.getByText('01/10/2026')).toBeTruthy();
   await userEvent.click(screen.getByText('lan@example.invalid'));
   expect(calls.push).toHaveBeenCalledWith('/admin/customers/c1');
@@ -173,4 +173,36 @@ it('refuses a registration range that ends before it starts, without calling the
   await userEvent.click(screen.getByRole('button', { name: 'Tìm kiếm' }));
   expect(await screen.findByText('Chọn ít nhất một đầu của khoảng ngày.')).toBeTruthy();
   expect(calls.customers.mock.calls.length).toBe(before);
+});
+
+it('shows a voucher past its dates as expired and a spent one as used up, in red', async () => {
+  calls.vouchers.mockResolvedValue([
+    { id: 'e1', code: 'KAS-EXPIRED2', name: 'Cũ', type: 'PERCENTAGE', valuePercent: 10, currency: 'VND', validFrom: '2026-11-09', validTo: '2026-11-10', usedCount: 0, usageLimitTotal: 1, stackable: false, status: 'ACTIVE', displayStatus: 'EXPIRED', properties: [] },
+    { id: 'u1', code: 'KAS-USEDUP23', name: 'Hết lượt', type: 'PERCENTAGE', valuePercent: 10, currency: 'VND', usedCount: 1, usageLimitTotal: 1, stackable: false, status: 'ACTIVE', displayStatus: 'USED_UP', properties: [] },
+  ]);
+  render(<VoucherManager />);
+  const usedUp = await screen.findByText('Đã dùng hết', { selector: 'span' });
+  expect(usedUp.className).toMatch(/danger/);
+  const expiredSelect = screen.getByLabelText('Đổi trạng thái KAS-EXPIRED2') as HTMLSelectElement;
+  expect(expiredSelect.value).toBe('EXPIRED');
+  expect(expiredSelect.disabled).toBe(true);
+  const usedUpSelect = screen.getByLabelText('Đổi trạng thái KAS-USEDUP23') as HTMLSelectElement;
+  expect(usedUpSelect.value).toBe('ACTIVE');
+  expect(usedUpSelect.disabled).toBe(false);
+  expect(screen.getByRole('option', { name: 'Đã dùng hết' })).toBeTruthy();
+});
+
+it('shows each customer tier as a badge and filters by account status on the server', async () => {
+  calls.customers.mockResolvedValue([
+    { id: 'g1', fullName: 'Minh', email: 'minh@example.invalid', phone: '0901', locale: 'vi', createdAt: '2026-10-01T03:00:00Z', tier: 'GOLD', points: 0, reservedPoints: 0, customerCode: 'KAS-GOLD01', accountStatus: 'ACTIVE', avatarUrl: null },
+    { id: 'n1', fullName: 'Hoa', email: 'hoa@example.invalid', phone: '0902', locale: 'vi', createdAt: '2026-10-02T03:00:00Z', tier: null, points: 0, reservedPoints: 0, customerCode: 'KAS-NONE01', accountStatus: 'NO_ACCOUNT', avatarUrl: null },
+  ]);
+  render(<CustomerManager />);
+  expect(await screen.findByRole('columnheader', { name: 'Hạng thành viên' })).toBeTruthy();
+  expect(screen.getByText('Gold', { selector: 'span' }).className).toMatch(/tierGold/);
+  expect(screen.getByText('Chưa có hạng')).toBeTruthy();
+  await userEvent.selectOptions(screen.getByLabelText('Trạng thái tài khoản'), 'SUSPENDED');
+  await userEvent.click(screen.getByRole('button', { name: 'Tìm kiếm' }));
+  await waitFor(() => expect(calls.customers).toHaveBeenLastCalledWith(
+    expect.objectContaining({ status: 'SUSPENDED', page: 0 }), expect.any(Function)));
 });

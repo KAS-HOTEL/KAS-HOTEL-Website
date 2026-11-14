@@ -122,3 +122,10 @@
 .cardLink:hover, .cardLink:focus-visible { text-decoration: underline; }
 .searchField { display: grid; gap: 6px; max-width: 28rem; font-size: 12px; font-weight: 500; color: var(--text-secondary); }
 .searchField input { min-height: 38px; padding: 0 12px; border: 1px solid var(--border-default); border-radius: var(--radius-md); background: var(--surface); font: inherit; font-size: 14px; color: var(--text-primary); }
+
+/* Membership tier badge (2026-11-12): KAS cream / champagne, one tone per tier. */
+.tierBadge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; border: 1px solid #d7cdbd; background: #fbf9f4; color: #5d5547; font-size: 12px; font-weight: 600; letter-spacing: .04em; white-space: nowrap; }
+.tierClassic { border-color: #d7cdbd; background: #f7f3ec; color: #5d5547; }
+.tierGold { border-color: #d9be86; background: #fbf3e2; color: #7a5617; }
+.tierPlatinum { border-color: #25241f; background: #25241f; color: #f3ead8; }
+.tierNone { color: #8b8172; font-size: 12px; }

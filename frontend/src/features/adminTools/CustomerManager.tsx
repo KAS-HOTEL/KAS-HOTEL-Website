@@ -8,7 +8,7 @@ import type { Customer } from '@/lib/domain/adminTools';
 import { Badge, Button, DatePicker, DateRangePicker, Table, type Column, PageHeader } from '@/ui/primitives';
 import { useAdminList } from './useAdminList';
 import { ListState, ListPagination } from './ListState';
-import { ACCOUNT_STATUS_LABEL, accountStatusTone, CustomerAvatar, formatRegistered } from './customerDisplay';
+import { ACCOUNT_STATUS_LABEL, accountStatusTone, CustomerAvatar, formatRegistered, TierBadge } from './customerDisplay';
 import styles from './AdminTools.module.css';
 
 export const customerHref = (id: string) => `/admin/customers/${encodeURIComponent(id)}`;
@@ -23,17 +23,18 @@ export function CustomerManager() {
   const [total, setTotal] = useState<number | null>(null);
   // Draft controls; the list only reloads on "Tìm kiếm" / "Xoá lọc".
   const [tier, setTier] = useState('');
+  const [status, setStatus] = useState('');
   const [dateMode, setDateMode] = useState<DateMode>('none');
   const [day, setDay] = useState('');
   const [range, setRange] = useState({ from: '', to: '' });
   const [dateError, setDateError] = useState('');
   const loader = useCallback(() => customersApi.search(filter, setTotal), [filter]);
   const { rows, loading, error, reload } = useAdminList(loader);
-  const filtered = filter.q !== '' || filter.tier !== '' || filter.registeredFrom !== undefined || filter.registeredTo !== undefined;
+  const filtered = filter.q !== '' || filter.tier !== '' || Boolean(filter.status) || filter.registeredFrom !== undefined || filter.registeredTo !== undefined;
 
   function clearAll(form: HTMLFormElement | null) {
     form?.reset();
-    setTier(''); setDateMode('none'); setDay(''); setRange({ from: '', to: '' }); setDateError('');
+    setTier(''); setStatus(''); setDateMode('none'); setDay(''); setRange({ from: '', to: '' }); setDateError('');
     setFilter(EMPTY_FILTER);
   }
 
@@ -51,6 +52,7 @@ export function CustomerManager() {
     },
     { key: 'email', header: 'Email', cell: (row) => row.email || '—' },
     { key: 'phone', header: 'Số điện thoại', cell: (row) => row.phone ?? '—' },
+    { key: 'tier', header: 'Hạng thành viên', cell: (row) => <TierBadge tier={row.tier} /> },
     { key: 'registered', header: 'Ngày đăng ký', cell: (row) => formatRegistered(row.createdAt) },
     {
       key: 'status',
@@ -85,7 +87,7 @@ export function CustomerManager() {
           const dates = registrationDates(dateMode, day, range);
           if ('error' in dates) { setDateError(dates.error); return; }
           setDateError('');
-          setFilter({ q: String(data.get('q') ?? '').trim(), tier, page: 0, ...dates });
+          setFilter({ q: String(data.get('q') ?? '').trim(), tier, page: 0, ...(status ? { status } : {}), ...dates });
         }}
       >
         <label>
@@ -96,6 +98,13 @@ export function CustomerManager() {
           Hạng thành viên
           <select name="tier" value={tier} onChange={(event) => setTier(event.target.value)}>
             {TIER_OPTIONS.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+        </label>
+        <label>
+          Trạng thái tài khoản
+          <select name="status" value={status} onChange={(event) => setStatus(event.target.value)}>
+            <option value="">Tất cả</option>
+            {Object.entries(ACCOUNT_STATUS_LABEL).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
           </select>
         </label>
         <label>
@@ -113,7 +122,7 @@ export function CustomerManager() {
           <DateRangePicker legend="Khoảng ngày đăng ký" from={range.from} to={range.to} onChange={setRange} error={dateError || undefined} />
         ) : null}
         <Button type="submit">Tìm kiếm</Button>
-        {filtered || dateMode !== 'none' || tier !== '' ? (
+        {filtered || dateMode !== 'none' || tier !== '' || status !== '' ? (
           <Button type="button" variant="ghost" onClick={(event) => clearAll(event.currentTarget.form)}>Xoá lọc</Button>
         ) : null}
       </form>

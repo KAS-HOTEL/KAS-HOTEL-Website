@@ -190,7 +190,9 @@
     window.Search.render(searchHost, {
       solid: true, cta: 'Search', values: search, externalHotelPicker: true,
       destinationLabel: getQuickDestinationLabel(),
-      onPopupOpen: function (type) { setQuickSearchOpen(false); },
+      /* Another panel opening closes Quick Search. The destination field itself is left to
+         its own toggle below: closing here first made a second press re-open it (2026-11-12). */
+      onPopupOpen: function (type) { if (type !== 'destination') setQuickSearchOpen(false); },
       onSearch: function (s) {
         B.saveSearch(s);
         search = s;

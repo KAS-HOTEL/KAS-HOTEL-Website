@@ -41,6 +41,24 @@ it('only offers bank verification while payment is pending', async () => {
   await waitFor(() => expect(calls.confirm).toHaveBeenCalledWith('KAS-TEST'));
 });
 
+it('with SePay on, says payment confirms itself and keeps only a secondary manual confirmation', async () => {
+  render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }}
+    payment={{ onlineGateway: true, manualTransfer: false }} />);
+  expect(screen.getByText(/tự động xác nhận/)).toBeTruthy();
+  expect(screen.queryByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeNull();
+  await userEvent.click(screen.getByRole('button', { name: 'Xác nhận thủ công' }));
+  expect(calls.confirm).not.toHaveBeenCalled();
+  await userEvent.click(screen.getByRole('button', { name: /^Xác nhận$/ }));
+  await waitFor(() => expect(calls.confirm).toHaveBeenCalledWith('KAS-TEST'));
+});
+
+it('without SePay keeps the bank-verification wording', () => {
+  render(<ManualBookingActions request={{ ...request, salesStatus: 'PAYMENT_PENDING' }}
+    payment={{ onlineGateway: false, manualTransfer: true }} />);
+  expect(screen.getByText(/đối chiếu tiền trong tài khoản ngân hàng/)).toBeTruthy();
+  expect(screen.getByRole('button', { name: 'Xác nhận đã nhận tiền' })).toBeTruthy();
+});
+
 it('reports a failed approval without claiming success or refreshing', async () => {
   calls.approve.mockRejectedValue(new Error('offline'));
   render(<ManualBookingActions request={request} />);

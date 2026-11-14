@@ -64,6 +64,17 @@ export interface SalesRequestDetail {
   readonly alternativeOffer?: SalesAlternativeOffer | null;
   /** How the total is made up (2026-11-10); absent from older servers. */
   readonly price?: SalesRequestPrice | null;
+  /** How the guest can pay now (2026-11-12); absent from older servers. */
+  readonly payment?: SalesRequestPayment | null;
+}
+
+/**
+ * onlineGateway: SePay is on, a paid order confirms the booking by itself.
+ * manualTransfer: a static QR is kept, the guest may also transfer by hand.
+ */
+export interface SalesRequestPayment {
+  readonly onlineGateway: boolean;
+  readonly manualTransfer: boolean;
 }
 
 /** The recorded price: roomsSubtotal − discount + taxes = total. Nothing is recomputed. */

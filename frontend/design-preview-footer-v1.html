@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DEMO · Footer v1 — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<style>
+:root{--ink:#11110f;--cream:#f5f1e8;--paper:#fbf9f4;--gold:#b49358;--gold-lt:#c8b58d;--muted:#8b8172;--line:#2a2924}
+*{box-sizing:border-box}body{margin:0;font:400 14px/1.6 Inter,Arial,sans-serif;color:#25241f;background:var(--cream)}
+.demo-bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;padding:10px 20px;background:#7a1f1f;color:#fff;font-size:13px}
+.demo-bar strong{letter-spacing:.12em}.demo-bar button{border:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;padding:6px 12px;border-radius:999px;cursor:pointer;font:inherit}
+.demo-bar button[aria-pressed="true"]{background:#fff;color:#7a1f1f}
+.intro{max-width:1180px;margin:32px auto 24px;padding:0 20px}.intro h1{font:400 40px/1.1 "Cormorant Garamond",Georgia,serif;margin:0 0 8px}.intro p{margin:0;color:#5d5547;max-width:760px}
+.stage{display:flex;justify-content:center;padding:0 20px 40px}.stage__frame{width:100%;transition:max-width .25s ease;box-shadow:0 18px 48px rgba(0,0,0,.12)}
+.stage__frame.is-mobile{max-width:390px}
+/* ---- proposed footer ---- */
+.kf{background:var(--ink);color:#d9d4c8;container-type:inline-size}
+.kf__in{max-width:1240px;margin:0 auto;padding:56px 32px 0}
+.kf__grid{display:grid;grid-template-columns:1.35fr 1fr 1fr 1fr 1.25fr;gap:32px 28px}
+.kf h5{margin:0 0 14px;font:600 11px/1.2 Inter,Arial,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-lt)}
+.kf ul{list-style:none;margin:0;padding:0;display:grid;gap:9px}.kf a{color:#d9d4c8;text-decoration:none}.kf a:hover,.kf a:focus-visible{color:#fff;text-decoration:underline;text-underline-offset:3px}
+.kf__brand img{width:168px;height:auto;filter:brightness(0) invert(1);opacity:.95}.kf__brand p{margin:16px 0 0;font-size:13px;color:#b7b2a6;max-width:300px}
+.kf__contact li{display:grid;gap:2px}.kf__label{font-size:11px;letter-spacing:.06em;color:var(--muted)}
+.kf__social{display:flex;gap:10px;margin-top:18px}.kf__social span{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px dashed #5c584e;border-radius:999px;font-size:12px;color:#9c968a}
+.kf__bottom{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;margin-top:44px;padding:18px 0 22px;border-top:1px solid var(--line);font-size:12px;color:#8a857a}
+@container (max-width:900px){.kf__grid{grid-template-columns:1fr 1fr}.kf__brand{grid-column:1/-1}}
+@container (max-width:480px){.kf__in{padding:40px 20px 0}.kf__grid{grid-template-columns:1fr;gap:26px}.kf__bottom{flex-direction:column}}
+/* ---- review tables ---- */
+.review{max-width:1180px;margin:0 auto 60px;padding:0 20px;display:grid;gap:24px}
+.review section{background:var(--paper);border:1px solid #e3dccf;border-radius:10px;padding:20px 22px}
+.review h2{margin:0 0 12px;font:400 26px/1.2 "Cormorant Garamond",Georgia,serif}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:left;vertical-align:top;padding:9px 10px;border-bottom:1px solid #ece6da}th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600}.tag--keep{background:#e9f2ee;color:#2f5a4c}.tag--drop{background:#f6e7e4;color:#8a2f22}.tag--wait{background:#fbf3e2;color:#7a5617}
+code{font-size:12px;background:#f1ece2;padding:1px 5px;border-radius:4px}
+</style></head>
+<body>
+<div class="demo-bar" role="note"><span><strong>DEMO</strong> · Footer v1 — bản đề xuất chờ duyệt, chưa áp dụng cho website.</span>
+  <span><button type="button" data-view="desktop" aria-pressed="true">Desktop</button> <button type="button" data-view="mobile" aria-pressed="false">Mobile</button></span></div>
+
+<div class="intro"><h1>Footer v1 — đề xuất</h1>
+<p>Gọn hơn, chỉ giữ liên kết tới trang và chức năng đang hoạt động. Footer hiện tại của website không bị thay đổi. Danh sách giữ / bỏ và lý do ở cuối trang.</p></div>
+
+<div class="stage"><div class="stage__frame" id="frame">
+<footer class="kf" aria-label="Footer (demo)"><div class="kf__in"><div class="kf__grid">
+  <div class="kf__brand"><img src="/assets/logo/kas-hotel-collection.svg" alt="KAS Hotel Collection">
+    <p>Những khách sạn boutique giữa trung tâm TP. Hồ Chí Minh — dịch vụ tận tâm và trải nghiệm đáng nhớ.</p>
+    <div class="kf__social" aria-label="Mạng xã hội (chờ xác nhận URL)"><span>TikTok · chờ URL</span><span>Facebook · chờ URL</span></div></div>
+  <nav aria-label="Khách sạn"><h5>Khách sạn KAS</h5><ul>
+    <li><a href="/hotel-detail.html?hotel=hotel-04">KAS Milestone Premium</a></li><li><a href="/hotel-detail.html?hotel=hotel-03">KAS Ancient Luxury</a></li>
+    <li><a href="/hotel-detail.html?hotel=hotel-02">KAS Premium Boutique</a></li><li><a href="/hotel-detail.html?hotel=hotel-06">KAS Sonata Luxury</a></li>
+    <li><a href="/hotel-detail.html?hotel=hotel-07">KAS Eliana Luxury</a></li><li><a href="/hotel-detail.html?hotel=hotel-01">KAS Passion Boutique</a></li>
+    <li><a href="/hotel-detail.html?hotel=hotel-08">KAS Dilly Luxury</a></li><li><a href="/hotel-detail.html?hotel=hotel-05">KAS Zody Boutique</a></li></ul></nav>
+  <nav aria-label="Khám phá"><h5>Khám phá</h5><ul>
+    <li><a href="/about.html">Về KAS</a></li><li><a href="/hotels.html">Khách sạn</a></li><li><a href="/experiences.html">Trải nghiệm</a></li><li><a href="/city-guide.html">Cẩm nang thành phố</a></li></ul></nav>
+  <nav aria-label="Dịch vụ khách hàng"><h5>Dịch vụ khách hàng</h5><ul>
+    <li><a href="/hotels.html">Đặt phòng</a></li><li><a href="/manage-booking.html">Quản lý đặt phòng</a></li><li><a href="/offers.html#membership">KAS Membership</a></li><li><a href="/support.html">Hỗ trợ</a></li></ul></nav>
+  <div><h5>Liên hệ</h5><ul class="kf__contact">
+    <li><span class="kf__label">Đặt phòng / Kinh doanh</span><a href="tel:+84774714892">+84 774 714 892</a><a href="tel:+84869768885">+84 869 768 885</a><a href="tel:+84979656791">+84 979 656 791</a></li>
+    <li><span class="kf__label">Đối tác lữ hành &amp; doanh nghiệp</span><a href="tel:+84968694864">+84 968 694 864</a></li>
+    <li><span class="kf__label">Email</span><a href="mailto:kashotelpremium@gmail.com">kashotelpremium@gmail.com</a></li>
+    <li><span class="kf__label">Văn phòng</span><span>170–174 Nguyễn Thái Bình, Quận 1, TP. Hồ Chí Minh</span></li></ul></div>
+</div>
+<div class="kf__bottom"><span>© 2026 KAS Hotel Collection. All rights reserved.</span><span><a href="/support.html#booking">Chính sách đặt phòng</a> · <a href="/support.html#contact">Liên hệ</a></span></div>
+</div></footer>
+</div></div>
+
+<div class="review">
+<section><h2>Liên kết được giữ</h2><table><thead><tr><th>Mục</th><th>Liên kết</th><th>Lý do</th></tr></thead><tbody>
+<tr><td>Khách sạn KAS (8)</td><td><code>hotel-detail.html?hotel=hotel-01…08</code></td><td><span class="tag tag--keep">Giữ</span> 8 khách sạn đang có trang chi tiết; gộp 2 cột "KAS Hotels" và "More KAS Hotels" thành 1.</td></tr>
+<tr><td>Về KAS · Khách sạn · Trải nghiệm</td><td><code>about.html</code> · <code>hotels.html</code> · <code>experiences.html</code></td><td><span class="tag tag--keep">Giữ</span> Trang đang hoạt động.</td></tr>
+<tr><td>Cẩm nang thành phố</td><td><code>city-guide.html</code></td><td><span class="tag tag--keep">Giữ</span> Trang đã có nội dung (cần anh/chị xác nhận đã hoàn thiện).</td></tr>
+<tr><td>Đặt phòng · Quản lý đặt phòng</td><td><code>hotels.html</code> · <code>manage-booking.html</code></td><td><span class="tag tag--keep">Giữ</span> Luồng đặt phòng và My KAS đang hoạt động.</td></tr>
+<tr><td>KAS Membership</td><td><code>offers.html#membership</code></td><td><span class="tag tag--keep">Giữ</span> Sửa neo: footer cũ trỏ <code>#member</code> (không tồn tại) → <code>#membership</code>.</td></tr>
+<tr><td>Hỗ trợ · Liên hệ · Chính sách đặt phòng</td><td><code>support.html</code>, <code>#contact</code>, <code>#booking</code></td><td><span class="tag tag--keep">Giữ</span> Có nội dung trên trang Support.</td></tr>
+<tr><td>Điện thoại, email, địa chỉ</td><td><code>tel:</code> / <code>mailto:</code></td><td><span class="tag tag--keep">Giữ</span> Lấy từ cấu hình liên hệ hiện tại của website.</td></tr>
+</tbody></table></section>
+<section><h2>Đề xuất bỏ</h2><table><thead><tr><th>Mục</th><th>Hiện trỏ tới</th><th>Lý do</th></tr></thead><tbody>
+<tr><td>Newsletter "Stay in the know"</td><td>Form <code>onsubmit="return false"</code></td><td><span class="tag tag--drop">Bỏ</span> Form không gửi đi đâu, backend chưa có API đăng ký nhận tin → form giả.</td></tr>
+<tr><td>Meetings &amp; Events</td><td><code>support.html#events</code></td><td><span class="tag tag--drop">Bỏ</span> Neo không tồn tại, chưa có dịch vụ/trang sự kiện.</td></tr>
+<tr><td>Gift Cards</td><td><code>support.html</code></td><td><span class="tag tag--drop">Bỏ</span> Chưa có chức năng thẻ quà tặng.</td></tr>
+<tr><td>Special Offers</td><td><code>offers.html</code></td><td><span class="tag tag--drop">Bỏ</span> Trang này là trang Membership; đã có mục "KAS Membership", tránh trùng.</td></tr>
+<tr><td>Dining · Wellness (cột Discover)</td><td><code>experiences.html#…</code></td><td><span class="tag tag--drop">Gộp</span> Đã nằm trong "Trải nghiệm".</td></tr>
+<tr><td>Booking Partners (footer trang chủ)</td><td>Chỉ là chữ, không có link</td><td><span class="tag tag--drop">Bỏ</span> Không phải chức năng của website; KAS đã ngừng nhận đặt phòng OTA qua website.</td></tr>
+</tbody></table></section>
+<section><h2>Chờ xác nhận</h2><table><thead><tr><th>Mục</th><th>Hiện trạng</th><th>Cần</th></tr></thead><tbody>
+<tr><td>Instagram / Facebook / TikTok</td><td>Icon trỏ <code>#</code> (không bấm được) hoặc chỉ là chữ</td><td><span class="tag tag--wait">Chờ</span> Gửi URL trang chính thức đang hoạt động; chưa có URL thì không hiển thị icon. Không tự xoá trước khi xác minh.</td></tr>
+</tbody></table></section>
+</div>
+<script>
+(function(){var f=document.getElementById('frame');document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){var m=b.getAttribute('data-view')==='mobile';f.classList.toggle('is-mobile',m);document.querySelectorAll('[data-view]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});})();
+</script>
+</body></html>

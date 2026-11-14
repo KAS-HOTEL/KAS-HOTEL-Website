@@ -20,6 +20,15 @@ spring:
   application:
     name: kas-backend
 
+  # Nine @Scheduled jobs (email outbox, payment deadline + SePay checkout cancels, holds,
+  # loyalty...). Spring's default is ONE thread, so a slow job (an HTTP call to SePay)
+  # held the email dispatcher back. A small pool keeps mail on time (2026-11-12).
+  task:
+    scheduling:
+      pool:
+        size: ${KAS_SCHEDULING_POOL_SIZE:4}
+      thread-name-prefix: kas-sched-
+
   datasource:
     # No defaults. An unset variable fails startup loudly and by name.
     url: ${KAS_DB_URL}

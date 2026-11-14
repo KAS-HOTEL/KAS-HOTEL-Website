@@ -461,6 +461,34 @@ class AdminOperationsIT extends SecurityIntegrationTest {
                 .andExpect(status().isBadRequest());
     }
 
+    @Test void voucherListShowsExpiredAndUsedUpWhateverTheStoredStatus() throws Exception {
+        String tag = "TEST_VSTATE_" + UUID.randomUUID().toString().substring(0, 8);
+        java.time.LocalDate today = java.time.LocalDate.now(com.kas.platform.shared.TimeConfiguration.PROPERTY_ZONE);
+        String body = "{\"name\":\"%s\",\"type\":\"PERCENTAGE\",\"valuePercent\":10,\"currency\":\"VND\",\"status\":\"ACTIVE\",\"usageLimitTotal\":1,\"validFrom\":\"%s\",\"validTo\":\"%s\"}";
+        String expired = com.jayway.jsonpath.JsonPath.read(mockMvc.perform(post("/api/v1/admin/vouchers").cookie(session).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted(tag + "_EXP", today.minusDays(3), today.minusDays(1))))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.status").value("ACTIVE")).andExpect(jsonPath("$.displayStatus").value("EXPIRED"))
+                .andReturn().getResponse().getContentAsString(), "$.id");
+        String lastDay = com.jayway.jsonpath.JsonPath.read(mockMvc.perform(post("/api/v1/admin/vouchers").cookie(session).with(csrf()).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted(tag + "_TODAY", today.minusDays(1), today)))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.displayStatus").value("ACTIVE"))
+                .andReturn().getResponse().getContentAsString(), "$.id");
+        jdbc.sql("UPDATE voucher SET used_count = 1 WHERE id = :id").param("id", UUID.fromString(lastDay)).update();
+        mockMvc.perform(get("/api/v1/admin/vouchers").param("q", tag).cookie(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[?(@.id=='" + expired + "')].displayStatus").value("EXPIRED"))
+                .andExpect(jsonPath("$[?(@.id=='" + lastDay + "')].displayStatus").value("USED_UP"))
+                .andExpect(jsonPath("$[?(@.id=='" + lastDay + "')].status").value("ACTIVE"));
+        // The status filter matches what staff see: neither voucher is "active" any more.
+        mockMvc.perform(get("/api/v1/admin/vouchers").param("q", tag).param("status", "ACTIVE").cookie(session))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0));
+        mockMvc.perform(get("/api/v1/admin/vouchers").param("q", tag).param("status", "USED_UP").cookie(session))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(1)).andExpect(jsonPath("$[0].id").value(lastDay));
+        mockMvc.perform(get("/api/v1/admin/vouchers").param("q", tag).param("status", "EXPIRED").cookie(session))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(1)).andExpect(jsonPath("$[0].id").value(expired));
+    }
+
     @Test void customerListShowsCodeAccountStatusAndPhoto() throws Exception {
         String name = "TEST_LIST_" + UUID.randomUUID().toString().substring(0, 8);
         UUID guest = jdbc.sql("INSERT INTO customer(full_name,customer_code) VALUES(:name,'KAS-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,12))) RETURNING id")
@@ -474,6 +502,20 @@ class AdminOperationsIT extends SecurityIntegrationTest {
                 .andExpect(jsonPath("$[0].avatarUrl").value("/api/v1/admin/customers/" + guest + "/avatar?v=1"));
         mockMvc.perform(get("/api/v1/admin/customers/" + guest + "/avatar").cookie(session))
                 .andExpect(status().isOk()).andExpect(header().string("Content-Type", "image/png"));
+    }
+
+    @Test void customerListFiltersByAccountStatusAsShown() throws Exception {
+        String name = "TEST_STATUS_" + UUID.randomUUID().toString().substring(0, 8);
+        jdbc.sql("INSERT INTO customer(full_name,customer_code) VALUES(:name,'KAS-' || upper(substr(replace(gen_random_uuid()::text,'-',''),1,12)))")
+                .param("name", name).update();
+        mockMvc.perform(get("/api/v1/admin/customers").param("q", name).param("status", "NO_ACCOUNT").cookie(session))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(1))
+                .andExpect(header().string("X-Total-Count", "1"));
+        mockMvc.perform(get("/api/v1/admin/customers").param("q", name).param("status", "ACTIVE").cookie(session))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(0))
+                .andExpect(header().string("X-Total-Count", "0"));
+        mockMvc.perform(get("/api/v1/admin/customers").param("status", "WHATEVER").cookie(session))
+                .andExpect(status().isBadRequest());
     }
 
     @Test void voucherAndCustomerErrorsUseTheDocumentedHttpStatus() throws Exception {

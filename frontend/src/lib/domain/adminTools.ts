@@ -10,6 +10,8 @@ export interface Voucher {
   currency: string; validFrom?: string; validTo?: string; stayFrom?: string; stayTo?: string;
   minNights?: number | null; minTotalMinor?: number | null; usageLimitTotal?: number | null;
   usageLimitPerCustomer?: number | null; usedCount: number; stackable: boolean; status: string;
+  /** What staff see: `status`, or `EXPIRED` past the last valid day / `USED_UP` when every use is spent. */
+  displayStatus?: string;
   /** Hotels the voucher applies to; empty means every hotel. */
   properties?: readonly { slug: string; name: string }[];
 }
@@ -17,7 +19,7 @@ export interface Voucher {
  * A new voucher. No `code`: the backend generates it and returns it. The "value
  * add" type is no longer offered, so neither is its description.
  */
-export type CreateVoucher = Omit<Voucher, 'id' | 'code' | 'usedCount' | 'stackable' | 'valueAddDescription' | 'properties'> & {
+export type CreateVoucher = Omit<Voucher, 'id' | 'code' | 'usedCount' | 'stackable' | 'valueAddDescription' | 'properties' | 'displayStatus'> & {
   /** Hotel slugs; omitted or empty applies the voucher to every hotel. */
   propertySlugs?: string[];
 };

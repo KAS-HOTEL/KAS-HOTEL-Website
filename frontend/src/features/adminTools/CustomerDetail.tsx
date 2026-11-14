@@ -7,7 +7,7 @@ import type { Customer } from '@/lib/domain/adminTools';
 import { Badge, Button, Card, Dialog } from '@/ui/primitives';
 import { adminError, useAdminList } from './useAdminList';
 import { ListState } from './ListState';
-import { ACCOUNT_STATUS_LABEL, accountStatusTone, CustomerAvatar, formatRegistered } from './customerDisplay';
+import { ACCOUNT_STATUS_LABEL, accountStatusTone, CustomerAvatar, formatRegistered, TierBadge } from './customerDisplay';
 import styles from './AdminTools.module.css';
 
 /**
@@ -72,7 +72,7 @@ export function CustomerDetail({ customerId }: { readonly customerId: string }) 
             <Card title="Thành viên">
               <dl className={styles.facts}>
                 <dt>Ngày đăng ký</dt><dd>{formatRegistered(customer.createdAt)}</dd>
-                <dt>Hạng</dt><dd>{customer.tier ?? 'Chưa có hạng'}</dd>
+                <dt>Hạng</dt><dd><TierBadge tier={customer.tier} /></dd>
                 <dt>Điểm</dt><dd>{customer.points}</dd>
                 <dt>Điểm đang giữ</dt><dd>{customer.reservedPoints}</dd>
               </dl>

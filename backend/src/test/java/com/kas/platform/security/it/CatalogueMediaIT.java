@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.simple.JdbcClient;
 
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -65,5 +68,32 @@ class CatalogueMediaIT extends SecurityIntegrationTest {
 
         jdbc.sql("UPDATE property SET lifecycle_state='CLOSED' WHERE id=:id").param("id", property).update();
         assertThat(entryFor(slug)).as("a closed hotel's images are not public").isNull();
+    }
+
+    /** V67: the Eliana photos are registered, published, with one cover, and every file ships in frontend/img. */
+    @Test void elianaGalleryIsRegisteredAndShipsWithTheWebsite() {
+        String slug = "kas-eliana-luxury-hotel";
+        List<String> urls = jdbc.sql("""
+                SELECT a.external_url FROM media_link l
+                  JOIN media_asset a ON a.id = l.media_asset_id
+                  JOIN property p ON p.id = l.owner_id
+                 WHERE l.owner_type = 'PROPERTY' AND p.slug = :slug
+                   AND a.external_url LIKE '/img/hotels/kas-eliana-luxury-hotel/%'
+                   AND l.status = 'PUBLISHED' AND a.status = 'PUBLISHED' AND a.visibility = 'PUBLIC'
+                 ORDER BY l.display_order
+                """).param("slug", slug).query(String.class).list();
+        assertThat(urls).hasSize(9);
+        assertThat(jdbc.sql("""
+                SELECT count(*) FROM media_link l JOIN property p ON p.id = l.owner_id
+                 WHERE l.owner_type = 'PROPERTY' AND p.slug = :slug AND l.is_cover
+                """).param("slug", slug).query(Long.class).single())
+                .as("the hotel has exactly one cover").isEqualTo(1L);
+        assertThat(jdbc.sql("""
+                SELECT count(*) FROM media_asset_translation t JOIN media_asset a ON a.id = t.media_asset_id
+                 WHERE a.external_url LIKE '/img/hotels/kas-eliana-luxury-hotel/%'
+                """).query(Long.class).single()).as("vi + en alt text for every photo").isEqualTo(18L);
+        Path website = Path.of("..", "frontend");
+        assertThat(urls).allSatisfy(url -> assertThat(Files.isRegularFile(website.resolve(url.substring(1))))
+                .as("%s is missing from frontend/", url).isTrue());
     }
 }

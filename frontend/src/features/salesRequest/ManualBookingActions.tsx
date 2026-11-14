@@ -8,12 +8,16 @@ import type { PublishedProperty, PublishedRoomType } from '@/lib/domain/availabi
 import { ApiError } from '@/lib/api/errors';
 import { messageFor } from '@/features/auth/messages';
 import { MANUAL_REVIEW_STATUSES, type AlternativeOffer } from '@/lib/domain/manualBooking';
-import type { SalesRequestSummary } from '@/lib/domain/salesRequest';
+import type { SalesRequestPayment, SalesRequestSummary } from '@/lib/domain/salesRequest';
 import { formatMoney } from '@/lib/domain/availability';
 import { Button, Card, ConfirmDialog, useToast } from '@/ui/primitives';
 import styles from '@/features/adminTools/AdminTools.module.css';
 
-export function ManualBookingActions({ request }: { readonly request: SalesRequestSummary }) {
+export function ManualBookingActions({ request, payment = null }: {
+  readonly request: SalesRequestSummary;
+  /** Payment options from the detail (2026-11-12); null from older servers = manual flow. */
+  readonly payment?: SalesRequestPayment | null;
+}) {
   const router = useRouter();
   const toast = useToast();
   const [busy, setBusy] = useState(false);
@@ -41,7 +45,7 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
       setConfirm(null);
       setError(caught instanceof ApiError
         ? caught.code === 'CONFIG_MISSING'
-          ? 'Chưa có cách thanh toán nào để gửi cho khách: cổng SePay chưa bật và chưa có QR trong Tài khoản thanh toán. Hãy bật SePay hoặc nhập QR rồi thử lại.'
+          ? 'Chưa gửi được link thanh toán: cổng SePay chưa được bật trên hệ thống. Vui lòng báo quản trị kỹ thuật KAS kiểm tra cấu hình SePay rồi thử lại.'
           : messageFor(caught)
         : 'Không thể kết nối. Vui lòng thử lại.');
     } finally { inFlight.current = false; setBusy(false); }
@@ -66,15 +70,24 @@ export function ManualBookingActions({ request }: { readonly request: SalesReque
   }
   const reviewable = MANUAL_REVIEW_STATUSES.has(request.salesStatus);
   if (!reviewable && request.salesStatus !== 'PAYMENT_PENDING') return null;
+  // SePay on: a paid order confirms the booking by itself (IPN); staff confirm by hand only a
+  // manual transfer, so that button becomes secondary (owner 2026-11-12).
+  const online = payment?.onlineGateway === true;
+  const pending = request.salesStatus === 'PAYMENT_PENDING';
   return <Card title="Trả lời yêu cầu đặt phòng">
-    <p>Khách sạn tự kiểm tra phòng và đối chiếu tiền trong tài khoản ngân hàng trước khi xác nhận.</p>
+    {pending && online
+      ? <p>Khách thanh toán qua cổng SePay. Đặt phòng <strong>tự động xác nhận</strong> ngay khi SePay báo đã nhận tiền — không cần thao tác.
+        {' Chỉ bấm "Xác nhận thủ công" khi '}{payment?.manualTransfer ? 'khách chuyển khoản tay, hoặc ' : ''}{'SePay không tự xác nhận dù tiền đã vào tài khoản.'}</p>
+      : reviewable && online
+        ? <p>Kiểm tra phòng thực tế rồi xác nhận: khách nhận email có link thanh toán SePay, đặt phòng tự xác nhận khi tiền về.</p>
+        : <p>Khách sạn tự kiểm tra phòng và đối chiếu tiền trong tài khoản ngân hàng trước khi xác nhận.</p>}
     {error && <p role="alert">{error}</p>}
     <div className={styles.actions}>
       {reviewable && <>
         <Button disabled={busy} onClick={() => setConfirm('approve')}>Còn phòng — xác nhận và gửi link thanh toán</Button>
         <Button variant="secondary" disabled={busy} onClick={() => void openOffer()}>Hết phòng — đề xuất phòng khác</Button>
       </>}
-      {request.salesStatus === 'PAYMENT_PENDING' && <Button disabled={busy} onClick={() => setConfirm('paid')}>Xác nhận đã nhận tiền</Button>}
+      {pending && <Button variant={online ? 'secondary' : 'primary'} disabled={busy} onClick={() => setConfirm('paid')}>{online ? 'Xác nhận thủ công' : 'Xác nhận đã nhận tiền'}</Button>}
     </div>
     {offering && <form className={styles.form} onSubmit={(event) => {
       event.preventDefault();

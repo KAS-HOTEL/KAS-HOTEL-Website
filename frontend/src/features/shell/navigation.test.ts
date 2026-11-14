@@ -40,6 +40,11 @@ describe('the two consoles', () => {
     }
   });
 
+  it('hides the legacy payment-account screen from every menu while SePay takes payments', () => {
+    for (const nav of [ADMIN_NAV, SUPER_ADMIN_NAV]) expect(hrefs(nav)).not.toContain('/partner/payment-account');
+    expect(hrefs(SUPER_ADMIN_NAV)).toContain('/partner/unmatched-payments');
+  });
+
   it('shares no screen between the two roles', () => {
     expect(hrefs(SUPER_ADMIN_NAV).filter((href) => hrefs(ADMIN_NAV).includes(href))).toEqual([]);
   });

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DEMO · Support v1 — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="/assets/favicon/favicon.ico" sizes="16x16 32x32 48x48">
+<style>
+:root{--ink:#11110f;--cream:#f5f1e8;--paper:#fbf9f4;--gold:#b49358;--gold-dk:#8c6a32;--muted:#8b8172;--line:#e3dccf}
+*{box-sizing:border-box}body{margin:0;font:400 15px/1.65 Inter,Arial,sans-serif;color:#25241f;background:var(--cream)}
+a{color:var(--gold-dk)}
+.demo-bar{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:9px 20px;background:#7a1f1f;color:#fff;font-size:13px}
+.demo-bar strong{letter-spacing:.12em}.demo-bar button{border:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;padding:5px 11px;border-radius:999px;cursor:pointer;font:inherit}.demo-bar button[aria-pressed="true"]{background:#fff;color:#7a1f1f}
+.stage{display:flex;justify-content:center}.page{width:100%;transition:max-width .25s ease;background:var(--cream)}.page.is-mobile{max-width:390px;box-shadow:0 0 0 1px #d7cdbd,0 18px 48px rgba(0,0,0,.14)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px;container-type:inline-size}
+.hero{background:var(--ink);color:#f3ead8;padding:72px 0 64px}.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#c8b58d}
+.hero h1{margin:10px 0 12px;font:400 46px/1.1 "Cormorant Garamond",Georgia,serif;color:#fff}.hero p{margin:0;max-width:640px;color:#cfc8b8}
+.search{display:flex;gap:0;margin-top:26px;max-width:620px;background:#fff;border-radius:999px;overflow:hidden}.search input{flex:1;border:0;padding:15px 20px;font:inherit;color:#25241f;outline:none}.search span{display:flex;align-items:center;padding:0 18px;color:var(--muted)}
+.section{padding:48px 0}.section h2{margin:0 0 6px;font:400 32px/1.15 "Cormorant Garamond",Georgia,serif}.lead{margin:0 0 22px;color:#5d5547}
+.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.quick button{display:grid;gap:4px;text-align:left;padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--paper);cursor:pointer;font:inherit;color:inherit}
+.quick button strong{font-size:14px}.quick button span{font-size:12px;color:var(--muted)}.quick button[aria-pressed="true"]{border-color:var(--gold);box-shadow:inset 0 0 0 1px var(--gold)}
+.faq{display:grid;gap:10px}.faq details{border:1px solid var(--line);border-radius:10px;background:#fff}
+.faq summary{list-style:none;display:flex;justify-content:space-between;gap:16px;padding:15px 18px;cursor:pointer;font-weight:600}.faq summary::-webkit-details-marker{display:none}
+.faq summary:after{content:"+";color:var(--gold-dk);font-weight:400;font-size:20px;line-height:1}.faq details[open] summary:after{content:"–"}
+.faq .a{padding:0 18px 16px;color:#4f493f}.faq .cat{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.empty{padding:18px;border:1px dashed #d7cdbd;border-radius:10px;color:var(--muted)}
+.contact{display:grid;grid-template-columns:1fr 1.5fr;gap:28px}
+.channels{display:grid;gap:12px}.channel{padding:16px;border:1px solid var(--line);border-radius:10px;background:var(--paper)}.channel b{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+form{display:grid;gap:14px;padding:22px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:grid;gap:6px;font-size:13px;font-weight:500;color:#4f493f}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d7cdbd;border-radius:8px;font:inherit;background:#fff}textarea{min-height:120px;resize:vertical}
+[aria-invalid="true"]{border-color:#b3261e}.err{font-size:12px;color:#b3261e;min-height:0}
+.hp{position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden}
+.btn{justify-self:start;padding:13px 26px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:600 13px/1 Inter,Arial,sans-serif;letter-spacing:.1em;text-transform:uppercase;cursor:pointer}
+.note{padding:12px 14px;border-left:2px solid var(--gold);background:#fbf5e9;font-size:13px;color:#5c4416}.ok{border-left-color:#356052;background:#eef5f1;color:#2f5a4c}
+.badge{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600;vertical-align:middle}.badge--demo{background:#f6e7e4;color:#8a2f22}.badge--live{background:#e9f2ee;color:#2f5a4c}
+.nav{display:flex;flex-wrap:wrap;gap:10px}.nav a{padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--paper);text-decoration:none;color:#25241f}
+@container (max-width:860px){.quick{grid-template-columns:repeat(2,minmax(0,1fr))}.contact{grid-template-columns:1fr}}
+@container (max-width:460px){.hero h1{font-size:34px}.quick{grid-template-columns:1fr}.row2{grid-template-columns:1fr}.wrap{padding:0 16px}}
+</style></head>
+<body>
+<div class="demo-bar" role="note"><span><strong>DEMO</strong> · Support v1 — bản đề xuất chờ duyệt, chưa thay trang Support chính thức.</span>
+  <span><button type="button" data-view="desktop" aria-pressed="true">Desktop</button> <button type="button" data-view="mobile" aria-pressed="false">Mobile</button>
+  <button type="button" id="langBtn">EN</button></span></div>
+<div class="stage"><div class="page" id="page">
+
+<section class="hero"><div class="wrap">
+  <div class="eyebrow" data-t="eyebrow">KAS Support</div>
+  <h1 data-t="heroTitle">Chúng tôi luôn sẵn sàng hỗ trợ bạn.</h1>
+  <p data-t="heroText">Tra cứu nhanh câu hỏi thường gặp về đặt phòng, thanh toán, huỷ phòng và KAS Membership — hoặc gửi yêu cầu để đội ngũ KAS liên hệ lại.</p>
+  <div class="search" role="search"><span aria-hidden="true">⌕</span><input id="q" type="search" autocomplete="off" aria-label="Tìm câu hỏi" data-tp="searchPh" placeholder="Tìm câu hỏi, ví dụ: huỷ phòng, thanh toán…"></div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h2 data-t="quickTitle">Chúng tôi có thể giúp gì?</h2><p class="lead" data-t="quickLead">Chọn một chủ đề để lọc câu hỏi.</p>
+  <div class="quick" id="quick"></div>
+</div></section>
+
+<section class="section" style="padding-top:0"><div class="wrap">
+  <h2 data-t="faqTitle">Câu hỏi thường gặp</h2><p class="lead" id="faqCount"></p>
+  <div class="faq" id="faq"></div>
+</div></section>
+
+<section class="section" id="contact" style="background:var(--paper)"><div class="wrap">
+  <h2 data-t="contactTitle">Liên hệ hỗ trợ</h2><p class="lead" data-t="contactLead">Gọi trực tiếp để được hỗ trợ nhanh nhất, hoặc gửi yêu cầu bên dưới.</p>
+  <div class="contact">
+    <div class="channels">
+      <div class="channel"><b data-t="phone">Điện thoại đặt phòng</b><a href="tel:+84774714892">+84 774 714 892</a> · <a href="tel:+84869768885">+84 869 768 885</a></div>
+      <div class="channel"><b>Email</b><a href="mailto:kashotelpremium@gmail.com">kashotelpremium@gmail.com</a></div>
+      <div class="channel"><b data-t="office">Văn phòng</b>170–174 Nguyễn Thái Bình, Quận 1, TP. Hồ Chí Minh</div>
+      <p class="note" data-t="noChat">Hiện KAS chưa có chat trực tuyến; vui lòng gọi điện hoặc gửi yêu cầu.</p>
+    </div>
+    <form id="supportForm" novalidate>
+      <div id="bookingPick" hidden><label><span data-t="pickBooking">Đặt phòng liên quan</span> <span class="badge badge--live">Dữ liệu thật</span>
+        <select id="bookingSel"><option value="" data-t="noBooking">Không liên quan đặt phòng</option></select></label></div>
+      <div class="row2">
+        <label><span><span data-t="name">Họ tên</span> *</span><input id="fName" autocomplete="name" maxlength="120"><span class="err" id="eName"></span></label>
+        <label><span>Email *</span><input id="fEmail" type="email" autocomplete="email" maxlength="200"><span class="err" id="eEmail"></span></label>
+      </div>
+      <div class="row2">
+        <label><span data-t="phoneField">Số điện thoại</span><input id="fPhone" type="tel" autocomplete="tel" maxlength="32"><span class="err" id="ePhone"></span></label>
+        <label><span><span data-t="topic">Chủ đề</span> *</span><select id="fTopic"></select><span class="err" id="eTopic"></span></label>
+      </div>
+      <label><span data-t="bookingId">Mã đặt phòng (nếu có)</span><input id="fRef" maxlength="20" placeholder="KAS0412345"><span class="err" id="eRef"></span></label>
+      <label><span><span data-t="message">Nội dung cần hỗ trợ</span> *</span><textarea id="fMsg" maxlength="2000"></textarea><span class="err" id="eMsg"></span></label>
+      <label class="hp" aria-hidden="true">Website<input id="fWebsite" tabindex="-1" autocomplete="off"></label>
+      <button class="btn" type="submit" data-t="send">Gửi yêu cầu</button> <span class="badge badge--demo">DEMO — chưa gửi đi</span>
+      <div id="formMsg" role="status"></div>
+    </form>
+  </div>
+</div></section>
+
+<section class="section"><div class="wrap">
+  <h2 data-t="moreTitle">Tiếp tục khám phá</h2>
+  <nav class="nav" aria-label="Điều hướng"><a href="/hotels.html" data-t="navHotels">Khách sạn</a><a href="/manage-booking.html">My KAS</a><a href="/offers.html#membership">KAS Membership</a><a href="/support.html" data-t="navSupport">Support (hiện tại)</a></nav>
+</div></section>
+</div></div>
+
+<script>
+(function(){
+  'use strict';
+  var lang='vi';
+  var T={
+    vi:{eyebrow:'KAS Support',heroTitle:'Chúng tôi luôn sẵn sàng hỗ trợ bạn.',heroText:'Tra cứu nhanh câu hỏi thường gặp về đặt phòng, thanh toán, huỷ phòng và KAS Membership — hoặc gửi yêu cầu để đội ngũ KAS liên hệ lại.',searchPh:'Tìm câu hỏi, ví dụ: huỷ phòng, thanh toán…',quickTitle:'Chúng tôi có thể giúp gì?',quickLead:'Chọn một chủ đề để lọc câu hỏi.',faqTitle:'Câu hỏi thường gặp',contactTitle:'Liên hệ hỗ trợ',contactLead:'Gọi trực tiếp để được hỗ trợ nhanh nhất, hoặc gửi yêu cầu bên dưới.',phone:'Điện thoại đặt phòng',office:'Văn phòng',noChat:'Hiện KAS chưa có chat trực tuyến; vui lòng gọi điện hoặc gửi yêu cầu.',pickBooking:'Đặt phòng liên quan',noBooking:'Không liên quan đặt phòng',name:'Họ tên',phoneField:'Số điện thoại',topic:'Chủ đề',bookingId:'Mã đặt phòng (nếu có)',message:'Nội dung cần hỗ trợ',send:'Gửi yêu cầu',moreTitle:'Tiếp tục khám phá',navHotels:'Khách sạn',navSupport:'Support (hiện tại)',all:'Tất cả',count:function(n){return n+' câu hỏi';},none:'Không tìm thấy câu hỏi phù hợp. Hãy thử từ khoá khác hoặc gửi yêu cầu cho KAS.',choose:'Chọn chủ đề'},
+    en:{eyebrow:'KAS Support',heroTitle:'We are always here to help.',heroText:'Find quick answers about booking, payment, cancellation and KAS Membership — or send a request and the KAS team will get back to you.',searchPh:'Search questions, e.g. cancellation, payment…',quickTitle:'How can we help?',quickLead:'Pick a topic to filter the questions.',faqTitle:'Frequently asked questions',contactTitle:'Contact support',contactLead:'Call us for the fastest help, or send a request below.',phone:'Reservations phone',office:'Office',noChat:'KAS has no live chat yet; please call or send a request.',pickBooking:'Related booking',noBooking:'Not about a booking',name:'Full name',phoneField:'Phone',topic:'Topic',bookingId:'Booking number (if any)',message:'How can we help?',send:'Send request',moreTitle:'Keep exploring',navHotels:'Hotels',navSupport:'Support (current)',all:'All',count:function(n){return n+' questions';},none:'No matching question. Try another word or send KAS a request.',choose:'Choose a topic'}
+  };
+  /* Topics with real content only. Answers follow the rules the system applies today. */
+  var CATS=[
+    {id:'booking',vi:['Đặt phòng','Cách gửi yêu cầu, xác nhận'],en:['Booking','Requests and confirmation']},
+    {id:'manage',vi:['Quản lý đặt phòng','Xem trạng thái, My KAS'],en:['Manage booking','Status and My KAS']},
+    {id:'payment',vi:['Thanh toán','SePay, hạn thanh toán'],en:['Payment','SePay and deadlines']},
+    {id:'cancel',vi:['Huỷ phòng & hoàn tiền','Thời hạn, phí huỷ'],en:['Cancellation & refund','Deadlines and fees']},
+    {id:'member',vi:['Tài khoản & Membership','Hạng, ưu đãi, điểm'],en:['Account & Membership','Tiers, benefits, points']},
+    {id:'stay',vi:['Trong thời gian lưu trú','Nhận / trả phòng'],en:['During your stay','Check-in / check-out']}
+  ];
+  var FAQ=[
+    {c:'booking',vi:['Làm thế nào để đặt phòng?','Chọn khách sạn, ngày và hạng phòng rồi gửi yêu cầu đặt phòng. Khách sạn kiểm tra phòng thực tế; khi còn phòng, KAS gửi email kèm liên kết thanh toán. Đặt phòng được xác nhận sau khi thanh toán thành công.'],en:['How do I book a room?','Choose a hotel, dates and room, then send a booking request. The hotel checks real availability; when a room is free, KAS emails you a payment link. The booking is confirmed once the payment succeeds.']},
+    {c:'booking',vi:['Gửi yêu cầu xong đã là đặt phòng thành công chưa?','Chưa. Yêu cầu chỉ trở thành đặt phòng đã xác nhận sau khi khách sạn xác nhận còn phòng và bạn thanh toán thành công. Nếu khách sạn không phản hồi trong thời hạn quy định, yêu cầu sẽ hết hạn.'],en:['Is my booking confirmed once I send the request?','Not yet. A request becomes a confirmed booking only after the hotel confirms availability and your payment succeeds. If the hotel does not respond in time, the request expires.']},
+    {c:'manage',vi:['Làm thế nào để kiểm tra trạng thái đặt phòng?','Đăng nhập và mở My KAS → Đặt phòng của tôi. Mỗi đặt phòng hiển thị riêng trạng thái đặt phòng và trạng thái thanh toán. Nếu đặt không đăng nhập, dùng chức năng tra cứu bằng mã đặt phòng và email.'],en:['How do I check my booking status?','Sign in and open My KAS → My bookings. Each booking shows its booking status and its payment status separately. If you booked without signing in, look it up with the booking number and email.']},
+    {c:'manage',vi:['Tôi có thể thay đổi ngày lưu trú không?','Hiện chưa có chức năng đổi ngày trực tuyến. Vui lòng liên hệ KAS qua điện thoại hoặc gửi yêu cầu kèm mã đặt phòng để được hỗ trợ.'],en:['Can I change my dates?','Online date changes are not available yet. Please call KAS or send a request with your booking number.']},
+    {c:'payment',vi:['Khi nào tôi cần thanh toán?','Sau khi khách sạn xác nhận còn phòng, bạn nhận email có liên kết thanh toán và hạn thanh toán: thường 24 giờ, 2 giờ nếu nhận phòng trong ngày, và không quá giờ nhận phòng. Quá hạn chưa thanh toán, yêu cầu sẽ hết hạn.'],en:['When do I need to pay?','After the hotel confirms availability, you receive an email with a payment link and a deadline: usually 24 hours, 2 hours for a same-day stay, and never past check-in. If it is not paid in time, the request expires.']},
+    {c:'payment',vi:['Thanh toán bằng cách nào?','KAS nhận thanh toán qua cổng SePay (quét QR ngân hàng hoặc thẻ). SePay tạo mã riêng cho từng đơn và đặt phòng được xác nhận tự động khi giao dịch thành công.'],en:['How can I pay?','KAS takes payments through the SePay gateway (bank QR or card). SePay creates a code for each order and the booking is confirmed automatically once the payment succeeds.']},
+    {c:'cancel',vi:['Làm thế nào để yêu cầu huỷ?','Mở My KAS → chọn đặt phòng → Huỷ đặt phòng. Trước khi xác nhận, hệ thống hiển thị thời hạn huỷ miễn phí và phí huỷ (nếu có). Gửi yêu cầu huỷ chưa đồng nghĩa đặt phòng đã bị huỷ.'],en:['How do I cancel?','Open My KAS → choose the booking → Cancel booking. Before you confirm, the free-cancellation deadline and any fee are shown. Sending a cancellation request does not by itself cancel the booking.']},
+    {c:'cancel',vi:['Phí huỷ được tính như thế nào?','Thành viên KAS huỷ miễn phí đến 12:00 ngày nhận phòng; khách thường huỷ miễn phí đến 24 giờ trước giờ nhận phòng. Sau mốc đó, phí huỷ theo chính sách của khách sạn được hiển thị để bạn đồng ý trước khi huỷ; số tiền hoàn = số đã thanh toán − phí huỷ.'],en:['How is the cancellation fee calculated?','KAS members cancel free until 12:00 on the check-in day; other guests until 24 hours before check-in. After that, the hotel fee is shown for you to accept before cancelling; the refund is what you paid minus the fee.']},
+    {c:'member',vi:['Làm thế nào để sử dụng quyền lợi KAS Membership?','Đăng nhập tài khoản KAS khi đặt phòng. Ưu đãi thành viên theo hạng (Classic, Gold, Platinum) được áp dụng vào giá và ghi rõ trong chi tiết giá. Xem điều kiện từng hạng tại trang KAS Membership.'],en:['How do I use my KAS Membership benefits?','Sign in to your KAS account when you book. Your tier discount (Classic, Gold, Platinum) is applied to the price and shown in the price details. See each tier on the KAS Membership page.']},
+    {c:'stay',vi:['Làm thế nào để trả phòng?','Trong thời gian lưu trú, mở My KAS → đặt phòng → Trả phòng để gửi yêu cầu; KAS sẽ xác nhận. Giờ nhận/trả phòng của từng khách sạn hiển thị trong chi tiết đặt phòng.'],en:['How do I check out?','During your stay, open My KAS → your booking → Check out to send the request; KAS confirms it. Each hotel\'s check-in/out times are shown in the booking details.']}
+  ];
+  var active='', page=document.getElementById('page');
+  function t(k){var v=T[lang][k];return typeof v==='function'?v:v;}
+  function norm(s){return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d');}
+  function paintQuick(){
+    var host=document.getElementById('quick');
+    host.innerHTML='<button type="button" data-cat="" aria-pressed="'+(active===''?'true':'false')+'"><strong>'+t('all')+'</strong><span>'+FAQ.length+'</span></button>'+
+      CATS.filter(function(c){return FAQ.some(function(f){return f.c===c.id;});}).map(function(c){return '<button type="button" data-cat="'+c.id+'" aria-pressed="'+(active===c.id)+'"><strong>'+c[lang][0]+'</strong><span>'+c[lang][1]+'</span></button>';}).join('');
+    host.querySelectorAll('button').forEach(function(b){b.addEventListener('click',function(){active=b.getAttribute('data-cat');paintQuick();paintFaq();});});
+  }
+  function paintFaq(){
+    var q=norm(document.getElementById('q').value.trim());
+    var list=FAQ.filter(function(f){return (active===''||f.c===active)&&(q===''||norm(f[lang][0]+' '+f[lang][1]).indexOf(q)>=0);});
+    document.getElementById('faqCount').textContent=t('count')(list.length);
+    document.getElementById('faq').innerHTML=list.length?list.map(function(f){var cat=CATS.find(function(c){return c.id===f.c;});return '<details><summary><span><span class="cat">'+cat[lang][0]+'</span><br>'+f[lang][0]+'</span></summary><div class="a">'+f[lang][1]+'</div></details>';}).join(''):'<p class="empty">'+t('none')+'</p>';
+  }
+  function paintTopics(){var s=document.getElementById('fTopic'),v=s.value;s.innerHTML='<option value="">'+t('choose')+'</option>'+CATS.map(function(c){return '<option value="'+c.id+'">'+c[lang][0]+'</option>';}).join('')+'<option value="other">'+(lang==='vi'?'Khác':'Other')+'</option>';s.value=v;}
+  function paintText(){document.documentElement.lang=lang;document.querySelectorAll('[data-t]').forEach(function(el){var v=T[lang][el.getAttribute('data-t')];if(typeof v==='string')el.textContent=v;});document.querySelectorAll('[data-tp]').forEach(function(el){el.placeholder=T[lang][el.getAttribute('data-tp')];});document.getElementById('langBtn').textContent=lang==='vi'?'EN':'VI';paintQuick();paintFaq();paintTopics();}
+  document.getElementById('q').addEventListener('input',paintFaq);
+  document.getElementById('langBtn').addEventListener('click',function(){lang=lang==='vi'?'en':'vi';paintText();});
+  document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){page.classList.toggle('is-mobile',b.getAttribute('data-view')==='mobile');document.querySelectorAll('[data-view]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});});});
+  /* Signed in: the guest's own bookings fill the picker (read-only call to /api/v1/me/stays). */
+  fetch('/api/v1/me/stays?locale=vi',{credentials:'same-origin',headers:{Accept:'application/json'}}).then(function(r){return r.ok?r.json():[];}).then(function(rows){
+    if(!Array.isArray(rows)||!rows.length)return;
+    var sel=document.getElementById('bookingSel');
+    rows.forEach(function(s){var o=document.createElement('option');o.value=s.reference;o.textContent=s.reference+' · '+(s.propertyName||s.propertySlug)+' · '+s.checkIn;sel.appendChild(o);});
+    document.getElementById('bookingPick').hidden=false;
+    sel.addEventListener('change',function(){document.getElementById('fRef').value=sel.value;var row=rows.find(function(r){return r.reference===sel.value;});if(row){if(!document.getElementById('fName').value)document.getElementById('fName').value=row.guestName||'';if(!document.getElementById('fEmail').value)document.getElementById('fEmail').value=row.guestEmail||'';}});
+  }).catch(function(){});
+  /* Contact form prototype: validation + honeypot + rate limit; nothing is sent (no backend endpoint yet). */
+  var lastSent=0;
+  document.getElementById('supportForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var vi=lang==='vi',ok=true;
+    function check(id,errId,bad,msg){var el=document.getElementById(id);el.setAttribute('aria-invalid',bad?'true':'false');document.getElementById(errId).textContent=bad?msg:'';if(bad&&ok){el.focus();ok=false;}}
+    var name=document.getElementById('fName').value.trim(),email=document.getElementById('fEmail').value.trim(),phone=document.getElementById('fPhone').value.trim(),topic=document.getElementById('fTopic').value,ref=document.getElementById('fRef').value.trim(),msg=document.getElementById('fMsg').value.trim();
+    check('fName','eName',name.length<2,vi?'Vui lòng nhập họ tên.':'Please enter your name.');
+    check('fEmail','eEmail',!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email),vi?'Email chưa hợp lệ.':'Please enter a valid email.');
+    check('fPhone','ePhone',phone!==''&&!/^[+0-9 ()-]{8,20}$/.test(phone),vi?'Số điện thoại chưa hợp lệ.':'Please enter a valid phone number.');
+    check('fTopic','eTopic',topic==='',vi?'Vui lòng chọn chủ đề.':'Please choose a topic.');
+    check('fRef','eRef',ref!==''&&!/^KAS\d{7}$/i.test(ref),vi?'Mã đặt phòng có dạng KAS + 7 chữ số.':'Booking numbers look like KAS + 7 digits.');
+    check('fMsg','eMsg',msg.length<10,vi?'Vui lòng mô tả ngắn gọn (ít nhất 10 ký tự).':'Please describe your request (at least 10 characters).');
+    var out=document.getElementById('formMsg');
+    if(!ok){out.className='';out.textContent='';return;}
+    if(document.getElementById('fWebsite').value){out.className='note ok';out.textContent=vi?'Đã nhận yêu cầu.':'Request received.';return;}
+    if(Date.now()-lastSent<30000){out.className='note';out.textContent=vi?'Bạn vừa gửi yêu cầu. Vui lòng chờ 30 giây.':'You just sent a request. Please wait 30 seconds.';return;}
+    lastSent=Date.now();
+    out.className='note ok';out.textContent=vi?'DEMO: dữ liệu hợp lệ. Bản chính thức sẽ gửi yêu cầu tới KAS và hiển thị mã tiếp nhận — cần thêm API backend.':'DEMO: the form is valid. The live version will send it to KAS and show a reference — a backend API is needed.';
+  });
+  paintText();
+})();
+</script>
+</body></html>

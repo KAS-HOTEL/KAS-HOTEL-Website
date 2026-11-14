@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>DEMO · Chi tiết đặt phòng v1 — KAS Hotel Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;font:400 14px/1.6 Inter,Arial,sans-serif;color:#25241f;background:#f5f1e8}
+.demo-bar{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;padding:9px 20px;background:#7a1f1f;color:#fff;font-size:13px}
+.demo-bar strong{letter-spacing:.12em}.demo-bar button{border:1px solid rgba(255,255,255,.6);background:transparent;color:#fff;padding:5px 11px;border-radius:999px;cursor:pointer;font:inherit}.demo-bar button[aria-pressed="true"]{background:#fff;color:#7a1f1f}
+.wrap{max-width:1080px;margin:0 auto;padding:32px 20px 60px}
+h1{font:400 40px/1.1 "Cormorant Garamond",Georgia,serif;margin:0 0 6px}.lead{margin:0 0 22px;color:#5d5547}
+.list{display:grid;gap:14px}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px 20px;align-items:center;padding:18px 20px;border:1px solid #d9d0c1;background:#fbf9f4}
+.row h2{margin:0;font:400 26px/1.15 "Cormorant Garamond",Georgia,serif}.row small{display:block;margin-top:2px;font-size:12px;color:#8b8172;letter-spacing:.06em}
+.row .meta{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:18px;font-size:13px;color:#4f493f}
+.open{border:0;background:#11110f;color:#fff;padding:12px 18px;font:600 11px/1 Inter,Arial,sans-serif;letter-spacing:.14em;cursor:pointer}
+.mykas-drawer__panel .btn{display:inline-flex;align-items:center;padding:10px 16px;border:1px solid #25241f;background:transparent;color:#25241f;text-decoration:none;font:600 12px/1 Inter,Arial,sans-serif;letter-spacing:.08em}
+.mykas-drawer__panel .muted{color:#7c7468;font-size:13px}
+.mykas-timeline{display:flex;justify-content:space-between;position:relative}
+.mykas-timeline:before{content:"";position:absolute;top:31px;left:8%;right:8%;height:1px;background:#d7cdbd}
+.mykas-timeline span{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;color:#8b8172}
+.mykas-timeline i{border:1px solid #c9bdab;border-radius:50%;background:#fbf9f4}
+.mykas-timeline span.is-current i{border:2px solid #b49358}
+@media(max-width:620px){.row{grid-template-columns:1fr}.open{width:100%}}
+.mykas-timeline{display:flex;justify-content:space-between;position:relative;margin-top:auto;padding:22px 8px 0}
+.mykas-timeline:before{content:"";position:absolute;top:25px;left:8%;right:8%;height:1px;background:#d7cdbd}
+.mykas-timeline span{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:6px;letter-spacing:.09em;color:#8b8172;text-align:center}
+.mykas-timeline i{width:6px;height:6px;border:1px solid #c9bdab;border-radius:50%;background:#fbf9f4}
+.mykas-timeline span.is-current{color:#8c6a32}.mykas-timeline span.is-current i{width:9px;height:9px;margin-top:-2px;border:2px solid #b49358}
+.mykas-timeline{gap:12px;padding:24px 0 8px;margin-top:20px}
+.mykas-timeline span{font-size:12px;line-height:1.45;letter-spacing:0;flex:1;gap:10px}
+.mykas-timeline i,.mykas-timeline span.is-current i{width:15px;height:15px;margin-top:0;font-size:10px;line-height:13px;font-style:normal}
+.mykas-timeline span.is-current{font-weight:700;color:#6b4b1b}
+.mykas-timeline span.is-complete{color:#356052}.mykas-timeline span.is-complete i{background:#356052;color:white;border-color:#356052}
+/* 2026-11-12: booking / payment status pills, unsuccessful note, detail drawer */
+.mykas-pills{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;margin-top:6px}
+.mykas-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border:1px solid #d7cdbd;border-radius:999px;background:#fbf9f4;font:600 11px/1.3 Inter,Arial,sans-serif;letter-spacing:.02em;color:#5d5547;text-transform:none}
+.mykas-pill:before{content:"";width:6px;height:6px;border-radius:50%;background:#b49358}
+.mykas-pill--ok{border-color:#b8cfc4;color:#2f5a4c;background:#f2f7f4}.mykas-pill--ok:before{background:#356052}
+.mykas-pill--warn{border-color:#e3cfa7;color:#7a5617;background:#fbf5e9}.mykas-pill--warn:before{background:#c08a2c}
+.mykas-pill--muted{border-color:#ddd6ca;color:#7c7468;background:#f6f3ee}.mykas-pill--muted:before{background:#a39a8c}
+.mykas-ended{margin:14px 0 0;padding:12px 14px;border-left:2px solid #a39a8c;background:#f6f3ee;font-size:13px;line-height:1.55;color:#4f493f}
+.mykas-paynote{margin:14px 0 0;padding:12px 14px;border-left:2px solid #c08a2c;background:#fbf5e9;font-size:13px;line-height:1.55;color:#5c4416}
+.mykas-tabs button .mykas-count{margin-left:6px;color:#a39a8c;font-weight:400}
+.mykas-drawer{position:fixed;inset:0;z-index:10050;display:flex;justify-content:flex-end}
+.mykas-drawer[hidden]{display:none}
+.mykas-drawer__backdrop{position:absolute;inset:0;background:rgba(22,21,18,.48);animation:mykasFade .2s ease}
+.mykas-drawer__panel{position:relative;width:min(720px,100%);height:100%;overflow-y:auto;overscroll-behavior:contain;background:#fbf9f4;box-shadow:-18px 0 48px rgba(0,0,0,.18);padding:28px 32px 40px;animation:mykasSlide .25s ease}
+.mykas-drawer__bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 18px;padding-bottom:14px;border-bottom:1px solid #e3dccf}
+.mykas-drawer__back{border:0;background:none;padding:6px 0;font:600 12px/1.2 Inter,Arial,sans-serif;letter-spacing:.08em;color:#6b4b1b;cursor:pointer}
+.mykas-drawer__close{border:1px solid #d7cdbd;background:#fff;width:36px;height:36px;border-radius:50%;font-size:20px;line-height:1;cursor:pointer;color:#25241f}
+.mykas-drawer__panel .card{box-shadow:none;border:0;background:transparent;padding:0}
+.mykas-drawer__panel .dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 22px}
+.mykas-drawer__panel .dl dt{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#8b8172}.mykas-drawer__panel .dl dd{margin:4px 0 0;font-size:15px;color:#25241f}
+body.mykas-drawer-open{overflow:hidden}
+.mykas-detail__head{margin:0 0 6px}.mykas-detail__ref{margin:0;font-size:11px;letter-spacing:.14em;color:#8b8172}.mykas-detail__hotel{margin:4px 0 8px;font:400 34px/1.1 "Cormorant Garamond",Georgia,serif;color:#25241f}
+.mykas-detail__section{margin-top:22px;padding-top:18px;border-top:1px solid #e3dccf}.mykas-detail__h{margin:0 0 12px;font:600 11px/1.2 Inter,Arial,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#8c6a32}
+.mykas-detail .prow{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:14px}.mykas-detail .prow--total{border-top:1px solid #e3dccf;margin-top:6px;padding-top:10px;font-size:16px}
+.mykas-detail__links,.mykas-detail #mbActions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+@keyframes mykasFade{from{opacity:0}to{opacity:1}}@keyframes mykasSlide{from{transform:translateX(32px);opacity:.6}to{transform:none;opacity:1}}
+@media(max-width:620px){.mykas-drawer__panel{padding:18px 16px 32px}.mykas-drawer__panel .dl{grid-template-columns:1fr}.mykas-pills{justify-content:flex-start}}
+@media (prefers-reduced-motion:reduce){.mykas-drawer__backdrop,.mykas-drawer__panel{animation:none}}
+
+</style></head><body>
+<div class="demo-bar" role="note"><span><strong>DEMO</strong> · Chi tiết đặt phòng v1 — dữ liệu mẫu, chưa phải dữ liệu thật.</span>
+<span><button type="button" data-lang="vi" aria-pressed="true">VI</button> <button type="button" data-lang="en" aria-pressed="false">EN</button></span></div>
+<main class="wrap">
+<h1>Đặt phòng của tôi — chi tiết</h1>
+<p class="lead">Bấm "Xem chi tiết" để mở ngăn chi tiết (đúng mã giao diện My KAS). Có bổ sung <strong>thời gian đặt</strong> ở đầu và trong mục Thông tin lưu trú. Đóng bằng nút ×, "My bookings", bấm ra ngoài hoặc phím Esc.</p>
+<div class="list" id="list"></div>
+</main>
+<div id="mbDrawer" class="mykas-drawer" hidden role="dialog" aria-modal="true" aria-labelledby="mbDrawerTitle">
+  <div class="mykas-drawer__backdrop" data-close-detail></div>
+  <aside class="mykas-drawer__panel" tabindex="-1">
+    <div class="mykas-drawer__bar"><button type="button" class="mykas-drawer__back" data-close-detail id="mbDrawerTitle">&larr; MY BOOKINGS</button><button type="button" class="mykas-drawer__close" data-close-detail aria-label="Close">&times;</button></div>
+    <div id="mbDrawerBody"></div>
+  </aside>
+</div>
+<script src="/js/request-view.js"></script>
+<script>
+(function(){
+  'use strict';
+  /* Sample data in the /api/v1/me/stays shape after KAS_REQUEST_VIEW.map — DEMO only. */
+  var SAMPLES=[
+    {bookingNumber:'KAS0267458',hotelId:'hotel-03',hotelName:'KAS Ancient Luxury Hotel',roomName:'Deluxe Double × 1',checkIn:'2026-12-12',checkOut:'2026-12-13',checkInTime:'14:00',checkOutTime:'12:00',nights:1,adults:2,children:0,rooms:1,total:1360800,roomRate:1400000,currency:'VND',salesStatus:'WON',stayStatus:'CONFIRMED',status:'CONFIRMED',createdAt:'2026-11-12T08:09:00Z',paymentVerifiedAt:'2026-11-12T08:15:00Z',paymentStatus:'PAID',guest:{fullName:'Đinh Thị Anh Thư',email:'guest@example.com'}},
+    {bookingNumber:'KAS0641878',hotelId:'hotel-06',hotelName:'KAS Sonata Luxury Hotel',roomName:'Junior Suite × 1',checkIn:'2026-12-20',checkOut:'2026-12-22',checkInTime:'14:00',checkOutTime:'12:00',nights:2,adults:2,children:1,rooms:1,total:3456000,roomRate:3200000,currency:'VND',salesStatus:'PAYMENT_PENDING',stayStatus:null,status:'PAYMENT_PENDING',createdAt:'2026-11-12T08:59:46Z',paymentStatus:'UNPAID',paymentDueAt:'2026-11-13T08:59:46Z',guest:{fullName:'Đinh Thị Anh Thư',email:'guest@example.com'},specialRequests:'Phòng tầng cao, yên tĩnh.'},
+    {bookingNumber:'KAS0717992',hotelId:'hotel-07',hotelName:'KAS Eliana Luxury Hotel',roomName:'Superior × 1',checkIn:'2026-11-20',checkOut:'2026-11-21',checkInTime:'14:00',checkOutTime:'12:00',nights:1,adults:1,children:0,rooms:1,total:972000,roomRate:900000,currency:'VND',salesStatus:'EXPIRED',stayStatus:null,status:'EXPIRED',createdAt:'2026-11-10T09:21:40Z',paymentStatus:'NONE',salesStatusReason:'SLA_EXPIRED',guest:{fullName:'Đinh Thị Anh Thư',email:'guest@example.com'}}
+  ];
+  if(!window.U)window.U={esc:function(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});},
+    fmtDate:function(iso){if(!iso)return '—';var p=String(iso).split('-');return p.length===3?p[2]+'/'+p[1]+'/'+p[0]:iso;}};
+  var V=window.KAS_REQUEST_VIEW, U=window.U, lang='vi', drawer=document.getElementById('mbDrawer'), last=null, openRef=null;
+  function fmt(iso){return new Date(iso).toLocaleString(lang==='vi'?'vi-VN':'en-GB',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'});}
+  function paintList(){
+    var vi=lang==='vi';
+    document.getElementById('list').innerHTML=SAMPLES.map(function(b){
+      var st=V.state(b,vi),pay=V.payment(b,vi),g=V.group(b);
+      var tone=g==='cancelled'?'muted':g==='processing'?'warn':'ok',ptone=pay.code==='PAID'?'ok':pay.code==='UNPAID'||pay.code==='PENDING'?'warn':'muted';
+      return '<article class="row"><div><h2>'+U.esc(b.hotelName)+'</h2><small>'+U.esc(b.bookingNumber)+' · '+(vi?'Đặt lúc ':'Booked ')+fmt(b.createdAt)+'</small></div>'+
+        '<button class="open" type="button" data-ref="'+b.bookingNumber+'">'+(vi?'XEM CHI TIẾT':'VIEW DETAILS')+' →</button>'+
+        '<div class="meta"><span class="mykas-pill mykas-pill--'+tone+'">'+U.esc(st.label)+'</span>'+(pay.code==='NONE'&&g!=='processing'?'':'<span class="mykas-pill mykas-pill--'+ptone+'">'+U.esc(pay.label)+'</span>')+
+        '<span>'+U.fmtDate(b.checkIn)+' → '+U.fmtDate(b.checkOut)+'</span><span>'+V.money(b.total,b.currency)+'</span></div></article>';
+    }).join('');
+    document.querySelectorAll('[data-ref]').forEach(function(btn){btn.addEventListener('click',function(){open(btn.getAttribute('data-ref'),btn);});});
+  }
+  function open(ref,trigger){
+    var b=SAMPLES.find(function(x){return x.bookingNumber===ref;});if(!b)return;
+    last=trigger||document.activeElement;openRef=ref;
+    document.getElementById('mbDrawerBody').innerHTML=V.details(b,lang==='vi');
+    var g=V.group(b),actions=document.getElementById('mbActions');
+    if(g==='upcoming'||g==='processing'){var c=document.createElement('button');c.className='btn';c.type='button';c.textContent=lang==='vi'?'Hủy đặt phòng':'Cancel booking';c.onclick=function(){alert(lang==='vi'?'DEMO: trang thật sẽ hiện thời hạn hủy miễn phí và phí hủy trước khi xác nhận.':'DEMO: the live page shows the free window and fee before you confirm.');};actions.appendChild(c);}
+    drawer.hidden=false;document.body.classList.add('mykas-drawer-open');
+    var panel=drawer.querySelector('.mykas-drawer__panel');panel.scrollTop=0;panel.focus();
+  }
+  function close(){if(drawer.hidden)return;drawer.hidden=true;document.body.classList.remove('mykas-drawer-open');openRef=null;if(last&&last.focus)last.focus();}
+  document.querySelectorAll('[data-close-detail]').forEach(function(el){el.addEventListener('click',close);});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){lang=b.getAttribute('data-lang');document.documentElement.lang=lang;document.querySelectorAll('[data-lang]').forEach(function(x){x.setAttribute('aria-pressed',String(x===b));});paintList();if(openRef){var r=openRef;open(r,last);}});});
+  paintList();
+})();
+</script>
+</body></html>

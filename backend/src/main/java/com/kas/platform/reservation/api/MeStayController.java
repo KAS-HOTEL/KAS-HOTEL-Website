@@ -76,7 +76,16 @@ public class MeStayController {
                                cr.id AS cancellation_request_id,
                                cr.status::text AS cancellation_request_status,
                                cr.fee_amount_minor, cr.fee_currency, cr.fee_note,
-                               cr.refund_due_minor, cr.refund_amount_minor
+                               cr.refund_due_minor, cr.refund_amount_minor,
+                               r.payment_due_at,
+                               EXISTS (SELECT 1 FROM payment pm
+                                        WHERE pm.reservation_id = r.id AND pm.status = 'VERIFIED') AS has_verified_payment,
+                               EXISTS (SELECT 1 FROM reservation_email_action_token tk
+                                        WHERE tk.reservation_id = r.id AND tk.action = 'GUEST_MARK_PAID'
+                                          AND tk.used_at IS NOT NULL) AS transfer_reported,
+                               (SELECT h.reason FROM reservation_status_history h
+                                 WHERE h.reservation_id = r.id AND h.field = 'SALES' AND h.to_status = r.sales_status::text
+                                 ORDER BY h.created_at DESC, h.id DESC LIMIT 1) AS sales_status_reason
                           FROM reservation r
                           JOIN customer c ON c.id = r.customer_id
                           JOIN property p ON p.id = r.property_id
@@ -119,8 +128,27 @@ public class MeStayController {
                         rs.getString("guest_name"), rs.getString("guest_email"), rs.getString("special_requests"),
                         (Long) rs.getObject("subtotal_minor"), rs.getObject("payment_verified_at", java.time.OffsetDateTime.class),
                         rs.getObject("checkout_requested_at", java.time.OffsetDateTime.class), rs.getString("checkout_request_source"),
-                        (Long) rs.getObject("refund_due_minor"), (Long) rs.getObject("refund_amount_minor")))
+                        (Long) rs.getObject("refund_due_minor"), (Long) rs.getObject("refund_amount_minor"),
+                        paymentStatus(rs.getString("sales_status"),
+                                rs.getObject("payment_verified_at") != null || rs.getBoolean("has_verified_payment"),
+                                rs.getBoolean("transfer_reported"), (Long) rs.getObject("refund_amount_minor")),
+                        rs.getObject("payment_due_at", java.time.OffsetDateTime.class),
+                        rs.getString("sales_status_reason")))
                 .list();
+    }
+
+    /**
+     * Payment state, kept apart from the booking state (2026-11-12): a paid booking never
+     * reads "awaiting payment". PAID once a payment is verified (SePay IPN or the hotel),
+     * PENDING when the guest reported a transfer the hotel has not checked yet, UNPAID while
+     * payment is due, REFUNDED once a refund is recorded, NONE when no payment step was
+     * reached (under review, declined, expired before paying).
+     */
+    static String paymentStatus(String salesStatus, boolean paid, boolean transferReported, Long refundAmountMinor) {
+        if (refundAmountMinor != null && refundAmountMinor > 0) return "REFUNDED";
+        if (paid) return "PAID";
+        if ("PAYMENT_PENDING".equals(salesStatus)) return transferReported ? "PENDING" : "UNPAID";
+        return "NONE";
     }
 
     @PostMapping("/{reference}/cancel")
@@ -178,6 +206,12 @@ public class MeStayController {
                        java.time.OffsetDateTime paymentVerifiedAt,
                        java.time.OffsetDateTime checkoutRequestedAt, String checkoutRequestSource,
                        /** Refund KAS owes / has recorded for a cancelled, paid stay (2026-11-10). */
-                       Long refundDueMinor, Long refundAmountMinor) { }
+                       Long refundDueMinor, Long refundAmountMinor,
+                       /** NONE, UNPAID, PENDING, PAID or REFUNDED — see {@link #paymentStatus} (2026-11-12). */
+                       String paymentStatus,
+                       /** When payment is due (V66); null when no deadline applies. */
+                       java.time.OffsetDateTime paymentDueAt,
+                       /** Why the booking reached its current sales status, e.g. SLA_EXPIRED, PAYMENT_DEADLINE. */
+                       String salesStatusReason) { }
     public record CancellationDecision(boolean accept) { }
 }

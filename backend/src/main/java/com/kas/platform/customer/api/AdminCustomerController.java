@@ -49,6 +49,8 @@ public class AdminCustomerController {
     @GetMapping
     public List<CustomerRow> list(@RequestParam(required = false) String q,
                                   @RequestParam(required = false) String tier,
+                                  /** Account status as shown: ACTIVE, UNVERIFIED, SUSPENDED, DISABLED, NO_ACCOUNT (2026-11-12). */
+                                  @RequestParam(required = false) String status,
                                   @RequestParam(required = false)
                                   @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE)
                                   java.time.LocalDate registeredFrom,
@@ -63,6 +65,12 @@ public class AdminCustomerController {
         int safeSize = Math.clamp(size, 1, 100);
         String search = q == null ? "" : q.trim();
         String tierCode = tier == null || tier.isBlank() ? null : tier.trim().toUpperCase();
+        String accountStatus = status == null || status.isBlank() ? null : status.trim().toUpperCase();
+        if (accountStatus != null && !java.util.Set.of("ACTIVE", "UNVERIFIED", "SUSPENDED", "DISABLED", "NO_ACCOUNT").contains(accountStatus)) {
+            throw new com.kas.platform.shared.KasException(com.kas.platform.shared.ApiErrorCode.VALIDATION_FAILED,
+                    "Unknown account status.", List.of(new com.kas.platform.shared.KasException.ErrorDetail("status", "INVALID",
+                            "One of ACTIVE, UNVERIFIED, SUSPENDED, DISABLED, NO_ACCOUNT.")));
+        }
         if (registeredFrom != null && registeredTo != null && registeredFrom.isAfter(registeredTo)) {
             throw new com.kas.platform.shared.KasException(com.kas.platform.shared.ApiErrorCode.VALIDATION_FAILED,
                     "registeredFrom must not be after registeredTo.", List.of(
@@ -79,6 +87,9 @@ public class AdminCustomerController {
                    AND (:q = '' OR c.full_name ILIKE '%' || :q || '%'
                         OR c.email::text ILIKE '%' || :q || '%' OR c.phone ILIKE '%' || :q || '%')
                    AND (CAST(:tier AS text) IS NULL OR mt.code = :tier)
+                   AND (CAST(:status AS text) IS NULL OR (CASE WHEN u.id IS NULL THEN 'NO_ACCOUNT'
+                            WHEN u.status = 'ACTIVE' AND u.email_verified_at IS NULL THEN 'UNVERIFIED'
+                            ELSE u.status::text END) = :status)
                    AND (CAST(:fromAt AS timestamptz) IS NULL OR c.created_at >= :fromAt)
                    AND (CAST(:toAt AS timestamptz) IS NULL OR c.created_at < :toAt)
                 """;
@@ -94,7 +105,7 @@ public class AdminCustomerController {
                 """;
         long total = jdbc.sql("SELECT count(*)" + joins + where)
                 .param("q", search).param("tier", tierCode).param("fromAt", from).param("toAt", toExclusive)
-                .query(Long.class).single();
+                .param("status", accountStatus).query(Long.class).single();
         List<CustomerRow> rows = jdbc.sql("""
                 SELECT c.id, c.full_name, c.email::text AS email, c.phone, c.country,
                        c.locale, c.created_at, mt.code AS tier,
@@ -109,6 +120,7 @@ public class AdminCustomerController {
                  LIMIT :limit OFFSET :offset
                 """)
                 .param("q", search).param("tier", tierCode).param("fromAt", from).param("toAt", toExclusive)
+                .param("status", accountStatus)
                 .param("limit", safeSize).param("offset", (long) safePage * safeSize)
                 .query((rs, rowNum) -> new CustomerRow(rs.getObject("id", UUID.class),
                         rs.getString("full_name"), rs.getString("email"), rs.getString("phone"),

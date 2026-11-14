@@ -28,6 +28,28 @@ class EmailOutboxDispatcherTest {
     }
 
     @Test
+    void queuedEmailIsDeliveredRightAfterCommitWithoutWaitingForThePoll() throws Exception {
+        when(repository.claim(10, 5)).thenReturn(List.of(item("event-now", 1, OffsetDateTime.now())));
+        when(transport.sendInline("guest@example.invalid", "Subject", "<p>hello</p>", "event-now"))
+                .thenReturn(SendResult.ACCEPTED);
+
+        dispatcher(5).onEmailQueued(new EmailQueuedEvent("event-now"));
+
+        verify(repository, timeout(2000)).markSent(id);
+    }
+
+    @Test
+    void wakeUpWithNothingDueSendsNothing() {
+        when(repository.claim(10, 5)).thenReturn(List.of());
+
+        dispatcher(5).onEmailQueued(new EmailQueuedEvent("event-none"));
+
+        verify(repository, timeout(2000)).claim(10, 5);
+        verify(repository, never()).markSent(any());
+        verify(transport, never()).sendInline(any(), any(), any(), any());
+    }
+
+    @Test
     void successfulProviderAcceptanceMarksEventSentWithStableKey() throws Exception {
         when(repository.claim(10, 5)).thenReturn(List.of(item("event-1", 1, OffsetDateTime.now())));
         when(transport.sendInline("guest@example.invalid", "Subject", "<p>hello</p>", "event-1"))

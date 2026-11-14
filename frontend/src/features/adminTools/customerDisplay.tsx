@@ -16,6 +16,16 @@ export function accountStatusTone(status: string | null | undefined): 'success' 
   return status === 'UNVERIFIED' || status === 'SUSPENDED' ? 'warning' : 'neutral';
 }
 
+/** Tier names as the membership policy stores them (membership_tier.code). */
+export const TIER_LABEL: Readonly<Record<string, string>> = { CLASSIC: 'Classic', GOLD: 'Gold', PLATINUM: 'Platinum' };
+
+/** The member's tier as a badge; customers without a membership read "Chưa có hạng". */
+export function TierBadge({ tier }: { readonly tier: string | null | undefined }) {
+  if (!tier) return <span className={styles.tierNone}>Chưa có hạng</span>;
+  const key = tier.toUpperCase();
+  return <span className={`${styles.tierBadge} ${styles[`tier${key.charAt(0)}${key.slice(1).toLowerCase()}`] ?? ''}`}>{TIER_LABEL[key] ?? tier}</span>;
+}
+
 /** dd/MM/yyyy in KAS business time. */
 export function formatRegistered(iso: string): string {
   const at = new Date(iso);

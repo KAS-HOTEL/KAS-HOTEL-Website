@@ -247,7 +247,7 @@ export function SalesRequestDetailView({
             </dl>
           </Card>
 
-          <ManualBookingActions request={summary} />
+          <ManualBookingActions request={summary} payment={request.payment ?? null} />
 
 
           <RequestHistory events={request.timeline} />
